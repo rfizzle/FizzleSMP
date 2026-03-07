@@ -48,6 +48,86 @@
 - **Mod Loader:** Fabric
 - **Status:** included
 - **Summary:** An animation library enabling custom player model animations for Minecraft mods.
-- **Why:** Required dependency of Better Combat and Combat Roll.
+- **Why:** Required dependency of Better Combat, Combat Roll, and Spell Engine.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Spell Power Attributes
+- **CurseForge ID:** 771265
+- **Slug:** spell-power
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Spell power entity attributes with related status effects and enchantments, providing an API for spell damage calculations, critical strikes, and more.
+- **Why:** Core attribute system for the RPG Series magic mods; required dependency of Spell Engine.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## Spell Engine
+- **CurseForge ID:** 807653
+- **Slug:** spell-engine
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Data-driven magic library providing a complete spell-casting system including spell books, visual effects, and weapon integration.
+- **Why:** Core library powering the RPG Series magic mods (Wizards, Paladins & Priests); works alongside Better Combat for weapon animations.
+- **Dependencies:** Fabric API, Cloth Config API, playerAnimator, Spell Power Attributes, Trinkets or Accessories
+- **Conflicts:** None known
+
+## Runes
+- **CurseForge ID:** 775518
+- **Slug:** rune-crafting
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds craftable runes that serve as ammunition for casting spells, with a Rune Crafting Altar for efficient production.
+- **Why:** Provides the ammo system for Spell Engine spells; required by Wizards and Paladins & Priests.
+- **Dependencies:** Fabric API, Bundle API
+- **Conflicts:** None known
+
+## Bundle API
+- **CurseForge ID:** 1189983
+- **Slug:** bundle-api
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** API allowing mods to easily add bundles that can hold more than 1 stack of items specified by an item tag.
+- **Why:** Required dependency of Runes.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Wizards (RPG Series)
+- **CurseForge ID:** 734325
+- **Slug:** wizards
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds RPG-style wizard classes with Arcane, Fire, and Frost magic skill sets, spell books, wands, staves, and Wizard Towers in villages.
+- **Why:** Adds deep magic combat classes to the SMP, complementing the existing melee combat from Better Combat and Simply Swords.
+- **Dependencies:** Spell Engine, Runes, AzureLib Armor, Structure Pool API, Fabric API
+- **Conflicts:** None known; strongly recommended alongside Better Combat for proper weapon animations.
+
+## Paladins & Priests (RPG Series)
+- **CurseForge ID:** 856548
+- **Slug:** paladins-and-priests
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds Paladin and Priest RPG classes with healing, protection, and holy damage spells, plus Sanctuaries in villages with Monk villagers.
+- **Why:** Adds support/healer classes to complement Wizards' DPS classes, enabling party-based gameplay on the SMP.
+- **Dependencies:** Spell Engine, Runes, AzureLib Armor, Structure Pool API, Fabric API
+- **Conflicts:** None known; strongly recommended alongside Better Combat for first-person animations.
+
+## AzureLib Armor
+- **CurseForge ID:** 912767
+- **Slug:** azurelib-armor
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A stripped-down AzureLib providing custom armor model and item rendering with reduced memory usage.
+- **Why:** Required dependency of Wizards and Paladins & Priests for animated armor rendering.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Structure Pool API
+- **CurseForge ID:** 927915
+- **Slug:** structure-pool-api
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** API to inject structures into vanilla structure pools, enabling mods to add buildings to villages and other generated structures.
+- **Why:** Required dependency of Wizards and Paladins & Priests for adding towers and sanctuaries to villages.
 - **Dependencies:** None
 - **Conflicts:** None known

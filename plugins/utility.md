@@ -242,6 +242,26 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## Wraith Waystones
+- **CurseForge ID:** 410902
+- **Slug:** fabric-waystones
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds craftable waystones for fast travel, with natural spawning in villages (including modded villages from Repurposed Structures), scrolls, and configurable teleportation costs.
+- **Why:** Provides a balanced fast-travel system for the SMP — players discover waystones by exploring villages and can craft their own for base networks.
+- **Dependencies:** None
+- **Conflicts:** None known; compatible with Repurposed Structures villages.
+
+## Lavender
+- **CurseForge ID:** 962916
+- **Slug:** lavender-api
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A guidebook API and alternative to Patchouli, enabling in-game documentation with markdown syntax and hot-reloading.
+- **Why:** Required dependency of Things for its in-game guidebook.
+- **Dependencies:** None
+- **Conflicts:** None known
+
 ## Puzzles Lib
 - **CurseForge ID:** 495476
 - **Slug:** puzzles-lib

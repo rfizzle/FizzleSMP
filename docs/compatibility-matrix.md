@@ -21,6 +21,7 @@ Tracks known interactions between mods in the pack.
 | Iris Shaders | OptiFine | Iris replaces OptiFine shader loading; cannot coexist |
 | ImmediatelyFast | OptiFine/OptiFabric | Incompatible rendering optimizations |
 | Colorful Hearts | Scaling Health | Both modify heart rendering; causes crashes or weird behaviour |
+| Accessories | Trinkets | Competing accessory slot APIs; do not install both — use Accessories Compatibility Layer instead |
 
 ## Known Soft Conflicts
 
@@ -209,12 +210,12 @@ Tracks known interactions between mods in the pack.
 | Reforged | UnionLib | UnionLib is a required dependency of Reforged |
 | Reforged | Sodium | No overlap — item modifiers vs. rendering optimization |
 | Reforged | Lithium | No overlap — item modifiers vs. game logic optimization |
-| Artifacts | Trinkets | Artifacts optionally integrates with Trinkets for accessory slot management |
+| Artifacts | Trinkets | Artifacts optionally integrates with Trinkets API; now served via Accessories Compatibility Layer |
 | Artifacts | Lootr | Compatible — Artifacts items found in structure chests work with Lootr's per-player instancing |
 | Artifacts | Sodium | No overlap — accessory items vs. rendering optimization |
 | Artifacts | Lithium | No overlap — accessory items vs. game logic optimization |
-| Trinkets | Sodium | No overlap — accessory slots vs. rendering optimization |
-| Trinkets | Fabric API | No overlap — accessory system vs. API |
+| Accessories | Sodium | No overlap — accessory slots vs. rendering optimization |
+| Accessories | Fabric API | No overlap — accessory system vs. API |
 | Mythic Upgrades | owo-lib | owo-lib is a required dependency of Mythic Upgrades |
 | Mythic Upgrades | Fabric API | Mythic Upgrades requires Fabric API |
 | Mythic Upgrades | Sodium | No overlap — new ores/gear vs. rendering optimization |
@@ -254,3 +255,58 @@ Tracks known interactions between mods in the pack.
 | Mendable Anvils | Fabric API | Mendable Anvils requires Fabric API |
 | Mendable Anvils | Sodium | No overlap — anvil repair vs. rendering optimization |
 | Mendable Anvils | Lithium | No overlap — anvil repair vs. game logic optimization |
+| Spell Engine | Better Combat | Same author (ZsoltMolnarrr); designed to work together — spell animations integrate with Better Combat system |
+| Spell Engine | playerAnimator | playerAnimator is a required dependency of Spell Engine |
+| Spell Engine | Spell Power Attributes | Spell Power Attributes is a required dependency of Spell Engine |
+| Spell Engine | Cloth Config API | Cloth Config is a required dependency of Spell Engine |
+| Spell Engine | Fabric API | Spell Engine requires Fabric API |
+| Spell Engine | Accessories | Spell Engine supports Accessories as its slot mod on Fabric |
+| Spell Engine | Accessories Compatibility Layer | Compatible — Spell Engine works with Trinkets API via the compat layer |
+| Spell Engine | Sodium | No overlap — magic system vs. rendering optimization |
+| Spell Power Attributes | Fabric API | Spell Power Attributes requires Fabric API |
+| Spell Power Attributes | Sodium | No overlap — entity attributes vs. rendering optimization |
+| Runes | Spell Engine | Runes provides the ammo system consumed by Spell Engine spells |
+| Runes | Bundle API | Bundle API is a required dependency of Runes |
+| Runes | Fabric API | Runes requires Fabric API |
+| Runes | Sodium | No overlap — spell ammo vs. rendering optimization |
+| Wizards (RPG Series) | Spell Engine | Spell Engine is a required dependency of Wizards |
+| Wizards (RPG Series) | Runes | Runes is a required dependency of Wizards |
+| Wizards (RPG Series) | Better Combat | Strongly recommended; Better Combat provides proper weapon animations for wizard weapons |
+| Wizards (RPG Series) | Paladins & Priests | Same author; designed to coexist — different RPG classes |
+| Wizards (RPG Series) | Simply Swords | Compatible — Wizards adds wands/staves, Simply Swords adds melee weapons; different niches |
+| Wizards (RPG Series) | AzureLib Armor | AzureLib Armor is a required dependency of Wizards |
+| Wizards (RPG Series) | Structure Pool API | Structure Pool API is a required dependency of Wizards |
+| Wizards (RPG Series) | Fabric API | Wizards requires Fabric API |
+| Wizards (RPG Series) | Sodium | No overlap — magic classes vs. rendering optimization |
+| Paladins & Priests | Spell Engine | Spell Engine is a required dependency of Paladins & Priests |
+| Paladins & Priests | Runes | Runes is a required dependency of Paladins & Priests |
+| Paladins & Priests | Better Combat | Strongly recommended; Better Combat provides first-person animations for paladin/priest weapons |
+| Paladins & Priests | AzureLib Armor | AzureLib Armor is a required dependency of Paladins & Priests |
+| Paladins & Priests | Structure Pool API | Structure Pool API is a required dependency of Paladins & Priests |
+| Paladins & Priests | Fabric API | Paladins & Priests requires Fabric API |
+| Paladins & Priests | Sodium | No overlap — magic classes vs. rendering optimization |
+| Structure Pool API | Repurposed Structures | No overlap — structure pool injection API vs. structure variants |
+| Structure Pool API | Towns and Towers | No overlap — structure pool injection API vs. village/outpost expansion |
+| Spectrum | Fabric API | Spectrum requires Fabric API |
+| Spectrum | Cloth Config API | Cloth Config is a required dependency of Spectrum |
+| Spectrum | Accessories Compatibility Layer | Spectrum uses Trinkets API; works via Accessories Compat Layer |
+| Spectrum | Revelationary | Revelationary is a required dependency of Spectrum |
+| Spectrum | Modonomicon | Modonomicon is a required dependency of Spectrum |
+| Spectrum | Sodium | No overlap — magic content vs. rendering optimization |
+| Spectrum | Lithium | No overlap — magic content vs. game logic optimization |
+| Spectrum | Terralith | No overlap — color magic vs. biome additions |
+| Things | owo-lib | owo-lib is a required dependency of Things |
+| Things | Lavender | Lavender is a required dependency of Things |
+| Things | Accessories | Accessories is a required dependency of Things |
+| Things | Artifacts | Compatible — both add accessory items; Things uses Accessories API, Artifacts uses Trinkets API via compat layer |
+| Things | Sodium | No overlap — trinket items vs. rendering optimization |
+| Things | Lithium | No overlap — trinket items vs. game logic optimization |
+| Accessories | Accessories Compatibility Layer | Designed to work together — compat layer bridges Trinkets/Curios APIs to Accessories |
+| Accessories | Artifacts | Compatible via Accessories Compatibility Layer — Artifacts uses Trinkets API which is wrapped by the compat layer |
+| Accessories | Spell Engine | Compatible — Spell Engine supports Accessories directly as its slot mod |
+| Wraith Waystones | Repurposed Structures | Compatible — Waystones spawn naturally in Repurposed Structures villages |
+| Wraith Waystones | Towns and Towers | Compatible — Waystones spawn in villages expanded by Towns and Towers |
+| Wraith Waystones | Terralith | No overlap — teleportation vs. biome additions |
+| Wraith Waystones | Sodium | No overlap — teleportation vs. rendering optimization |
+| Wraith Waystones | Lithium | No overlap — teleportation vs. game logic optimization |
+| Wraith Waystones | Lootr | No overlap — teleportation vs. loot instancing |

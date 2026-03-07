@@ -88,19 +88,39 @@
 - **Mod Loader:** Fabric
 - **Status:** included
 - **Summary:** Adds powerful, uncraftable accessory items found in structure chests, archaeology, or dropped by mimics in underground campsites.
-- **Why:** Makes exploration more rewarding with unique collectible items in accessory slots; pairs with Trinkets for slot management.
-- **Dependencies:** None required; Trinkets (optional, for accessory slots), Cloth Config API (optional)
+- **Why:** Makes exploration more rewarding with unique collectible items in accessory slots; uses Accessories (via Compat Layer) for slot management.
+- **Dependencies:** None required; Accessories Compatibility Layer (optional, for accessory slots), Cloth Config API (optional)
 - **Conflicts:** None known
 
 ## Trinkets
 - **CurseForge ID:** 341284
 - **Slug:** trinkets
 - **Mod Loader:** Fabric
-- **Status:** included
+- **Status:** rejected
 - **Summary:** A data-driven accessory slot system adding equipment slots for head, chest, legs, feet, hands, and custom groups.
-- **Why:** Provides the accessory slot framework used by Artifacts and other mods for equipping rings, necklaces, and other trinkets.
+- **Why:** Replaced by Accessories + Accessories Compatibility Layer. The compat layer wraps the Trinkets API so all Trinkets-dependent mods continue working under Accessories.
 - **Dependencies:** None
-- **Conflicts:** None known
+- **Conflicts:** Conflicts with Accessories when both are installed directly; use Accessories Compatibility Layer instead.
+
+## Accessories
+- **CurseForge ID:** 938917
+- **Slug:** accessories
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A data-driven accessory mod providing an extendable accessory slot system, inspired by Trinkets and Curios with a cross-platform API.
+- **Why:** Replaces Trinkets as the accessory slot framework; required by Things and compatible with Spell Engine. Used with Accessories Compatibility Layer for Trinkets API backwards compatibility.
+- **Dependencies:** None
+- **Conflicts:** Do not install alongside Trinkets directly; use Accessories Compatibility Layer to bridge Trinkets-dependent mods.
+
+## Accessories Compatibility Layer
+- **CurseForge ID:** 1315611
+- **Slug:** accessories-compat-layer
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Wraps the Trinkets and Curios APIs to work under Accessories, unifying accessory management under one framework.
+- **Why:** Enables Trinkets-dependent mods (Artifacts, Spectrum) to work with Accessories without code changes.
+- **Dependencies:** Accessories
+- **Conflicts:** None known; replaces Trinkets mod (do not install Trinkets alongside this).
 
 ## Mythic Upgrades
 - **CurseForge ID:** 663567
@@ -171,3 +191,43 @@
 - **Why:** Prevents anvil waste on the SMP — players can maintain their anvils instead of constantly crafting new ones.
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
+
+## Spectrum
+- **CurseForge ID:** 556967
+- **Slug:** spectrum
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A progression and exploration-based magic mod where you combine colors to create magical tools, machines, and equipment, with the goal of breaking through bedrock.
+- **Why:** Adds a deep, puzzle-driven magic progression system that rewards exploration and experimentation — perfect for long-term SMP engagement.
+- **Dependencies:** Fabric API, Cloth Config API, Trinkets (via Accessories Compat Layer), Revelationary, Modonomicon
+- **Conflicts:** None known
+
+## Revelationary
+- **CurseForge ID:** 656526
+- **Slug:** revelationary
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A data-driven block and item revelation system that gates discovery of new blocks via advancements.
+- **Why:** Required dependency of Spectrum for its progressive discovery system.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Modonomicon
+- **CurseForge ID:** 538392
+- **Slug:** modonomicon
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A data-driven in-game documentation mod with quest/advancement-style navigation, inspired by Thaumcraft's Thaumonomicon and Patchouli.
+- **Why:** Required dependency of Spectrum for its in-game guidebook.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Things
+- **CurseForge ID:** 456151
+- **Slug:** things-fabric
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A collection of trinkets and utility items including a Displacement Tome (teleporter), Bater Wucket (infinite water), Ender Pouch (portable ender chest), and many accessory trinkets.
+- **Why:** Adds a variety of useful, fun trinket items and utilities that enhance casual vanilla+ gameplay on the SMP.
+- **Dependencies:** owo-lib, Lavender, Accessories
+- **Conflicts:** None known; uses Accessories API for trinket slots.
