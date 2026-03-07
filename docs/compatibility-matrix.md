@@ -111,3 +111,25 @@ Tracks known interactions between mods in the pack.
 | Traveler's Backpack | Cloth Config API | Traveler's Backpack uses Cloth Config for settings |
 | Traveler's Backpack | Fabric API | Traveler's Backpack requires Fabric API |
 | Traveler's Backpack | Inventory Profiles Next | IPN can sort Traveler's Backpack inventories |
+| Terralith | Tectonic | Tectonic mod auto-loads Terratonic compatibility when Terralith is detected |
+| Terralith | Noisium | Noisium optimizes worldgen without altering output; confirmed compatible |
+| Tectonic | Noisium | Noisium optimizes worldgen without altering output; confirmed compatible |
+| Terralith | Repurposed Structures | RS spawns structures in Terralith biomes; complementary |
+| Terralith | Towns and Towers | Explicitly confirmed compatible by Towns and Towers |
+| Tectonic | Repurposed Structures | No overlap — terrain shaping vs. structure variants |
+| Tectonic | Towns and Towers | No overlap — terrain shaping vs. village/outpost expansion |
+| Repurposed Structures | Towns and Towers | Explicitly confirmed compatible; different structure types |
+| Repurposed Structures | Lootr | Lootr operates at container level; compatible with all structure mods |
+| Towns and Towers | Lootr | Lootr operates at container level; compatible with all structure mods |
+| Terralith | Lootr | Lootr operates at container level; compatible with all structure mods |
+| Terralith | Sodium | No overlap — worldgen vs. rendering optimization |
+| Terralith | Lithium | No overlap — worldgen vs. game logic optimization |
+| Tectonic | Sodium | No overlap — worldgen vs. rendering optimization |
+| Tectonic | Lithium | No overlap — worldgen vs. game logic optimization |
+| Repurposed Structures | Sodium | No overlap — structures vs. rendering optimization |
+| Repurposed Structures | Lithium | No overlap — structures vs. game logic optimization |
+| Repurposed Structures | MidnightLib | MidnightLib is a required dependency of Repurposed Structures |
+| Repurposed Structures | Fabric API | Repurposed Structures requires Fabric API |
+| Towns and Towers | Sodium | No overlap — structures vs. rendering optimization |
+| Towns and Towers | Lithium | No overlap — structures vs. game logic optimization |
+| Towns and Towers | Cristel Lib | Cristel Lib is a required dependency of Towns and Towers |
