@@ -201,9 +201,29 @@ jq '.hits[] | {project_id, slug, title, description}' /tmp/search.json
 
 Plugin files still track CurseForge project IDs and slugs (for the CurseForge modpack manifest). The CurseForge website blocks direct `curl`/`WebFetch` requests (403), so use this fallback chain:
 
-1. **WebSearch** — Search `"<mod name> Minecraft CurseForge project ID"` with `allowed_domains: ["curseforge.com"]`. The search results typically include the project ID in snippets or metadata.
-2. **Mod's GitHub README** — Many mods link to their CurseForge page. Fetch the raw README and extract the URL; the project ID is sometimes in badge URLs or metadata.
-3. **Modrinth project page** — Check the `.source_url` or description from the Modrinth API response for CurseForge links.
+1. **CFWidget API** (preferred for bulk lookups) — Returns full project metadata including the numeric project ID. Works with both CurseForge slugs and numeric IDs:
+
+   ```bash
+   # Look up by CurseForge slug
+   curl -s "https://api.cfwidget.com/minecraft/mc-mods/<slug>" | jq '{id, title}'
+
+   # Verify a numeric ID
+   curl -s "https://api.cfwidget.com/<numeric-id>" | jq '{id, title}'
+   ```
+
+   > **Note:** CFWidget has rate limits. When looking up many mods, add a small delay (`sleep 1`) between requests. Responses may be empty if rate-limited — retry after a brief pause.
+
+2. **CFLookup** — [cflookup.com](https://cflookup.com/) resolves CurseForge slugs to project pages. Useful as a manual fallback but redirects to curseforge.com (so not directly fetchable via `curl`/`WebFetch`):
+
+   ```
+   https://cflookup.com/minecraft/mc-mods/<slug>
+   ```
+
+3. **WebSearch** — Search `"<mod name> Minecraft CurseForge project ID"` with `allowed_domains: ["curseforge.com"]`. The search results typically include the project ID in snippets or metadata.
+
+4. **Mod's GitHub README** — Many mods link to their CurseForge page. Fetch the raw README and extract the URL; the project ID is sometimes in badge URLs or metadata.
+
+5. **Modrinth project page** — Check the `.source_url` or description from the Modrinth API response for CurseForge links.
 
 Do **not** attempt to `WebFetch` curseforge.com directly — it will return 403.
 
