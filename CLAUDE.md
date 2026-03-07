@@ -134,87 +134,74 @@ refactor(plugins): split utility mods into utility and admin
 - Stage only the files relevant to the change — avoid catch-all `git add .`.
 - One logical change per commit. If adding a mod touches `plugins/`, `docs/compatibility-matrix.md`, and `curseforge/minecraftinstance.json`, commit them together as one `feat` commit.
 
-## CurseForge API Access
+## Modrinth API Access
 
-The project uses the [CurseForge Core API](https://docs.curseforge.com/rest-api/) for mod lookups. Do **not** use Python — use `curl` and `jq` exclusively.
-
-### Authentication
-
-- API key is stored in `.env` (gitignored) as `CURSEFORGE_API_KEY`.
-- Load it before API calls: `source .env`
-- Pass it via header: `-H "x-api-key: $CURSEFORGE_API_KEY"`
+The project uses the [Modrinth API v2](https://docs.modrinth.com/) for mod lookups. No authentication required. Do **not** use Python — use `curl` and `jq` exclusively.
 
 ### Base URL
 
 ```
-https://api.curseforge.com
+https://api.modrinth.com/v2
 ```
 
-### Key Constants
-
-| Constant | Value | Meaning |
-|----------|-------|---------|
-| `gameId` | `432` | Minecraft |
-| `modLoaderType` | `4` | Fabric |
-| `gameVersion` | `1.21.1` | Target MC version |
-
 ### Useful Endpoints
+
+#### Get Project (by slug or ID)
+
+```bash
+curl -s "https://api.modrinth.com/v2/project/<slug>"
+```
+
+Key response fields: `.id`, `.slug`, `.title`, `.description`, `.game_versions`, `.loaders`, `.source_url`.
 
 #### Search Mods
 
 ```bash
-curl -s -H "x-api-key: $CURSEFORGE_API_KEY" \
-  "https://api.curseforge.com/v1/mods/search?gameId=432&slug=<slug>&modLoaderType=4&pageSize=5"
+curl -s "https://api.modrinth.com/v2/search?query=<name>&facets=[[%22categories:fabric%22],[%22versions:1.21.1%22],[%22project_type:mod%22]]"
 ```
 
-Key response fields: `.data[].id`, `.data[].slug`, `.data[].name`, `.data[].summary`, `.data[].latestFilesIndexes[]`.
+Key response fields: `.hits[].project_id`, `.hits[].slug`, `.hits[].title`, `.hits[].description`.
 
-#### Get Mod by ID
+#### Get Project Versions (filtered by version + loader)
 
 ```bash
-curl -s -H "x-api-key: $CURSEFORGE_API_KEY" \
-  "https://api.curseforge.com/v1/mods/<modId>"
+curl -s "https://api.modrinth.com/v2/project/<slug>/version?game_versions=%5B%221.21.1%22%5D&loaders=%5B%22fabric%22%5D"
 ```
 
-Returns full mod details under `.data`.
+Returns an array of version objects. Each includes a `dependencies` array with `project_id` and `dependency_type` (`required`, `optional`, `incompatible`, `embedded`).
 
-#### Get Mod Files (filtered by version + loader)
-
-```bash
-curl -s -H "x-api-key: $CURSEFORGE_API_KEY" \
-  "https://api.curseforge.com/v1/mods/<modId>/files?gameVersion=1.21.1&modLoaderType=4"
-```
-
-Returns files matching the filter. Each file object includes a `dependencies` array with `modId` and `relationType` (1 = embedded library, 2 = optional, 3 = required, 4 = tool, 5 = incompatible, 6 = include).
-
-#### Get Multiple Mods at Once
+#### Get Multiple Projects at Once
 
 ```bash
-curl -s -X POST -H "x-api-key: $CURSEFORGE_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{"modIds": [1, 2, 3]}' \
-  "https://api.curseforge.com/v1/mods"
+curl -s "https://api.modrinth.com/v2/projects?ids=%5B%22id1%22,%22id2%22%5D"
 ```
 
 ### Typical jq Patterns
 
 ```bash
-# Extract mod ID and name from search results
-jq '.data[] | {id, slug, name, summary}' /tmp/result.json
+# Extract key fields from a project
+jq '{id, slug, title, description}' /tmp/project.json
 
-# Check if a mod has a 1.21.1 Fabric file
-jq '.data[] | select(.gameVersion == "1.21.1")' /tmp/files.json
+# Check if a mod supports 1.21.1
+jq '.game_versions | map(select(. == "1.21.1"))' /tmp/project.json
 
-# Extract dependencies from a file
-jq '.data[0].dependencies[] | {modId, relationType}' /tmp/files.json
+# Check if a mod supports Fabric
+jq '.loaders | map(select(. == "fabric"))' /tmp/project.json
 
-# Get latestFilesIndexes filtered to 1.21.1 + Fabric
-jq '.data.latestFilesIndexes[] | select(.gameVersion == "1.21.1" and .modLoader == 4)' /tmp/mod.json
+# Get dependencies from a version
+jq '.[0].dependencies[] | {project_id, dependency_type}' /tmp/versions.json
+
+# Search results extraction
+jq '.hits[] | {project_id, slug, title, description}' /tmp/search.json
 ```
+
+### CurseForge ID Cross-Reference
+
+Plugin files still track CurseForge project IDs and slugs (for the CurseForge modpack manifest). When adding mods via Modrinth, look up the CurseForge ID separately — many mods link to their CurseForge page from their Modrinth project or GitHub README.
 
 ## Conventions
 
-- Always use CurseForge slugs and project IDs — never rely on display names alone.
+- Always use CurseForge slugs and project IDs — never rely on display names alone. Use Modrinth API for lookups, then cross-reference CurseForge IDs.
 - Keep one mod per `## Heading` block in the plugin files.
 - When web-searching for mod info, verify compatibility with **Minecraft 1.21.1** specifically.
 - Prefer mods with active maintenance (updated within the last 6 months).
