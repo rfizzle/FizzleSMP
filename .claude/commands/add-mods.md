@@ -32,6 +32,11 @@ For each mod provided, perform these steps in order:
 - Read `docs/compatibility-matrix.md` for any known conflicts with this mod.
 - Read all `plugins/*.md` files and check if any `included` mod is known to conflict.
 - Flag any hard or soft conflicts found.
+- **If a hard conflict exists with any `included` mod, STOP.** Do not add the mod. Instead:
+  - Explain the conflict clearly.
+  - Suggest alternatives that serve the same purpose without the conflict.
+  - Ask the user if they want to replace the conflicting mod or skip the new one.
+  - Only proceed once the conflict is resolved (conflicting mod removed/replaced or user explicitly overrides).
 - **Update `docs/compatibility-matrix.md`** with any new information gathered:
   - Add entries from the CurseForge page scrape (step 4) to the appropriate section (Hard Conflicts, Soft Conflicts, or Verified Compatible).
   - For each `included` mod in the pack, if the CurseForge page mentions compatibility with it, add a Verified Compatible entry.
