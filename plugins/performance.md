@@ -62,6 +62,26 @@
 - **Dependencies:** None
 - **Conflicts:** None known (archived project, but stable for 1.21.1)
 
+## FerriteCore
+- **CurseForge ID:** 459857
+- **Slug:** ferritecore-fabric
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Reduces memory usage through optimized data structures and blockstate management.
+- **Why:** Significantly lowers RAM consumption, allowing more headroom for other mods and larger worlds on the SMP server.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## ModernFix
+- **CurseForge ID:** 790626
+- **Slug:** modernfix
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** All-in-one mod that improves performance, reduces memory usage, and fixes many bugs.
+- **Why:** Complements existing performance mods by improving launch times, world load times, and memory usage with broad compatibility.
+- **Dependencies:** None
+- **Conflicts:** None known
+
 ## Fabric API
 - **CurseForge ID:** 306612
 - **Slug:** fabric-api

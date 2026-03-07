@@ -50,3 +50,16 @@ Tracks known interactions between mods in the pack.
 | Noisium | Iris Shaders | No overlap — worldgen vs. rendering |
 | Noisium | ImmediatelyFast | No overlap — worldgen vs. rendering |
 | Noisium | Entity Culling | No overlap — worldgen vs. entity rendering |
+| FerriteCore | Sodium | Complementary — FerriteCore optimizes memory, Sodium optimizes rendering |
+| FerriteCore | Lithium | Complementary — memory vs. game logic optimizations |
+| FerriteCore | Iris Shaders | No overlap — different optimization targets |
+| FerriteCore | ImmediatelyFast | No overlap — different optimization targets |
+| FerriteCore | Entity Culling | No overlap — different optimization targets |
+| FerriteCore | Noisium | No overlap — memory vs. worldgen optimizations |
+| FerriteCore | ModernFix | Complementary — both reduce memory but target different areas |
+| ModernFix | Sodium | Compatible per ModernFix description; complementary optimizations |
+| ModernFix | Lithium | Compatible per ModernFix description; complementary optimizations |
+| ModernFix | Iris Shaders | No overlap — different optimization targets |
+| ModernFix | ImmediatelyFast | No overlap — different optimization targets |
+| ModernFix | Entity Culling | No overlap — different optimization targets |
+| ModernFix | Noisium | No overlap — memory/loading vs. worldgen optimizations |
