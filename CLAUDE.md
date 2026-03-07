@@ -134,6 +134,84 @@ refactor(plugins): split utility mods into utility and admin
 - Stage only the files relevant to the change — avoid catch-all `git add .`.
 - One logical change per commit. If adding a mod touches `plugins/`, `docs/compatibility-matrix.md`, and `curseforge/minecraftinstance.json`, commit them together as one `feat` commit.
 
+## CurseForge API Access
+
+The project uses the [CurseForge Core API](https://docs.curseforge.com/rest-api/) for mod lookups. Do **not** use Python — use `curl` and `jq` exclusively.
+
+### Authentication
+
+- API key is stored in `.env` (gitignored) as `CURSEFORGE_API_KEY`.
+- Load it before API calls: `source .env`
+- Pass it via header: `-H "x-api-key: $CURSEFORGE_API_KEY"`
+
+### Base URL
+
+```
+https://api.curseforge.com
+```
+
+### Key Constants
+
+| Constant | Value | Meaning |
+|----------|-------|---------|
+| `gameId` | `432` | Minecraft |
+| `modLoaderType` | `4` | Fabric |
+| `gameVersion` | `1.21.1` | Target MC version |
+
+### Useful Endpoints
+
+#### Search Mods
+
+```bash
+curl -s -H "x-api-key: $CURSEFORGE_API_KEY" \
+  "https://api.curseforge.com/v1/mods/search?gameId=432&slug=<slug>&modLoaderType=4&pageSize=5"
+```
+
+Key response fields: `.data[].id`, `.data[].slug`, `.data[].name`, `.data[].summary`, `.data[].latestFilesIndexes[]`.
+
+#### Get Mod by ID
+
+```bash
+curl -s -H "x-api-key: $CURSEFORGE_API_KEY" \
+  "https://api.curseforge.com/v1/mods/<modId>"
+```
+
+Returns full mod details under `.data`.
+
+#### Get Mod Files (filtered by version + loader)
+
+```bash
+curl -s -H "x-api-key: $CURSEFORGE_API_KEY" \
+  "https://api.curseforge.com/v1/mods/<modId>/files?gameVersion=1.21.1&modLoaderType=4"
+```
+
+Returns files matching the filter. Each file object includes a `dependencies` array with `modId` and `relationType` (1 = embedded library, 2 = optional, 3 = required, 4 = tool, 5 = incompatible, 6 = include).
+
+#### Get Multiple Mods at Once
+
+```bash
+curl -s -X POST -H "x-api-key: $CURSEFORGE_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"modIds": [1, 2, 3]}' \
+  "https://api.curseforge.com/v1/mods"
+```
+
+### Typical jq Patterns
+
+```bash
+# Extract mod ID and name from search results
+jq '.data[] | {id, slug, name, summary}' /tmp/result.json
+
+# Check if a mod has a 1.21.1 Fabric file
+jq '.data[] | select(.gameVersion == "1.21.1")' /tmp/files.json
+
+# Extract dependencies from a file
+jq '.data[0].dependencies[] | {modId, relationType}' /tmp/files.json
+
+# Get latestFilesIndexes filtered to 1.21.1 + Fabric
+jq '.data.latestFilesIndexes[] | select(.gameVersion == "1.21.1" and .modLoader == 4)' /tmp/mod.json
+```
+
 ## Conventions
 
 - Always use CurseForge slugs and project IDs — never rely on display names alone.
