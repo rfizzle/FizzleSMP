@@ -115,3 +115,5 @@ Tracks known interactions between mods in the pack.
 | Oritech | Tech Reborn | Built-in cross-mod compatibility — Oritech machines can process Tech Reborn materials and vice-versa |
 | Simple Conveyor Belts | Iris Shaders | Shader-compatible per mod description |
 | Simple Conveyor Belts | All item storage mods | Designed to work with any item storage mod (chests, barrels, machines) |
+| BetterF3 | MiniHUD | Complementary — BetterF3 replaces the F3 debug screen, MiniHUD adds separate configurable overlays; no overlap |
+| Polymorph | All recipe-adding mods | Designed to resolve recipe conflicts from any mod; universally compatible |

@@ -178,7 +178,7 @@
 - **Mod Loader:** Fabric
 - **Status:** included
 - **Summary:** Enables Fabric mods written in Kotlin to run on the Fabric mod loader.
-- **Why:** Required dependency of Inventory Profiles Next.
+- **Why:** Required dependency of Inventory Profiles Next and Zoomify.
 - **Dependencies:** None
 - **Conflicts:** None known
 
@@ -290,6 +290,46 @@
 - **Summary:** A shared library mod providing common utilities for Fuzs' mods.
 - **Why:** Required dependency of Enchanting Infuser and Easy Magic.
 - **Dependencies:** None
+- **Conflicts:** None known
+
+## YetAnotherConfigLib (YACL)
+- **CurseForge ID:** 667299
+- **Slug:** yacl
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A builder-based configuration library with a rich GUI for Minecraft mods.
+- **Why:** Required dependency of Zoomify.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Zoomify
+- **CurseForge ID:** 574741
+- **Slug:** zoomify
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A zoom mod with infinite customizability.
+- **Why:** Gives players a configurable zoom key for spotting distant terrain, builds, and mobs on the SMP.
+- **Dependencies:** Fabric API, Fabric Language Kotlin, YetAnotherConfigLib (YACL)
+- **Conflicts:** None known
+
+## BetterF3
+- **CurseForge ID:** 401648
+- **Slug:** betterf3
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Replaces Minecraft's original debug HUD with a highly customizable, more human-readable HUD.
+- **Why:** Makes the F3 debug screen easier to read with color-coded modules, customizable layout, and cleaner presentation.
+- **Dependencies:** Cloth Config API
+- **Conflicts:** None known
+
+## Polymorph
+- **CurseForge ID:** 388800
+- **Slug:** polymorph
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Solves recipe conflicts by letting players choose between all potential outputs shared by the same ingredients.
+- **Why:** Essential with a large modpack — resolves crafting, smelting, and smithing recipe conflicts from mods like Tech Reborn, Oritech, and Mythic Upgrades.
+- **Dependencies:** Fabric API
 - **Conflicts:** None known
 
 ## Forge Config API Port
