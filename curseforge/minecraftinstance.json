@@ -1,0 +1,27 @@
+{
+  "baseModLoader": {
+    "name": "neoforge",
+    "minecraftVersion": "1.21.1"
+  },
+  "gameVersion": "1.21.1",
+  "name": "FizzleSMP",
+  "installedAddons": [],
+  "manifest": {
+    "minecraft": {
+      "version": "1.21.1",
+      "modLoaders": [
+        {
+          "id": "neoforge",
+          "primary": true
+        }
+      ]
+    },
+    "manifestType": "minecraftModpack",
+    "manifestVersion": 1,
+    "name": "FizzleSMP",
+    "version": "0.1.0",
+    "author": "",
+    "files": [],
+    "overrides": "overrides"
+  }
+}
