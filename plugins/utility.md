@@ -362,6 +362,26 @@
 - **Dependencies:** EMI, Fzzy Config
 - **Conflicts:** None known
 
+## EMI professions (EMIP)
+- **CurseForge ID:** 1065904
+- **Slug:** emi-professions-emip
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** An EMI addon that shows villager profession workstations — press Uses (U) on an Emerald or Villager Spawn Egg to see all professions.
+- **Why:** Lets players quickly look up which workstation corresponds to each villager profession directly in EMI.
+- **Dependencies:** EMI
+- **Conflicts:** None known
+
+## EMIffect
+- **CurseForge ID:** 735528
+- **Slug:** emiffect-status-effects-emi-plugin
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** An EMI addon that displays status effects in EMI with detailed information about each effect.
+- **Why:** Lets players browse and understand all status effects (vanilla and modded) directly in EMI.
+- **Dependencies:** EMI, Fabric API
+- **Conflicts:** None known
+
 ## Nether Chested
 - **CurseForge ID:** 857971
 - **Slug:** nether-chested
