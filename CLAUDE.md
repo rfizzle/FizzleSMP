@@ -71,6 +71,8 @@ When adding or editing mods, always populate all fields. Use `Status: considerin
 
 When adding a new mod, check it against every existing `included` mod and update the matrix.
 
+**Scope rule:** Only track conflicts and compatibility entries between mods that are `included` or `considering` in the pack. Do not add entries for mods that are not in the pack — the matrix should reflect the actual mod list, not hypothetical external conflicts.
+
 **Hard conflict rule:** A mod must NOT be added with `Status: included` if it has a hard conflict with any existing `included` mod. If a hard conflict is found, either reject the new mod, remove/replace the conflicting mod first, or resolve the conflict before proceeding. This rule applies to all workflows — manual edits, `/add-mods`, and status changes.
 
 ## CurseForge Instance Config

@@ -21,3 +21,13 @@
 - **Why:** Required dependency of What Are They Up To (Watut).
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## Fabric Tailor
+- **CurseForge ID:** 390114
+- **Slug:** fabrictailor
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A server-side skin and cape changing mod that lets players change their skin in-game without restarting.
+- **Why:** Lets SMP players customize their appearance on the fly with commands, useful for offline-mode servers and skin personalization.
+- **Dependencies:** None
+- **Conflicts:** None known

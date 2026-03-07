@@ -262,6 +262,26 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## Xaero's Minimap
+- **CurseForge ID:** 263420
+- **Slug:** xaeros-minimap
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds a self-writing minimap with waypoints, entity radar, cave maps, and customizable appearance.
+- **Why:** Essential navigation tool for SMP — helps players find their way, set waypoints for bases and points of interest, and coordinate with others.
+- **Dependencies:** Fabric API; Open Parties and Claims (optional, for claim overlay)
+- **Conflicts:** None known
+
+## Xaero's World Map
+- **CurseForge ID:** 317780
+- **Slug:** xaeros-world-map
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds a full-screen world map showing explored terrain, designed to work alongside Xaero's Minimap.
+- **Why:** Complements Xaero's Minimap with a full-screen map view for planning routes, reviewing explored territory, and managing waypoints on the SMP.
+- **Dependencies:** Fabric API; Open Parties and Claims (optional, for claim overlay)
+- **Conflicts:** None known
+
 ## Puzzles Lib
 - **CurseForge ID:** 495476
 - **Slug:** puzzles-lib

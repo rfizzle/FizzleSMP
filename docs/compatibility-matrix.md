@@ -17,10 +17,6 @@ Tracks known interactions between mods in the pack.
 
 | Mod A | Mod B | Details |
 |---|---|---|
-| Sodium | OptiFine | Fundamentally incompatible rendering engines |
-| Iris Shaders | OptiFine | Iris replaces OptiFine shader loading; cannot coexist |
-| ImmediatelyFast | OptiFine/OptiFabric | Incompatible rendering optimizations |
-| Colorful Hearts | Scaling Health | Both modify heart rendering; causes crashes or weird behaviour |
 | Accessories | Trinkets | Competing accessory slot APIs; do not install both — use Accessories Compatibility Layer instead |
 
 ## Known Soft Conflicts
@@ -29,11 +25,10 @@ Tracks known interactions between mods in the pack.
 
 | Mod A | Mod B | Details | Resolution |
 |---|---|---|---|
-| Entity Culling | Mods with oversized block entities (Create, Botania) | Oversized block entities may be culled incorrectly | Whitelist affected entities in Entity Culling config |
-| Colorful Hearts | Overflowing Bars | Both modify heart rendering code; can crash or render incorrectly | Set `allowLayers` for hearts to `false` in Overflowing Bars config |
 | Jade | MiniHUD | Both display block/entity info overlays | No actual conflict — Jade shows tooltip on crosshair, MiniHUD shows F3-style HUD. Complementary. |
 | Inventory Profiles Next | Mouse Tweaks | Both modify inventory click/drag behavior | No actual conflict — IPN handles sorting/auto-refill, Mouse Tweaks handles drag-splitting. May need keybind adjustment if defaults overlap. |
 | YUNG's suite | Repurposed Structures | Overlapping structure types: dungeons, mineshafts, desert temples, jungle temples, witch huts | Disable overlapping structure types in RS config; let YUNG's mods handle those. Keep RS enabled for its unique shipwrecks, mansions, igloos, and ruins variants. |
+| Xaero's Minimap | MiniHUD | Both display map/coordinate overlays on the HUD | No actual conflict — Xaero's shows a corner minimap, MiniHUD shows F3-style text overlays. Complementary; adjust HUD positions to avoid visual overlap. |
 | Geophilic | Terralith | Both modify vanilla biome files; features may override each other | Use Terraphilic compatibility pack (must load after both mods) |
 | Enchanting Infuser | Easy Magic | Both from Fuzs; Infuser adds a new enchanting block while Easy Magic tweaks the vanilla table — minor feature overlap in enchanting UX | No config needed — they target different blocks. Both can be used together as intended by the author. |
 
@@ -310,3 +305,34 @@ Tracks known interactions between mods in the pack.
 | Wraith Waystones | Sodium | No overlap — teleportation vs. rendering optimization |
 | Wraith Waystones | Lithium | No overlap — teleportation vs. game logic optimization |
 | Wraith Waystones | Lootr | No overlap — teleportation vs. loot instancing |
+| Creeper Healing | Sodium | No overlap — explosion healing vs. rendering optimization |
+| Creeper Healing | Lithium | No overlap — explosion healing vs. game logic optimization |
+| Creeper Healing | Fabric API | Creeper Healing requires Fabric API |
+| Creeper Healing | Monkey Utils | Monkey Utils is a required dependency of Creeper Healing |
+| Ledger | Fabric API | Ledger requires Fabric API |
+| Ledger | Fabric Language Kotlin | Fabric Language Kotlin is a required dependency of Ledger |
+| Ledger | Sodium | No overlap — block logging vs. rendering optimization |
+| Ledger | Lithium | No overlap — block logging vs. game logic optimization |
+| Open Parties and Claims | Fabric API | OPAC requires Fabric API |
+| Open Parties and Claims | Forge Config API Port | Forge Config API Port is a required dependency of OPAC |
+| Open Parties and Claims | Xaero's Minimap | Designed integration — OPAC claim boundaries display on Xaero's Minimap |
+| Open Parties and Claims | Xaero's World Map | Designed integration — OPAC claim boundaries display on Xaero's World Map |
+| Open Parties and Claims | Wraith Waystones | No overlap — chunk claims vs. teleportation |
+| Open Parties and Claims | Sodium | No overlap — chunk claims vs. rendering optimization |
+| Open Parties and Claims | Lithium | No overlap — chunk claims vs. game logic optimization |
+| Carpet | Lithium | Compatible — Carpet provides rule toggles, Lithium optimizes game logic; complementary |
+| Carpet | Sodium | No overlap — server rules vs. rendering optimization |
+| Carpet | Spark | Complementary — Carpet tweaks mechanics, Spark profiles performance |
+| Spark | Sodium | No overlap — profiling vs. rendering optimization |
+| Spark | Lithium | No overlap — profiling vs. game logic optimization |
+| Fabric Tailor | Sodium | No overlap — skin changing vs. rendering optimization |
+| Fabric Tailor | Lithium | No overlap — skin changing vs. game logic optimization |
+| Xaero's Minimap | Sodium | No overlap — minimap vs. rendering optimization |
+| Xaero's Minimap | Lithium | No overlap — minimap vs. game logic optimization |
+| Xaero's Minimap | Fabric API | Xaero's Minimap requires Fabric API |
+| Xaero's Minimap | Xaero's World Map | Designed to work together — same author, shared waypoint system |
+| Xaero's Minimap | Wraith Waystones | Compatible — waystones can appear as waypoints on minimap via integration mods |
+| Xaero's World Map | Sodium | No overlap — world map vs. rendering optimization |
+| Xaero's World Map | Lithium | No overlap — world map vs. game logic optimization |
+| Xaero's World Map | Fabric API | Xaero's World Map requires Fabric API |
+| Xaero's World Map | Wraith Waystones | Compatible — waystones can appear on world map via integration mods |
