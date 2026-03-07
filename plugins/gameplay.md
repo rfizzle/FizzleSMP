@@ -61,3 +61,73 @@
 - **Why:** Required dependency of Traveler's Backpack.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## Reforged (formerly TieredZ)
+- **CurseForge ID:** 453889
+- **Slug:** tiered-forge
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds random quality modifiers to all tools, weapons, and armor with stat bonuses and abilities, plus a rerolling system via villager-sold hammers.
+- **Why:** Adds RPG-style item quality tiers to every crafted piece of gear, making loot more exciting and encouraging trading on the SMP.
+- **Dependencies:** UnionLib
+- **Conflicts:** None known; modifiers apply to weapons from Simply Swords and gear from Mythic Upgrades (desirable interaction).
+
+## UnionLib
+- **CurseForge ID:** 367806
+- **Slug:** unionlib
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A shared library mod providing common utilities for StereoWalker's mods.
+- **Why:** Required dependency of Reforged (formerly TieredZ).
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Artifacts
+- **CurseForge ID:** 401236
+- **Slug:** artifacts-fabric
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds powerful, uncraftable accessory items found in structure chests, archaeology, or dropped by mimics in underground campsites.
+- **Why:** Makes exploration more rewarding with unique collectible items in accessory slots; pairs with Trinkets for slot management.
+- **Dependencies:** None required; Trinkets (optional, for accessory slots), Cloth Config API (optional)
+- **Conflicts:** None known
+
+## Trinkets
+- **CurseForge ID:** 341284
+- **Slug:** trinkets
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A data-driven accessory slot system adding equipment slots for head, chest, legs, feet, hands, and custom groups.
+- **Why:** Provides the accessory slot framework used by Artifacts and other mods for equipping rings, necklaces, and other trinkets.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Mythic Upgrades
+- **CurseForge ID:** 663567
+- **Slug:** mythic-upgrades
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds new ores (Jade, Topaz, Aquamarine, Sapphire, Ruby, Peridot, Zircon, Citrine, Necoium, Ametrine) with craftable ingots and gear upgrades beyond netherite.
+- **Why:** Extends endgame progression with new materials and gear tiers, giving SMP players more goals beyond netherite.
+- **Dependencies:** Fabric API, owo-lib
+- **Conflicts:** None known
+
+## Mythic Compat
+- **CurseForge ID:** 1014057
+- **Slug:** mythic-lib
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds cross-upgrade recipes for Mythic Upgrades, allowing gear to be upgraded between material tiers.
+- **Why:** Enables upgrading between Mythic Upgrades material tiers (e.g., Topaz chestplate to Ametrine chestplate) for smoother progression.
+- **Dependencies:** Fabric API, Mythic Upgrades
+- **Conflicts:** None known
+
+## owo-lib
+- **CurseForge ID:** 532610
+- **Slug:** owo-lib
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A general utility, GUI, and configuration library for Fabric mods.
+- **Why:** Required dependency of Mythic Upgrades.
+- **Dependencies:** None
+- **Conflicts:** None known

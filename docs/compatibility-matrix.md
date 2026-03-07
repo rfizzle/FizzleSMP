@@ -188,3 +188,41 @@ Tracks known interactions between mods in the pack.
 | Hopo Better Underwater Ruins | Repurposed Structures | May overlap on ocean ruin variants; check RS config to avoid duplicate ruins |
 | Sparse Structures | All structure mods | Designed to work with all structure mods; adjusts spacing/separation globally |
 | Sparse Structures | Fabric API | Sparse Structures requires Fabric API |
+| Simply Swords | Better Combat | Officially partnered — Better Combat provides unique attack animations for all Simply Swords weapon types |
+| Simply Swords | Architectury API | Architectury API is a required dependency of Simply Swords |
+| Simply Swords | Fzzy Config | Fzzy Config is a required dependency of Simply Swords |
+| Simply Swords | Fabric API | No overlap — weapons mod vs. API |
+| Simply Swords | Sodium | No overlap — weapons vs. rendering optimization |
+| Simply Swords | Lithium | No overlap — weapons vs. game logic optimization |
+| Better Combat | Combat Roll | Same author (ZsoltMolnarrr); designed to work together — combat animations + dodge mechanics |
+| Better Combat | playerAnimator | playerAnimator is a required dependency of Better Combat |
+| Better Combat | Cloth Config API | Cloth Config is a required dependency of Better Combat |
+| Better Combat | Fabric API | Better Combat requires Fabric API |
+| Better Combat | Sodium | No overlap — combat animations vs. rendering optimization |
+| Combat Roll | playerAnimator | playerAnimator is a required dependency of Combat Roll |
+| Combat Roll | Cloth Config API | Cloth Config is a required dependency of Combat Roll |
+| Combat Roll | Fabric API | Combat Roll requires Fabric API |
+| Combat Roll | Sodium | No overlap — dodge mechanics vs. rendering optimization |
+| Reforged | Simply Swords | Compatible — Reforged applies random quality modifiers to Simply Swords weapons (desirable interaction) |
+| Reforged | Mythic Upgrades | Compatible — Reforged applies random quality modifiers to Mythic Upgrades gear (desirable interaction) |
+| Reforged | UnionLib | UnionLib is a required dependency of Reforged |
+| Reforged | Sodium | No overlap — item modifiers vs. rendering optimization |
+| Reforged | Lithium | No overlap — item modifiers vs. game logic optimization |
+| Artifacts | Trinkets | Artifacts optionally integrates with Trinkets for accessory slot management |
+| Artifacts | Lootr | Compatible — Artifacts items found in structure chests work with Lootr's per-player instancing |
+| Artifacts | Sodium | No overlap — accessory items vs. rendering optimization |
+| Artifacts | Lithium | No overlap — accessory items vs. game logic optimization |
+| Trinkets | Sodium | No overlap — accessory slots vs. rendering optimization |
+| Trinkets | Fabric API | No overlap — accessory system vs. API |
+| Mythic Upgrades | owo-lib | owo-lib is a required dependency of Mythic Upgrades |
+| Mythic Upgrades | Fabric API | Mythic Upgrades requires Fabric API |
+| Mythic Upgrades | Sodium | No overlap — new ores/gear vs. rendering optimization |
+| Mythic Upgrades | Lithium | No overlap — new ores/gear vs. game logic optimization |
+| Mythic Compat | Mythic Upgrades | Mythic Compat is a companion mod designed for Mythic Upgrades |
+| Mythic Compat | Fabric API | Mythic Compat requires Fabric API |
+| Equipment Compare | Iceberg | Iceberg is a required dependency of Equipment Compare |
+| Equipment Compare | Fabric API | Equipment Compare requires Fabric API |
+| Equipment Compare | Sodium | No overlap — tooltip comparison vs. rendering optimization |
+| Equipment Compare | Simply Swords | Compatible — Equipment Compare shows comparison tooltips for Simply Swords weapons |
+| Equipment Compare | Mythic Upgrades | Compatible — Equipment Compare shows comparison tooltips for Mythic Upgrades gear |
+| Equipment Compare | Artifacts | Compatible — Equipment Compare shows comparison tooltips for Artifacts items |

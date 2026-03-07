@@ -182,6 +182,26 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## Equipment Compare
+- **CurseForge ID:** 541329
+- **Slug:** equipment-compare-fabric
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Shows a comparison tooltip of currently equipped gear alongside hovered items for easy stat comparison.
+- **Why:** Essential QoL for comparing weapons and armor at a glance, especially valuable with Simply Swords and Mythic Upgrades adding many new items.
+- **Dependencies:** Fabric API, Iceberg
+- **Conflicts:** None known; client-side only.
+
+## Iceberg
+- **CurseForge ID:** 539382
+- **Slug:** iceberg-fabric
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A modding library providing common utilities for Grend's mods.
+- **Why:** Required dependency of Equipment Compare.
+- **Dependencies:** None
+- **Conflicts:** None known
+
 ## Traveler's Titles
 - **CurseForge ID:** 590990
 - **Slug:** travelers-titles-fabric
