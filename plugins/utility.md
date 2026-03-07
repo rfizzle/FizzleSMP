@@ -131,3 +131,53 @@
 - **Why:** Required dependency of Mod Menu.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## Iron Chests
+- **CurseForge ID:** 498534
+- **Slug:** iron-chests-for-fabric
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds upgradeable chests (copper, iron, gold, emerald, diamond, crystal, obsidian) with increasing storage capacity.
+- **Why:** Provides larger storage options without needing multiple vanilla chests, essential for organized SMP bases.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## Metal Barrels
+- **CurseForge ID:** 324985
+- **Slug:** metal-barrels
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds upgradeable barrels (copper, iron, silver, gold, diamond, crystal, obsidian, netherite) with increasing storage capacity.
+- **Why:** Complements Iron Chests with barrel variants that have no rendering overhead and can be opened with blocks on top.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## Inventory Profiles Next
+- **CurseForge ID:** 495267
+- **Slug:** inventory-profiles-next
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Advanced inventory management with sorting, auto-refill, locked slots, gear sets, and more.
+- **Why:** Comprehensive inventory QoL — auto-sorts, replaces broken tools, dumps items to chests, and locks slots for organized gameplay.
+- **Dependencies:** Fabric API, Fabric Language Kotlin, libIPN, Mod Menu (optional)
+- **Conflicts:** None known; may have keybind overlap with Mouse Tweaks (configure keybinds to avoid collision)
+
+## libIPN
+- **CurseForge ID:** 679177
+- **Slug:** libipn
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** GUI and configuration library for Inventory Profiles Next and related mods.
+- **Why:** Required dependency of Inventory Profiles Next.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Fabric Language Kotlin
+- **CurseForge ID:** 308769
+- **Slug:** fabric-language-kotlin
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Enables Fabric mods written in Kotlin to run on the Fabric mod loader.
+- **Why:** Required dependency of Inventory Profiles Next.
+- **Dependencies:** None
+- **Conflicts:** None known

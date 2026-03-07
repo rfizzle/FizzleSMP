@@ -31,6 +31,7 @@ Tracks known interactions between mods in the pack.
 | Entity Culling | Mods with oversized block entities (Create, Botania) | Oversized block entities may be culled incorrectly | Whitelist affected entities in Entity Culling config |
 | Colorful Hearts | Overflowing Bars | Both modify heart rendering code; can crash or render incorrectly | Set `allowLayers` for hearts to `false` in Overflowing Bars config |
 | Jade | MiniHUD | Both display block/entity info overlays | No actual conflict — Jade shows tooltip on crosshair, MiniHUD shows F3-style HUD. Complementary. |
+| Inventory Profiles Next | Mouse Tweaks | Both modify inventory click/drag behavior | No actual conflict — IPN handles sorting/auto-refill, Mouse Tweaks handles drag-splitting. May need keybind adjustment if defaults overlap. |
 
 ## Verified Compatible
 
@@ -90,3 +91,23 @@ Tracks known interactions between mods in the pack.
 | Cloth Config API | Mod Menu | Complementary — Cloth Config screens integrate with Mod Menu |
 | RightClickHarvest | Lithium | No overlap — crop harvesting vs. game logic optimization |
 | What Are They Up To (Watut) | Sodium | No overlap — player animation visuals vs. rendering optimization |
+| Iron Chests | Sodium | No overlap — storage blocks vs. rendering optimization |
+| Iron Chests | Lithium | No overlap — storage blocks vs. game logic optimization |
+| Iron Chests | Metal Barrels | Complementary — chests and barrels, no overlap |
+| Metal Barrels | Sodium | No overlap — storage blocks vs. rendering optimization |
+| Metal Barrels | Lithium | No overlap — storage blocks vs. game logic optimization |
+| Metal Barrels | Fabric API | Metal Barrels requires Fabric API |
+| Iron Chests | Fabric API | Iron Chests requires Fabric API |
+| Lootr | Sodium | No overlap — loot instancing vs. rendering optimization |
+| Lootr | Lithium | No overlap — loot instancing vs. game logic optimization |
+| Lootr | Cloth Config API | Lootr uses Cloth Config for settings |
+| Lootr | Fabric API | Lootr requires Fabric API |
+| Inventory Profiles Next | Mouse Tweaks | Both modify inventory interactions; generally compatible but may need keybind adjustment |
+| Inventory Profiles Next | Sodium | No overlap — inventory management vs. rendering optimization |
+| Inventory Profiles Next | Mod Menu | IPN integrates with Mod Menu for settings |
+| Inventory Profiles Next | Fabric API | IPN requires Fabric API |
+| Traveler's Backpack | Sodium | No overlap — backpack storage vs. rendering optimization |
+| Traveler's Backpack | Lithium | No overlap — backpack storage vs. game logic optimization |
+| Traveler's Backpack | Cloth Config API | Traveler's Backpack uses Cloth Config for settings |
+| Traveler's Backpack | Fabric API | Traveler's Backpack requires Fabric API |
+| Traveler's Backpack | Inventory Profiles Next | IPN can sort Traveler's Backpack inventories |
