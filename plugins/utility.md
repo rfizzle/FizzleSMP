@@ -211,3 +211,53 @@
 - **Why:** Adds immersive biome/dimension discovery feel to exploration; pairs with Visual Traveler's Titles resource pack for image-based titles.
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API
 - **Conflicts:** None known
+
+## Enchantment Descriptions
+- **CurseForge ID:** 250419
+- **Slug:** enchantment-descriptions
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds plain-text descriptions of enchantment effects to enchanted item tooltips.
+- **Why:** Helps SMP players understand what each enchantment does at a glance without alt-tabbing to a wiki.
+- **Dependencies:** Fabric API, Bookshelf, Prickle
+- **Conflicts:** None known
+
+## Bookshelf
+- **CurseForge ID:** 228525
+- **Slug:** bookshelf
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** An open-source library mod providing shared utilities for DarkhaxDev's mods.
+- **Why:** Required dependency of Enchantment Descriptions.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Prickle
+- **CurseForge ID:** 1023259
+- **Slug:** prickle
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A JSON-based configuration file format library for Minecraft mods.
+- **Why:** Required dependency of Enchantment Descriptions.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Puzzles Lib
+- **CurseForge ID:** 495476
+- **Slug:** puzzles-lib
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A shared library mod providing common utilities for Fuzs' mods.
+- **Why:** Required dependency of Enchanting Infuser and Easy Magic.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Forge Config API Port
+- **CurseForge ID:** 547434
+- **Slug:** forge-config-api-port
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Ports the NeoForge/Forge config API to Fabric, allowing mods to use Forge-style configuration files.
+- **Why:** Required dependency of Enchanting Infuser and Easy Magic.
+- **Dependencies:** None
+- **Conflicts:** None known

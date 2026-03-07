@@ -34,6 +34,7 @@ Tracks known interactions between mods in the pack.
 | Inventory Profiles Next | Mouse Tweaks | Both modify inventory click/drag behavior | No actual conflict — IPN handles sorting/auto-refill, Mouse Tweaks handles drag-splitting. May need keybind adjustment if defaults overlap. |
 | YUNG's suite | Repurposed Structures | Overlapping structure types: dungeons, mineshafts, desert temples, jungle temples, witch huts | Disable overlapping structure types in RS config; let YUNG's mods handle those. Keep RS enabled for its unique shipwrecks, mansions, igloos, and ruins variants. |
 | Geophilic | Terralith | Both modify vanilla biome files; features may override each other | Use Terraphilic compatibility pack (must load after both mods) |
+| Enchanting Infuser | Easy Magic | Both from Fuzs; Infuser adds a new enchanting block while Easy Magic tweaks the vanilla table — minor feature overlap in enchanting UX | No config needed — they target different blocks. Both can be used together as intended by the author. |
 
 ## Verified Compatible
 
@@ -226,3 +227,30 @@ Tracks known interactions between mods in the pack.
 | Equipment Compare | Simply Swords | Compatible — Equipment Compare shows comparison tooltips for Simply Swords weapons |
 | Equipment Compare | Mythic Upgrades | Compatible — Equipment Compare shows comparison tooltips for Mythic Upgrades gear |
 | Equipment Compare | Artifacts | Compatible — Equipment Compare shows comparison tooltips for Artifacts items |
+| Enchanting Infuser | Easy Magic | Same author (Fuzs); complementary — Infuser adds a new block, Easy Magic improves the vanilla table |
+| Enchanting Infuser | Puzzles Lib | Puzzles Lib is a required dependency of Enchanting Infuser |
+| Enchanting Infuser | Forge Config API Port | Forge Config API Port is a required dependency of Enchanting Infuser |
+| Enchanting Infuser | Fabric API | Enchanting Infuser requires Fabric API |
+| Enchanting Infuser | Sodium | No overlap — enchanting mechanics vs. rendering optimization |
+| Enchanting Infuser | Lithium | No overlap — enchanting mechanics vs. game logic optimization |
+| Easy Magic | Puzzles Lib | Puzzles Lib is a required dependency of Easy Magic |
+| Easy Magic | Forge Config API Port | Forge Config API Port is a required dependency of Easy Magic |
+| Easy Magic | Fabric API | Easy Magic requires Fabric API |
+| Easy Magic | Sodium | No overlap — enchanting QoL vs. rendering optimization |
+| Easy Magic | Lithium | No overlap — enchanting QoL vs. game logic optimization |
+| Enchantment Descriptions | Bookshelf | Bookshelf is a required dependency of Enchantment Descriptions |
+| Enchantment Descriptions | Prickle | Prickle is a required dependency of Enchantment Descriptions |
+| Enchantment Descriptions | Fabric API | Enchantment Descriptions requires Fabric API |
+| Enchantment Descriptions | Sodium | No overlap — tooltip text vs. rendering optimization |
+| Enchantment Descriptions | Equipment Compare | Compatible — both add tooltip information, no overlap |
+| Easy Anvils | Puzzles Lib | Puzzles Lib is a required dependency of Easy Anvils |
+| Easy Anvils | Forge Config API Port | Forge Config API Port is a required dependency of Easy Anvils |
+| Easy Anvils | Fabric API | Easy Anvils requires Fabric API |
+| Easy Anvils | Mendable Anvils | Complementary — Easy Anvils tweaks anvil mechanics, Mendable Anvils adds physical repair |
+| Easy Anvils | Enchanting Infuser | Same author (Fuzs); no overlap — anvil vs. enchanting mechanics |
+| Easy Anvils | Easy Magic | Same author (Fuzs); no overlap — anvil vs. enchanting table |
+| Easy Anvils | Sodium | No overlap — anvil mechanics vs. rendering optimization |
+| Easy Anvils | Lithium | No overlap — anvil mechanics vs. game logic optimization |
+| Mendable Anvils | Fabric API | Mendable Anvils requires Fabric API |
+| Mendable Anvils | Sodium | No overlap — anvil repair vs. rendering optimization |
+| Mendable Anvils | Lithium | No overlap — anvil repair vs. game logic optimization |

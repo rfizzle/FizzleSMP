@@ -131,3 +131,43 @@
 - **Why:** Required dependency of Mythic Upgrades.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## Enchanting Infuser
+- **CurseForge ID:** 551151
+- **Slug:** enchanting-infuser
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds a new enchanting table block that lets players choose specific enchantments for fair, configurable prices.
+- **Why:** Removes enchanting randomness, letting SMP players pick exactly which enchantments they want instead of gambling at vanilla tables.
+- **Dependencies:** Fabric API, Puzzles Lib, Forge Config API Port
+- **Conflicts:** None known; complementary with Easy Magic (same author, different blocks).
+
+## Easy Magic
+- **CurseForge ID:** 456239
+- **Slug:** easy-magic
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Improves the vanilla enchanting table by keeping items in place after closing and enabling easy enchantment re-rolls.
+- **Why:** QoL improvement for vanilla enchanting — items stay in the table when you close the GUI and re-rolling enchantments is simplified.
+- **Dependencies:** Fabric API, Puzzles Lib, Forge Config API Port
+- **Conflicts:** None known; complementary with Enchanting Infuser (same author, different targets).
+
+## Easy Anvils
+- **CurseForge ID:** 682567
+- **Slug:** easy-anvils
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Overhauls anvils with items staying after closing, removal of the "too expensive" cap, better name tags, and many configurable tweaks.
+- **Why:** Removes the frustrating "too expensive" anvil limit and adds QoL improvements, keeping anvils useful throughout endgame on the SMP.
+- **Dependencies:** Fabric API, Puzzles Lib, Forge Config API Port
+- **Conflicts:** None known; complementary with Mendable Anvils (Easy Anvils tweaks mechanics, Mendable Anvils adds repair).
+
+## Mendable Anvils
+- **CurseForge ID:** 648497
+- **Slug:** mendable-anvils
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Allows players to repair damaged anvils by shift + right-clicking with an iron ingot.
+- **Why:** Prevents anvil waste on the SMP — players can maintain their anvils instead of constantly crafting new ones.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
