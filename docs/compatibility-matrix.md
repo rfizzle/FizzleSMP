@@ -20,6 +20,7 @@ Tracks known interactions between mods in the pack.
 | Sodium | OptiFine | Fundamentally incompatible rendering engines |
 | Iris Shaders | OptiFine | Iris replaces OptiFine shader loading; cannot coexist |
 | ImmediatelyFast | OptiFine/OptiFabric | Incompatible rendering optimizations |
+| Colorful Hearts | Scaling Health | Both modify heart rendering; causes crashes or weird behaviour |
 
 ## Known Soft Conflicts
 
@@ -28,6 +29,8 @@ Tracks known interactions between mods in the pack.
 | Mod A | Mod B | Details | Resolution |
 |---|---|---|---|
 | Entity Culling | Mods with oversized block entities (Create, Botania) | Oversized block entities may be culled incorrectly | Whitelist affected entities in Entity Culling config |
+| Colorful Hearts | Overflowing Bars | Both modify heart rendering code; can crash or render incorrectly | Set `allowLayers` for hearts to `false` in Overflowing Bars config |
+| Jade | MiniHUD | Both display block/entity info overlays | No actual conflict — Jade shows tooltip on crosshair, MiniHUD shows F3-style HUD. Complementary. |
 
 ## Verified Compatible
 
@@ -63,3 +66,15 @@ Tracks known interactions between mods in the pack.
 | ModernFix | ImmediatelyFast | No overlap — different optimization targets |
 | ModernFix | Entity Culling | No overlap — different optimization targets |
 | ModernFix | Noisium | No overlap — memory/loading vs. worldgen optimizations |
+| AppleSkin | Colorful Hearts | Explicitly supported — Colorful Hearts has built-in AppleSkin compatibility for health restoration visualization |
+| AppleSkin | Sodium | No overlap — food HUD vs. rendering optimization |
+| AppleSkin | ImmediatelyFast | No overlap — food HUD vs. rendering optimization |
+| Colorful Hearts | Sodium | No overlap — heart rendering vs. chunk rendering |
+| Colorful Hearts | ImmediatelyFast | No overlap — heart rendering vs. rendering optimization |
+| Jade | Sodium | No overlap — info tooltip vs. rendering optimization |
+| Jade | Lithium | No overlap — info tooltip vs. game logic optimization |
+| MiniHUD | Sodium | No overlap — debug HUD vs. rendering optimization |
+| MiniHUD | Lithium | No overlap — debug HUD vs. game logic optimization |
+| MiniHUD | MaLiLib | MaLiLib is MiniHUD's required library; designed to work together |
+| guy's Armor HUD | Sodium | No overlap — armor HUD vs. rendering optimization |
+| guy's Armor HUD | ImmediatelyFast | No overlap — armor HUD widget vs. rendering optimization |
