@@ -18,9 +18,9 @@ For each mod provided, perform these steps in order:
 ## 3. Dependency Check
 - Look up the mod's required dependencies for 1.21.1 Fabric.
 - For each dependency:
-  - Check if it is already listed as `included` in any `plugins/*.md` file.
+  - Check if it is already listed in any `plugins/*.md` file.
   - If missing, note it as a **new dependency that must also be added**.
-- List all dependencies (already included and newly required).
+- List all dependencies (already present and newly required).
 
 ## 4. CurseForge Page Compatibility Scrape
 - Fetch the mod's CurseForge page (and any linked wiki/docs) using WebFetch.
@@ -30,16 +30,16 @@ For each mod provided, perform these steps in order:
 
 ## 5. Conflict Pre-Check & Matrix Update
 - Read `docs/compatibility-matrix.md` for any known conflicts with this mod.
-- Read all `plugins/*.md` files and check if any `included` mod is known to conflict.
+- Read all `plugins/*.md` files and check if any listed mod is known to conflict.
 - Flag any hard or soft conflicts found.
-- **If a hard conflict exists with any `included` mod, STOP.** Do not add the mod. Instead:
+- **If a hard conflict exists with any listed mod, STOP.** Do not add the mod. Instead:
   - Explain the conflict clearly.
   - Suggest alternatives that serve the same purpose without the conflict.
   - Ask the user if they want to replace the conflicting mod or skip the new one.
   - Only proceed once the conflict is resolved (conflicting mod removed/replaced or user explicitly overrides).
 - **Update `docs/compatibility-matrix.md`** with any new information gathered:
   - Add entries from the CurseForge page scrape (step 4) to the appropriate section (Hard Conflicts, Soft Conflicts, or Verified Compatible).
-  - For each `included` mod in the pack, if the CurseForge page mentions compatibility with it, add a Verified Compatible entry.
+  - For each mod in the pack, if the CurseForge page mentions compatibility with it, add a Verified Compatible entry.
   - If the CurseForge page mentions conflicts with any mod (whether in our pack or not), add it to the appropriate conflict section for future reference.
 
 ## 6. Categorize
@@ -53,7 +53,6 @@ For each mod provided, perform these steps in order:
   - **CurseForge ID:** <project-id>
   - **Slug:** <curseforge-slug>
   - **Mod Loader:** Fabric
-  - **Status:** included
   - **Summary:** One-line description.
   - **Why:** <ask the user or infer from context>
   - **Dependencies:** List or "None"
@@ -67,4 +66,4 @@ After processing all mods, print a summary:
 - **Dependencies added:** any new dependencies pulled in.
 - **Incompatible:** mods that couldn't be added, with suggested alternatives.
 - **Conflicts found:** any issues that need attention.
-- Remind the user to run `/check-conflicts` for a full cross-reference and to regenerate `curseforge/minecraftinstance.json` when ready.
+- Remind the user to run `/check-conflicts` for a full cross-reference.

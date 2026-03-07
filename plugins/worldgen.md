@@ -6,7 +6,6 @@
 - **CurseForge ID:** 513688
 - **Slug:** terralith
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Adds nearly 100 new biomes with overhauled terrain using only vanilla blocks, plus immersive structures.
 - **Why:** Massively expands world diversity with realistic and fantasy biomes, making exploration more rewarding on the SMP.
 - **Dependencies:** None
@@ -16,7 +15,6 @@
 - **CurseForge ID:** 686836
 - **Slug:** tectonic
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Overhauls terrain generation with grander, more varied mountains, valleys, and landforms.
 - **Why:** Creates dramatic terrain shaping that complements Terralith's biome additions for a visually stunning world.
 - **Dependencies:** None
@@ -26,7 +24,6 @@
 - **CurseForge ID:** 391366
 - **Slug:** repurposed-structures-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Adds biome-themed variants of vanilla structures (pyramids, villages, dungeons, mineshafts, and more).
 - **Why:** Adds structure variety across biomes so exploration feels fresh and structures fit their surroundings.
 - **Dependencies:** Fabric API, MidnightLib
@@ -36,7 +33,6 @@
 - **CurseForge ID:** 626761
 - **Slug:** towns-and-towers
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Expands villages, pillager outposts, and adds new ship structures with biome-appropriate designs.
 - **Why:** Enhances village and outpost variety to complement the expanded biome diversity from Terralith.
 - **Dependencies:** Cristel Lib
@@ -46,7 +42,6 @@
 - **CurseForge ID:** 856996
 - **Slug:** cristel-lib
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** A library mod for easy structure config and runtime datapacks.
 - **Why:** Required dependency of Towns and Towers.
 - **Dependencies:** None
@@ -56,7 +51,6 @@
 - **CurseForge ID:** 408465
 - **Slug:** yungs-better-caves-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Completely overhauls Minecraft's cave systems with lava caverns, underground lakes and rivers, flooded caverns, and more.
 - **Why:** Makes underground exploration dramatically more interesting with varied cave types that get crazier the deeper you go.
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API
@@ -66,7 +60,6 @@
 - **CurseForge ID:** 373591
 - **Slug:** yungs-better-mineshafts-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Revamps abandoned mineshafts into dynamic webs of tunnels with 13 biome variants, ore deposits, and hidden loot.
 - **Why:** Transforms mineshafts from boring straight lines into varied, explorable tunnel networks.
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API
@@ -76,7 +69,6 @@
 - **CurseForge ID:** 480684
 - **Slug:** yungs-better-strongholds-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Completely redesigns strongholds with 15+ room types, varied tunnels, staircases, traps, and hidden areas.
 - **Why:** Makes the stronghold a proper dungeon-crawling experience instead of a repetitive maze.
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API
@@ -86,7 +78,6 @@
 - **CurseForge ID:** 525586
 - **Slug:** yungs-better-dungeons-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Redesigns vanilla dungeons and adds three new types: Catacombs, Fortresses of the Undead, and Spider Caves.
 - **Why:** Replaces boring single-room spawner dungeons with varied, atmospheric dungeon experiences.
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API
@@ -96,7 +87,6 @@
 - **CurseForge ID:** 631020
 - **Slug:** yungs-better-desert-temples-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Redesigns desert temples with new puzzles, traps, parkour challenges, and a pharaoh boss encounter.
 - **Why:** Transforms desert temples from trivial loot boxes into engaging multi-room dungeons.
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API
@@ -106,7 +96,6 @@
 - **CurseForge ID:** 689252
 - **Slug:** yungs-better-ocean-monuments-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Overhauls ocean monuments to be larger, randomized, more engaging, and more rewarding with better loot.
 - **Why:** Makes ocean monuments worth exploring with varied layouts and improved loot including tridents.
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API
@@ -116,7 +105,6 @@
 - **CurseForge ID:** 817666
 - **Slug:** yungs-better-nether-fortresses-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Completely redesigns Nether fortresses with bridge networks, a Keep, and Lava Halls extending deep underground.
 - **Why:** Makes Nether fortresses much larger, more complex, and more rewarding to explore.
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API
@@ -126,7 +114,6 @@
 - **CurseForge ID:** 897678
 - **Slug:** yungs-better-jungle-temples-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Redesigns jungle temples with expanded layouts, new puzzles, traps, and improved loot.
 - **Why:** Transforms jungle temples from small, forgettable structures into proper jungle dungeon experiences.
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API
@@ -136,7 +123,6 @@
 - **CurseForge ID:** 631403
 - **Slug:** yungs-better-witch-huts-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Overhauls swamp witch huts with multiple biome-specific variants and expanded interiors.
 - **Why:** Adds variety to witch huts so they feel more integrated into the world.
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API
@@ -146,7 +132,6 @@
 - **CurseForge ID:** 901350
 - **Slug:** yungs-better-end-island-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Overhauls the main End Island with redesigned obsidian pillars, gateways, spawn platform, and a bell tower summon mechanic.
 - **Why:** Makes the dragon fight arena more impressive and changes the dragon encounter to be summoned rather than auto-spawning.
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API
@@ -156,7 +141,6 @@
 - **CurseForge ID:** 590993
 - **Slug:** yungs-extras-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Adds miscellaneous small structures and features to the world like desert wells, shipwrecks, igloos, and more.
 - **Why:** Fills in small worldgen gaps with extra structures that complement the larger YUNG's overhauls.
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API
@@ -166,7 +150,6 @@
 - **CurseForge ID:** 590988
 - **Slug:** yungs-bridges-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Adds naturally generated bridges throughout the world with 15+ biome-specific variants.
 - **Why:** Adds beautiful, immersive bridges that span ravines and rivers, enhancing world atmosphere.
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API
@@ -176,7 +159,6 @@
 - **CurseForge ID:** 421649
 - **Slug:** yungs-api-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** A common API and library mod used by all YUNG's mods for shared structure generation code.
 - **Why:** Required dependency of all YUNG's Better structure mods and Traveler's Titles.
 - **Dependencies:** Fabric API
@@ -186,7 +168,6 @@
 - **CurseForge ID:** 591388
 - **Slug:** incendium
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** A nether biome overhaul with challenging structures, unique weapons, and tricky mobs.
 - **Why:** Transforms the Nether into a rich, explorable dimension with new biomes, structures, loot, and mobs for SMP adventure.
 - **Dependencies:** None
@@ -196,7 +177,6 @@
 - **CurseForge ID:** 570354
 - **Slug:** nullscape
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Transforms the End into an alien dimension with surreal terrain and new biomes while keeping it desolate.
 - **Why:** Makes the End worth exploring beyond just the dragon fight, with dramatic terrain and new biomes.
 - **Dependencies:** None
@@ -206,7 +186,6 @@
 - **CurseForge ID:** 636540
 - **Slug:** structory
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Adds atmospheric, lore-rich structures throughout the world with seasonal updates.
 - **Why:** Fills the world with immersive small-to-medium structures that enhance exploration and world atmosphere.
 - **Dependencies:** None
@@ -216,7 +195,6 @@
 - **CurseForge ID:** 783522
 - **Slug:** structory-towers
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Adds immersive biome-themed towers to the world as a standalone option or add-on to Structory.
 - **Why:** Complements Structory with vertical tower structures that serve as landmarks and exploration targets.
 - **Dependencies:** None (standalone, but designed to pair with Structory)
@@ -226,7 +204,6 @@
 - **CurseForge ID:** 1112347
 - **Slug:** yungs-cave-biomes-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Adds new vanilla+ cave biomes and underground content with unique vegetation, ores, and atmosphere.
 - **Why:** Enriches underground exploration with diverse cave biome types that complement YUNG's Better Caves.
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API, GeckoLib, TerraBlender
@@ -236,7 +213,6 @@
 - **CurseForge ID:** 388172
 - **Slug:** geckolib
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** An animation and model library for Minecraft mods, enabling complex entity animations.
 - **Why:** Required dependency of YUNG's Cave Biomes.
 - **Dependencies:** None
@@ -246,7 +222,6 @@
 - **CurseForge ID:** 565956
 - **Slug:** terrablender-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** A library mod for adding biomes in a simple and compatible manner with other biome mods.
 - **Why:** Required dependency of YUNG's Cave Biomes.
 - **Dependencies:** None
@@ -256,7 +231,6 @@
 - **CurseForge ID:** 711216
 - **Slug:** geophilic
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** A subtle overhaul of vanilla Overworld biomes with reworked vegetation and terrain features.
 - **Why:** Enhances vanilla biomes with more natural-looking vegetation and terrain details without adding new biomes.
 - **Dependencies:** None
@@ -266,7 +240,6 @@
 - **CurseForge ID:** 1098706
 - **Slug:** terraphilic
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Geophilic-Terralith compatibility pack that merges biome files from both mods.
 - **Why:** Required compatibility pack to run Geophilic alongside Terralith without biome conflicts.
 - **Dependencies:** Terralith, Geophilic
@@ -276,7 +249,6 @@
 - **CurseForge ID:** 632622
 - **Slug:** hopo-better-underwater-ruins
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Overhauls ocean ruins with new, larger, and more varied underwater structure designs.
 - **Why:** Enhances underwater exploration with better-looking and more rewarding ocean ruins.
 - **Dependencies:** None
@@ -286,7 +258,6 @@
 - **CurseForge ID:** 911437
 - **Slug:** sparse-structures
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Makes all structures (including modded) more spread out and configurable in rarity.
 - **Why:** Prevents structure spam in a heavily modded worldgen pack; encourages exploration by making structures rarer and better distributed.
 - **Dependencies:** Fabric API

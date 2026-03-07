@@ -5,7 +5,7 @@
 This repository defines **FizzleSMP**, a curated Minecraft 1.21.1 modpack managed with [packwiz](https://packwiz.infra.link/) and distributable to CurseForge and Modrinth. The project contains:
 
 - Plugin/mod lists organized by category (`plugins/`) — the human-readable source of truth
-- Packwiz metadata (`pack.toml`, `index.toml`, `mods/*.pw.toml`) — the machine-readable modpack definition
+- Packwiz metadata (`modpack/pack.toml`, `modpack/index.toml`, `modpack/mods/*.pw.toml`) — the machine-readable modpack definition
 - A feature brainstorming document that maps ideas to mods (`docs/features-brainstorm.md`)
 - A compatibility matrix tracking known conflicts (`docs/compatibility-matrix.md`)
 - A sync script (`scripts/sync-packwiz.sh`) that keeps packwiz in sync with the plugin lists
@@ -21,12 +21,13 @@ This repository defines **FizzleSMP**, a curated Minecraft 1.21.1 modpack manage
 ```
 FizzleSMP/
 ├── CLAUDE.md                       # This file — project rules and context
-├── pack.toml                       # Packwiz pack definition (MC version, loader)
-├── index.toml                      # Packwiz file manifest (auto-generated)
-├── mods/                           # Packwiz mod metadata (one .pw.toml per mod)
-│   ├── sodium.pw.toml
-│   ├── lithium.pw.toml
-│   └── ...
+├── modpack/                        # Packwiz modpack directory
+│   ├── pack.toml                   # Packwiz pack definition (MC version, loader)
+│   ├── index.toml                  # Packwiz file manifest (auto-generated)
+│   └── mods/                       # Packwiz mod metadata (one .pw.toml per mod)
+│       ├── sodium.pw.toml
+│       ├── lithium.pw.toml
+│       └── ...
 ├── plugins/                        # Human-readable mod lists (source of truth)
 │   ├── performance.md              # Performance & optimization mods
 │   ├── worldgen.md                 # World generation & terrain mods
@@ -41,7 +42,7 @@ FizzleSMP/
 │   ├── features-brainstorm.md      # Feature wishlist → mod mapping
 │   └── compatibility-matrix.md     # Known conflicts & compatibility notes
 ├── scripts/
-│   └── sync-packwiz.sh             # Sync plugins/*.md → packwiz mods/
+│   └── sync-packwiz.sh             # Sync plugins/*.md → modpack/mods/
 └── .claude/
     └── commands/
         ├── review-plugins.md       # /review-plugins — audit the full mod list
@@ -60,14 +61,13 @@ Each file in `plugins/` uses this format:
 - **CurseForge ID:** <project-id>
 - **Slug:** <curseforge-slug>
 - **Mod Loader:** Fabric
-- **Status:** included | considering | rejected
 - **Summary:** One-line description of what it does.
 - **Why:** Why we want it in the pack.
 - **Dependencies:** Required dependencies (or "None").
 - **Conflicts:** Any known incompatibilities (or "None known").
 ```
 
-When adding or editing mods, always populate all fields. Use `Status: considering` for mods not yet confirmed.
+Only mods that belong in the pack should be listed. If a mod is rejected or removed, delete its entry entirely. When adding or editing mods, always populate all fields.
 
 ## Compatibility Matrix Rules
 
@@ -76,9 +76,9 @@ When adding or editing mods, always populate all fields. Use `Status: considerin
 - **Soft conflicts** — mods that overlap in functionality or have config clashes.
 - **Verified compatible** — mod pairs explicitly tested together.
 
-When adding a new mod, check it against every existing `included` mod for conflicts. Only add matrix entries when there is a meaningful finding (see signal rule below).
+When adding a new mod, check it against every existing mod for conflicts. Only add matrix entries when there is a meaningful finding (see signal rule below).
 
-**Scope rule:** Only track conflicts and compatibility entries between mods that are `included` or `considering` in the pack. Do not add entries for mods that are not in the pack — the matrix should reflect the actual mod list, not hypothetical external conflicts.
+**Scope rule:** Only track conflicts and compatibility entries between mods listed in the pack. Do not add entries for mods that are not in the pack — the matrix should reflect the actual mod list, not hypothetical external conflicts.
 
 **Signal rule:** The matrix should only contain entries with real informational value. Do **not** add:
 - **Dependency relationships** — these are already tracked in the plugin files' `Dependencies` field. A mod is obviously compatible with its own dependencies.
@@ -90,17 +90,17 @@ When adding a new mod, check it against every existing `included` mod for confli
 - Mods have an **explicit integration** or designed interaction (e.g., OPAC displays on Xaero's maps, Reforged applies modifiers to Simply Swords weapons).
 - A mod is **universally compatible** with a whole category and it's worth noting once (e.g., "Lootr | All structure mods", "Noisium | All worldgen mods").
 
-**Hard conflict rule:** A mod must NOT be added with `Status: included` if it has a hard conflict with any existing `included` mod. If a hard conflict is found, either reject the new mod, remove/replace the conflicting mod first, or resolve the conflict before proceeding. This rule applies to all workflows — manual edits, `/add-mods`, and status changes.
+**Hard conflict rule:** A mod must NOT be added if it has a hard conflict with any existing mod. If a hard conflict is found, either skip the new mod, remove/replace the conflicting mod first, or resolve the conflict before proceeding.
 
-**Add-mod conflict check:** When adding a new mod via `/add-mods`, always check for conflicts against **all** existing `included` mods regardless of category. The matrix entries are limited to same-domain interactions, but the conflict *check* must be comprehensive. Use `/check-conflicts` for full cross-pack audits.
+**Add-mod conflict check:** When adding a new mod via `/add-mods`, always check for conflicts against **all** existing mods regardless of category. The matrix entries are limited to same-domain interactions, but the conflict *check* must be comprehensive. Use `/check-conflicts` for full cross-pack audits.
 
 ## Packwiz
 
 [Packwiz](https://packwiz.infra.link/) manages the machine-readable modpack definition. Key files:
 
-- **`pack.toml`** — Pack name, Minecraft version, Fabric loader version
-- **`index.toml`** — Auto-generated manifest of all files with hashes
-- **`mods/*.pw.toml`** — One metadata file per mod (download URL, hash, update tracking)
+- **`modpack/pack.toml`** — Pack name, Minecraft version, Fabric loader version
+- **`modpack/index.toml`** — Auto-generated manifest of all files with hashes
+- **`modpack/mods/*.pw.toml`** — One metadata file per mod (download URL, hash, update tracking)
 
 ### Sync Script
 
@@ -112,9 +112,11 @@ When adding a new mod, check it against every existing `included` mod for confli
 ./scripts/sync-packwiz.sh --dry-run # Preview changes without modifying anything
 ```
 
-The script parses all `plugins/*.md` files, finds mods with `Status: included`, and runs `packwiz curseforge install` (or `packwiz modrinth install` for Modrinth-only mods) for each one not already in `mods/`. It matches by CurseForge project ID to avoid duplicates even when filenames differ.
+The script parses all `plugins/*.md` files and runs `packwiz curseforge install` (or `packwiz modrinth install` for Modrinth-only mods) for each mod not already in `modpack/mods/`. It matches by CurseForge project ID to avoid duplicates even when filenames differ.
 
 ### Common Packwiz Commands
+
+Run these from the `modpack/` directory:
 
 ```bash
 packwiz curseforge install <slug>   # Add a mod from CurseForge
@@ -129,22 +131,22 @@ packwiz modrinth export             # Export .mrpack for Modrinth
 
 ### Workflow Integration
 
-When adding a mod via `/add-mods`, the plugin file is the source of truth. After updating `plugins/*.md`, run `./scripts/sync-packwiz.sh` to propagate changes to packwiz. The packwiz files (`pack.toml`, `index.toml`, `mods/`) should be committed alongside plugin changes.
+When adding a mod via `/add-mods`, the plugin file is the source of truth. After updating `plugins/*.md`, run `./scripts/sync-packwiz.sh` to propagate changes to packwiz. The packwiz files (`modpack/pack.toml`, `modpack/index.toml`, `modpack/mods/`) should be committed alongside plugin changes.
 
 ## Custom Commands
 
 | Command | Purpose |
 |---------|---------|
-| `/review-plugins` | Reads all `plugins/*.md` files, prints a summary table of every mod (name, status, category, conflicts), and flags any issues (missing fields, duplicates across categories). |
-| `/check-conflicts` | Reads the plugin lists and compatibility matrix, cross-references all `included` mods, and reports potential conflicts — both known (from the matrix) and suspected (overlapping functionality). |
+| `/review-plugins` | Reads all `plugins/*.md` files, prints a summary table of every mod (name, category, conflicts), and flags any issues (missing fields, duplicates across categories). |
+| `/check-conflicts` | Reads the plugin lists and compatibility matrix, cross-references all mods, and reports potential conflicts — both known (from the matrix) and suspected (overlapping functionality). |
 | `/add-mods <mod names>` | Verifies 1.21.1 Fabric compatibility, resolves dependencies, checks for conflicts, and adds the mod to the correct category file. Suggests alternatives if incompatible. |
 
 ## Workflow
 
 1. **Brainstorm** — Add feature ideas to `docs/features-brainstorm.md`.
-2. **Research** — Find mods that fulfill those features; add to the appropriate `plugins/*.md` file with `Status: considering`.
+2. **Research** — Find mods that fulfill those features; verify compatibility.
 3. **Evaluate** — Run `/check-conflicts` to surface issues. Update `docs/compatibility-matrix.md`.
-4. **Decide** — Change status to `included` or `rejected`.
+4. **Add** — Add the mod to the appropriate `plugins/*.md` file via `/add-mods` or manually.
 5. **Build** — Run `./scripts/sync-packwiz.sh` to sync packwiz, then `packwiz curseforge export` or `packwiz modrinth export` to build distributable packs.
 
 ## Git Commit Workflow
@@ -169,7 +171,7 @@ This project uses **Conventional Commits** for all commit messages.
   - `worldgen`, `combat`, `economy`, etc. — Specific plugin category
   - `compat` — Changes to `compatibility-matrix.md`
   - `brainstorm` — Changes to `features-brainstorm.md`
-  - `packwiz` — Changes to `pack.toml`, `index.toml`, or `mods/*.pw.toml`
+  - `packwiz` — Changes to `modpack/pack.toml`, `modpack/index.toml`, or `modpack/mods/*.pw.toml`
 - **short summary** — Imperative, lowercase, no period at the end
 
 ### Examples
@@ -179,7 +181,7 @@ feat(plugins): add Lithium to performance mods
 fix(compat): correct hard conflict between Create and Sodium
 docs(brainstorm): add custom enchantments feature idea
 chore(packwiz): sync mods via sync-packwiz.sh
-feat(combat): add Better Combat with status included
+feat(combat): add Better Combat
 refactor(plugins): split utility mods into utility and admin
 ```
 
@@ -188,7 +190,7 @@ refactor(plugins): split utility mods into utility and admin
 - Keep the summary line under 72 characters.
 - Use the imperative mood ("add", not "added" or "adds").
 - Stage only the files relevant to the change — avoid catch-all `git add .`.
-- One logical change per commit. If adding a mod touches `plugins/`, `docs/compatibility-matrix.md`, and `mods/*.pw.toml`, commit them together as one `feat` commit.
+- One logical change per commit. If adding a mod touches `plugins/`, `docs/compatibility-matrix.md`, and `modpack/mods/*.pw.toml`, commit them together as one `feat` commit.
 
 ## Modrinth API Access
 

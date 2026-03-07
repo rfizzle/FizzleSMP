@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# sync-packwiz.sh — Sync included mods from plugins/*.md into packwiz
+# sync-packwiz.sh — Sync mods from plugins/*.md into packwiz
 #
 # Usage:
 #   ./scripts/sync-packwiz.sh           # Install missing mods
 #   ./scripts/sync-packwiz.sh --prune   # Also remove mods not in plugins/
 #   ./scripts/sync-packwiz.sh --dry-run # Show what would happen without changes
 #
-# Reads every plugins/*.md file, extracts mods with Status: included,
+# Reads every plugins/*.md file, extracts all listed mods,
 # and runs packwiz curseforge/modrinth install for each one not already
 # present in the packwiz mods/ directory.
 
@@ -15,7 +15,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 PLUGINS_DIR="$PROJECT_DIR/plugins"
-MODS_DIR="$PROJECT_DIR/mods"
+MODPACK_DIR="$PROJECT_DIR/modpack"
+MODS_DIR="$MODPACK_DIR/mods"
 
 DRY_RUN=false
 PRUNE=false
@@ -43,8 +44,8 @@ if ! command -v packwiz &>/dev/null; then
     exit 1
 fi
 
-if [[ ! -f "$PROJECT_DIR/pack.toml" ]]; then
-    echo "ERROR: pack.toml not found in $PROJECT_DIR"
+if [[ ! -f "$MODPACK_DIR/pack.toml" ]]; then
+    echo "ERROR: pack.toml not found in $MODPACK_DIR"
     echo "Run 'packwiz init' first."
     exit 1
 fi
@@ -54,7 +55,7 @@ fi
 # curseforge_id is "N/A" for Modrinth-only mods.
 
 parse_plugins() {
-    local name="" slug="" cf_id="" status=""
+    local name="" slug="" cf_id=""
 
     for file in "$PLUGINS_DIR"/*.md; do
         [[ -f "$file" ]] || continue
@@ -62,12 +63,12 @@ parse_plugins() {
         while IFS= read -r line; do
             # New mod heading
             if [[ "$line" =~ ^##\  ]]; then
-                # Emit previous mod if included
-                if [[ "$status" == "included" && -n "$slug" ]]; then
+                # Emit previous mod if it has a slug
+                if [[ -n "$slug" ]]; then
                     echo "${slug}|${cf_id}|${name}"
                 fi
                 name="${line#\#\# }"
-                slug="" cf_id="" status=""
+                slug="" cf_id=""
             fi
 
             # Field extraction
@@ -75,16 +76,14 @@ parse_plugins() {
                 slug="$(echo "$line" | sed 's/.*\*\*Slug:\*\* *//')"
             elif [[ "$line" == *"**CurseForge ID:**"* ]]; then
                 cf_id="$(echo "$line" | sed 's/.*\*\*CurseForge ID:\*\* *//')"
-            elif [[ "$line" == *"**Status:**"* ]]; then
-                status="$(echo "$line" | sed 's/.*\*\*Status:\*\* *//')"
             fi
         done < "$file"
 
         # Last mod in file
-        if [[ "$status" == "included" && -n "$slug" ]]; then
+        if [[ -n "$slug" ]]; then
             echo "${slug}|${cf_id}|${name}"
         fi
-        name="" slug="" cf_id="" status=""
+        name="" slug="" cf_id=""
     done
 }
 
@@ -196,7 +195,7 @@ main() {
     done < <(parse_plugins)
 
     total=${#mod_lines[@]}
-    echo "Included mods in plugins/: $total"
+    echo "Mods in plugins/: $total"
     echo ""
 
     # Process each mod

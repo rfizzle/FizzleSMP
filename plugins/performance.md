@@ -6,7 +6,6 @@
 - **CurseForge ID:** 394468
 - **Slug:** sodium
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** The fastest and most compatible rendering optimization mod for Minecraft.
 - **Why:** Essential client-side performance boost — dramatically improves FPS and reduces stuttering.
 - **Dependencies:** None
@@ -16,7 +15,6 @@
 - **CurseForge ID:** 455508
 - **Slug:** irisshaders
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** A modern shader pack loader compatible with existing OptiFine shader packs.
 - **Why:** Allows players to use shader packs for visual enhancement while keeping Sodium performance.
 - **Dependencies:** Sodium
@@ -26,7 +24,6 @@
 - **CurseForge ID:** 686911
 - **Slug:** immediatelyfast
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Speeds up immediate mode rendering in Minecraft (HUD, text, entities).
 - **Why:** Complements Sodium by optimizing rendering areas Sodium doesn't cover (HUD, text, item rendering).
 - **Dependencies:** None
@@ -36,7 +33,6 @@
 - **CurseForge ID:** 448233
 - **Slug:** entityculling
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Uses async path-tracing to skip rendering block entities and entities that are not visible.
 - **Why:** Significant FPS improvement in entity-heavy areas by culling off-screen entities more aggressively than Sodium.
 - **Dependencies:** Fabric API
@@ -46,7 +42,6 @@
 - **CurseForge ID:** 360438
 - **Slug:** lithium
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** No-compromises game logic optimization mod for servers and clients.
 - **Why:** Optimizes game logic (AI, physics, chunk loading) for significant server and client performance gains without changing vanilla behavior.
 - **Dependencies:** None
@@ -56,7 +51,6 @@
 - **CurseForge ID:** 930207
 - **Slug:** noisium
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Optimises worldgen performance for faster chunk generation.
 - **Why:** Speeds up world generation, complementing other performance mods; especially beneficial for exploration-heavy SMP gameplay.
 - **Dependencies:** None
@@ -66,7 +60,6 @@
 - **CurseForge ID:** 459857
 - **Slug:** ferritecore-fabric
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Reduces memory usage through optimized data structures and blockstate management.
 - **Why:** Significantly lowers RAM consumption, allowing more headroom for other mods and larger worlds on the SMP server.
 - **Dependencies:** None
@@ -76,7 +69,6 @@
 - **CurseForge ID:** 790626
 - **Slug:** modernfix
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** All-in-one mod that improves performance, reduces memory usage, and fixes many bugs.
 - **Why:** Complements existing performance mods by improving launch times, world load times, and memory usage with broad compatibility.
 - **Dependencies:** None
@@ -86,7 +78,6 @@
 - **CurseForge ID:** 306612
 - **Slug:** fabric-api
 - **Mod Loader:** Fabric
-- **Status:** included
 - **Summary:** Lightweight and modular API providing common hooks and intercompatibility measures for Fabric mods.
 - **Why:** Required dependency of Entity Culling.
 - **Dependencies:** None
