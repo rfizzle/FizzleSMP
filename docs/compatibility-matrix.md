@@ -78,3 +78,15 @@ Tracks known interactions between mods in the pack.
 | MiniHUD | MaLiLib | MaLiLib is MiniHUD's required library; designed to work together |
 | guy's Armor HUD | Sodium | No overlap — armor HUD vs. rendering optimization |
 | guy's Armor HUD | ImmediatelyFast | No overlap — armor HUD widget vs. rendering optimization |
+| Mouse Tweaks | Sodium | No overlap — inventory management vs. rendering optimization |
+| Mouse Tweaks | ImmediatelyFast | No overlap — inventory management vs. rendering optimization |
+| Blur+ | Sodium | No overlap — GUI blur effect vs. chunk rendering optimization |
+| Blur+ | Iris Shaders | Compatible — Blur+ works with shader mods |
+| Continuity | Sodium | Designed to work together — Continuity provides connected textures for Sodium |
+| Continuity | Iris Shaders | Compatible — connected textures work alongside shaders |
+| Mod Menu | Sodium | Sodium provides Mod Menu integration for its settings screen |
+| Mod Menu | Iris Shaders | Iris provides Mod Menu integration for its settings screen |
+| Mod Menu | ImmediatelyFast | No overlap — mod list UI vs. rendering optimization |
+| Cloth Config API | Mod Menu | Complementary — Cloth Config screens integrate with Mod Menu |
+| RightClickHarvest | Lithium | No overlap — crop harvesting vs. game logic optimization |
+| What Are They Up To (Watut) | Sodium | No overlap — player animation visuals vs. rendering optimization |

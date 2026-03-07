@@ -61,3 +61,73 @@
 - **Why:** Required dependency of MiniHUD.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## Mouse Tweaks
+- **CurseForge ID:** 60089
+- **Slug:** mouse-tweaks
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Enhances inventory management by adding various functions to the mouse buttons.
+- **Why:** Essential QoL for inventory management — adds RMB drag, LMB drag-splitting, and scroll wheel item movement.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## Blur+
+- **CurseForge ID:** 393563
+- **Slug:** blur-fabric
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds a configurable Gaussian blur effect to the background of all GUI screens.
+- **Why:** Provides a sleek, modern look to menus by blurring the game world behind GUIs.
+- **Dependencies:** MidnightLib, Fabric API
+- **Conflicts:** None known
+
+## Continuity
+- **CurseForge ID:** 531351
+- **Slug:** continuity
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Enables connected textures, emissive textures, and custom block layers from OptiFine-format resource packs.
+- **Why:** Allows resource packs with connected glass, bookshelves, etc. to work without OptiFine, complementing Sodium.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## Mod Menu
+- **CurseForge ID:** 308702
+- **Slug:** modmenu
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds a mod list menu to view and configure installed mods.
+- **Why:** Essential for accessing mod config screens in-game; used by many mods for settings integration.
+- **Dependencies:** Fabric API, Text Placeholder API
+- **Conflicts:** None known
+
+## Cloth Config API
+- **CurseForge ID:** 348521
+- **Slug:** cloth-config
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Configuration library providing a standard config screen framework for Minecraft mods.
+- **Why:** Required config library used by many mods for in-game settings screens.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## MidnightLib
+- **CurseForge ID:** 488090
+- **Slug:** midnightlib
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A common library providing shared utilities for Minecraft mods.
+- **Why:** Required dependency of Blur+.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Text Placeholder API
+- **CurseForge ID:** 1037459
+- **Slug:** text-placeholder-api
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** An API for creating and parsing text placeholders in Minecraft.
+- **Why:** Required dependency of Mod Menu.
+- **Dependencies:** None
+- **Conflicts:** None known
