@@ -32,6 +32,7 @@ Tracks known interactions between mods in the pack.
 | Geophilic | Terralith | Both modify vanilla biome files; features may override each other | Use Terraphilic compatibility pack (must load after both mods) |
 | Enchanting Infuser | Easy Magic | Both from Fuzs; Infuser adds a new enchanting block while Easy Magic tweaks the vanilla table — minor feature overlap in enchanting UX | No config needed — they target different blocks. Both can be used together as intended by the author. |
 | Hopo Better Underwater Ruins | Repurposed Structures | May overlap on ocean ruin variants | Check RS config to disable overlapping ocean ruin types; let Hopo handle underwater ruins. |
+| Athena | Continuity | Both provide connected texture functionality | No actual conflict — Athena is a library used by Oritech for its own block textures, Continuity handles vanilla/Sodium connected textures. They operate independently. |
 
 ## Verified Compatible
 
@@ -111,3 +112,6 @@ Tracks known interactions between mods in the pack.
 | Carpet | Spark | Complementary — Carpet tweaks mechanics, Spark profiles performance |
 | Pickable Villagers | Villager Names | Compatible — picked-up villagers retain their assigned names |
 | Villager Names | Trade Cycling | Compatible — named villagers display names in the trade cycling UI |
+| Oritech | Tech Reborn | Built-in cross-mod compatibility — Oritech machines can process Tech Reborn materials and vice-versa |
+| Simple Conveyor Belts | Iris Shaders | Shader-compatible per mod description |
+| Simple Conveyor Belts | All item storage mods | Designed to work with any item storage mod (chests, barrels, machines) |

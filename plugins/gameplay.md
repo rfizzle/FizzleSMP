@@ -281,3 +281,53 @@
 - **Why:** Eliminates tedious workstation-breaking when cycling for desired villager trades on the SMP.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## Tech Reborn
+- **CurseForge ID:** 233564
+- **Slug:** techreborn
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A standalone tech mod with tools and machines to gather resources, process materials, and progress through a full tech tree inspired by GregTech and IndustrialCraft 2.
+- **Why:** Adds deep industrial tech progression with ore processing, power generation, and automation to the SMP.
+- **Dependencies:** Fabric API, Reborn Core
+- **Conflicts:** None known; explicit cross-mod compatibility with Oritech.
+
+## Reborn Core
+- **CurseForge ID:** 237903
+- **Slug:** reborncore
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A library mod providing shared utilities for Tech Reborn and related mods.
+- **Why:** Required dependency of Tech Reborn.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## Oritech
+- **CurseForge ID:** 1030830
+- **Slug:** oritech
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A technology-focused mod with animated multiblock machinery, diverse ore processing chains, energy systems, pipes, drones, lasers, and cybernetic augmentation.
+- **Why:** Adds modern, well-designed tech content with animated machines, multiple processing paths, and extensive automation to the SMP.
+- **Dependencies:** owo-lib, GeckoLib, Architectury API, Athena
+- **Conflicts:** None known; has built-in Tech Reborn compatibility for cross-mod recipes.
+
+## Athena
+- **CurseForge ID:** 841890
+- **Slug:** athena
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A cross-platform connected block textures library for Fabric and Forge.
+- **Why:** Required dependency of Oritech.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Simple Conveyor Belts
+- **CurseForge ID:** 1292980
+- **Slug:** simple-conveyor-belts
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds spline-based conveyor belts that transport items between inventories with flexible curves, bends, and filtering via chutes.
+- **Why:** Provides clean, visual item logistics for the SMP — connects machines and storage with flexible conveyor belts.
+- **Dependencies:** Architectury API, Fabric API
+- **Conflicts:** None known; designed to work with any item storage mod, shader-compatible with Iris.
