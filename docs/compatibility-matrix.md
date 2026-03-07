@@ -32,6 +32,7 @@ Tracks known interactions between mods in the pack.
 | Colorful Hearts | Overflowing Bars | Both modify heart rendering code; can crash or render incorrectly | Set `allowLayers` for hearts to `false` in Overflowing Bars config |
 | Jade | MiniHUD | Both display block/entity info overlays | No actual conflict — Jade shows tooltip on crosshair, MiniHUD shows F3-style HUD. Complementary. |
 | Inventory Profiles Next | Mouse Tweaks | Both modify inventory click/drag behavior | No actual conflict — IPN handles sorting/auto-refill, Mouse Tweaks handles drag-splitting. May need keybind adjustment if defaults overlap. |
+| YUNG's suite | Repurposed Structures | Overlapping structure types: dungeons, mineshafts, desert temples, jungle temples, witch huts | Disable overlapping structure types in RS config; let YUNG's mods handle those. Keep RS enabled for its unique shipwrecks, mansions, igloos, and ruins variants. |
 
 ## Verified Compatible
 
@@ -133,3 +134,21 @@ Tracks known interactions between mods in the pack.
 | Towns and Towers | Sodium | No overlap — structures vs. rendering optimization |
 | Towns and Towers | Lithium | No overlap — structures vs. game logic optimization |
 | Towns and Towers | Cristel Lib | Cristel Lib is a required dependency of Towns and Towers |
+| YUNG's Better Caves | Terralith | Compatible — Better Caves overhauls cave shapes, Terralith adds biomes; no documented conflicts |
+| YUNG's Better Caves | Tectonic | No overlap — cave generation vs. terrain shaping |
+| YUNG's Better Caves | Noisium | Noisium optimizes worldgen without altering output; compatible |
+| YUNG's Better Mineshafts | Terralith | Compatible — biome-specific mineshaft variants work with Terralith biomes |
+| YUNG's Better Dungeons | Terralith | No overlap — dungeon overhauls vs. biome additions |
+| YUNG's Better Dungeons | Lootr | Lootr operates at container level; compatible with all structure mods |
+| YUNG's Better Desert Temples | Lootr | Lootr operates at container level; compatible with all structure mods |
+| YUNG's Better Ocean Monuments | Lootr | Lootr operates at container level; compatible with all structure mods |
+| YUNG's Better Nether Fortresses | Lootr | Lootr operates at container level; compatible with all structure mods |
+| YUNG's Better Jungle Temples | Lootr | Lootr operates at container level; compatible with all structure mods |
+| YUNG's Better Strongholds | Lootr | Lootr operates at container level; compatible with all structure mods |
+| YUNG's Better Witch Huts | Lootr | Lootr operates at container level; compatible with all structure mods |
+| All YUNG's mods | YUNG's API | YUNG's API is the required shared library for all YUNG's mods |
+| All YUNG's mods | Sodium | No overlap — worldgen/structures vs. rendering optimization |
+| All YUNG's mods | Lithium | No overlap — worldgen/structures vs. game logic optimization |
+| Traveler's Titles | YUNG's API | YUNG's API is a required dependency of Traveler's Titles |
+| Traveler's Titles | Terralith | Compatible — Traveler's Titles displays biome names from Terralith |
+| Traveler's Titles | Sodium | No overlap — biome title display vs. rendering optimization |

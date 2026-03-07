@@ -181,3 +181,13 @@
 - **Why:** Required dependency of Inventory Profiles Next.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## Traveler's Titles
+- **CurseForge ID:** 590990
+- **Slug:** travelers-titles-fabric
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Displays RPG-like title text when entering new biomes or dimensions, fully customizable.
+- **Why:** Adds immersive biome/dimension discovery feel to exploration; pairs with Visual Traveler's Titles resource pack for image-based titles.
+- **Dependencies:** YUNG's API, Fabric API, Cloth Config API
+- **Conflicts:** None known
