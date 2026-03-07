@@ -181,3 +181,113 @@
 - **Why:** Required dependency of all YUNG's Better structure mods and Traveler's Titles.
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
+
+## Incendium
+- **CurseForge ID:** 591388
+- **Slug:** incendium
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A nether biome overhaul with challenging structures, unique weapons, and tricky mobs.
+- **Why:** Transforms the Nether into a rich, explorable dimension with new biomes, structures, loot, and mobs for SMP adventure.
+- **Dependencies:** None
+- **Conflicts:** None known; incompatible with Amplified Nether (not in pack).
+
+## Nullscape
+- **CurseForge ID:** 570354
+- **Slug:** nullscape
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Transforms the End into an alien dimension with surreal terrain and new biomes while keeping it desolate.
+- **Why:** Makes the End worth exploring beyond just the dragon fight, with dramatic terrain and new biomes.
+- **Dependencies:** None
+- **Conflicts:** None known; compatible with Terralith and Incendium (same author — Stardust Labs).
+
+## Structory
+- **CurseForge ID:** 636540
+- **Slug:** structory
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds atmospheric, lore-rich structures throughout the world with seasonal updates.
+- **Why:** Fills the world with immersive small-to-medium structures that enhance exploration and world atmosphere.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Structory: Towers
+- **CurseForge ID:** 783522
+- **Slug:** structory-towers
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds immersive biome-themed towers to the world as a standalone option or add-on to Structory.
+- **Why:** Complements Structory with vertical tower structures that serve as landmarks and exploration targets.
+- **Dependencies:** None (standalone, but designed to pair with Structory)
+- **Conflicts:** None known
+
+## YUNG's Cave Biomes
+- **CurseForge ID:** 1112347
+- **Slug:** yungs-cave-biomes-fabric
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds new vanilla+ cave biomes and underground content with unique vegetation, ores, and atmosphere.
+- **Why:** Enriches underground exploration with diverse cave biome types that complement YUNG's Better Caves.
+- **Dependencies:** YUNG's API, Fabric API, Cloth Config API, GeckoLib, TerraBlender
+- **Conflicts:** None known; designed to work alongside YUNG's Better Caves.
+
+## GeckoLib
+- **CurseForge ID:** 388172
+- **Slug:** geckolib
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** An animation and model library for Minecraft mods, enabling complex entity animations.
+- **Why:** Required dependency of YUNG's Cave Biomes.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## TerraBlender
+- **CurseForge ID:** 565956
+- **Slug:** terrablender-fabric
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A library mod for adding biomes in a simple and compatible manner with other biome mods.
+- **Why:** Required dependency of YUNG's Cave Biomes.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Geophilic
+- **CurseForge ID:** 711216
+- **Slug:** geophilic
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A subtle overhaul of vanilla Overworld biomes with reworked vegetation and terrain features.
+- **Why:** Enhances vanilla biomes with more natural-looking vegetation and terrain details without adding new biomes.
+- **Dependencies:** None
+- **Conflicts:** Soft conflict with Terralith — both modify vanilla biome files. Requires Terraphilic compatibility pack to use together.
+
+## Terraphilic
+- **CurseForge ID:** 1098706
+- **Slug:** terraphilic
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Geophilic-Terralith compatibility pack that merges biome files from both mods.
+- **Why:** Required compatibility pack to run Geophilic alongside Terralith without biome conflicts.
+- **Dependencies:** Terralith, Geophilic
+- **Conflicts:** None — this mod resolves the Geophilic/Terralith conflict.
+
+## Hopo Better Underwater Ruins
+- **CurseForge ID:** 632622
+- **Slug:** hopo-better-underwater-ruins
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Overhauls ocean ruins with new, larger, and more varied underwater structure designs.
+- **Why:** Enhances underwater exploration with better-looking and more rewarding ocean ruins.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Sparse Structures
+- **CurseForge ID:** 911437
+- **Slug:** sparse-structures
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Makes all structures (including modded) more spread out and configurable in rarity.
+- **Why:** Prevents structure spam in a heavily modded worldgen pack; encourages exploration by making structures rarer and better distributed.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known; works with all structure mods including modded and datapack structures.

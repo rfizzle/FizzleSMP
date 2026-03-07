@@ -33,6 +33,7 @@ Tracks known interactions between mods in the pack.
 | Jade | MiniHUD | Both display block/entity info overlays | No actual conflict — Jade shows tooltip on crosshair, MiniHUD shows F3-style HUD. Complementary. |
 | Inventory Profiles Next | Mouse Tweaks | Both modify inventory click/drag behavior | No actual conflict — IPN handles sorting/auto-refill, Mouse Tweaks handles drag-splitting. May need keybind adjustment if defaults overlap. |
 | YUNG's suite | Repurposed Structures | Overlapping structure types: dungeons, mineshafts, desert temples, jungle temples, witch huts | Disable overlapping structure types in RS config; let YUNG's mods handle those. Keep RS enabled for its unique shipwrecks, mansions, igloos, and ruins variants. |
+| Geophilic | Terralith | Both modify vanilla biome files; features may override each other | Use Terraphilic compatibility pack (must load after both mods) |
 
 ## Verified Compatible
 
@@ -152,3 +153,38 @@ Tracks known interactions between mods in the pack.
 | Traveler's Titles | YUNG's API | YUNG's API is a required dependency of Traveler's Titles |
 | Traveler's Titles | Terralith | Compatible — Traveler's Titles displays biome names from Terralith |
 | Traveler's Titles | Sodium | No overlap — biome title display vs. rendering optimization |
+| Incendium | Terralith | Same author (Stardust Labs); designed to work together — different dimensions |
+| Incendium | Nullscape | Same author (Stardust Labs); designed to work together — different dimensions |
+| Nullscape | Terralith | Same author (Stardust Labs); designed to work together — different dimensions |
+| Incendium | Tectonic | No overlap — Nether biomes vs. Overworld terrain shaping |
+| Nullscape | Tectonic | No overlap — End dimension vs. Overworld terrain shaping |
+| Incendium | Lootr | Lootr operates at container level; compatible with all structure mods |
+| Nullscape | Lootr | Lootr operates at container level; compatible with all structure mods |
+| Incendium | Noisium | Noisium optimizes worldgen without altering output; compatible |
+| Nullscape | Noisium | Noisium optimizes worldgen without altering output; compatible |
+| Incendium | Sodium | No overlap — Nether worldgen vs. rendering optimization |
+| Nullscape | Sodium | No overlap — End worldgen vs. rendering optimization |
+| Structory | Terralith | Compatible — Structory structures spawn in Terralith biomes |
+| Structory | Tectonic | No overlap — small structures vs. terrain shaping |
+| Structory | Repurposed Structures | No overlap — different structure types |
+| Structory | Towns and Towers | No overlap — different structure types |
+| Structory | Lootr | Lootr operates at container level; compatible with all structure mods |
+| Structory: Towers | Terralith | Compatible — towers spawn in Terralith biomes |
+| Structory: Towers | Structory | Designed as a companion add-on to Structory |
+| Structory: Towers | Towns and Towers | No overlap — different tower styles and structure types |
+| Structory: Towers | Lootr | Lootr operates at container level; compatible with all structure mods |
+| YUNG's Cave Biomes | YUNG's Better Caves | Same author; designed to work together — Cave Biomes adds biome types, Better Caves overhauls shapes |
+| YUNG's Cave Biomes | Terralith | Compatible — cave biomes complement Terralith's overworld biomes |
+| YUNG's Cave Biomes | Noisium | Noisium optimizes worldgen without altering output; compatible |
+| YUNG's Cave Biomes | YUNG's API | YUNG's API is a required dependency |
+| YUNG's Cave Biomes | GeckoLib | GeckoLib is a required dependency |
+| YUNG's Cave Biomes | TerraBlender | TerraBlender is a required dependency |
+| Geophilic | Tectonic | Compatible — Geophilic modifies biome vegetation, Tectonic modifies terrain shape |
+| Geophilic | Terraphilic | Terraphilic resolves biome file conflicts between Geophilic and Terralith |
+| Terraphilic | Terralith | Terraphilic is designed specifically for Terralith+Geophilic compatibility |
+| Hopo Better Underwater Ruins | YUNG's Better Ocean Monuments | No overlap — ruins vs. monuments are different structure types |
+| Hopo Better Underwater Ruins | Terralith | No overlap — underwater structures vs. overworld biomes |
+| Hopo Better Underwater Ruins | Lootr | Lootr operates at container level; compatible with all structure mods |
+| Hopo Better Underwater Ruins | Repurposed Structures | May overlap on ocean ruin variants; check RS config to avoid duplicate ruins |
+| Sparse Structures | All structure mods | Designed to work with all structure mods; adjusts spacing/separation globally |
+| Sparse Structures | Fabric API | Sparse Structures requires Fabric API |
