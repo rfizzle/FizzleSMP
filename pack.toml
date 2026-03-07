@@ -1,0 +1,13 @@
+name = "Fizzle SMP"
+author = "rfizzle"
+version = "1.0.0"
+pack-format = "packwiz:1.1.0"
+
+[index]
+file = "index.toml"
+hash-format = "sha256"
+hash = "f50ddf480fa3fbb16651acd19be70e698ef1764e6cbdb16382f9ca4706806173"
+
+[versions]
+fabric = "0.18.4"
+minecraft = "1.21.1"

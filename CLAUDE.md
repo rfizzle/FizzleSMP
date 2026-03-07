@@ -1,13 +1,14 @@
-# FizzleSMP — Minecraft 1.21.1 CurseForge Modpack
+# FizzleSMP — Minecraft 1.21.1 Fabric Modpack
 
 ## Project Overview
 
-This repository defines **FizzleSMP**, a curated Minecraft 1.21.1 modpack distributed via CurseForge. The project contains:
+This repository defines **FizzleSMP**, a curated Minecraft 1.21.1 modpack managed with [packwiz](https://packwiz.infra.link/) and distributable to CurseForge and Modrinth. The project contains:
 
-- Plugin/mod lists organized by category (`plugins/`)
+- Plugin/mod lists organized by category (`plugins/`) — the human-readable source of truth
+- Packwiz metadata (`pack.toml`, `index.toml`, `mods/*.pw.toml`) — the machine-readable modpack definition
 - A feature brainstorming document that maps ideas to mods (`docs/features-brainstorm.md`)
 - A compatibility matrix tracking known conflicts (`docs/compatibility-matrix.md`)
-- The CurseForge instance definition file (`curseforge/minecraftinstance.json`)
+- A sync script (`scripts/sync-packwiz.sh`) that keeps packwiz in sync with the plugin lists
 
 ## Target Platform
 
@@ -20,7 +21,13 @@ This repository defines **FizzleSMP**, a curated Minecraft 1.21.1 modpack distri
 ```
 FizzleSMP/
 ├── CLAUDE.md                       # This file — project rules and context
-├── plugins/
+├── pack.toml                       # Packwiz pack definition (MC version, loader)
+├── index.toml                      # Packwiz file manifest (auto-generated)
+├── mods/                           # Packwiz mod metadata (one .pw.toml per mod)
+│   ├── sodium.pw.toml
+│   ├── lithium.pw.toml
+│   └── ...
+├── plugins/                        # Human-readable mod lists (source of truth)
 │   ├── performance.md              # Performance & optimization mods
 │   ├── worldgen.md                 # World generation & terrain mods
 │   ├── gameplay.md                 # Core gameplay mechanics & content
@@ -33,8 +40,8 @@ FizzleSMP/
 ├── docs/
 │   ├── features-brainstorm.md      # Feature wishlist → mod mapping
 │   └── compatibility-matrix.md     # Known conflicts & compatibility notes
-├── curseforge/
-│   └── minecraftinstance.json      # CurseForge modpack instance config
+├── scripts/
+│   └── sync-packwiz.sh             # Sync plugins/*.md → packwiz mods/
 └── .claude/
     └── commands/
         ├── review-plugins.md       # /review-plugins — audit the full mod list
@@ -87,9 +94,42 @@ When adding a new mod, check it against every existing `included` mod for confli
 
 **Add-mod conflict check:** When adding a new mod via `/add-mods`, always check for conflicts against **all** existing `included` mods regardless of category. The matrix entries are limited to same-domain interactions, but the conflict *check* must be comprehensive. Use `/check-conflicts` for full cross-pack audits.
 
-## CurseForge Instance Config
+## Packwiz
 
-`curseforge/minecraftinstance.json` is the machine-readable modpack definition. It follows the CurseForge manifest schema. When the plugin lists change, this file must be regenerated to stay in sync.
+[Packwiz](https://packwiz.infra.link/) manages the machine-readable modpack definition. Key files:
+
+- **`pack.toml`** — Pack name, Minecraft version, Fabric loader version
+- **`index.toml`** — Auto-generated manifest of all files with hashes
+- **`mods/*.pw.toml`** — One metadata file per mod (download URL, hash, update tracking)
+
+### Sync Script
+
+`scripts/sync-packwiz.sh` syncs the `plugins/*.md` mod lists into packwiz:
+
+```bash
+./scripts/sync-packwiz.sh           # Install mods missing from packwiz
+./scripts/sync-packwiz.sh --prune   # Also remove mods not in plugins/
+./scripts/sync-packwiz.sh --dry-run # Preview changes without modifying anything
+```
+
+The script parses all `plugins/*.md` files, finds mods with `Status: included`, and runs `packwiz curseforge install` (or `packwiz modrinth install` for Modrinth-only mods) for each one not already in `mods/`. It matches by CurseForge project ID to avoid duplicates even when filenames differ.
+
+### Common Packwiz Commands
+
+```bash
+packwiz curseforge install <slug>   # Add a mod from CurseForge
+packwiz modrinth install <slug>     # Add a mod from Modrinth
+packwiz update --all                # Update all mods to latest versions
+packwiz remove <mod>                # Remove a mod
+packwiz list                        # List installed mods
+packwiz refresh                     # Rebuild index.toml after manual edits
+packwiz curseforge export           # Export CurseForge-format zip
+packwiz modrinth export             # Export .mrpack for Modrinth
+```
+
+### Workflow Integration
+
+When adding a mod via `/add-mods`, the plugin file is the source of truth. After updating `plugins/*.md`, run `./scripts/sync-packwiz.sh` to propagate changes to packwiz. The packwiz files (`pack.toml`, `index.toml`, `mods/`) should be committed alongside plugin changes.
 
 ## Custom Commands
 
@@ -105,7 +145,7 @@ When adding a new mod, check it against every existing `included` mod for confli
 2. **Research** — Find mods that fulfill those features; add to the appropriate `plugins/*.md` file with `Status: considering`.
 3. **Evaluate** — Run `/check-conflicts` to surface issues. Update `docs/compatibility-matrix.md`.
 4. **Decide** — Change status to `included` or `rejected`.
-5. **Build** — Regenerate `curseforge/minecraftinstance.json` from all `included` mods.
+5. **Build** — Run `./scripts/sync-packwiz.sh` to sync packwiz, then `packwiz curseforge export` or `packwiz modrinth export` to build distributable packs.
 
 ## Git Commit Workflow
 
@@ -129,7 +169,7 @@ This project uses **Conventional Commits** for all commit messages.
   - `worldgen`, `combat`, `economy`, etc. — Specific plugin category
   - `compat` — Changes to `compatibility-matrix.md`
   - `brainstorm` — Changes to `features-brainstorm.md`
-  - `curseforge` — Changes to `minecraftinstance.json`
+  - `packwiz` — Changes to `pack.toml`, `index.toml`, or `mods/*.pw.toml`
 - **short summary** — Imperative, lowercase, no period at the end
 
 ### Examples
@@ -138,7 +178,7 @@ This project uses **Conventional Commits** for all commit messages.
 feat(plugins): add Lithium to performance mods
 fix(compat): correct hard conflict between Create and Sodium
 docs(brainstorm): add custom enchantments feature idea
-chore(curseforge): regenerate minecraftinstance.json
+chore(packwiz): sync mods via sync-packwiz.sh
 feat(combat): add Better Combat with status included
 refactor(plugins): split utility mods into utility and admin
 ```
@@ -148,7 +188,7 @@ refactor(plugins): split utility mods into utility and admin
 - Keep the summary line under 72 characters.
 - Use the imperative mood ("add", not "added" or "adds").
 - Stage only the files relevant to the change — avoid catch-all `git add .`.
-- One logical change per commit. If adding a mod touches `plugins/`, `docs/compatibility-matrix.md`, and `curseforge/minecraftinstance.json`, commit them together as one `feat` commit.
+- One logical change per commit. If adding a mod touches `plugins/`, `docs/compatibility-matrix.md`, and `mods/*.pw.toml`, commit them together as one `feat` commit.
 
 ## Modrinth API Access
 
