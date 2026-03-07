@@ -231,3 +231,53 @@
 - **Why:** Adds a variety of useful, fun trinket items and utilities that enhance casual vanilla+ gameplay on the SMP.
 - **Dependencies:** owo-lib, Lavender, Accessories
 - **Conflicts:** None known; uses Accessories API for trinket slots.
+
+## Pickable Villagers
+- **CurseForge ID:** 636067
+- **Slug:** pickable-villagers
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Pick up villagers as items that remember their job, level, trades, and name, then place them wherever you want.
+- **Why:** Makes relocating villagers painless on the SMP — no more minecart/boat pushing across long distances.
+- **Dependencies:** Fabric API, Cloth Config API, Architectury API, Alexandria Lib
+- **Conflicts:** None known
+
+## Alexandria Lib
+- **CurseForge ID:** 992905
+- **Slug:** alexandria
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A shared library mod providing common utilities for Fabric mods.
+- **Why:** Required dependency of Pickable Villagers.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Villager Names
+- **CurseForge ID:** 345854
+- **Slug:** villager-names
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Gives all villager entities a random name from a pool of 5000+ names, with profession shown on the trade screen.
+- **Why:** Adds personality and immersion to villages on the SMP — every villager gets a unique name.
+- **Dependencies:** Collective
+- **Conflicts:** None known
+
+## Collective
+- **CurseForge ID:** 342584
+- **Slug:** collective
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A shared library mod providing common utilities for Serilum's Fabric mods.
+- **Why:** Required dependency of Villager Names.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Trade Cycling
+- **CurseForge ID:** 570431
+- **Slug:** trade-cycling
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds a button to the villager trade screen to refresh available trades without breaking and replacing workstations.
+- **Why:** Eliminates tedious workstation-breaking when cycling for desired villager trades on the SMP.
+- **Dependencies:** None
+- **Conflicts:** None known

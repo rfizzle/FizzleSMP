@@ -69,11 +69,23 @@ When adding or editing mods, always populate all fields. Use `Status: considerin
 - **Soft conflicts** — mods that overlap in functionality or have config clashes.
 - **Verified compatible** — mod pairs explicitly tested together.
 
-When adding a new mod, check it against every existing `included` mod and update the matrix.
+When adding a new mod, check it against every existing `included` mod for conflicts. Only add matrix entries when there is a meaningful finding (see signal rule below).
 
 **Scope rule:** Only track conflicts and compatibility entries between mods that are `included` or `considering` in the pack. Do not add entries for mods that are not in the pack — the matrix should reflect the actual mod list, not hypothetical external conflicts.
 
+**Signal rule:** The matrix should only contain entries with real informational value. Do **not** add:
+- **Dependency relationships** — these are already tracked in the plugin files' `Dependencies` field. A mod is obviously compatible with its own dependencies.
+- **Trivial "no overlap" pairings** — if two mods operate in completely unrelated domains (e.g., a villager mechanic vs. a rendering optimizer, a storage mod vs. a game logic optimizer), there is no reason to track them. The absence of an entry already implies no known conflict.
+- **Library/API pairings** — entries like "Mod X | Fabric API" add no information.
+
+**Do** add entries when:
+- Mods touch the **same system** and could plausibly conflict (worldgen + worldgen, rendering + rendering, accessory slots + accessory slots, inventory management + inventory management).
+- Mods have an **explicit integration** or designed interaction (e.g., OPAC displays on Xaero's maps, Reforged applies modifiers to Simply Swords weapons).
+- A mod is **universally compatible** with a whole category and it's worth noting once (e.g., "Lootr | All structure mods", "Noisium | All worldgen mods").
+
 **Hard conflict rule:** A mod must NOT be added with `Status: included` if it has a hard conflict with any existing `included` mod. If a hard conflict is found, either reject the new mod, remove/replace the conflicting mod first, or resolve the conflict before proceeding. This rule applies to all workflows — manual edits, `/add-mods`, and status changes.
+
+**Add-mod conflict check:** When adding a new mod via `/add-mods`, always check for conflicts against **all** existing `included` mods regardless of category. The matrix entries are limited to same-domain interactions, but the conflict *check* must be comprehensive. Use `/check-conflicts` for full cross-pack audits.
 
 ## CurseForge Instance Config
 
