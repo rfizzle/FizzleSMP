@@ -197,7 +197,13 @@ jq '.hits[] | {project_id, slug, title, description}' /tmp/search.json
 
 ### CurseForge ID Cross-Reference
 
-Plugin files still track CurseForge project IDs and slugs (for the CurseForge modpack manifest). When adding mods via Modrinth, look up the CurseForge ID separately — many mods link to their CurseForge page from their Modrinth project or GitHub README.
+Plugin files still track CurseForge project IDs and slugs (for the CurseForge modpack manifest). The CurseForge website blocks direct `curl`/`WebFetch` requests (403), so use this fallback chain:
+
+1. **WebSearch** — Search `"<mod name> Minecraft CurseForge project ID"` with `allowed_domains: ["curseforge.com"]`. The search results typically include the project ID in snippets or metadata.
+2. **Mod's GitHub README** — Many mods link to their CurseForge page. Fetch the raw README and extract the URL; the project ID is sometimes in badge URLs or metadata.
+3. **Modrinth project page** — Check the `.source_url` or description from the Modrinth API response for CurseForge links.
+
+Do **not** attempt to `WebFetch` curseforge.com directly — it will return 403.
 
 ## Conventions
 

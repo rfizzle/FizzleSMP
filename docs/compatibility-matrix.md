@@ -41,3 +41,12 @@ Tracks known interactions between mods in the pack.
 | Iris Shaders | ImmediatelyFast | Tested together alongside Sodium |
 | Iris Shaders | Entity Culling | Confirmed compatible in testing |
 | ImmediatelyFast | Entity Culling | Confirmed compatible in testing |
+| Lithium | Sodium | Complementary optimizations — Lithium handles game logic, Sodium handles rendering |
+| Lithium | Iris Shaders | No overlap — different optimization targets |
+| Lithium | ImmediatelyFast | No overlap — different optimization targets |
+| Lithium | Entity Culling | No overlap — different optimization targets |
+| Noisium | Sodium | Confirmed compatible per Noisium docs |
+| Noisium | Lithium | Confirmed compatible per Noisium docs |
+| Noisium | Iris Shaders | No overlap — worldgen vs. rendering |
+| Noisium | ImmediatelyFast | No overlap — worldgen vs. rendering |
+| Noisium | Entity Culling | No overlap — worldgen vs. entity rendering |

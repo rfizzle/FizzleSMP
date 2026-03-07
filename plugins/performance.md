@@ -42,6 +42,26 @@
 - **Dependencies:** Fabric API
 - **Conflicts:** None known; may need config whitelisting for oversized block entities (e.g., beacons)
 
+## Lithium
+- **CurseForge ID:** 360438
+- **Slug:** lithium
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** No-compromises game logic optimization mod for servers and clients.
+- **Why:** Optimizes game logic (AI, physics, chunk loading) for significant server and client performance gains without changing vanilla behavior.
+- **Dependencies:** None
+- **Conflicts:** None known; individual optimizations can be disabled if issues arise with specific mods.
+
+## Noisium
+- **CurseForge ID:** 930207
+- **Slug:** noisium
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Optimises worldgen performance for faster chunk generation.
+- **Why:** Speeds up world generation, complementing other performance mods; especially beneficial for exploration-heavy SMP gameplay.
+- **Dependencies:** None
+- **Conflicts:** None known (archived project, but stable for 1.21.1)
+
 ## Fabric API
 - **CurseForge ID:** 306612
 - **Slug:** fabric-api
