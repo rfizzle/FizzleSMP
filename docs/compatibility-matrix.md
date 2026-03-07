@@ -121,3 +121,6 @@ Tracks known interactions between mods in the pack.
 | EMI Addon: Extra Mod Integrations | Tech Reborn | Provides EMI recipe integration for Tech Reborn machines and processing chains |
 | Chipped | Polymorph | Chipped adds many crafting recipes via workbenches; Polymorph resolves any recipe conflicts |
 | Magnum Torch | Nether Chested | Both from Fuzs; designed to coexist, no overlap (mob spawning vs. storage) |
+| Sound Physics Remastered | Presence Footsteps | Compatible — Sound Physics applies reverb/occlusion to Presence Footsteps' custom step sounds |
+| Sound Physics Remastered | AmbientSounds | Compatible — Sound Physics applies reverb/occlusion to AmbientSounds' environmental audio |
+| Presence Footsteps | AmbientSounds | Compatible — footstep sounds and ambient environmental sounds operate independently |

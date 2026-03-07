@@ -401,3 +401,43 @@
 - **Why:** Required dependency of Enchanting Infuser and Easy Magic.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## CreativeCore
+- **CurseForge ID:** 609890
+- **Slug:** creative-core
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A core library mod required by CreativeMD's mods including AmbientSounds.
+- **Why:** Required dependency of AmbientSounds.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Sound Physics Remastered
+- **CurseForge ID:** 535489
+- **Slug:** sound-physics-remastered
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Provides realistic sound attenuation, reverberation, and absorption through blocks.
+- **Why:** Adds immersive audio with realistic reverb in caves, indoors, and large spaces.
+- **Dependencies:** None (optional: Mod Menu, Cloth Config — both already included)
+- **Conflicts:** None known
+
+## Presence Footsteps
+- **CurseForge ID:** 334259
+- **Slug:** presence-footsteps
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds dynamic, material-based footstep sounds for every block the player walks on.
+- **Why:** Enhances immersion with detailed footstep audio that matches block materials.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## AmbientSounds
+- **CurseForge ID:** 254284
+- **Slug:** ambientsounds
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds rich ambient environmental sounds to the Minecraft world based on biome and surroundings.
+- **Why:** Creates an immersive soundscape with nature sounds, wind, and environmental audio.
+- **Dependencies:** CreativeCore, Fabric API
+- **Conflicts:** None known
