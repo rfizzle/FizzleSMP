@@ -332,6 +332,46 @@
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
 
+## EMI
+- **CurseForge ID:** 580555
+- **Slug:** emi
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A featureful and accessible item and recipe viewer for browsing recipes, usages, and crafting trees.
+- **Why:** Essential QoL for a large modpack — lets players look up recipes and usages for all modded items without alt-tabbing to a wiki.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## EMI Addon: Extra Mod Integrations
+- **CurseForge ID:** 739970
+- **Slug:** extra-mod-integrations
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds EMI recipe support for additional mods including Tech Reborn, Farmers' Delight, and more.
+- **Why:** Extends EMI with recipe integration for Tech Reborn and other mods in the pack.
+- **Dependencies:** EMI, Fabric API
+- **Conflicts:** None known
+
+## EMI Loot
+- **CurseForge ID:** 681783
+- **Slug:** emi-loot
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Displays mob loot tables and chest loot tables directly in EMI.
+- **Why:** Lets players see what mobs drop and what loot chests contain in EMI, reducing wiki dependency.
+- **Dependencies:** EMI, Fzzy Config
+- **Conflicts:** None known
+
+## Nether Chested
+- **CurseForge ID:** 857971
+- **Slug:** nether-chested
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds a linked chest block that shares its inventory across dimensions, allowing cross-dimension item transfer.
+- **Why:** Enables cross-dimension item transfer for SMP players working across Overworld, Nether, and End.
+- **Dependencies:** Fabric API, Puzzles Lib, Forge Config API Port
+- **Conflicts:** None known
+
 ## Forge Config API Port
 - **CurseForge ID:** 547434
 - **Slug:** forge-config-api-port

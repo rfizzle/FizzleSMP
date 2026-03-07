@@ -322,6 +322,46 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## Chipped
+- **CurseForge ID:** 456956
+- **Slug:** chipped
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds thousands of decorative block variants accessible through specialized workbenches (mason, botanist, glassblower, etc.).
+- **Why:** Massively expands building options with thousands of block variants for creative SMP builders.
+- **Dependencies:** Fabric API, Athena, Resourceful Lib
+- **Conflicts:** None known
+
+## Resourceful Lib
+- **CurseForge ID:** 570073
+- **Slug:** resourceful-lib
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** A shared library mod providing common utilities for Team Resourceful mods.
+- **Why:** Required dependency of Chipped.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## HT's TreeChop
+- **CurseForge ID:** 421377
+- **Slug:** treechop
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds gradual tree chopping where trees are chopped block by block and can fall realistically.
+- **Why:** Makes tree chopping more satisfying and prevents floating tree tops on the SMP.
+- **Dependencies:** Forge Config API Port
+- **Conflicts:** None known
+
+## Magnum Torch
+- **CurseForge ID:** 593981
+- **Slug:** magnum-torch
+- **Mod Loader:** Fabric
+- **Status:** included
+- **Summary:** Adds a powerful torch block that prevents hostile mob spawning in a configurable large area.
+- **Why:** Lets players protect large areas from mob spawning without placing hundreds of torches.
+- **Dependencies:** Fabric API, Forge Config API Port, Puzzles Lib
+- **Conflicts:** None known
+
 ## Simple Conveyor Belts
 - **CurseForge ID:** 1292980
 - **Slug:** simple-conveyor-belts

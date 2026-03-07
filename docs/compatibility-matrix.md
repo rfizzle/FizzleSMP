@@ -117,3 +117,7 @@ Tracks known interactions between mods in the pack.
 | Simple Conveyor Belts | All item storage mods | Designed to work with any item storage mod (chests, barrels, machines) |
 | BetterF3 | MiniHUD | Complementary — BetterF3 replaces the F3 debug screen, MiniHUD adds separate configurable overlays; no overlap |
 | Polymorph | All recipe-adding mods | Designed to resolve recipe conflicts from any mod; universally compatible |
+| Polymorph | EMI | EMI has built-in Polymorph integration — recipe conflict choices appear directly in the EMI viewer |
+| EMI Addon: Extra Mod Integrations | Tech Reborn | Provides EMI recipe integration for Tech Reborn machines and processing chains |
+| Chipped | Polymorph | Chipped adds many crafting recipes via workbenches; Polymorph resolves any recipe conflicts |
+| Magnum Torch | Nether Chested | Both from Fuzs; designed to coexist, no overlap (mob spawning vs. storage) |
