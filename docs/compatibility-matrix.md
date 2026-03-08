@@ -23,3 +23,5 @@ Tracks known conflicts between mods in the pack and how to resolve them.
 | Geophilic | Terralith | Both modify vanilla biome files; features may override each other | Use Terraphilic compatibility pack (must load after both mods) |
 | Hopo Better Underwater Ruins | Repurposed Structures | May overlap on ocean ruin variants | Check RS config to disable overlapping ocean ruin types; let Hopo handle underwater ruins. |
 | Inventory Profiles Next | Mouse Tweaks | Both modify inventory click/drag behavior | Adjust keybinds if defaults overlap; IPN handles sorting/auto-refill, Mouse Tweaks handles drag-splitting. |
+| Illager Invasion | Friends & Foes | Both add illager-adjacent mobs (new illagers vs Iceologer/Illusioner); both modify raid/patrol systems | Test raid mechanics together; disable overlapping mob spawns if duplicates appear in config. |
+| Creeper Overhaul | Creeper Healing | Both modify creeper entities (visual variants vs explosion aftermath) | Generally compatible — different aspects of creeper behavior. Verify biome variants still trigger healing. |

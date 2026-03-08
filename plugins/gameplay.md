@@ -325,3 +325,57 @@
 - **Why:** Provides clean, visual item logistics for the SMP — connects machines and storage with flexible conveyor belts.
 - **Dependencies:** Architectury API, Fabric API
 - **Conflicts:** None known; designed to work with any item storage mod, shader-compatible with Iris.
+
+## Resourceful Config
+- **CurseForge ID:** 714059
+- **Slug:** resourceful-config
+- **Mod Loader:** Fabric
+- **Summary:** A configuration library for Minecraft mods by Team Resourceful.
+- **Why:** Required dependency of Creeper Overhaul.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Bosses of Mass Destruction
+- **CurseForge ID:** 438365
+- **Slug:** bosses-of-mass-destruction
+- **Mod Loader:** Fabric
+- **Summary:** Adds challenging boss fights with unique mechanics and custom structures scattered throughout the world.
+- **Why:** Adds endgame boss encounters that give players meaningful PvE challenges beyond the Ender Dragon and Wither on the SMP.
+- **Dependencies:** Fabric API, Cloth Config API, GeckoLib, Fabric Language Kotlin, Cardinal Components API
+- **Conflicts:** None known
+
+## Illager Invasion
+- **CurseForge ID:** 891324
+- **Slug:** illager-invasion
+- **Mod Loader:** Fabric
+- **Summary:** Adds new illager mobs, structures, and raid content as a port of the Illager Expansion mod.
+- **Why:** Expands the illager faction with new hostile mobs and encounters, making raids and exploration more varied on the SMP.
+- **Dependencies:** Fabric API, Forge Config API Port, Puzzles Lib
+- **Conflicts:** None known
+
+## Creeper Overhaul
+- **CurseForge ID:** 561625
+- **Slug:** creeper-overhaul
+- **Mod Loader:** Fabric
+- **Summary:** Overhauls vanilla creepers with new biome-specific variants, each with unique textures and behaviors.
+- **Why:** Adds visual variety and biome-appropriate creeper variants, making encounters more interesting across different biomes.
+- **Dependencies:** GeckoLib, Resourceful Lib, Resourceful Config
+- **Conflicts:** None known; compatible with Creeper Healing (different aspects — visual variants vs explosion repair).
+
+## Critters and Companions
+- **CurseForge ID:** 574913
+- **Slug:** critters-and-companions
+- **Mod Loader:** Fabric
+- **Summary:** Adds new ambient and companion creatures to the world including ferrets, otters, red pandas, and more.
+- **Why:** Populates the world with charming ambient creatures and tameable companions, adding life and variety to exploration.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## Friends & Foes
+- **CurseForge ID:** 551364
+- **Slug:** friends-and-foes
+- **Mod Loader:** Fabric
+- **Summary:** Adds outvoted and forgotten mobs from Minecraft mob votes (Copper Golem, Moobloom, Iceologer, Glare, Rascal, and more) with vanilla-style implementations.
+- **Why:** Brings beloved mob vote losers into the game with faithful, vanilla-feeling implementations that expand mob variety on the SMP.
+- **Dependencies:** Fabric API, Resourceful Lib, YetAnotherConfigLib (YACL)
+- **Conflicts:** None known
