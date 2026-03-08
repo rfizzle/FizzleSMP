@@ -415,3 +415,30 @@
 - **Why:** Required dependency of Easy Disenchanting.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## You're in Grave Danger
+- **CurseForge ID:** 544912
+- **Slug:** youre-in-grave-danger
+- **Mod Loader:** Fabric
+- **Summary:** Spawns a grave at the player's death location that stores their items for safe retrieval.
+- **Why:** Prevents frustrating item loss on death — players can recover their gear from a grave instead of racing a despawn timer.
+- **Dependencies:** Fabric API, Cloth Config API
+- **Conflicts:** None known
+
+## Farmer's Delight Refabricated
+- **CurseForge ID:** 993166
+- **Slug:** farmers-delight-refabricated
+- **Mod Loader:** Fabric
+- **Summary:** Modern Fabric port of the cooking and farming mod, adding new crops, cooking mechanics, and food items via cutting boards, stoves, and more.
+- **Why:** Adds depth to farming and cooking with new crops, recipes, and food progression, encouraging players to explore cuisine beyond vanilla foods.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known; verify RightClickHarvest supports Farmer's Delight custom crops.
+
+## Steve's Realistic Sleep
+- **CurseForge ID:** 616330
+- **Slug:** stevesrealisticsleep
+- **Mod Loader:** Fabric
+- **Summary:** Makes sleeping speed up time instead of skipping instantly to day, with speed scaling by number of sleeping players.
+- **Why:** Adds immersion to sleeping on the SMP — time accelerates gradually instead of jumping to morning, and more players sleeping speeds it up.
+- **Dependencies:** Fabric API, Architectury API, Cloth Config API
+- **Conflicts:** None known

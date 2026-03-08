@@ -505,3 +505,12 @@
 - **Why:** Lets SMP players bank XP safely to avoid losing it on death, complementing Better Than Mending for on-demand repairs.
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
+
+## LambDynamicLights
+- **CurseForge ID:** 393442
+- **Slug:** lambdynamiclights
+- **Mod Loader:** Fabric
+- **Summary:** Adds dynamic lighting so held torches, glowstone, and other light-emitting items illuminate surroundings in real time.
+- **Why:** Enhances exploration immersion — torches light up caves as you walk, lava illuminates surroundings, and dropped glowing items cast light.
+- **Dependencies:** Fabric API
+- **Conflicts:** Hard conflict with Sodium Dynamic Lights and RyoamicLights (neither in pack).

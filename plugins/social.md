@@ -28,3 +28,12 @@
 - **Why:** Lets SMP players customize their appearance on the fly with commands, useful for offline-mode servers and skin personalization.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## Simple Voice Chat
+- **CurseForge ID:** 416089
+- **Slug:** simple-voice-chat
+- **Mod Loader:** Fabric
+- **Summary:** Adds proximity-based voice chat to Minecraft with groups, whispering, and adjustable distance.
+- **Why:** Enables real-time voice communication on the SMP without needing external apps like Discord — proximity audio adds immersion.
+- **Dependencies:** None
+- **Conflicts:** None known; integrates with Sound Physics Remastered for directional voice audio.
