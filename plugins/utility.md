@@ -506,6 +506,24 @@
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
 
+## NetherPortalFix
+- **CurseForge ID:** 241160
+- **Slug:** netherportalfix
+- **Mod Loader:** Fabric
+- **Summary:** Ensures correct destinations when travelling back and forth through Nether Portals in multiplayer.
+- **Why:** Fixes a vanilla multiplayer bug where nether portals send players to the wrong destination, essential for SMP portal networks.
+- **Dependencies:** Balm, Fabric API
+- **Conflicts:** None known
+
+## Balm
+- **CurseForge ID:** 500525
+- **Slug:** balm-fabric
+- **Mod Loader:** Fabric
+- **Summary:** A cross-platform abstraction library providing shared utilities for BlayTheNinth's mods.
+- **Why:** Required dependency of NetherPortalFix.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
 ## LambDynamicLights
 - **CurseForge ID:** 393442
 - **Slug:** lambdynamiclights
