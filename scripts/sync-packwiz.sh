@@ -52,12 +52,13 @@ if [[ ! -f "$MODPACK_DIR/pack.toml" ]]; then
 fi
 
 # ── Parse plugins/*.md ────────────────────────────────────────────────
-# Outputs lines: slug|curseforge_id|modrinth_slug|name
+# Outputs lines: slug|curseforge_id|modrinth_slug|name|pin_cf_file_id
 # curseforge_id is "N/A" for Modrinth-only mods.
 # modrinth_slug is "N/A" or empty if not on Modrinth.
+# pin_cf_file_id is empty if no pin is set.
 
 parse_plugins() {
-    local name="" slug="" cf_id="" mr_slug=""
+    local name="" slug="" cf_id="" mr_slug="" pin_cf_file_id=""
 
     for file in "$PLUGINS_DIR"/*.md; do
         [[ -f "$file" ]] || continue
@@ -67,10 +68,10 @@ parse_plugins() {
             if [[ "$line" =~ ^##\  ]]; then
                 # Emit previous mod if it has a slug
                 if [[ -n "$slug" ]]; then
-                    echo "${slug}|${cf_id}|${mr_slug}|${name}"
+                    echo "${slug}|${cf_id}|${mr_slug}|${name}|${pin_cf_file_id}"
                 fi
                 name="${line#\#\# }"
-                slug="" cf_id="" mr_slug=""
+                slug="" cf_id="" mr_slug="" pin_cf_file_id=""
             fi
 
             # Field extraction
@@ -80,14 +81,16 @@ parse_plugins() {
                 cf_id="$(echo "$line" | sed 's/.*\*\*CurseForge ID:\*\* *//')"
             elif [[ "$line" == *"**Modrinth Slug:**"* ]]; then
                 mr_slug="$(echo "$line" | sed 's/.*\*\*Modrinth Slug:\*\* *//')"
+            elif [[ "$line" == *"**Pin CurseForge File ID:**"* ]]; then
+                pin_cf_file_id="$(echo "$line" | sed 's/.*\*\*Pin CurseForge File ID:\*\* *//')"
             fi
         done < "$file"
 
         # Last mod in file
         if [[ -n "$slug" ]]; then
-            echo "${slug}|${cf_id}|${mr_slug}|${name}"
+            echo "${slug}|${cf_id}|${mr_slug}|${name}|${pin_cf_file_id}"
         fi
-        name="" slug="" cf_id="" mr_slug=""
+        name="" slug="" cf_id="" mr_slug="" pin_cf_file_id=""
     done
 }
 
@@ -220,7 +223,7 @@ main() {
 
     # Process each mod
     for entry in "${mod_lines[@]}"; do
-        IFS='|' read -r slug cf_id mr_slug name <<< "$entry"
+        IFS='|' read -r slug cf_id mr_slug name pin_cf_file_id <<< "$entry"
 
         # Track wanted mods for pruning
         if [[ "$cf_id" != "N/A"* ]]; then
@@ -258,7 +261,13 @@ main() {
             err_output="$(run_packwiz modrinth install "$install_slug" -y 2>&1)" && install_ok=true
             echo "$err_output" | sed 's/^/  /'
         else
-            err_output="$(run_packwiz curseforge install --addon-id "$cf_id" -y 2>&1)" && install_ok=true
+            local cf_install_args=(curseforge install --addon-id "$cf_id")
+            if [[ -n "$pin_cf_file_id" ]]; then
+                cf_install_args+=(--file-id "$pin_cf_file_id")
+                echo "  ⊳ Pinned to CurseForge file ID: $pin_cf_file_id"
+            fi
+            cf_install_args+=(-y)
+            err_output="$(run_packwiz "${cf_install_args[@]}" 2>&1)" && install_ok=true
             echo "$err_output" | sed 's/^/  /'
             if ! $install_ok; then
                 # CurseForge failed — try Modrinth fallback

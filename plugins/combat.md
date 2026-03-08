@@ -5,11 +5,12 @@
 ## Simply Swords
 - **CurseForge ID:** 659887
 - **Slug:** simply-swords
+- **Pin CurseForge File ID:** 6958140
 - **Mod Loader:** Fabric
 - **Summary:** Adds 14 unique weapon variants with different playstyles, plus rare unique weapons with special abilities found in loot chests.
 - **Why:** Greatly expands weapon variety for SMP combat with throwable chakrams, twinblades, greataxes, and more — each with distinct attack patterns via Better Combat.
 - **Dependencies:** Architectury API, Fzzy Config; Better Combat (optional, recommended)
-- **Conflicts:** None known
+- **Conflicts:** v1.63.0+ requires Simply Tooltips, which hard-conflicts with Alexandria (Accessories screen crash). Pinned to v1.62.0.
 
 ## Better Combat
 - **CurseForge ID:** 639842

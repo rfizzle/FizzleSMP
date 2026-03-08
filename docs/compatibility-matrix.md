@@ -13,7 +13,7 @@ Tracks known conflicts between mods in the pack and how to resolve them.
 
 | Mod A | Mod B | Details |
 |---|---|---|
-| *(none currently)* | | |
+| Simply Swords (≥1.63.0) | Alexandria | Simply Swords 1.63.0+ added a hard dependency on Simply Tooltips, which crashes with Alexandria (Accessories screen crash). **Pin Simply Swords to ≤1.62.0** (`Pin CurseForge File ID: 6958140` in plugins/combat.md) to avoid pulling in Simply Tooltips. |
 
 ## Soft Conflicts
 
