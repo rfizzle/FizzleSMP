@@ -29,6 +29,15 @@
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
 
+## Chunky
+- **CurseForge ID:** 433175
+- **Slug:** chunky-pregenerator
+- **Mod Loader:** Fabric
+- **Summary:** Pre-generates chunks quickly and efficiently using server commands.
+- **Why:** Allows admins to pre-generate the world around spawn and key areas to eliminate lag from on-the-fly chunk generation on the SMP.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
 ## Spark
 - **CurseForge ID:** 361579
 - **Slug:** spark

@@ -29,6 +29,15 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## No Chat Reports
+- **CurseForge ID:** 634062
+- **Slug:** no-chat-reports
+- **Mod Loader:** Fabric
+- **Summary:** Strips cryptographic signatures from chat messages, making them unreportable to Mojang's chat reporting system.
+- **Why:** Protects SMP players from false chat reports and preserves server autonomy over moderation.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
 ## Simple Voice Chat
 - **CurseForge ID:** 416089
 - **Slug:** simple-voice-chat

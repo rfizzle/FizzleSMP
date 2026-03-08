@@ -101,6 +101,33 @@
 - **Dependencies:** Almanac Lib
 - **Conflicts:** None known
 
+## Krypton
+- **CurseForge ID:** 428912
+- **Slug:** krypton
+- **Mod Loader:** Fabric
+- **Summary:** Optimizes the Minecraft networking stack with improved packet compression, flush consolidation, and login handling.
+- **Why:** Reduces server bandwidth usage and improves multiplayer performance, complementing Lithium (game logic) and Sodium (rendering).
+- **Dependencies:** None
+- **Conflicts:** Soft conflict with Connectivity — both modify networking (see compatibility matrix).
+
+## Dynamic FPS
+- **CurseForge ID:** 335493
+- **Slug:** dynamic-fps
+- **Mod Loader:** Fabric
+- **Summary:** Reduces resource usage while Minecraft is in the background, idle, or on battery.
+- **Why:** Saves CPU/GPU when players alt-tab or go idle, reducing client-side resource waste on the SMP.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## Debugify
+- **CurseForge ID:** 596224
+- **Slug:** debugify
+- **Mod Loader:** Fabric
+- **Summary:** Fixes numerous Minecraft bugs found on the official bug tracker.
+- **Why:** Patches vanilla bugs that affect gameplay quality — fixes for phantom spawning, pathfinding, rendering glitches, and more.
+- **Dependencies:** Fabric API, YetAnotherConfigLib (YACL)
+- **Conflicts:** None known
+
 ## Almanac Lib
 - **CurseForge ID:** 1115285
 - **Slug:** almanac-lib
