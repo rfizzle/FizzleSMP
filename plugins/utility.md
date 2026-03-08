@@ -570,3 +570,23 @@
 - **Why:** Lets players look up ore spawn levels and distribution in EMI, especially useful with modded ores from Tech Reborn, Oritech, and Mythic Upgrades.
 - **Dependencies:** EMI, Fabric API
 - **Conflicts:** None known
+
+## Controlling
+- **CurseForge ID:** 250398
+- **Slug:** controlling
+- **Modrinth Slug:** controlling
+- **Mod Loader:** Fabric
+- **Summary:** Adds a search bar to the Key-Bindings menu, with options to filter by conflicts and unbound keys.
+- **Why:** Essential QoL for a large modpack with many keybind additions — quickly find, search, and resolve keybind conflicts.
+- **Dependencies:** Fabric API, Searchables
+- **Conflicts:** None known
+
+## Searchables
+- **CurseForge ID:** 858542
+- **Slug:** searchables
+- **Modrinth Slug:** searchables
+- **Mod Loader:** Fabric
+- **Summary:** A library mod providing search, filter, and auto-complete helper methods for UI elements.
+- **Why:** Required dependency of Controlling.
+- **Dependencies:** None
+- **Conflicts:** None known
