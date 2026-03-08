@@ -122,19 +122,23 @@ index_installed() {
 }
 
 # ── Check if a mod is already installed ───────────────────────────────
-# Matches by CurseForge project ID first, then falls back to slug-based
-# filename matching.
+# Matches by CurseForge project ID, Modrinth slug, or CF slug filename.
 
 is_installed() {
-    local slug="$1" cf_id="$2"
+    local slug="$1" cf_id="$2" mr_slug="${3:-}"
 
     # Match by CurseForge project ID
     if [[ "$cf_id" != "N/A"* && -n "${installed_cf_ids[$cf_id]+x}" ]]; then
         return 0
     fi
 
-    # Fallback: match by slug as filename
+    # Match by CurseForge slug as filename
     if [[ -n "${installed_files[$slug]+x}" ]]; then
+        return 0
+    fi
+
+    # Match by Modrinth slug as filename (pw.toml may use Modrinth slug)
+    if [[ -n "$mr_slug" && "$mr_slug" != "N/A" && -n "${installed_files[$mr_slug]+x}" ]]; then
         return 0
     fi
 
@@ -221,7 +225,7 @@ main() {
         wanted_slugs["$slug"]=1
 
         # Skip if already installed
-        if is_installed "$slug" "$cf_id"; then
+        if is_installed "$slug" "$cf_id" "$mr_slug"; then
             (( skipped++ )) || true
             continue
         fi
