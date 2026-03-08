@@ -194,6 +194,8 @@ main() {
     declare -A wanted_slugs    # slug -> 1
 
     local total=0 added=0 skipped=0 failed=0 removed=0
+    declare -a added_names=() failed_names=() removed_names=() prune_failed_names=()
+    declare -a failed_errors=()
 
     # Collect all mods first
     declare -a mod_lines=()
@@ -229,6 +231,7 @@ main() {
 
         if $DRY_RUN; then
             echo "[DRY RUN] Would install: $name ($slug) via $source"
+            added_names+=("$name ($slug)")
             ((added++))
             continue
         fi
@@ -236,28 +239,33 @@ main() {
         echo "▸ Installing: $name ($slug) via $source..."
 
         local install_ok=false
+        local err_output=""
         if [[ "$source" == "modrinth" ]]; then
-            if run_packwiz modrinth install "$slug" -y 2>&1 | sed 's/^/  /'; then
-                install_ok=true
-            fi
+            err_output="$(run_packwiz modrinth install "$slug" -y 2>&1)" && install_ok=true
+            echo "$err_output" | sed 's/^/  /'
         else
-            if run_packwiz curseforge install --addon-id "$cf_id" -y 2>&1 | sed 's/^/  /'; then
-                install_ok=true
-            else
+            err_output="$(run_packwiz curseforge install --addon-id "$cf_id" -y 2>&1)" && install_ok=true
+            echo "$err_output" | sed 's/^/  /'
+            if ! $install_ok; then
                 echo "  ↳ CurseForge failed, trying Modrinth fallback..."
-                if run_packwiz modrinth install "$slug" -y 2>&1 | sed 's/^/  /'; then
-                    install_ok=true
-                fi
+                err_output="$(run_packwiz modrinth install "$slug" -y 2>&1)" && install_ok=true
+                echo "$err_output" | sed 's/^/  /'
             fi
         fi
 
         if $install_ok; then
             ((added++))
+            added_names+=("$name ($slug)")
             # Re-index so subsequent checks see the new mod
             index_installed
         else
             echo "  ✗ FAILED: $name ($slug)"
             ((failed++))
+            failed_names+=("$name ($slug)")
+            # Capture last line of error output as reason
+            local reason
+            reason="$(echo "$err_output" | tail -1)"
+            failed_errors+=("${reason:-unknown error}")
         fi
     done
 
@@ -269,17 +277,72 @@ main() {
             [[ -n "$orphan" ]] || continue
             if $DRY_RUN; then
                 echo "[DRY RUN] Would remove: $orphan"
+                removed_names+=("$orphan")
             else
                 echo "▸ Removing: $orphan"
-                run_packwiz remove "$orphan" 2>&1 | sed 's/^/  /'
+                if run_packwiz remove "$orphan" 2>&1 | sed 's/^/  /'; then
+                    removed_names+=("$orphan")
+                else
+                    echo "  ✗ Failed to remove: $orphan"
+                    prune_failed_names+=("$orphan")
+                fi
             fi
             ((removed++))
         done < <(find_orphans wanted_cf_ids)
     fi
 
+    # ── Summary Report ─────────────────────────────────────────────────
     echo ""
-    echo "=== Sync Complete ==="
-    echo "Added: $added | Skipped: $skipped | Failed: $failed | Removed: $removed"
+    echo "╔══════════════════════════════════════════════════════════════╗"
+    echo "║                    Sync Summary Report                     ║"
+    echo "╠══════════════════════════════════════════════════════════════╣"
+    printf "║  %-20s %5d                                 ║\n" "Total in plugins/:" "$total"
+    printf "║  %-20s %5d                                 ║\n" "Already installed:" "$skipped"
+    printf "║  %-20s %5d                                 ║\n" "Newly added:" "$added"
+    printf "║  %-20s %5d                                 ║\n" "Failed:" "$failed"
+    printf "║  %-20s %5d                                 ║\n" "Removed:" "$removed"
+    echo "╚══════════════════════════════════════════════════════════════╝"
+
+    if (( ${#added_names[@]} > 0 )); then
+        echo ""
+        echo "── Added ──────────────────────────────────────────────────────"
+        for mod in "${added_names[@]}"; do
+            echo "  ✓ $mod"
+        done
+    fi
+
+    if (( ${#failed_names[@]} > 0 )); then
+        echo ""
+        echo "── Failed ─────────────────────────────────────────────────────"
+        for i in "${!failed_names[@]}"; do
+            echo "  ✗ ${failed_names[$i]}"
+            echo "    └─ ${failed_errors[$i]}"
+        done
+    fi
+
+    if (( ${#removed_names[@]} > 0 )); then
+        echo ""
+        echo "── Removed ────────────────────────────────────────────────────"
+        for mod in "${removed_names[@]}"; do
+            echo "  - $mod"
+        done
+    fi
+
+    if (( ${#prune_failed_names[@]} > 0 )); then
+        echo ""
+        echo "── Failed to Remove ───────────────────────────────────────────"
+        for mod in "${prune_failed_names[@]}"; do
+            echo "  ✗ $mod"
+        done
+    fi
+
+    echo ""
+    if (( failed > 0 || ${#prune_failed_names[@]} > 0 )); then
+        echo "Sync completed with errors. Review failures above."
+        return 1
+    else
+        echo "Sync completed successfully."
+    fi
 }
 
 main
