@@ -124,3 +124,9 @@ Tracks known interactions between mods in the pack.
 | Sound Physics Remastered | Presence Footsteps | Compatible — Sound Physics applies reverb/occlusion to Presence Footsteps' custom step sounds |
 | Sound Physics Remastered | AmbientSounds | Compatible — Sound Physics applies reverb/occlusion to AmbientSounds' environmental audio |
 | Presence Footsteps | AmbientSounds | Compatible — footstep sounds and ambient environmental sounds operate independently |
+| Not Enough Animations | Better Combat | Compatible — NEA defers to Better Combat's animations when both are present |
+| Not Enough Animations | First-person Model | Same author (tr7zw); designed to work together — First-person Model requires NEA |
+| Not Enough Animations | playerAnimator | Compatible — NEA respects playerAnimator's custom animations (used by Better Combat/Spell Engine) |
+| First-person Model | Better Combat | Compatible — first-person body model displays Better Combat animations correctly |
+| First-person Model | Better Third Person | Compatible — independent mods targeting different camera perspectives |
+| Visuality | Sodium | Compatible — Visuality's particles render correctly with Sodium |
