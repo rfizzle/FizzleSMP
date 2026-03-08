@@ -62,10 +62,18 @@ For each mod provided, perform these steps in order:
   ```
 - Also add entries for any new dependencies using the same format, with **Why** set to "Required dependency of <parent mod>".
 
-## 8. Summary Report
+## 8. Update Testing Checklist
+- Read `docs/testing.md` and determine which sections the new mod affects.
+- Add specific test steps for the new mod under the appropriate section(s).
+- If the mod introduces a new system not covered by existing sections, add a new subsection.
+- Test steps should be concrete and actionable (e.g., "Craft X, place it, confirm Y happens").
+- If the mod has known soft conflicts with existing mods, add a cross-mod interaction test.
+
+## 9. Summary Report
 After processing all mods, print a summary:
 - **Added:** mods successfully added (with categories).
 - **Dependencies added:** any new dependencies pulled in.
 - **Incompatible:** mods that couldn't be added, with suggested alternatives.
 - **Conflicts found:** any issues that need attention.
+- **Testing:** list the new test steps added to `docs/testing.md`.
 - Remind the user to run `/check-conflicts` for a full cross-reference.
