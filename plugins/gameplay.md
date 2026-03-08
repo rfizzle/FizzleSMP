@@ -397,3 +397,21 @@
 - **Why:** Brings beloved mob vote losers into the game with faithful, vanilla-feeling implementations that expand mob variety on the SMP.
 - **Dependencies:** Fabric API, Resourceful Lib, YetAnotherConfigLib (YACL)
 - **Conflicts:** None known
+
+## Easy Disenchanting
+- **CurseForge ID:** 1266689
+- **Slug:** easy-disenchanting
+- **Mod Loader:** Fabric
+- **Summary:** Allows transferring enchantments from items onto books using a vanilla anvil, returning the disenchanted item.
+- **Why:** Lets SMP players salvage enchantments from unwanted gear instead of losing them, complementing Easy Anvils' anvil improvements.
+- **Dependencies:** Fabric API, TxniLib
+- **Conflicts:** None known
+
+## TxniLib
+- **CurseForge ID:** 1104882
+- **Slug:** txnilib
+- **Mod Loader:** Fabric
+- **Summary:** A shared library mod providing common utilities for Txni's mods.
+- **Why:** Required dependency of Easy Disenchanting.
+- **Dependencies:** None
+- **Conflicts:** None known

@@ -91,3 +91,21 @@
 - **Why:** Required dependency of Entity Culling.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## Let Me Despawn
+- **CurseForge ID:** 663477
+- **Slug:** let-me-despawn
+- **Mod Loader:** Fabric
+- **Summary:** Allows mobs that picked up items to despawn naturally, dropping their items, preventing entity buildup over time.
+- **Why:** Prevents server entity lag from mobs with picked-up items becoming permanently persistent; server-side only.
+- **Dependencies:** Almanac Lib
+- **Conflicts:** None known
+
+## Almanac Lib
+- **CurseForge ID:** 1115285
+- **Slug:** almanac-lib
+- **Mod Loader:** Fabric
+- **Summary:** A loader-independent library providing shared utilities for Almanac mods.
+- **Why:** Required dependency of Let Me Despawn.
+- **Dependencies:** None
+- **Conflicts:** None known

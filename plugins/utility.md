@@ -478,3 +478,30 @@
 - **Why:** Creates an immersive soundscape with nature sounds, wind, and environmental audio.
 - **Dependencies:** CreativeCore, Fabric API
 - **Conflicts:** None known
+
+## Better Than Mending
+- **CurseForge ID:** 264738
+- **Slug:** better-than-mending
+- **Mod Loader:** Fabric
+- **Summary:** Sneak-right-click a Mending-enchanted item to instantly repair it using your stored XP levels.
+- **Why:** Lets players repair Mending gear on-demand instead of waiting at an XP farm, a simple but essential QoL improvement.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Shulker Box Tooltip
+- **CurseForge ID:** 315811
+- **Slug:** shulkerboxtooltip
+- **Mod Loader:** Fabric
+- **Summary:** Shows the contents of shulker boxes as a visual tooltip when hovering over them in inventory.
+- **Why:** Essential QoL for shulker box organization — see contents at a glance without placing and opening each box.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## XP Storage
+- **CurseForge ID:** 403434
+- **Slug:** xp-storage
+- **Mod Loader:** Fabric
+- **Summary:** Adds blocks and items that let players safely store and retrieve experience points.
+- **Why:** Lets SMP players bank XP safely to avoid losing it on death, complementing Better Than Mending for on-demand repairs.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known

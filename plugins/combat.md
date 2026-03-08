@@ -118,3 +118,12 @@
 - **Why:** Required dependency of Wizards and Paladins & Priests for adding towers and sanctuaries to villages.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## SwingThrough
+- **CurseForge ID:** 1402841
+- **Slug:** swingthrough
+- **Mod Loader:** Fabric
+- **Summary:** Allows targeting, interacting with, and attacking living entities through transparent blocks like grass, crops, and flowers.
+- **Why:** Eliminates the frustration of grass blocking attacks during combat, especially important with Better Combat's directional swings.
+- **Dependencies:** None
+- **Conflicts:** None known
