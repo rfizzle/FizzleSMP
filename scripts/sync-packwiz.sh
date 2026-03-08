@@ -18,6 +18,7 @@ PLUGINS_DIR="$PROJECT_DIR/plugins"
 MODPACK_DIR="$PROJECT_DIR/modpack"
 MODS_DIR="$MODPACK_DIR/mods"
 DATAPACKS_DIR="$MODPACK_DIR/config/paxi/datapacks"
+SHADERPACKS_DIR="$MODPACK_DIR/shaderpacks"
 
 DRY_RUN=false
 PRUNE=false
@@ -52,13 +53,14 @@ if [[ ! -f "$MODPACK_DIR/pack.toml" ]]; then
 fi
 
 # ── Parse plugins/*.md ────────────────────────────────────────────────
-# Outputs lines: slug|curseforge_id|modrinth_slug|name|pin_cf_file_id
+# Outputs lines: slug|curseforge_id|modrinth_slug|name|pin_cf_file_id|mod_loader
 # curseforge_id is "N/A" for Modrinth-only mods.
 # modrinth_slug is "N/A" or empty if not on Modrinth.
 # pin_cf_file_id is empty if no pin is set.
+# mod_loader is "Fabric", "Iris", "Datapack", etc.
 
 parse_plugins() {
-    local name="" slug="" cf_id="" mr_slug="" pin_cf_file_id=""
+    local name="" slug="" cf_id="" mr_slug="" pin_cf_file_id="" mod_loader=""
 
     for file in "$PLUGINS_DIR"/*.md; do
         [[ -f "$file" ]] || continue
@@ -68,10 +70,10 @@ parse_plugins() {
             if [[ "$line" =~ ^##\  ]]; then
                 # Emit previous mod if it has a slug
                 if [[ -n "$slug" ]]; then
-                    echo "${slug}|${cf_id}|${mr_slug}|${name}|${pin_cf_file_id}"
+                    echo "${slug}|${cf_id}|${mr_slug}|${name}|${pin_cf_file_id}|${mod_loader}"
                 fi
                 name="${line#\#\# }"
-                slug="" cf_id="" mr_slug="" pin_cf_file_id=""
+                slug="" cf_id="" mr_slug="" pin_cf_file_id="" mod_loader=""
             fi
 
             # Field extraction
@@ -83,14 +85,16 @@ parse_plugins() {
                 mr_slug="$(echo "$line" | sed 's/.*\*\*Modrinth Slug:\*\* *//')"
             elif [[ "$line" == *"**Pin CurseForge File ID:**"* ]]; then
                 pin_cf_file_id="$(echo "$line" | sed 's/.*\*\*Pin CurseForge File ID:\*\* *//')"
+            elif [[ "$line" == *"**Mod Loader:**"* ]]; then
+                mod_loader="$(echo "$line" | sed 's/.*\*\*Mod Loader:\*\* *//')"
             fi
         done < "$file"
 
         # Last mod in file
         if [[ -n "$slug" ]]; then
-            echo "${slug}|${cf_id}|${mr_slug}|${name}|${pin_cf_file_id}"
+            echo "${slug}|${cf_id}|${mr_slug}|${name}|${pin_cf_file_id}|${mod_loader}"
         fi
-        name="" slug="" cf_id="" mr_slug="" pin_cf_file_id=""
+        name="" slug="" cf_id="" mr_slug="" pin_cf_file_id="" mod_loader=""
     done
 }
 
@@ -102,7 +106,7 @@ declare -A installed_files    # pw.toml basename (no ext) -> 1
 
 index_installed() {
     local dir
-    for dir in "$MODS_DIR" "$DATAPACKS_DIR"; do
+    for dir in "$MODS_DIR" "$DATAPACKS_DIR" "$SHADERPACKS_DIR"; do
         [[ -d "$dir" ]] || continue
 
         for pw_file in "$dir"/*.pw.toml; do
@@ -156,33 +160,37 @@ is_installed() {
 
 find_orphans() {
     local -n _wanted_ids=$1
-    [[ -d "$MODS_DIR" ]] || return 0
 
-    for pw_file in "$MODS_DIR"/*.pw.toml; do
-        [[ -f "$pw_file" ]] || continue
-        local base
-        base="$(basename "$pw_file" .pw.toml)"
+    local dir
+    for dir in "$MODS_DIR" "$SHADERPACKS_DIR"; do
+        [[ -d "$dir" ]] || continue
 
-        # Check if this mod's CF project ID is in the wanted set
-        local cf_pid
-        cf_pid="$(grep -Po '(?<=^project-id = )\d+' "$pw_file" 2>/dev/null || true)"
-        if [[ -n "$cf_pid" && -n "${_wanted_ids[$cf_pid]+x}" ]]; then
-            continue
-        fi
+        for pw_file in "$dir"/*.pw.toml; do
+            [[ -f "$pw_file" ]] || continue
+            local base
+            base="$(basename "$pw_file" .pw.toml)"
 
-        # Check by slug match
-        local found=false
-        for wanted_slug in "${!_wanted_ids[@]}"; do
-            if [[ "$wanted_slug" == "$base" ]]; then
-                found=true
-                break
+            # Check if this mod's CF project ID is in the wanted set
+            local cf_pid
+            cf_pid="$(grep -Po '(?<=^project-id = )\d+' "$pw_file" 2>/dev/null || true)"
+            if [[ -n "$cf_pid" && -n "${_wanted_ids[$cf_pid]+x}" ]]; then
+                continue
             fi
-        done
-        $found && continue
 
-        # This mod is an orphan (might be a dependency — packwiz installed it
-        # automatically). Only flag it; let the user decide.
-        echo "$base"
+            # Check by slug match
+            local found=false
+            for wanted_slug in "${!_wanted_ids[@]}"; do
+                if [[ "$wanted_slug" == "$base" ]]; then
+                    found=true
+                    break
+                fi
+            done
+            $found && continue
+
+            # This mod is an orphan (might be a dependency — packwiz installed it
+            # automatically). Only flag it; let the user decide.
+            echo "$base"
+        done
     done
 }
 
@@ -223,7 +231,7 @@ main() {
 
     # Process each mod
     for entry in "${mod_lines[@]}"; do
-        IFS='|' read -r slug cf_id mr_slug name pin_cf_file_id <<< "$entry"
+        IFS='|' read -r slug cf_id mr_slug name pin_cf_file_id mod_loader <<< "$entry"
 
         # Track wanted mods for pruning
         if [[ "$cf_id" != "N/A"* ]]; then
@@ -240,6 +248,9 @@ main() {
         # Determine source
         local source="curseforge"
         if [[ "$cf_id" == "N/A"* ]]; then
+            source="modrinth"
+        elif [[ "$mod_loader" == "Iris" ]]; then
+            # Shader packs must be installed via Modrinth (project_type: shader)
             source="modrinth"
         fi
 

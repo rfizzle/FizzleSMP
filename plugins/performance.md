@@ -20,6 +20,26 @@
 - **Dependencies:** Sodium
 - **Conflicts:** Incompatible with OptiFine/OptiFabric
 
+## Complementary Shaders - Reimagined
+- **CurseForge ID:** 627557
+- **Slug:** complementary-reimagined
+- **Modrinth Slug:** complementary-reimagined
+- **Mod Loader:** Iris
+- **Summary:** A shader pack that preserves the vanilla Minecraft aesthetic with modern lighting, reflections, and atmosphere.
+- **Why:** Gives players a beautiful, performance-friendly shader option that stays faithful to vanilla visuals.
+- **Dependencies:** Iris Shaders
+- **Conflicts:** None known
+
+## Complementary Shaders - Unbound
+- **CurseForge ID:** 385587
+- **Slug:** complementary-unbound
+- **Modrinth Slug:** complementary-unbound
+- **Mod Loader:** Iris
+- **Summary:** A shader pack that transforms Minecraft visuals with dramatic lighting, volumetrics, and stylized effects.
+- **Why:** Offers players a more cinematic, stylized shader alternative alongside Reimagined.
+- **Dependencies:** Iris Shaders
+- **Conflicts:** None known
+
 ## ImmediatelyFast
 - **CurseForge ID:** 686911
 - **Slug:** immediatelyfast
