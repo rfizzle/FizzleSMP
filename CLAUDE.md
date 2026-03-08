@@ -24,9 +24,11 @@ FizzleSMP/
 ├── modpack/                        # Packwiz modpack directory
 │   ├── pack.toml                   # Packwiz pack definition (MC version, loader)
 │   ├── index.toml                  # Packwiz file manifest (auto-generated)
-│   └── mods/                       # Packwiz mod metadata (one .pw.toml per mod)
-│       ├── sodium.pw.toml
-│       ├── lithium.pw.toml
+│   ├── mods/                       # Packwiz mod metadata (one .pw.toml per mod)
+│   │   ├── sodium.pw.toml
+│   │   ├── lithium.pw.toml
+│   │   └── ...
+│   └── config/paxi/datapacks/      # Packwiz datapack metadata (.pw.toml)
 │       └── ...
 ├── plugins/                        # Human-readable mod lists (source of truth)
 │   ├── performance.md              # Performance & optimization mods
@@ -47,6 +49,7 @@ FizzleSMP/
     └── commands/
         ├── review-plugins.md       # /review-plugins — audit the full mod list
         ├── check-conflicts.md      # /check-conflicts — find potential conflicts
+        ├── compare-sync.md         # /compare-sync — compare plugins/ vs packwiz
         └── add-mods.md             # /add-mods — add mods with version/dependency checks
 ```
 
@@ -140,6 +143,7 @@ When adding a mod via `/add-mods`, the plugin file is the source of truth. **Do 
 |---------|---------|
 | `/review-plugins` | Reads all `plugins/*.md` files, prints a summary table of every mod (name, category, conflicts), and flags any issues (missing fields, duplicates across categories). |
 | `/check-conflicts` | Reads the plugin lists and compatibility matrix, cross-references all mods, and reports potential conflicts — both known (from the matrix) and suspected (overlapping functionality). |
+| `/compare-sync` | Compares mods listed in `plugins/*.md` against packwiz files in `modpack/mods/` and `modpack/config/paxi/datapacks/`. Reports synced, missing, and extra mods. |
 | `/add-mods <mod names>` | Verifies 1.21.1 Fabric compatibility, resolves dependencies, checks for conflicts, and adds the mod to the correct category file. Suggests alternatives if incompatible. |
 
 ## Workflow
