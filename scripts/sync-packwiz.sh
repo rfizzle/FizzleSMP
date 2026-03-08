@@ -17,6 +17,7 @@ PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 PLUGINS_DIR="$PROJECT_DIR/plugins"
 MODPACK_DIR="$PROJECT_DIR/modpack"
 MODS_DIR="$MODPACK_DIR/mods"
+DATAPACKS_DIR="$MODPACK_DIR/config/paxi/datapacks"
 
 DRY_RUN=false
 PRUNE=false
@@ -97,27 +98,30 @@ declare -A installed_mr_ids   # modrinth_mod_id -> pw.toml filename
 declare -A installed_files    # pw.toml basename (no ext) -> 1
 
 index_installed() {
-    [[ -d "$MODS_DIR" ]] || return 0
+    local dir
+    for dir in "$MODS_DIR" "$DATAPACKS_DIR"; do
+        [[ -d "$dir" ]] || continue
 
-    for pw_file in "$MODS_DIR"/*.pw.toml; do
-        [[ -f "$pw_file" ]] || continue
-        local base
-        base="$(basename "$pw_file" .pw.toml)"
-        installed_files["$base"]=1
+        for pw_file in "$dir"/*.pw.toml; do
+            [[ -f "$pw_file" ]] || continue
+            local base
+            base="$(basename "$pw_file" .pw.toml)"
+            installed_files["$base"]=1
 
-        # Extract CurseForge project-id
-        local cf_pid
-        cf_pid="$(grep -Po '(?<=^project-id = )\d+' "$pw_file" 2>/dev/null || true)"
-        if [[ -n "$cf_pid" ]]; then
-            installed_cf_ids["$cf_pid"]="$base"
-        fi
+            # Extract CurseForge project-id
+            local cf_pid
+            cf_pid="$(grep -Po '(?<=^project-id = )\d+' "$pw_file" 2>/dev/null || true)"
+            if [[ -n "$cf_pid" ]]; then
+                installed_cf_ids["$cf_pid"]="$base"
+            fi
 
-        # Extract Modrinth mod-id
-        local mr_mid
-        mr_mid="$(grep -Po '(?<=^mod-id = ")[^"]+' "$pw_file" 2>/dev/null || true)"
-        if [[ -n "$mr_mid" ]]; then
-            installed_mr_ids["$mr_mid"]="$base"
-        fi
+            # Extract Modrinth mod-id
+            local mr_mid
+            mr_mid="$(grep -Po '(?<=^mod-id = ")[^"]+' "$pw_file" 2>/dev/null || true)"
+            if [[ -n "$mr_mid" ]]; then
+                installed_mr_ids["$mr_mid"]="$base"
+            fi
+        done
     done
 }
 
