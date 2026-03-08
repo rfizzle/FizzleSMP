@@ -425,6 +425,33 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## Nature's Compass
+- **CurseForge ID:** 252848
+- **Slug:** natures-compass
+- **Mod Loader:** Fabric
+- **Summary:** Adds a craftable compass that locates any biome in the world.
+- **Why:** Essential exploration tool for SMP players searching for specific biomes for resources or building locations.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Explorer's Compass
+- **CurseForge ID:** 491794
+- **Slug:** explorers-compass
+- **Mod Loader:** Fabric
+- **Summary:** Adds a craftable compass that locates any structure in the world, including modded structures.
+- **Why:** Helps SMP players find specific structures without aimless wandering; works with modded structures from YUNG's suite, Repurposed Structures, etc.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Carry On
+- **CurseForge ID:** 274259
+- **Slug:** carry-on
+- **Mod Loader:** Fabric
+- **Summary:** Allows picking up and carrying tile entities (chests, furnaces, etc.) and mobs with bare hands.
+- **Why:** Convenient way to relocate blocks with inventories and mobs without breaking/killing them on the SMP.
+- **Dependencies:** None
+- **Conflicts:** Soft conflict with Lootr — carried Lootr chests may not open properly for other players (see compatibility matrix).
+
 ## Sound Physics Remastered
 - **CurseForge ID:** 535489
 - **Slug:** sound-physics-remastered

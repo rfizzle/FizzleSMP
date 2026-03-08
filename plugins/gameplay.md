@@ -335,6 +335,24 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## Supplementaries
+- **CurseForge ID:** 412082
+- **Slug:** supplementaries
+- **Mod Loader:** Fabric
+- **Summary:** Vanilla+ additions including jars, signposts, faucets, weather vanes, planters, sconces, and many decorative and functional blocks.
+- **Why:** Adds a wide variety of useful and decorative blocks that feel vanilla-appropriate, enhancing building and automation options on the SMP.
+- **Dependencies:** Fabric API, Moonlight Lib
+- **Conflicts:** None known
+
+## Moonlight Lib
+- **CurseForge ID:** 499980
+- **Slug:** selene
+- **Mod Loader:** Fabric
+- **Summary:** A dynamic data pack and registration library providing shared utilities for MehVahdJukaar's mods.
+- **Why:** Required dependency of Supplementaries.
+- **Dependencies:** None
+- **Conflicts:** None known
+
 ## Bosses of Mass Destruction
 - **CurseForge ID:** 438365
 - **Slug:** bosses-of-mass-destruction

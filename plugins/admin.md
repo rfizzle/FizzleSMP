@@ -20,6 +20,15 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## Connectivity
+- **CurseForge ID:** 470193
+- **Slug:** connectivity
+- **Mod Loader:** Fabric
+- **Summary:** Fixes various connection issues including timeouts, login failures, and chunk loading problems.
+- **Why:** Prevents frustrating disconnects and login issues on the SMP server by increasing timeouts and fixing packet handling bugs.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
 ## Spark
 - **CurseForge ID:** 361579
 - **Slug:** spark

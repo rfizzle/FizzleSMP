@@ -74,6 +74,15 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## Clumps
+- **CurseForge ID:** 256717
+- **Slug:** clumps
+- **Mod Loader:** Fabric
+- **Summary:** Groups nearby XP orbs into a single entity to reduce lag.
+- **Why:** Reduces entity count and tick overhead when many XP orbs spawn, improving server performance in farms and combat areas.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
 ## Fabric API
 - **CurseForge ID:** 306612
 - **Slug:** fabric-api

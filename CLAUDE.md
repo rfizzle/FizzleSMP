@@ -131,7 +131,7 @@ packwiz modrinth export             # Export .mrpack for Modrinth
 
 ### Workflow Integration
 
-When adding a mod via `/add-mods`, the plugin file is the source of truth. After updating `plugins/*.md`, run `./scripts/sync-packwiz.sh` to propagate changes to packwiz. The packwiz files (`modpack/pack.toml`, `modpack/index.toml`, `modpack/mods/`) should be committed alongside plugin changes.
+When adding a mod via `/add-mods`, the plugin file is the source of truth. **Do not** automatically run `sync-packwiz.sh` after adding mods — the user will trigger the sync manually when ready. The packwiz files (`modpack/pack.toml`, `modpack/index.toml`, `modpack/mods/`) should be committed alongside plugin changes when the sync is performed.
 
 ## Custom Commands
 
