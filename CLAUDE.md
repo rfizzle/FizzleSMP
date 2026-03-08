@@ -50,7 +50,8 @@ FizzleSMP/
         ├── review-plugins.md       # /review-plugins — audit the full mod list
         ├── check-conflicts.md      # /check-conflicts — find potential conflicts
         ├── compare-sync.md         # /compare-sync — compare plugins/ vs packwiz
-        └── add-mods.md             # /add-mods — add mods with version/dependency checks
+        ├── add-mods.md             # /add-mods — add mods with version/dependency checks
+        └── analyze-log.md          # /analyze-log — diagnose Minecraft logs & map to mods
 ```
 
 ## Plugin File Format
@@ -146,6 +147,7 @@ When adding a mod via `/add-mods`, the plugin file is the source of truth. **Do 
 | `/check-conflicts` | Reads the plugin lists and compatibility matrix, cross-references all mods, and reports potential conflicts — both known (from the matrix) and suspected (overlapping functionality). |
 | `/compare-sync` | Compares mods listed in `plugins/*.md` against packwiz files in `modpack/mods/` and `modpack/config/paxi/datapacks/`. Reports synced, missing, and extra mods. |
 | `/add-mods <mod names>` | Verifies 1.21.1 Fabric compatibility, resolves dependencies, checks for conflicts, and adds the mod to the correct category file. Suggests alternatives if incompatible. |
+| `/analyze-log <path or pasted log>` | Parses a Minecraft log file (or pasted log content), maps errors/warnings to mods in the pack, diagnoses root causes, and recommends fixes. Updates testing checklist and compatibility matrix as needed. |
 
 ## Workflow
 
