@@ -241,6 +241,11 @@ hash = "765d72129bfb30756fee8e30e11fc04c6658292b5041a5890aa89e7013a387f9"
 metafile = true
 
 [[files]]
+file = "mods/easy-mob-farm.pw.toml"
+hash = "2ef1c75556e6e49606999c01ef2b0fba2a9a5a52158b997a7a1548b62972e338"
+metafile = true
+
+[[files]]
 file = "mods/emi-enchanting.pw.toml"
 hash = "3bba70ae20cac5df72bddb4ba9e23bd2f39ea3c0f327eda5711cb0d4ae1500b6"
 metafile = true
@@ -458,6 +463,11 @@ metafile = true
 [[files]]
 file = "mods/lithium.pw.toml"
 hash = "4af07dd765be426fec46e72aa0a0b435b42d85bffe1ee87a100e661d881c90f2"
+metafile = true
+
+[[files]]
+file = "mods/lithostitched.pw.toml"
+hash = "d49477dba10c7b8431dde58fdaa0d5d9c9a36c2c8d8e5ffc30a7007ec7476b2f"
 metafile = true
 
 [[files]]
@@ -833,6 +843,11 @@ metafile = true
 [[files]]
 file = "mods/treechop.pw.toml"
 hash = "20cc87fb3a1be50f98b2e2877dd4fb4c5a31950d77b8267cd7c539a66d35ec2c"
+metafile = true
+
+[[files]]
+file = "mods/trinkets.pw.toml"
+hash = "7b5e8074a47ad6a9e453a29853bb1527906ae0ced0d714fcd386c75ef1f0f00a"
 metafile = true
 
 [[files]]
