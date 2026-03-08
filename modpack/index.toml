@@ -1,10 +1,6 @@
 hash-format = "sha256"
 
 [[files]]
-file = "config/fabric_loader_dependencies.json"
-hash = "4262c4696674153485bd71f908ca1deb2d704c48db30090ee4fbf503e1b85f70"
-
-[[files]]
 file = "config/paxi/datapacks/terraphilic.pw.toml"
 hash = "73b877ef14e88cab2d1771894a0271472c1a5b0a464773f886678eb631603cab"
 metafile = true
@@ -712,11 +708,6 @@ metafile = true
 [[files]]
 file = "mods/simply-swords.pw.toml"
 hash = "05c574407090469fba2689bb765d9ad851e2f182d25efe3a41e55d476ac6f6e9"
-metafile = true
-
-[[files]]
-file = "mods/simply-tooltips.pw.toml"
-hash = "b3012b407c6e1c3ade845cf4c30bce13b000864123668710f6b670009ccfecf5"
 metafile = true
 
 [[files]]
