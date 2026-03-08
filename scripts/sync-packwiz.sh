@@ -159,7 +159,9 @@ is_installed() {
 # ── Collect mods no longer in plugins (for --prune) ──────────────────
 
 find_orphans() {
-    local -n _wanted_ids=$1
+    local -n _wanted_cf_ids=$1
+    local -n _wanted_slugs=$2
+    local -n _wanted_mr_slugs=$3
 
     local dir
     for dir in "$MODS_DIR" "$SHADERPACKS_DIR"; do
@@ -170,22 +172,22 @@ find_orphans() {
             local base
             base="$(basename "$pw_file" .pw.toml)"
 
-            # Check if this mod's CF project ID is in the wanted set
+            # 1. Match by CurseForge project ID
             local cf_pid
             cf_pid="$(grep -Po '(?<=^project-id = )\d+' "$pw_file" 2>/dev/null || true)"
-            if [[ -n "$cf_pid" && -n "${_wanted_ids[$cf_pid]+x}" ]]; then
+            if [[ -n "$cf_pid" && -n "${_wanted_cf_ids[$cf_pid]+x}" ]]; then
                 continue
             fi
 
-            # Check by slug match
-            local found=false
-            for wanted_slug in "${!_wanted_ids[@]}"; do
-                if [[ "$wanted_slug" == "$base" ]]; then
-                    found=true
-                    break
-                fi
-            done
-            $found && continue
+            # 2. Match by pw.toml filename against CF slugs
+            if [[ -n "${_wanted_slugs[$base]+x}" ]]; then
+                continue
+            fi
+
+            # 3. Match by pw.toml filename against Modrinth slugs
+            if [[ -n "${_wanted_mr_slugs[$base]+x}" ]]; then
+                continue
+            fi
 
             # This mod is an orphan (might be a dependency — packwiz installed it
             # automatically). Only flag it; let the user decide.
@@ -218,6 +220,7 @@ main() {
     local total=0 added=0 skipped=0 failed=0 removed=0
     declare -a added_names=() failed_names=() removed_names=() prune_failed_names=()
     declare -a failed_errors=()
+    declare -A wanted_mr_slugs  # modrinth_slug -> 1
 
     # Collect all mods first
     declare -a mod_lines=()
@@ -238,6 +241,9 @@ main() {
             wanted_cf_ids["$cf_id"]="$slug"
         fi
         wanted_slugs["$slug"]=1
+        if [[ -n "$mr_slug" && "$mr_slug" != "N/A" ]]; then
+            wanted_mr_slugs["$mr_slug"]=1
+        fi
 
         # Skip if already installed
         if is_installed "$slug" "$cf_id" "$mr_slug"; then
@@ -336,7 +342,7 @@ main() {
                 fi
             fi
             (( removed++ )) || true
-        done < <(find_orphans wanted_cf_ids)
+        done < <(find_orphans wanted_cf_ids wanted_slugs wanted_mr_slugs)
     fi
 
     # ── Summary Report ─────────────────────────────────────────────────

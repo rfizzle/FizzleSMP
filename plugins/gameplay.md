@@ -56,24 +56,6 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
-## Reforged (formerly TieredZ)
-- **CurseForge ID:** 453889
-- **Slug:** tiered-forge
-- **Mod Loader:** Fabric
-- **Summary:** Adds random quality modifiers to all tools, weapons, and armor with stat bonuses and abilities, plus a rerolling system via villager-sold hammers.
-- **Why:** Adds RPG-style item quality tiers to every crafted piece of gear, making loot more exciting and encouraging trading on the SMP.
-- **Dependencies:** UnionLib
-- **Conflicts:** None known; modifiers apply to weapons from Simply Swords and gear from Mythic Upgrades (desirable interaction).
-
-## UnionLib
-- **CurseForge ID:** 367806
-- **Slug:** unionlib
-- **Mod Loader:** Fabric
-- **Summary:** A shared library mod providing common utilities for StereoWalker's mods.
-- **Why:** Required dependency of Reforged (formerly TieredZ).
-- **Dependencies:** None
-- **Conflicts:** None known
-
 ## Artifacts
 - **CurseForge ID:** 401236
 - **Slug:** artifacts-fabric
@@ -174,15 +156,6 @@
 - **Summary:** Overhauls anvils with items staying after closing, removal of the "too expensive" cap, better name tags, and many configurable tweaks.
 - **Why:** Removes the frustrating "too expensive" anvil limit and adds QoL improvements, keeping anvils useful throughout endgame on the SMP.
 - **Dependencies:** Fabric API, Puzzles Lib, Forge Config API Port
-- **Conflicts:** None known; complementary with Mendable Anvils (Easy Anvils tweaks mechanics, Mendable Anvils adds repair).
-
-## Mendable Anvils
-- **CurseForge ID:** 648497
-- **Slug:** mendable-anvils
-- **Mod Loader:** Fabric
-- **Summary:** Allows players to repair damaged anvils by shift + right-clicking with an iron ingot.
-- **Why:** Prevents anvil waste on the SMP — players can maintain their anvils instead of constantly crafting new ones.
-- **Dependencies:** Fabric API
 - **Conflicts:** None known
 
 ## Spectrum

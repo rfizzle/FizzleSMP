@@ -181,6 +181,11 @@ hash = "b50378ddd8de5877ce51ded7616ebbf3ad0a5e18af8125a473411fbabc6c37cd"
 metafile = true
 
 [[files]]
+file = "mods/controlling.pw.toml"
+hash = "c95f96c1422ed285de47a75dd9c163538fe89259d9525d15d2c07039f0c1f5b1"
+metafile = true
+
+[[files]]
 file = "mods/coroutil.pw.toml"
 hash = "74b82158cadd5d72b6f1c706aa7f190c4e791681472fc98735cec30acf622535"
 metafile = true
@@ -496,11 +501,6 @@ hash = "dd766c9ebeaf93db8b869f6bcaa83a07040a1413e5171be0577dd9a3dd8d3b04"
 metafile = true
 
 [[files]]
-file = "mods/mendable-anvils.pw.toml"
-hash = "4bfe874bc5ae7e873b65d18c901823335b11edffa66c8acaa91f5242d01fa6f0"
-metafile = true
-
-[[files]]
 file = "mods/metal-barrels.pw.toml"
 hash = "dfb3370d775b9f3c143cc7d644c253364c2c092192799c59b217365f13adafa6"
 metafile = true
@@ -686,6 +686,11 @@ hash = "d6b026804b9667f1d58cfb391319d352ae4eda535618d2c5e8a37e4d6a9b7ed3"
 metafile = true
 
 [[files]]
+file = "mods/searchables.pw.toml"
+hash = "795a73207734f08e5cece4da342c509d2210787ea8f0df9ea7ee440719a53cf3"
+metafile = true
+
+[[files]]
 file = "mods/selene.pw.toml"
 hash = "2068f7e43e2340d719cb9fe76bb9d1a9d7677ce79f0c6f15df6a0eb2aa0425fb"
 metafile = true
@@ -811,11 +816,6 @@ hash = "668a0515ab70249e8e3e8c74d395d47373b3c5eb3162e76531ddc143c1aa73fd"
 metafile = true
 
 [[files]]
-file = "mods/tiered-forge.pw.toml"
-hash = "5ab48e0e870a2cba7c40871b0b8ab9e79ff0d3d81fbb1704a57668c68773a603"
-metafile = true
-
-[[files]]
 file = "mods/towns-and-towers.pw.toml"
 hash = "cab2f1d2bf3b9e4435f02cde12c270f3234599d63fc5c7383eaa9da3e4e9d5bb"
 metafile = true
@@ -843,11 +843,6 @@ metafile = true
 [[files]]
 file = "mods/trinkets.pw.toml"
 hash = "7b5e8074a47ad6a9e453a29853bb1527906ae0ced0d714fcd386c75ef1f0f00a"
-metafile = true
-
-[[files]]
-file = "mods/unionlib.pw.toml"
-hash = "222aec6ca2ee229ff17aaed669c7b5fcd3381a90272f017b0cf048d26a8e95a0"
 metafile = true
 
 [[files]]
