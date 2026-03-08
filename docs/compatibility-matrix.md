@@ -19,7 +19,7 @@ Tracks known conflicts between mods in the pack and how to resolve them.
 
 | Mod A | Mod B | Details | Resolution |
 |---|---|---|---|
-| YUNG's suite | Repurposed Structures | Overlapping structure types: dungeons, mineshafts, desert temples, jungle temples, witch huts | Disable overlapping structure types in RS config; let YUNG's mods handle those. Keep RS enabled for its unique shipwrecks, mansions, igloos, and ruins variants. |
+| YUNG's suite | Repurposed Structures | Overlapping structure types: dungeons, mineshafts, desert temples, jungle temples, witch huts | **Resolved** — `RS-YUNG-Compat-Config.zip` datapack (in `modpack/config/paxi/datapacks/`) disables RS overworld mineshafts, pyramids, temples, witch huts, and overworld dungeons. YUNG's handles those; RS keeps its unique structures (shipwrecks, mansions, igloos, ruins, cities, villages, etc.) and all nether/end variants. |
 | Geophilic | Terralith | Both modify vanilla biome files; features may override each other | Use Terraphilic compatibility pack (must load after both mods) |
 | Hopo Better Underwater Ruins | Repurposed Structures | May overlap on ocean ruin variants | Check RS config to disable overlapping ocean ruin types; let Hopo handle underwater ruins. |
 | Inventory Profiles Next | Mouse Tweaks | Both modify inventory click/drag behavior | Adjust keybinds if defaults overlap; IPN handles sorting/auto-refill, Mouse Tweaks handles drag-splitting. |

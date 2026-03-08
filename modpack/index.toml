@@ -1,6 +1,10 @@
 hash-format = "sha256"
 
 [[files]]
+file = "config/paxi/datapacks/RS-YUNG-Compat-Config.zip"
+hash = "1cb323f43bb33ec0d8ffc2ad71f8074a2b7180ff4eb5aa43292cb50a13c6d95a"
+
+[[files]]
 file = "config/paxi/datapacks/terraphilic.pw.toml"
 hash = "73b877ef14e88cab2d1771894a0271472c1a5b0a464773f886678eb631603cab"
 metafile = true

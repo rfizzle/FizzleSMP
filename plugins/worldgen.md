@@ -37,7 +37,7 @@
 - **Summary:** Adds biome-themed variants of vanilla structures (pyramids, villages, dungeons, mineshafts, and more).
 - **Why:** Adds structure variety across biomes so exploration feels fresh and structures fit their surroundings.
 - **Dependencies:** Fabric API, MidnightLib
-- **Conflicts:** Soft conflict with YUNG's suite — overlapping structure types (dungeons, mineshafts, desert temples, jungle temples, witch huts). Disable these in RS config to let YUNG's handle them; keep RS for its unique shipwrecks, mansions, igloos, and ruins variants.
+- **Conflicts:** Soft conflict with YUNG's suite — overlapping structure types (dungeons, mineshafts, desert temples, jungle temples, witch huts). Resolved via `RS-YUNG-Compat-Config.zip` datapack (shipped in `modpack/config/paxi/datapacks/`) which disables RS overworld mineshafts, pyramids, temples, witch huts, and overworld dungeons to let YUNG's handle them. RS remains enabled for its unique shipwrecks, mansions, igloos, ruins, cities, bastions, villages, outposts, and nether/end variants.
 
 ## Towns and Towers
 - **CurseForge ID:** 626761

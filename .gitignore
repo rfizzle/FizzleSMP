@@ -4,5 +4,8 @@
 # Exclude exported CurseForge zip files
 *.zip
 
+# Allow custom datapacks shipped via Paxi
+!modpack/config/paxi/datapacks/*.zip
+
 # Exclude exported Modrinth modpacks
 *.mrpack
