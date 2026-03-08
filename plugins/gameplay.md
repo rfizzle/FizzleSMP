@@ -84,14 +84,24 @@
 - **Dependencies:** None required; Accessories Compatibility Layer (optional, for accessory slots), Cloth Config API (optional)
 - **Conflicts:** None known
 
+## Trinkets
+- **CurseForge ID:** 341284
+- **Slug:** trinkets
+- **Modrinth Slug:** trinkets
+- **Mod Loader:** Fabric
+- **Summary:** Provides an accessory/trinket slot system for equipping items beyond standard armor slots.
+- **Why:** Required dependency of Spectrum; works alongside Accessories via the Accessories Compatibility Layer.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known; requires Accessories Compatibility Layer when used with Accessories.
+
 ## Accessories
 - **CurseForge ID:** 938917
 - **Slug:** accessories
 - **Mod Loader:** Fabric
 - **Summary:** A data-driven accessory mod providing an extendable accessory slot system, inspired by Trinkets and Curios with a cross-platform API.
-- **Why:** Replaces Trinkets as the accessory slot framework; required by Things and compatible with Spell Engine. Used with Accessories Compatibility Layer for Trinkets API backwards compatibility.
+- **Why:** Primary accessory slot framework; required by Things and compatible with Spell Engine. Used with Accessories Compatibility Layer to bridge Trinkets-dependent mods.
 - **Dependencies:** None
-- **Conflicts:** Do not install alongside Trinkets directly; use Accessories Compatibility Layer to bridge Trinkets-dependent mods.
+- **Conflicts:** None known; use Accessories Compatibility Layer to bridge Trinkets alongside.
 
 ## Accessories Compatibility Layer
 - **CurseForge ID:** 1315611
@@ -99,8 +109,8 @@
 - **Mod Loader:** Fabric
 - **Summary:** Wraps the Trinkets and Curios APIs to work under Accessories, unifying accessory management under one framework.
 - **Why:** Enables Trinkets-dependent mods (Artifacts, Spectrum) to work with Accessories without code changes.
-- **Dependencies:** Accessories
-- **Conflicts:** None known; replaces Trinkets mod (do not install Trinkets alongside this).
+- **Dependencies:** Accessories, Trinkets (>= 3.10.0)
+- **Conflicts:** Breaks with Trinkets versions below 3.10.0.
 
 ## Mythic Upgrades
 - **CurseForge ID:** 663567
@@ -506,4 +516,14 @@
 - **Summary:** Makes vanilla items (clock, compass, elytra, totem, spyglass, lantern, ender chest, shulker boxes, arrows) equippable as accessories.
 - **Why:** Frees up inventory space by letting players wear useful vanilla items as accessories, with configurable item support and modded variant compatibility.
 - **Dependencies:** Accessories, Fzzy Config, Fabric API
+- **Conflicts:** None known
+
+## Easy Mob Farm
+- **CurseForge ID:** 563464
+- **Slug:** easy-mob-farm
+- **Modrinth Slug:** easy-mob-farm
+- **Mod Loader:** Fabric
+- **Summary:** Adds mob farm blocks that capture and automatically farm mobs for their loot drops in a server-friendly way.
+- **Why:** Provides a balanced, server-friendly way to automate mob farming without lag-inducing traditional mob grinders.
+- **Dependencies:** Fabric API
 - **Conflicts:** None known

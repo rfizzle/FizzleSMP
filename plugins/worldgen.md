@@ -11,13 +11,23 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## Lithostitched
+- **CurseForge ID:** 936015
+- **Slug:** lithostitched
+- **Modrinth Slug:** lithostitched
+- **Mod Loader:** Fabric
+- **Summary:** Library mod with new configurability and compatibility enhancements for worldgen.
+- **Why:** Required dependency of Tectonic for worldgen stitching.
+- **Dependencies:** None
+- **Conflicts:** None known
+
 ## Tectonic
 - **CurseForge ID:** 686836
 - **Slug:** tectonic
 - **Mod Loader:** Fabric
 - **Summary:** Overhauls terrain generation with grander, more varied mountains, valleys, and landforms.
 - **Why:** Creates dramatic terrain shaping that complements Terralith's biome additions for a visually stunning world.
-- **Dependencies:** None
+- **Dependencies:** Lithostitched
 - **Conflicts:** None known; mod version auto-loads Terratonic compatibility when Terralith is detected.
 
 ## Repurposed Structures
