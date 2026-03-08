@@ -1,6 +1,10 @@
 hash-format = "sha256"
 
 [[files]]
+file = "config/fabric_loader_dependencies.json"
+hash = "4262c4696674153485bd71f908ca1deb2d704c48db30090ee4fbf503e1b85f70"
+
+[[files]]
 file = "config/paxi/datapacks/terraphilic.pw.toml"
 hash = "73b877ef14e88cab2d1771894a0271472c1a5b0a464773f886678eb631603cab"
 metafile = true
@@ -231,11 +235,6 @@ hash = "4d12c0266b95a0616377dc797b100ad0520977a8c97739cacfc2de2ac214e66c"
 metafile = true
 
 [[files]]
-file = "mods/easy-disenchanting.pw.toml"
-hash = "e87b12e7389b39c35df58887d42d92f0fb7ab727305aa83d977f5c5fffa2f737"
-metafile = true
-
-[[files]]
 file = "mods/easy-magic.pw.toml"
 hash = "765d72129bfb30756fee8e30e11fc04c6658292b5041a5890aa89e7013a387f9"
 metafile = true
@@ -368,6 +367,11 @@ metafile = true
 [[files]]
 file = "mods/geophilic.pw.toml"
 hash = "093711628f921153cd954c278f237665b2c7cb3e91f304b8c0483c5ba8be5347"
+metafile = true
+
+[[files]]
+file = "mods/grind-enchantments.pw.toml"
+hash = "55c1e79e52cf4a8ebf8871bd467781962357ba30b4aaaf1694c204cddb7106e7"
 metafile = true
 
 [[files]]
@@ -848,11 +852,6 @@ metafile = true
 [[files]]
 file = "mods/trinkets.pw.toml"
 hash = "7b5e8074a47ad6a9e453a29853bb1527906ae0ced0d714fcd386c75ef1f0f00a"
-metafile = true
-
-[[files]]
-file = "mods/txnilib.pw.toml"
-hash = "dc99439481e946cc3a26477b1ad2c7768ca15d5b89ca9aeeb9ff29deea22bee1"
 metafile = true
 
 [[files]]

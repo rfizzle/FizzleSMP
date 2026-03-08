@@ -1,8 +1,0 @@
-{
-  "version": 1,
-  "overrides": {
-    "c2me-opts-natives-math": {
-      "java": ""
-    }
-  }
-}

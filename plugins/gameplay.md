@@ -419,22 +419,14 @@
 - **Dependencies:** Fabric API, Resourceful Lib, YetAnotherConfigLib (YACL)
 - **Conflicts:** None known
 
-## Easy Disenchanting
-- **CurseForge ID:** 1266689
-- **Slug:** easy-disenchanting
+## Grind Enchantments
+- **CurseForge ID:** 379680
+- **Slug:** grind-enchantments
+- **Modrinth Slug:** grind-enchantments
 - **Mod Loader:** Fabric
-- **Summary:** Allows transferring enchantments from items onto books using a vanilla anvil, returning the disenchanted item.
-- **Why:** Lets SMP players salvage enchantments from unwanted gear instead of losing them, complementing Easy Anvils' anvil improvements.
-- **Dependencies:** Fabric API, TxniLib
-- **Conflicts:** None known
-
-## TxniLib
-- **CurseForge ID:** 1104882
-- **Slug:** txnilib
-- **Mod Loader:** Fabric
-- **Summary:** A shared library mod providing common utilities for Txni's mods.
-- **Why:** Required dependency of Easy Disenchanting.
-- **Dependencies:** None
+- **Summary:** Disenchant and transfer enchantments using a grindstone instead of discarding them.
+- **Why:** Lets SMP players salvage enchantments from unwanted gear via the grindstone, avoiding conflicts with Easy Anvils' anvil modifications.
+- **Dependencies:** Fabric API
 - **Conflicts:** None known
 
 ## You're in Grave Danger
