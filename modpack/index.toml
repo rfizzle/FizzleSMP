@@ -1,6 +1,14 @@
 hash-format = "sha256"
 
 [[files]]
+file = "config/emi.css"
+hash = "c786f704eb7c0e147d187863f36133a2544cfe10ba9b2d26678a72ad6a45d694"
+
+[[files]]
+file = "config/inventoryprofilesnext/inventoryprofiles.json"
+hash = "c4332888117f2029298fe81c97a773d27104e5af3c62068d8f9eba31c61d7dfe"
+
+[[files]]
 file = "config/lithium.properties"
 hash = "fa8988198ae2d22fef700a88198449a74116732e1f35ec9758a18d7fb0394c96"
 
@@ -996,6 +1004,10 @@ metafile = true
 file = "mods/zoomify.pw.toml"
 hash = "813dc67a4b0f6040008993731ce8709b7eec76040560b28e47610d92cf97bfdd"
 metafile = true
+
+[[files]]
+file = "options.txt"
+hash = "948ccfefb0d0018ad76f55c64637b268b6c363086fb6a9a357e9938bc7a82675"
 
 [[files]]
 file = "shaderpacks/complementary-reimagined.pw.toml"
