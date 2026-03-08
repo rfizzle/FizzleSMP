@@ -442,3 +442,21 @@
 - **Why:** Adds immersion to sleeping on the SMP — time accelerates gradually instead of jumping to morning, and more players sleeping speeds it up.
 - **Dependencies:** Fabric API, Architectury API, Cloth Config API
 - **Conflicts:** None known
+
+## Cupboard
+- **CurseForge ID:** 326652
+- **Slug:** cupboard
+- **Mod Loader:** Fabric
+- **Summary:** Provides code, frameworks, and utilities for Minecraft mods.
+- **Why:** Required dependency of Loot Integrations.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Loot Integrations
+- **CurseForge ID:** 580689
+- **Slug:** loot-integrations
+- **Mod Loader:** Fabric
+- **Summary:** Allows loot from loot tables to be integrated into other loot tables through datapacks, enriching structure chest loot with modded items.
+- **Why:** Enriches loot found in dungeon and structure chests by integrating items from all installed mods, making exploration more rewarding.
+- **Dependencies:** Fabric API, Cupboard
+- **Conflicts:** None known

@@ -262,3 +262,12 @@
 - **Why:** Prevents structure spam in a heavily modded worldgen pack; encourages exploration by making structures rarer and better distributed.
 - **Dependencies:** Fabric API
 - **Conflicts:** None known; works with all structure mods including modded and datapack structures.
+
+## YUNG's Structures Addon for Loot Integrations
+- **CurseForge ID:** 1012211
+- **Slug:** yung-structures-addon-for-loot-integrations
+- **Mod Loader:** Fabric
+- **Summary:** Adds better, more varied loot to all YUNG's structure mod chests via Loot Integrations.
+- **Why:** Enhances loot in YUNG's redesigned structures (dungeons, temples, mineshafts, etc.) with items from other mods in the pack.
+- **Dependencies:** Loot Integrations, YUNG's API
+- **Conflicts:** None known
