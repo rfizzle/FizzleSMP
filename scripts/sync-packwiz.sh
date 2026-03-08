@@ -172,6 +172,13 @@ find_orphans() {
     done
 }
 
+# ── Run packwiz from the modpack directory ────────────────────────────
+# packwiz expects to be run from the directory containing pack.toml.
+
+run_packwiz() {
+    (cd "$MODPACK_DIR" && packwiz "$@")
+}
+
 # ── Main ──────────────────────────────────────────────────────────────
 
 main() {
@@ -230,15 +237,15 @@ main() {
 
         local install_ok=false
         if [[ "$source" == "modrinth" ]]; then
-            if packwiz modrinth install "$slug" -y 2>&1 | sed 's/^/  /'; then
+            if run_packwiz modrinth install "$slug" -y 2>&1 | sed 's/^/  /'; then
                 install_ok=true
             fi
         else
-            if packwiz curseforge install --addon-id "$cf_id" -y 2>&1 | sed 's/^/  /'; then
+            if run_packwiz curseforge install --addon-id "$cf_id" -y 2>&1 | sed 's/^/  /'; then
                 install_ok=true
             else
                 echo "  ↳ CurseForge failed, trying Modrinth fallback..."
-                if packwiz modrinth install "$slug" -y 2>&1 | sed 's/^/  /'; then
+                if run_packwiz modrinth install "$slug" -y 2>&1 | sed 's/^/  /'; then
                     install_ok=true
                 fi
             fi
@@ -264,7 +271,7 @@ main() {
                 echo "[DRY RUN] Would remove: $orphan"
             else
                 echo "▸ Removing: $orphan"
-                packwiz remove "$orphan" 2>&1 | sed 's/^/  /'
+                run_packwiz remove "$orphan" 2>&1 | sed 's/^/  /'
             fi
             ((removed++))
         done < <(find_orphans wanted_cf_ids)
