@@ -418,23 +418,6 @@
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
 
-## First-person Model
-- **CurseForge ID:** 333287
-- **Slug:** first-person-model
-- **Mod Loader:** Fabric
-- **Summary:** Renders the player's full third-person model in first-person view, replacing the floating arm.
-- **Why:** Adds immersion by showing your full character model while playing, pairs perfectly with Not Enough Animations.
-- **Dependencies:** Fabric API, Not Enough Animations
-- **Conflicts:** None known
-
-## Better Third Person
-- **CurseForge ID:** 435044
-- **Slug:** better-third-person
-- **Mod Loader:** Fabric
-- **Summary:** Improves the third-person camera with free rotation, adjustable distance, and smoother controls.
-- **Why:** Makes third-person view actually usable with independent camera control and customizable distance.
-- **Dependencies:** None
-- **Conflicts:** None known
 
 ## Nature's Compass
 - **CurseForge ID:** 252848

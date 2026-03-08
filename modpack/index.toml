@@ -101,11 +101,6 @@ hash = "3e65329703701a8af3aa71ea1093d921d8e75f1b2d74fbd08fd4e63585277913"
 metafile = true
 
 [[files]]
-file = "mods/better-third-person.pw.toml"
-hash = "9d58379cbe25bdabf408a97e8de3ba1bef123b36382bd892e394c5a744d0c05e"
-metafile = true
-
-[[files]]
 file = "mods/betterf3.pw.toml"
 hash = "5fe7e26e9534cf3d7829e8c4937c7b700d2084b6345aed901c1c3de9a80f49fa"
 metafile = true
@@ -363,11 +358,6 @@ metafile = true
 [[files]]
 file = "mods/ferritecore-fabric.pw.toml"
 hash = "3aa66d677f5f23ddc8528f0c3243a9cbded0e27ea4b3db089ec0c8deecfb5704"
-metafile = true
-
-[[files]]
-file = "mods/first-person-model.pw.toml"
-hash = "deaa709b95713229e0de750ea46b38bbf21b63f417ee1348430b9f90929175e1"
 metafile = true
 
 [[files]]

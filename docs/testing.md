@@ -38,7 +38,7 @@ These mods all touch worldgen and are the most likely to conflict: Terralith, Te
 
 ## 3. Rendering & Visual Mods
 
-Key mods: Sodium, Iris, ImmediatelyFast, Entity Culling, Continuity, LambDynamicLights, Visuality, Falling Leaves, Make Bubbles Pop, Not Enough Animations, First-person Model, Better Third Person.
+Key mods: Sodium, Iris, ImmediatelyFast, Entity Culling, Continuity, LambDynamicLights, Visuality, Falling Leaves, Make Bubbles Pop, Not Enough Animations.
 
 - [ ] **Sodium rendering** — Confirm smooth rendering with Sodium's default settings. Check no graphical glitches (z-fighting, missing faces).
 - [ ] **Shader loading** — Enable Complementary Reimagined via Iris. Walk around and confirm:
@@ -50,7 +50,6 @@ Key mods: Sodium, Iris, ImmediatelyFast, Entity Culling, Continuity, LambDynamic
 - [ ] **Dynamic lighting** — Hold a torch in hand (LambDynamicLights). Confirm light emits around the player and doesn't conflict with Sodium.
 - [ ] **Entity culling** — Stand behind a wall near a mob farm. Open F3 and confirm entity render count drops (Entity Culling working).
 - [ ] **Particles** — Break blocks near leaves (Falling Leaves), pop bubbles underwater (Make Bubbles Pop), hit entities (Visuality). Confirm particles render without lag spikes.
-- [ ] **Player model** — Check First-person Model shows full body in first person. Switch to third person and verify Better Third Person camera controls.
 - [ ] **Animations** — Perform actions (eating, using bow, mining) and confirm Not Enough Animations adds proper third-person animations.
 
 ## 4. HUD & UI Mods
