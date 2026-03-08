@@ -460,3 +460,30 @@
 - **Why:** Enriches loot found in dungeon and structure chests by integrating items from all installed mods, making exploration more rewarding.
 - **Dependencies:** Fabric API, Cupboard
 - **Conflicts:** None known
+
+## RightClickHarvest Supplementaries Compat
+- **CurseForge ID:** 1038427
+- **Slug:** rightclickharvest-supplementaries-compat
+- **Mod Loader:** Fabric
+- **Summary:** Adds compatibility between RightClickHarvest and Supplementaries, making Flax and other Supplementaries crops right-click-harvestable.
+- **Why:** Bridges the gap between RightClickHarvest and Supplementaries so all crops (including Flax) support right-click harvesting.
+- **Dependencies:** RightClickHarvest, Supplementaries
+- **Conflicts:** None known
+
+## Supplementaries Squared
+- **CurseForge ID:** 838411
+- **Slug:** supplementaries-squared
+- **Mod Loader:** Fabric
+- **Summary:** An addon for Supplementaries adding block variants like colored sacks, wood-variant item shelves, golden candle holders, daub stairs/walls, metal frames, and plaques.
+- **Why:** Expands Supplementaries with additional decorative and functional block variants for more building options on the SMP.
+- **Dependencies:** Moonlight Lib, Fabric API, Supplementaries
+- **Conflicts:** None known
+
+## Accessorify
+- **CurseForge ID:** 1169634
+- **Slug:** accessorify
+- **Mod Loader:** Fabric
+- **Summary:** Makes vanilla items (clock, compass, elytra, totem, spyglass, lantern, ender chest, shulker boxes, arrows) equippable as accessories.
+- **Why:** Frees up inventory space by letting players wear useful vanilla items as accessories, with configurable item support and modded variant compatibility.
+- **Dependencies:** Accessories, Fzzy Config, Fabric API
+- **Conflicts:** None known

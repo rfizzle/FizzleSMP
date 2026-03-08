@@ -532,3 +532,30 @@
 - **Why:** Enhances exploration immersion — torches light up caves as you walk, lava illuminates surroundings, and dropped glowing items cast light.
 - **Dependencies:** Fabric API
 - **Conflicts:** Hard conflict with Sodium Dynamic Lights and RyoamicLights (neither in pack).
+
+## Jade Addons (Fabric)
+- **CurseForge ID:** 656665
+- **Slug:** jade-addons-fabric
+- **Mod Loader:** Fabric
+- **Summary:** Adds Jade tooltip/HUD integration for blocks and entities from supported mods including Lootr, Supplementaries, and Artifacts.
+- **Why:** Extends Jade with mod-specific tooltips for several mods already in the pack (Lootr, Supplementaries, Artifacts), improving information display.
+- **Dependencies:** Jade
+- **Conflicts:** None known
+
+## EMI Enchanting
+- **CurseForge ID:** 936713
+- **Slug:** emi-enchanting
+- **Mod Loader:** Fabric
+- **Summary:** An EMI plugin that displays enchantment information including valid items, exclusions, curse status, tradability, and max level.
+- **Why:** Lets players browse enchantment details directly in EMI, complementing the existing EMI addon suite.
+- **Dependencies:** EMI
+- **Conflicts:** None known
+
+## EMI Ores
+- **CurseForge ID:** 974009
+- **Slug:** emi-ores
+- **Mod Loader:** Fabric
+- **Summary:** An EMI plugin that displays ore generation information including Y-level distribution, vein size, and biome restrictions.
+- **Why:** Lets players look up ore spawn levels and distribution in EMI, especially useful with modded ores from Tech Reborn, Oritech, and Mythic Upgrades.
+- **Dependencies:** EMI, Fabric API
+- **Conflicts:** None known

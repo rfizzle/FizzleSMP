@@ -271,3 +271,12 @@
 - **Why:** Enhances loot in YUNG's redesigned structures (dungeons, temples, mineshafts, etc.) with items from other mods in the pack.
 - **Dependencies:** Loot Integrations, YUNG's API
 - **Conflicts:** None known
+
+## Repurposed Structures - Farmer's Delight Compat
+- **CurseForge ID:** 1071336
+- **Slug:** repurposed-structures-farmers-delight-compat-mod
+- **Mod Loader:** Fabric
+- **Summary:** Adds Farmer's Delight crops and compost buildings to Repurposed Structures villages.
+- **Why:** Integrates Farmer's Delight content into RS village generation, making modded village farms use FD crops and buildings.
+- **Dependencies:** Repurposed Structures, Farmer's Delight Refabricated
+- **Conflicts:** None known
