@@ -590,3 +590,13 @@
 - **Why:** Required dependency of Controlling.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## Double Doors
+- **CurseForge ID:** 348831
+- **Slug:** double-doors
+- **Modrinth Slug:** double-doors
+- **Mod Loader:** Fabric
+- **Summary:** Allows identical double doors, trapdoors, and fence gates to be opened and closed simultaneously.
+- **Why:** Simple QoL improvement — clicking one side of a double door opens both, also works with trapdoors and fence gates.
+- **Dependencies:** Collective
+- **Conflicts:** None known
