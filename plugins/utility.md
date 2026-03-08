@@ -562,6 +562,16 @@
 - **Dependencies:** EMI
 - **Conflicts:** None known
 
+## Simply Tooltips
+- **CurseForge ID:** 1475755
+- **Slug:** simply-tooltips
+- **Modrinth Slug:** N/A
+- **Mod Loader:** Fabric
+- **Summary:** Modern data-driven tooltip rendering library.
+- **Why:** Required dependency of Simply Swords.
+- **Dependencies:** None
+- **Conflicts:** None known
+
 ## EMI Ores
 - **CurseForge ID:** 974009
 - **Slug:** emi-ores

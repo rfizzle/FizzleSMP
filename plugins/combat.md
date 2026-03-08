@@ -8,7 +8,7 @@
 - **Mod Loader:** Fabric
 - **Summary:** Adds 14 unique weapon variants with different playstyles, plus rare unique weapons with special abilities found in loot chests.
 - **Why:** Greatly expands weapon variety for SMP combat with throwable chakrams, twinblades, greataxes, and more — each with distinct attack patterns via Better Combat.
-- **Dependencies:** Architectury API, Fzzy Config; Better Combat (optional, recommended)
+- **Dependencies:** Architectury API, Fzzy Config, Simply Tooltips; Better Combat (optional, recommended)
 - **Conflicts:** None known
 
 ## Better Combat

@@ -108,7 +108,17 @@
 - **Mod Loader:** Fabric
 - **Summary:** Adds new ores (Jade, Topaz, Aquamarine, Sapphire, Ruby, Peridot, Zircon, Citrine, Necoium, Ametrine) with craftable ingots and gear upgrades beyond netherite.
 - **Why:** Extends endgame progression with new materials and gear tiers, giving SMP players more goals beyond netherite.
-- **Dependencies:** Fabric API, owo-lib
+- **Dependencies:** Fabric API, owo-lib, Better Loot
+- **Conflicts:** None known
+
+## Better Loot
+- **CurseForge ID:** 906394
+- **Slug:** better-loot
+- **Modrinth Slug:** N/A
+- **Mod Loader:** Fabric
+- **Summary:** Completely overhauls vanilla loot tables to make them more rewarding.
+- **Why:** Required dependency of Mythic Upgrades.
+- **Dependencies:** None
 - **Conflicts:** None known
 
 ## Mythic Compat
