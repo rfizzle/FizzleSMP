@@ -1,8 +1,16 @@
 hash-format = "sha256"
 
 [[files]]
+file = "config/lithium.properties"
+hash = "fa8988198ae2d22fef700a88198449a74116732e1f35ec9758a18d7fb0394c96"
+
+[[files]]
 file = "config/paxi/datapacks/RS-YUNG-Compat-Config.zip"
 hash = "1cb323f43bb33ec0d8ffc2ad71f8074a2b7180ff4eb5aa43292cb50a13c6d95a"
+
+[[files]]
+file = "config/paxi/datapacks/Spectrum-TechReborn-Recipe-Fix.zip"
+hash = "698274cd70fb33126c4c799387120a362dfcd1a8500f16ec657a796f929c884c"
 
 [[files]]
 file = "config/paxi/datapacks/terraphilic.pw.toml"
@@ -475,6 +483,11 @@ hash = "7438e773f85e37b376469cbe8749525e3353ff38711ddb3911dde77bbd0e3388"
 metafile = true
 
 [[files]]
+file = "mods/libz.pw.toml"
+hash = "5cf1dea6b7a960aefadfd61a7ed17eeb85ea1c9da88835832d9e17496187a76f"
+metafile = true
+
+[[files]]
 file = "mods/lithium.pw.toml"
 hash = "4af07dd765be426fec46e72aa0a0b435b42d85bffe1ee87a100e661d881c90f2"
 metafile = true
@@ -822,6 +835,11 @@ metafile = true
 [[files]]
 file = "mods/things-fabric.pw.toml"
 hash = "668a0515ab70249e8e3e8c74d395d47373b3c5eb3162e76531ddc143c1aa73fd"
+metafile = true
+
+[[files]]
+file = "mods/tieredz.pw.toml"
+hash = "2c81621c20b317e0b8f81da6a254e5e5fe3cac42cbfa5e8a3052bb5eff397d3c"
 metafile = true
 
 [[files]]

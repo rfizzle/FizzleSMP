@@ -141,6 +141,13 @@ Key mods: Accessories, Trinkets, Accessories Compatibility Layer, Artifacts, Thi
 - [ ] **Villager Names** — Check that villagers have random names displayed.
 - [ ] **Let Me Despawn** — Give an item to a mob. Wait for despawn timer. Confirm it despawns (vanilla would keep it).
 
+### Item Tiers & Reforging
+- [ ] **TieredZ tier assignment** — Craft a diamond sword and pickaxe. Confirm each receives a random tier modifier with stat bonuses shown in the tooltip.
+- [ ] **TieredZ reforging** — Place flint, a tiered item, and an amethyst shard in an anvil. Confirm reforging changes the tier and that higher-tier results become more likely with repeated reforges.
+- [ ] **TieredZ + Simply Swords** — Craft or spawn a Simply Swords weapon. Confirm it receives a TieredZ modifier and that the weapon's special ability still functions correctly.
+- [ ] **TieredZ + Mythic Upgrades** — Craft a Mythic Upgrades item (e.g., Ruby Sword). Confirm it receives a TieredZ tier and that the material bonuses stack correctly with the tier modifier.
+- [ ] **TieredZ + Enchanting** — Apply enchantments to a tiered item via Enchanting Infuser and Easy Anvils. Confirm enchantments and tier modifiers coexist without issues.
+
 ### Death & Respawn
 - [ ] **You're in Grave Danger** — Die with items. Return to death location. Confirm grave spawns and contains all items.
 - [ ] **Grave + Lootr interaction** — Die near a Lootr chest. Confirm grave doesn't interfere with Lootr instancing.
