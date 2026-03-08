@@ -434,6 +434,15 @@
 - **Dependencies:** Fabric API
 - **Conflicts:** None known; verify RightClickHarvest supports Farmer's Delight custom crops.
 
+## Chef's Delight
+- **CurseForge ID:** 736986
+- **Slug:** chefs-delight-fabric
+- **Mod Loader:** Fabric
+- **Summary:** Adds Cook and Chef villager professions with food-related trades, plus custom village structures where they spawn naturally.
+- **Why:** Extends Farmer's Delight with new villager professions and village structures, making food trading a natural part of SMP village economies.
+- **Dependencies:** Farmer's Delight Refabricated
+- **Conflicts:** None known
+
 ## Steve's Realistic Sleep
 - **CurseForge ID:** 616330
 - **Slug:** stevesrealisticsleep
