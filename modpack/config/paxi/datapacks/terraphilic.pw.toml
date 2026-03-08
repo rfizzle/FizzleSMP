@@ -1,0 +1,13 @@
+name = "Terraphilic"
+filename = "Terraphilic v1.2.0.zip"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/8T4mO5eV/versions/KBOxtBzr/Terraphilic%20v1.2.0.zip"
+hash-format = "sha512"
+hash = "0f5eae3dee3a8c6f46994c26f1d1e29e48cda0103ee694a0f4cbc8f8ffe12a64942c699c5c61e1462e05db1ef92ee2f42e37b9457cfb8c12f2a8af7344daf403"
+
+[update]
+[update.modrinth]
+mod-id = "8T4mO5eV"
+version = "KBOxtBzr"

@@ -1,0 +1,13 @@
+name = "Spectrum"
+filename = "spectrum-1.10.2.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "ceb6fb3036b67b44600bdffec7199d66c294ae91"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7300632
+project-id = 556967

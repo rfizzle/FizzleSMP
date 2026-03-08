@@ -363,11 +363,22 @@
 - **Conflicts:** None known
 
 ## CreativeCore
-- **CurseForge ID:** 609890
-- **Slug:** creative-core
+- **CurseForge ID:** 257814
+- **Slug:** creativecore
+- **Modrinth Slug:** creativecore
 - **Mod Loader:** Fabric
 - **Summary:** A core library mod required by CreativeMD's mods including AmbientSounds.
 - **Why:** Required dependency of AmbientSounds.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Paxi
+- **CurseForge ID:** 418881
+- **Slug:** paxi-fabric
+- **Modrinth Slug:** paxi
+- **Mod Loader:** Fabric
+- **Summary:** Automatic data & resource pack loading; places packs in config/paxi/ for global loading across all worlds.
+- **Why:** Required for packwiz to install datapack-type mods (e.g., Terraphilic).
 - **Dependencies:** None
 - **Conflicts:** None known
 

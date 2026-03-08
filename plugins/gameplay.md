@@ -77,6 +77,7 @@
 ## Artifacts
 - **CurseForge ID:** 401236
 - **Slug:** artifacts-fabric
+- **Modrinth Slug:** artifacts
 - **Mod Loader:** Fabric
 - **Summary:** Adds powerful, uncraftable accessory items found in structure chests, archaeology, or dropped by mimics in underground campsites.
 - **Why:** Makes exploration more rewarding with unique collectible items in accessory slots; uses Accessories (via Compat Layer) for slot management.

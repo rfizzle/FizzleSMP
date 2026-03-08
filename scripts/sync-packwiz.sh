@@ -10,7 +10,7 @@
 # and runs packwiz curseforge/modrinth install for each one not already
 # present in the packwiz mods/ directory.
 
-set -euo pipefail
+set -eo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
@@ -51,11 +51,12 @@ if [[ ! -f "$MODPACK_DIR/pack.toml" ]]; then
 fi
 
 # ── Parse plugins/*.md ────────────────────────────────────────────────
-# Outputs lines: slug|curseforge_id|name
+# Outputs lines: slug|curseforge_id|modrinth_slug|name
 # curseforge_id is "N/A" for Modrinth-only mods.
+# modrinth_slug is "N/A" or empty if not on Modrinth.
 
 parse_plugins() {
-    local name="" slug="" cf_id=""
+    local name="" slug="" cf_id="" mr_slug=""
 
     for file in "$PLUGINS_DIR"/*.md; do
         [[ -f "$file" ]] || continue
@@ -65,10 +66,10 @@ parse_plugins() {
             if [[ "$line" =~ ^##\  ]]; then
                 # Emit previous mod if it has a slug
                 if [[ -n "$slug" ]]; then
-                    echo "${slug}|${cf_id}|${name}"
+                    echo "${slug}|${cf_id}|${mr_slug}|${name}"
                 fi
                 name="${line#\#\# }"
-                slug="" cf_id=""
+                slug="" cf_id="" mr_slug=""
             fi
 
             # Field extraction
@@ -76,14 +77,16 @@ parse_plugins() {
                 slug="$(echo "$line" | sed 's/.*\*\*Slug:\*\* *//')"
             elif [[ "$line" == *"**CurseForge ID:**"* ]]; then
                 cf_id="$(echo "$line" | sed 's/.*\*\*CurseForge ID:\*\* *//')"
+            elif [[ "$line" == *"**Modrinth Slug:**"* ]]; then
+                mr_slug="$(echo "$line" | sed 's/.*\*\*Modrinth Slug:\*\* *//')"
             fi
         done < "$file"
 
         # Last mod in file
         if [[ -n "$slug" ]]; then
-            echo "${slug}|${cf_id}|${name}"
+            echo "${slug}|${cf_id}|${mr_slug}|${name}"
         fi
-        name="" slug="" cf_id=""
+        name="" slug="" cf_id="" mr_slug=""
     done
 }
 
@@ -209,7 +212,7 @@ main() {
 
     # Process each mod
     for entry in "${mod_lines[@]}"; do
-        IFS='|' read -r slug cf_id name <<< "$entry"
+        IFS='|' read -r slug cf_id mr_slug name <<< "$entry"
 
         # Track wanted mods for pruning
         if [[ "$cf_id" != "N/A"* ]]; then
@@ -219,7 +222,7 @@ main() {
 
         # Skip if already installed
         if is_installed "$slug" "$cf_id"; then
-            ((skipped++))
+            (( skipped++ )) || true
             continue
         fi
 
@@ -232,7 +235,7 @@ main() {
         if $DRY_RUN; then
             echo "[DRY RUN] Would install: $name ($slug) via $source"
             added_names+=("$name ($slug)")
-            ((added++))
+            (( added++ )) || true
             continue
         fi
 
@@ -241,26 +244,43 @@ main() {
         local install_ok=false
         local err_output=""
         if [[ "$source" == "modrinth" ]]; then
-            err_output="$(run_packwiz modrinth install "$slug" -y 2>&1)" && install_ok=true
+            # Modrinth-only mod: prefer Modrinth slug field, fall back to CF slug
+            local install_slug="${mr_slug:-$slug}"
+            [[ "$install_slug" == "N/A" ]] && install_slug="$slug"
+            err_output="$(run_packwiz modrinth install "$install_slug" -y 2>&1)" && install_ok=true
             echo "$err_output" | sed 's/^/  /'
         else
             err_output="$(run_packwiz curseforge install --addon-id "$cf_id" -y 2>&1)" && install_ok=true
             echo "$err_output" | sed 's/^/  /'
             if ! $install_ok; then
-                echo "  ↳ CurseForge failed, trying Modrinth fallback..."
-                err_output="$(run_packwiz modrinth install "$slug" -y 2>&1)" && install_ok=true
-                echo "$err_output" | sed 's/^/  /'
+                # CurseForge failed — try Modrinth fallback
+                local fallback_slug=""
+                # Use the Modrinth Slug field from the plugin file if available
+                if [[ -n "$mr_slug" && "$mr_slug" != "N/A" ]]; then
+                    fallback_slug="$mr_slug"
+                else
+                    # No Modrinth slug in plugin file — look it up via API
+                    fallback_slug="$(curl -s "https://api.modrinth.com/v2/search?query=$(printf '%s' "$name" | jq -sRr @uri)&facets=%5B%5B%22categories:fabric%22%5D,%5B%22versions:1.21.1%22%5D,%5B%22project_type:mod%22%5D%5D" \
+                        | jq -r '.hits[0].slug // empty' 2>/dev/null || true)"
+                fi
+                if [[ -n "$fallback_slug" ]]; then
+                    echo "  ↳ CurseForge failed, trying Modrinth (slug: $fallback_slug)..."
+                    err_output="$(run_packwiz modrinth install "$fallback_slug" -y 2>&1)" && install_ok=true
+                    echo "$err_output" | sed 's/^/  /'
+                else
+                    echo "  ↳ CurseForge failed, no matching mod found on Modrinth."
+                fi
             fi
         fi
 
         if $install_ok; then
-            ((added++))
+            (( added++ )) || true
             added_names+=("$name ($slug)")
             # Re-index so subsequent checks see the new mod
             index_installed
         else
             echo "  ✗ FAILED: $name ($slug)"
-            ((failed++))
+            (( failed++ )) || true
             failed_names+=("$name ($slug)")
             # Capture last line of error output as reason
             local reason
@@ -287,7 +307,7 @@ main() {
                     prune_failed_names+=("$orphan")
                 fi
             fi
-            ((removed++))
+            (( removed++ )) || true
         done < <(find_orphans wanted_cf_ids)
     fi
 

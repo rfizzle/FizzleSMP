@@ -1,0 +1,13 @@
+name = "EMI professions (EMIP)"
+filename = "EMIProfessions-fabric-1.21.1-1.0.3.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "d0331ab425f79418aa4291883d734ea8f30a6869"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 6231427
+project-id = 1065904

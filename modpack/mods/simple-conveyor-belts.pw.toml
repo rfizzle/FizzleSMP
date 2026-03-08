@@ -1,0 +1,13 @@
+name = "Simple Conveyor Belts"
+filename = "belts-fabric-0.2.2.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "4291d591b4284e7ea00ef897d5d1013ed690ae3e"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7195754
+project-id = 1292980

@@ -1,0 +1,13 @@
+name = "guy's Armor HUD"
+filename = "armor_hud-fabric-1.1.1+mc1.21.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "c793b8cfdc5e01b11da75b5031a9cad3030e7610"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7689621
+project-id = 1388138

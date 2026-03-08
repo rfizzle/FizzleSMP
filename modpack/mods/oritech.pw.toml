@@ -1,0 +1,13 @@
+name = "Oritech"
+filename = "oritech-fabric-1.21.1-1.0.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "b4f55e03aa1bfdae073e9608790da8ff43cc34e8"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7595310
+project-id = 1030830

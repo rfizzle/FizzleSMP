@@ -1,0 +1,13 @@
+name = "Better Loot"
+filename = "betterloot-2.0+mc1.21.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "2c61d70bcbc8965f8dca0bbb74c31fbe3160451c"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 6721462
+project-id = 906394

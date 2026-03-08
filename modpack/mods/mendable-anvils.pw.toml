@@ -1,0 +1,13 @@
+name = "Mendable Anvils"
+filename = "MendableAnvils-fabric-1.21-1.2.2.jar"
+side = "server"
+
+[download]
+url = "https://cdn.modrinth.com/data/9p1fvkRO/versions/yYq7SrFZ/MendableAnvils-fabric-1.21-1.2.2.jar"
+hash-format = "sha512"
+hash = "3816ec1dc2c1dd7fa93990449326c1ad9cb88fec06b5f7a8f1177a13b357babbc0e1d9f314f712038c2aec794c7183c70393a47487b318e844770bc1f4adeec0"
+
+[update]
+[update.modrinth]
+mod-id = "9p1fvkRO"
+version = "yYq7SrFZ"

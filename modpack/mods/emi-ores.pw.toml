@@ -1,0 +1,13 @@
+name = "EMI Ores"
+filename = "emi_ores-1.2+1.21.1+fabric.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "6e149b5d5b75e4a2b4846b0c87cbf8117bb4eec7"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 6060342
+project-id = 974009

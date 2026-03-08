@@ -1,0 +1,13 @@
+name = "Alexandria"
+filename = "Alexandria-1.0.3.3.2+1.21.1-fabric.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "ead17564bd0a255ce4ce4f332d00fc54ea8a02fd"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7676165
+project-id = 992905

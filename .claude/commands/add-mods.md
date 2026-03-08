@@ -5,6 +5,7 @@ For each mod provided, perform these steps in order:
 ## 1. Identify the Mod
 - Search CurseForge (or the web) for the exact mod by name.
 - Confirm the CurseForge project ID, slug, and correct display name.
+- Look up the mod on Modrinth (via the Modrinth API) and confirm the Modrinth slug. If the mod is not on Modrinth, use `N/A`.
 
 ## 2. Version Compatibility Check
 - Verify the mod has a release for **Minecraft 1.21.1** on **Fabric**.
@@ -52,6 +53,7 @@ For each mod provided, perform these steps in order:
   ## Mod Name
   - **CurseForge ID:** <project-id>
   - **Slug:** <curseforge-slug>
+  - **Modrinth Slug:** <modrinth-slug>
   - **Mod Loader:** Fabric
   - **Summary:** One-line description.
   - **Why:** <ask the user or infer from context>

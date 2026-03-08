@@ -1,0 +1,13 @@
+name = "Steve's Realistic Sleep"
+filename = "stevesrealisticsleep-fabric-1.11.2+mc1.21-1.21.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "7cc5a034d0f62ecce73525cd8af2b1610aa4dc0d"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 5962687
+project-id = 616330

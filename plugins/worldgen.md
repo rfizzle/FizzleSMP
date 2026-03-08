@@ -239,8 +239,9 @@
 ## Terraphilic
 - **CurseForge ID:** 1098706
 - **Slug:** terraphilic
-- **Mod Loader:** Fabric
-- **Summary:** Geophilic-Terralith compatibility pack that merges biome files from both mods.
+- **Modrinth Slug:** terraphilic
+- **Mod Loader:** Datapack
+- **Summary:** Geophilic-Terralith compatibility datapack that merges biome files from both mods.
 - **Why:** Required compatibility pack to run Geophilic alongside Terralith without biome conflicts.
 - **Dependencies:** Terralith, Geophilic
 - **Conflicts:** None — this mod resolves the Geophilic/Terralith conflict.

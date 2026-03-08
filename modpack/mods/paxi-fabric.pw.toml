@@ -1,0 +1,13 @@
+name = "Paxi (Fabric)"
+filename = "Paxi-1.21.1-Fabric-5.1.3.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "e91042c9cc9f358776afe3b69af73e6e38038cdd"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 6485738
+project-id = 418881

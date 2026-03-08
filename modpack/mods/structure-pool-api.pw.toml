@@ -1,0 +1,13 @@
+name = "Structure Pool API"
+filename = "structure_pool_api-fabric-1.2.1+1.21.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "ca2fb52f5fd2c9b688860366eabdb8ec14297ad5"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7145229
+project-id = 927915

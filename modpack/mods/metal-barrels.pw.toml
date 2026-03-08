@@ -1,0 +1,13 @@
+name = "Metal Barrels"
+filename = "metalbarrels-fabric-1.21.1-7.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "c247a5a469948c01d140a57e1d6b484085e9562c"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 6111342
+project-id = 324985

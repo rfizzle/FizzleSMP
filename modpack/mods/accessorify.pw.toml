@@ -1,0 +1,13 @@
+name = "Accessorify"
+filename = "accessorify-2.4.0-beta.5+1.21.1-fabric.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "315a64d22a1e515220bc3171e9f46d2a460f6d28"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7366900
+project-id = 1169634

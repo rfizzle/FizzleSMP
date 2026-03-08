@@ -60,6 +60,7 @@ Each file in `plugins/` uses this format:
 ## Mod Name
 - **CurseForge ID:** <project-id>
 - **Slug:** <curseforge-slug>
+- **Modrinth Slug:** <modrinth-slug>
 - **Mod Loader:** Fabric
 - **Summary:** One-line description of what it does.
 - **Why:** Why we want it in the pack.
@@ -67,7 +68,7 @@ Each file in `plugins/` uses this format:
 - **Conflicts:** Any known incompatibilities (or "None known").
 ```
 
-Only mods that belong in the pack should be listed. If a mod is rejected or removed, delete its entry entirely. When adding or editing mods, always populate all fields.
+Only mods that belong in the pack should be listed. If a mod is rejected or removed, delete its entry entirely. When adding or editing mods, always populate all fields. Use `N/A` for **CurseForge ID** / **Slug** if the mod is Modrinth-only, or for **Modrinth Slug** if it is CurseForge-only.
 
 ## Compatibility Matrix Rules
 

@@ -1,0 +1,13 @@
+name = "EMI Extra Integrations"
+filename = "extra-mod-integrations-all-fabric-1.0.3+1.21.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "fae672b7508d9196df9f437173aee0979293117e"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 6939680
+project-id = 739970

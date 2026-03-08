@@ -1,0 +1,13 @@
+name = "SwingThrough"
+filename = "swingthrough-1.0.6+1.21.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "e5049b5b05e505266e4f7d6f60eb215b8e393b6f"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7323165
+project-id = 1402841
