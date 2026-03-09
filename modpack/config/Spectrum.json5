@@ -1,0 +1,4 @@
+{
+	// Mod Integration Packs to not load (in case of mod compat errors). Put the mod id of the mod with integration pack conflict here
+	"IntegrationPacksToSkipLoading": ["techreborn"]
+}
