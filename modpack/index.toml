@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "config/Spectrum.json5"
-hash = "d625b7a1cd2658dfd62d449a1fe8b10f884c49ee2cde22a235095a66add8b20f"
+hash = "fe66b600b2e2b4a2d7c2d64ed736ef05fe902980e5a94e3d40cefa6469bd90cd"
 
 [[files]]
 file = "config/carryon-common.json"
@@ -26,7 +26,7 @@ hash = "1cb323f43bb33ec0d8ffc2ad71f8074a2b7180ff4eb5aa43292cb50a13c6d95a"
 
 [[files]]
 file = "config/paxi/datapacks/Spectrum-TechReborn-Recipe-Fix.zip"
-hash = "0340313bc2d0272fe77bf44252514148bfe7c9f2ed2d2f2b0b16128dae244614"
+hash = "0ac9654e95e6eccda0b7c73ce662e6f4e58435026abda70c605ad0aa18c4dcb4"
 
 [[files]]
 file = "config/paxi/datapacks/terraphilic.pw.toml"
