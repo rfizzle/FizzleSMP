@@ -275,6 +275,15 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## GeckoLib
+- **CurseForge ID:** 388172
+- **Slug:** geckolib
+- **Mod Loader:** Fabric
+- **Summary:** An animation and model library for Minecraft mods, enabling complex entity animations.
+- **Why:** Required dependency of Oritech, Bosses of Mass Destruction, and Critters and Companions.
+- **Dependencies:** None
+- **Conflicts:** None known
+
 ## Chipped
 - **CurseForge ID:** 456956
 - **Slug:** chipped

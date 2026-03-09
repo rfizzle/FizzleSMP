@@ -210,32 +210,6 @@
 - **Dependencies:** None (standalone, but designed to pair with Structory)
 - **Conflicts:** None known
 
-## YUNG's Cave Biomes
-- **CurseForge ID:** 1112347
-- **Slug:** yungs-cave-biomes-fabric
-- **Mod Loader:** Fabric
-- **Summary:** Adds new vanilla+ cave biomes and underground content with unique vegetation, ores, and atmosphere.
-- **Why:** Enriches underground exploration with diverse cave biome types that complement YUNG's Better Caves.
-- **Dependencies:** YUNG's API, Fabric API, Cloth Config API, GeckoLib, TerraBlender
-- **Conflicts:** None known; designed to work alongside YUNG's Better Caves.
-
-## GeckoLib
-- **CurseForge ID:** 388172
-- **Slug:** geckolib
-- **Mod Loader:** Fabric
-- **Summary:** An animation and model library for Minecraft mods, enabling complex entity animations.
-- **Why:** Required dependency of YUNG's Cave Biomes.
-- **Dependencies:** None
-- **Conflicts:** None known
-
-## TerraBlender
-- **CurseForge ID:** 565956
-- **Slug:** terrablender-fabric
-- **Mod Loader:** Fabric
-- **Summary:** A library mod for adding biomes in a simple and compatible manner with other biome mods.
-- **Why:** Required dependency of YUNG's Cave Biomes.
-- **Dependencies:** None
-- **Conflicts:** None known
 
 ## Geophilic
 - **CurseForge ID:** 711216
@@ -283,25 +257,6 @@
 - **Dependencies:** Loot Integrations, YUNG's API
 - **Conflicts:** None known
 
-## When Dungeons Arise
-- **CurseForge ID:** 511812
-- **Slug:** when-dungeons-arise-fabric
-- **Modrinth Slug:** when-dungeons-arise
-- **Mod Loader:** Fabric
-- **Summary:** Adds various elegant roguelike dungeons and large structures (castles, keeps, towers, ruins) that generate throughout the world.
-- **Why:** Fills the world with large, dramatic structures for dungeon-crawling and exploration, adding the kind of landmark structures missing from vanilla.
-- **Dependencies:** None
-- **Conflicts:** None known
-
-## When Dungeons Arise: Seven Seas
-- **CurseForge ID:** 953637
-- **Slug:** when-dungeons-arise-seven-seas
-- **Modrinth Slug:** when-dungeons-arise-seven-seas
-- **Mod Loader:** Fabric
-- **Summary:** Adds elegant and hostile vessels lost in the seven seas as explorable ocean structures.
-- **Why:** Expands ocean exploration with shipwrecks and vessels that complement When Dungeons Arise's overland structures.
-- **Dependencies:** None
-- **Conflicts:** None known
 
 ## Explorify
 - **CurseForge ID:** 698309

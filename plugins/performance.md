@@ -67,14 +67,15 @@
 - **Dependencies:** None
 - **Conflicts:** None known; individual optimizations can be disabled if issues arise with specific mods.
 
-## Noisium
-- **CurseForge ID:** 930207
-- **Slug:** noisium
+## NoisiumForked
+- **CurseForge ID:** 1357563
+- **Slug:** noisiumforked
+- **Modrinth Slug:** noisiumforked
 - **Mod Loader:** Fabric
-- **Summary:** Optimises worldgen performance for faster chunk generation.
-- **Why:** Speeds up world generation, complementing other performance mods; especially beneficial for exploration-heavy SMP gameplay.
+- **Summary:** Optimises worldgen performance for faster chunk generation (actively maintained fork of archived Noisium).
+- **Why:** Speeds up world generation, complementing other performance mods; especially beneficial for exploration-heavy SMP gameplay. Replaces the archived Noisium with an actively maintained fork.
 - **Dependencies:** None
-- **Conflicts:** None known (archived project, but stable for 1.21.1)
+- **Conflicts:** None known
 
 ## FerriteCore
 - **CurseForge ID:** 459857
@@ -153,7 +154,7 @@
 - **Slug:** c2me
 - **Mod Loader:** Fabric
 - **Summary:** Parallelizes chunk loading, generation, and I/O operations to leverage multi-core CPUs for faster chunk performance.
-- **Why:** Significantly speeds up chunk generation and loading on the SMP server, complementing Lithium and Noisium.
+- **Why:** Significantly speeds up chunk generation and loading on the SMP server, complementing Lithium and NoisiumForked.
 - **Dependencies:** None
 - **Conflicts:** None known (alpha stage — backup worlds recommended)
 
