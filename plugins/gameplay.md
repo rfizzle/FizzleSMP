@@ -113,15 +113,6 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
-## Mythic Compat
-- **CurseForge ID:** 1014057
-- **Slug:** mythic-lib
-- **Mod Loader:** Fabric
-- **Summary:** Adds cross-upgrade recipes for Mythic Upgrades, allowing gear to be upgraded between material tiers.
-- **Why:** Enables upgrading between Mythic Upgrades material tiers (e.g., Topaz chestplate to Ametrine chestplate) for smoother progression.
-- **Dependencies:** Fabric API, Mythic Upgrades
-- **Conflicts:** None known
-
 ## owo-lib
 - **CurseForge ID:** 532610
 - **Slug:** owo-lib

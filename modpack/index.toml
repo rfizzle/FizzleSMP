@@ -585,11 +585,6 @@ hash = "3cd8155341a4233955ff9892a3b7b5da6dc6d8d892863b2f544328f2731f7f03"
 metafile = true
 
 [[files]]
-file = "mods/mythic-lib.pw.toml"
-hash = "da4a4fec5feb2ba55af5d379efa4609f3b3812372a1c77b772b81afa06b37a31"
-metafile = true
-
-[[files]]
 file = "mods/mythic-upgrades.pw.toml"
 hash = "f35b438d8889e93e7c0d163c033b70c3f17325e4f0217275e8fe838007d2472c"
 metafile = true
