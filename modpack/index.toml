@@ -611,6 +611,11 @@ hash = "9dc2d4fa85a374b22f3d7efe009f10187c8dbe8828c2c7b019ddd3d334b1d64f"
 metafile = true
 
 [[files]]
+file = "mods/mns-moogs-nether-structures.pw.toml"
+hash = "1262c73d6e6b1d83bca0e5e48d81c92e943915323710ff310fdfce2fde119465"
+metafile = true
+
+[[files]]
 file = "mods/modernfix.pw.toml"
 hash = "756e9021d46a85cc4a8f89e9f71c0ac6031e8e40b41004fd2915bf2cbe64cd99"
 metafile = true
@@ -631,6 +636,11 @@ hash = "044248a2ec9a9d342300ea8841d56891602d0bd22824d23923248078a22d34cc"
 metafile = true
 
 [[files]]
+file = "mods/moogs-end-structures.pw.toml"
+hash = "e03b66c806c52193722f066dcbb8918fe44e45fdabe5ea562e8a435f6b0affa3"
+metafile = true
+
+[[files]]
 file = "mods/moogs-structure-lib.pw.toml"
 hash = "91f6dc7de966c88f9ef7b669a3ba68f0eb1030038ce3ff8f502f14be060a7380"
 metafile = true
@@ -643,6 +653,11 @@ metafile = true
 [[files]]
 file = "mods/mouse-tweaks.pw.toml"
 hash = "3cd8155341a4233955ff9892a3b7b5da6dc6d8d892863b2f544328f2731f7f03"
+metafile = true
+
+[[files]]
+file = "mods/mss-moogs-soaring-structures.pw.toml"
+hash = "754ec9e9d76c7d53977a1a85e74394f59855e315d8b9f96f050aa926280bb44f"
 metafile = true
 
 [[files]]

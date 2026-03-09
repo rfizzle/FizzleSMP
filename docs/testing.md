@@ -13,7 +13,7 @@ Systematic testing guide for verifying mod compatibility and pack stability. Run
 
 ## 2. World Creation & Chunk Generation
 
-These mods all touch worldgen and are the most likely to conflict: Terralith, Tectonic, Geophilic, Terraphilic, Incendium, Nullscape, C2ME, NoisiumForked, Sparse Structures, all YUNG's mods, Repurposed Structures, Towns and Towers, Structory, Explorify, MVS - Moog's Voyager Structures, Philip's Ruins, Tidal Towns, Better Archeology.
+These mods all touch worldgen and are the most likely to conflict: Terralith, Tectonic, Geophilic, Terraphilic, Incendium, Nullscape, C2ME, NoisiumForked, Sparse Structures, all YUNG's mods, Repurposed Structures, Towns and Towers, Structory, Explorify, MVS - Moog's Voyager Structures, MES - Moog's End Structures, MNS - Moog's Nether Structures, MSS - Moog's Soaring Structures, Philip's Ruins, Tidal Towns, Better Archeology.
 
 - [ ] **New world creation** — Create a new world (default settings). Confirm no crash during initial chunk generation.
 - [ ] **Explore Overworld biomes** — Fly/teleport through at least 10 different biomes. Confirm:
@@ -38,8 +38,11 @@ These mods all touch worldgen and are the most likely to conflict: Terralith, Te
   - Better Archeology structure (confirm brush/archeology mechanic works)
 - [ ] **Structure overlap** — Check that YUNG's dungeons and Repurposed Structures dungeons don't spawn on top of each other (RS dungeons/temples should be disabled in RS config).
 - [ ] **Structure density** — With all structure mods active, fly across 2000+ blocks. Confirm Sparse Structures prevents oversaturation and structures don't generate on top of each other.
+- [ ] **MSS - Moog's Soaring Structures** — Look for floating islands in the sky while exploring. Confirm structures generate with loot and mobs.
 - [ ] **Nether generation** — Enter the Nether. Confirm Incendium biomes, custom structures, and YUNG's Better Nether Fortresses generate.
+- [ ] **MNS - Moog's Nether Structures** — Explore the Nether beyond fortresses. Locate at least 1-2 MNS structures. Confirm loot and enemies spawn.
 - [ ] **End generation** — Enter the End. Confirm Nullscape terrain and YUNG's Better End Island generate.
+- [ ] **MES - Moog's End Structures** — Explore outer End islands. Locate at least 1-2 MES structures. Confirm loot and enemies spawn on Nullscape terrain.
 - [ ] **Chunk gen performance** — Use `/chunky start` to pre-generate a 1000-block radius. Monitor TPS with Spark. Confirm C2ME and NoisiumForked aren't conflicting (watch for deadlocks or errors in log).
 
 ## 3. Rendering & Visual Mods

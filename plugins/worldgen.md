@@ -276,7 +276,7 @@
 - **Mod Loader:** Fabric
 - **Summary:** Adds better loot to Moog's Voyager, Soaring, End & Nether Structures chests, including modded loot.
 - **Why:** Enriches loot in MVS structure chests with items from other mods in the pack via Loot Integrations.
-- **Dependencies:** Loot Integrations, MVS - Moog's Voyager Structures
+- **Dependencies:** Loot Integrations, MVS - Moog's Voyager Structures (also covers MES, MNS, MSS)
 - **Conflicts:** None known
 
 ## Loot Integrations: Better Archeology
@@ -315,8 +315,38 @@
 - **Modrinth Slug:** moogs-structure-lib
 - **Mod Loader:** Fabric
 - **Summary:** A library mod for the Moog's Structure series.
-- **Why:** Required dependency of MVS - Moog's Voyager Structures.
+- **Why:** Required dependency of MVS - Moog's Voyager Structures, MES, MNS, and MSS.
 - **Dependencies:** None
+- **Conflicts:** None known
+
+## MES - Moog's End Structures
+- **CurseForge ID:** 892382
+- **Slug:** moogs-end-structures
+- **Modrinth Slug:** N/A
+- **Mod Loader:** Fabric
+- **Summary:** Adds vanilla-styled structures to the End dimension with loot, enemies, and dungeons.
+- **Why:** Fills the nearly empty outer End islands with explorable structures, addressing the pack's biggest structure gap.
+- **Dependencies:** Moog's Structure Lib
+- **Conflicts:** None known
+
+## MNS - Moog's Nether Structures
+- **CurseForge ID:** 967466
+- **Slug:** mns-moogs-nether-structures
+- **Modrinth Slug:** N/A
+- **Mod Loader:** Fabric
+- **Summary:** Adds vanilla-block structures to the Nether dimension with loot, enemies, and dungeons.
+- **Why:** Supplements Incendium and YUNG's Better Nether Fortresses with additional Nether structures for more exploration variety.
+- **Dependencies:** Moog's Structure Lib
+- **Conflicts:** None known
+
+## MSS - Moog's Soaring Structures
+- **CurseForge ID:** 1040210
+- **Slug:** moogs-soaring-structures
+- **Modrinth Slug:** N/A
+- **Mod Loader:** Fabric
+- **Summary:** Adds vanilla-style floating islands with buildings, loot, mobs, and dungeons to explore in the sky.
+- **Why:** Fills a unique vertical niche with sky-based structures that no other mod in the pack covers.
+- **Dependencies:** Moog's Structure Lib
 - **Conflicts:** None known
 
 ## Philip's Ruins
