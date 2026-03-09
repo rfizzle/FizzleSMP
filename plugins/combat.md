@@ -128,3 +128,113 @@
 - **Why:** Eliminates the frustration of grass blocking attacks during combat, especially important with Better Combat's directional swings.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## Archers (RPG Series)
+- **CurseForge ID:** 932359
+- **Slug:** archers
+- **Modrinth Slug:** archers
+- **Mod Loader:** Fabric
+- **Summary:** Adds RPG-style archery class with skill sets, craftable ranged weapons, armor with archery bonuses, and an Auto-Fire Hook gadget for bows/crossbows.
+- **Why:** Adds a dedicated ranged combat class to complement Wizards and Paladins, with archery skills usable with any bow or crossbow.
+- **Dependencies:** Spell Engine, AzureLib Armor, Ranged Weapon API, Structure Pool API, Fabric API
+- **Conflicts:** Rebalances Power enchantment (+8%/level instead of +50%) and Quick Draw (+10%/level instead of +20%) via datapack overrides. Configurable in `config/archers/tweaks.json`.
+
+## Rogues & Warriors (RPG Series)
+- **CurseForge ID:** 1048409
+- **Slug:** rogues-and-warriors
+- **Modrinth Slug:** rogues-and-warriors
+- **Mod Loader:** Fabric
+- **Summary:** Adds Rogue and Warrior RPG classes with evasion/trick skills and heavy-hitting martial skills, plus new weapons, armor sets, and Barracks in villages.
+- **Why:** Adds melee martial classes to complement magic classes, with dual-wield rogue skills and heavy-weapon warrior skills for diverse PvP/PvE playstyles.
+- **Dependencies:** Spell Engine, AzureLib Armor, Structure Pool API, Fabric API
+- **Conflicts:** Rebalances Sharpness enchantment (+8%/level) for balanced fast/slow weapon scaling. Strongly recommended alongside Better Combat.
+
+## Jewelry (RPG Series)
+- **CurseForge ID:** 910706
+- **Slug:** jewelry
+- **Modrinth Slug:** jewelry
+- **Mod Loader:** Fabric
+- **Summary:** Adds 25+ craftable jewelry items (rings, necklaces) from mineable gem veins, with Jeweler villagers in villages and unique pieces in end-game loot chests.
+- **Why:** Adds an accessory crafting system with combat attribute bonuses, giving players another progression axis alongside weapons and armor.
+- **Dependencies:** Spell Power Attributes, Ranged Weapon API, Trinkets (via Accessories Compat Layer), Fabric API
+- **Conflicts:** None known; adds gem veins at diamond depth (half as common as diamonds).
+
+## Armory (RPG Series)
+- **CurseForge ID:** 1311561
+- **Slug:** armory-rpg-series
+- **Modrinth Slug:** armory-rpg-series
+- **Mod Loader:** Fabric
+- **Summary:** Adds epic end-game armor sets with unique 3D models, set bonuses, and spell modifiers for each RPG Series class.
+- **Why:** Provides end-game armor progression for all RPG classes, obtainable via upgrade materials from End City/Ancient City chests and boss drops.
+- **Dependencies:** Spell Engine, AzureLib Armor, Ranged Weapon API, Fabric API; requires Archers, Paladins & Priests, Rogues & Warriors, and Wizards
+- **Conflicts:** None known
+
+## Arsenal (RPG Series)
+- **CurseForge ID:** 1230054
+- **Slug:** arsenal-rpg-series
+- **Modrinth Slug:** arsenal-rpg-series
+- **Mod Loader:** Fabric
+- **Summary:** Adds 40+ legendary weapons of 15 different types with built-in passive spells, obtainable only from boss drops and end-game dungeon chests.
+- **Why:** Provides aspirational end-game loot weapons with Minecraft Dungeons-style passive abilities (Swirling, Shockwave, Radiance) as rewards for defeating bosses.
+- **Dependencies:** Spell Engine, Ranged Weapon API, Shield API, Fabric API
+- **Conflicts:** None known; loot tables configurable in `config/rpg_series/loot_items.json`.
+
+## Skill Tree (RPG Series)
+- **CurseForge ID:** 1311513
+- **Slug:** skill-tree
+- **Modrinth Slug:** skill-tree
+- **Mod Loader:** Fabric
+- **Summary:** Adds a 100+ node skill tree for all RPG Series classes with offensive/defensive specializations, spell modifiers, and passive abilities, powered by XP.
+- **Why:** Adds deep class specialization and meaningful build choices, letting players customize their RPG class with unique skill paths.
+- **Dependencies:** Pufferfish's Skills, Spell Engine, Ranged Weapon API, Fabric API; requires Archers, Paladins & Priests, Rogues & Warriors, and Wizards
+- **Conflicts:** None known; Orb of Oblivion item allows full skill tree reset.
+
+## Ranged Weapon API
+- **CurseForge ID:** 962162
+- **Slug:** ranged-weapon-api
+- **Modrinth Slug:** ranged-weapon-api
+- **Mod Loader:** Fabric
+- **Summary:** API for creating custom bows and crossbows with configurable damage, pull time, and projectile velocity.
+- **Why:** Required dependency of Archers, Jewelry, Armory, Arsenal, and Skill Tree.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## Shield API
+- **CurseForge ID:** 1048720
+- **Slug:** shield-api
+- **Modrinth Slug:** shield-api
+- **Mod Loader:** Fabric
+- **Summary:** API allowing mods to easily add shields with custom models.
+- **Why:** Required dependency of Arsenal.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## Pufferfish's Skills
+- **CurseForge ID:** 835091
+- **Slug:** puffish-skills
+- **Modrinth Slug:** skills
+- **Mod Loader:** Fabric
+- **Summary:** A framework for fully configurable skill systems with an online editor and API, supporting custom skill trees via datapacks.
+- **Why:** Required dependency of Skill Tree (RPG Series).
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## Gazebos (RPG Series)
+- **CurseForge ID:** 865298
+- **Slug:** gazebos
+- **Modrinth Slug:** gazebos
+- **Mod Loader:** Fabric
+- **Summary:** Adds gazebo structures to villages containing Spell Binding Tables, with biome variants for desert, plains, savanna, snowy, and taiga villages.
+- **Why:** Provides the natural discovery path for RPG class spell books — players find Spell Binding Tables in village gazebos instead of only crafting them.
+- **Dependencies:** Structure Pool API
+- **Conflicts:** None known; gazebo spawn frequency configurable in `config/gazebo/villages.json`.
+
+## Critical Strike
+- **CurseForge ID:** 1379562
+- **Slug:** critical-strike
+- **Modrinth Slug:** critical-strike
+- **Mod Loader:** Fabric
+- **Summary:** Adds chance-based critical hit mechanics for melee and ranged combat with configurable crit chance/damage attributes, two new enchantments, potion effects, and Minecraft Dungeons-style visual/audio feedback.
+- **Why:** Adds meaningful combat RNG depth with crit chance builds via enchantments and potions, complementing the RPG class system and Better Combat.
+- **Dependencies:** Fabric API
+- **Conflicts:** Replaces vanilla jump-critical system with RNG-based crits (configurable). Toggle vanilla jump crits in config.

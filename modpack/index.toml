@@ -69,8 +69,23 @@ hash = "9ce55dc09b4b2a28b39ae47d146cfe5399dfc74666d9ae53811bdef4058b3491"
 metafile = true
 
 [[files]]
+file = "mods/archers.pw.toml"
+hash = "d896600de09904c3d26247ca13c11d5f1a2a03936baba59e3f5fd78777e5a417"
+metafile = true
+
+[[files]]
 file = "mods/architectury-api.pw.toml"
 hash = "39792a11da59cebc770f3918dd0ad53637bcbd206dc19bfa6709392bfd2d1830"
+metafile = true
+
+[[files]]
+file = "mods/armory-rpg-series.pw.toml"
+hash = "d240e9ec734e0b2a8758cfc87308c403d529c89b28d685afa24972cf7dacf170"
+metafile = true
+
+[[files]]
+file = "mods/arsenal-rpg-series.pw.toml"
+hash = "38ca1a8962cac2caf90bc01755296aa5efa23164bccead22a26ffb221e73e173"
 metafile = true
 
 [[files]]
@@ -239,6 +254,11 @@ hash = "c92fd4a87e1ddbe0b9288a38cbf1491e4ba933eaeb4c209f7861de0235b2c81a"
 metafile = true
 
 [[files]]
+file = "mods/critical-strike.pw.toml"
+hash = "453686017da7252480b3f198707c866cbcdee450d50905ca465dce7f31893fbb"
+metafile = true
+
+[[files]]
 file = "mods/critters-and-companions.pw.toml"
 hash = "529546ba78395ea92705efeafe932fcacfbe233e334099ca5f8d90eaf1a2f4af"
 metafile = true
@@ -394,6 +414,11 @@ hash = "7e772dbc24a23ed3eafa8d6c1e7a8fb21d0085ee06028216362daea8206938c4"
 metafile = true
 
 [[files]]
+file = "mods/gazebos.pw.toml"
+hash = "66e48cbd5a8a8e416b96adb952fe48f0fda9cc27f83f46d2072d3296096ed939"
+metafile = true
+
+[[files]]
 file = "mods/geckolib.pw.toml"
 hash = "d3904dd183818cd7b73df5da5a99eb1339ad165fc51ebcdc614142466905c211"
 metafile = true
@@ -466,6 +491,11 @@ metafile = true
 [[files]]
 file = "mods/jamlib.pw.toml"
 hash = "f99d68db548845d3e5cad75d714429ea73deaa5d41d8d3404af8ca4eb74f1457"
+metafile = true
+
+[[files]]
+file = "mods/jewelry.pw.toml"
+hash = "82f4e5354270642ac4b75ef1ec0bcdb1395a1ee0a179f717115381013b62755e"
 metafile = true
 
 [[files]]
@@ -679,8 +709,18 @@ hash = "910b7d375f82f0f733cd90246ba6f67b9a05e9363880163555dc5ffeebff84e0"
 metafile = true
 
 [[files]]
+file = "mods/puffish-skills.pw.toml"
+hash = "392cdfe8252c343e7e2ac45eff6072901f99163dbffa706c5095b18cca6c92da"
+metafile = true
+
+[[files]]
 file = "mods/puzzles-lib.pw.toml"
 hash = "e3c482b20c0bb250716495a2c05efae13b520849de1cfb27ea2ad704fb325873"
+metafile = true
+
+[[files]]
+file = "mods/ranged-weapon-api.pw.toml"
+hash = "2fb4d187415a831e91657fc1458c63ec4d3ae7c91e826bba4a0ce4330bd94725"
 metafile = true
 
 [[files]]
@@ -724,6 +764,11 @@ hash = "9766bba0a21c4bb834b47cee6a114f139373813902f21c833e4982498ff89f9e"
 metafile = true
 
 [[files]]
+file = "mods/rogues-and-warriors.pw.toml"
+hash = "dd94cf9174ce88206139d9b5ff7e10425ebe5af90c24698d394ba8dcafadb82c"
+metafile = true
+
+[[files]]
 file = "mods/ruins.pw.toml"
 hash = "d0f9d008ef7e0b58eeaffe5bea23683342b5ff816f5cf19465bd71033189d4a0"
 metafile = true
@@ -744,6 +789,11 @@ hash = "2068f7e43e2340d719cb9fe76bb9d1a9d7677ce79f0c6f15df6a0eb2aa0425fb"
 metafile = true
 
 [[files]]
+file = "mods/shield-api.pw.toml"
+hash = "f8802cdc0cb16d6a2d499fcc82f1debd75cf8b1fa0f3763997208807b8ba7ca4"
+metafile = true
+
+[[files]]
 file = "mods/shulkerboxtooltip.pw.toml"
 hash = "73f89a223ecd0e79a317c7eb7f38aa9950fa624089be48da6357933e7b66f4ae"
 metafile = true
@@ -761,6 +811,11 @@ metafile = true
 [[files]]
 file = "mods/simply-swords.pw.toml"
 hash = "5109546e15b0b30df34f447907f9041d289512cbd66f68a3d95500c14bad966c"
+metafile = true
+
+[[files]]
+file = "mods/skill-tree.pw.toml"
+hash = "227ad32f561011efc446df1d9e5acf138588b47c142128f5a95eeace0bf9d9ea"
 metafile = true
 
 [[files]]

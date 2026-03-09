@@ -22,7 +22,7 @@ These mods all touch worldgen and are the most likely to conflict: Terralith, Te
   - Geophilic biome tweaks appear (check flower meadows, etc.)
   - No floating structures, cut-off terrain, or void holes
 - [ ] **Structure generation** — Locate and enter at least one of each. To identify which mod generated a structure, use **MiniHUD's structure bounding box overlay** (Renderer Hotkeys → "Structure Bounding Boxes") which displays namespaced IDs like `explorify:ruin_plains` — the prefix before `:` is the mod. As a fallback, stand inside the structure and check the **F3 debug screen** (BetterF3) which shows the namespaced structure ID you're currently in.
-  - Vanilla village (verify Towns and Towers expansions)
+  - Vanilla village (verify Towns and Towers expansions + Gazebos with Spell Binding Table)
   - YUNG's Better Dungeon
   - YUNG's Better Mineshaft
   - YUNG's Better Stronghold
@@ -84,21 +84,41 @@ Key mods: Jade, MiniHUD, AppleSkin, Colorful Hearts, guy's Armor HUD, BetterF3, 
 
 ## 5. Combat System
 
-Key mods: Better Combat, Combat Roll, Simply Swords, SwingThrough, Spell Engine, Wizards, Paladins & Priests, playerAnimator, Bosses of Mass Destruction.
+Key mods: Better Combat, Combat Roll, Simply Swords, SwingThrough, Spell Engine, Wizards, Paladins & Priests, Archers, Rogues & Warriors, Jewelry, Armory, Arsenal, Skill Tree, Gazebos, Critical Strike, playerAnimator, Bosses of Mass Destruction.
 
 - [ ] **Better Combat animations** — Attack with sword, axe, and Simply Swords weapons. Confirm swing animations play correctly in both first and third person.
 - [ ] **Simply Swords** — Craft or spawn a unique weapon (e.g., Emberblade). Confirm special abilities trigger. Verify pinned version (v1.62.0) loads without Simply Tooltips.
 - [ ] **Combat Roll** — Double-tap movement key (or configured key). Confirm dodge animation plays and invincibility frames work.
 - [ ] **SwingThrough** — Attack a mob through tall grass or vines. Confirm attacks connect through transparent blocks.
 - [ ] **Spell casting** — Create a Wizard or Paladin loadout. Cast spells. Confirm Spell Engine and playerAnimator render spell effects and animations.
+- [ ] **Archers class** — Craft an Archery Manual at a Spell Binding Table. Equip it with a bow. Cast archery skills (e.g., Multi Shot, Power Shot). Confirm skills fire correctly and animations play via playerAnimator.
+- [ ] **Archers Auto-Fire Hook** — Craft an Auto-Fire Hook and attach it to a bow. Hold right-click and confirm automatic arrow release on full charge. Remove it via Grindstone.
+- [ ] **Rogues class** — Craft a Rogue Manual at a Spell Binding Table. Equip with dual-wielded daggers/sickles. Cast rogue skills (evasion, backstab). Confirm animations and Better Combat dual wield integration.
+- [ ] **Warriors class** — Craft a Warrior Codex. Equip with a heavy weapon (double axe, glaive). Cast warrior skills. Confirm heavy weapon swings and stagger effects.
+- [ ] **Rogues & Warriors village structures** — Locate a village with a Barracks. Confirm rogue/warrior equipment is sold by villagers there.
+- [ ] **Jewelry crafting** — Mine gem veins at diamond depth. Craft rings and necklaces. Equip in trinket/accessory slots. Confirm combat attribute bonuses apply.
+- [ ] **Jewelry villagers** — Find a Jeweler villager in a village. Confirm jewelry items are available for trade.
+- [ ] **Jewelry + Accessories Compat** — Equip jewelry alongside Artifacts trinkets. Confirm both work through Accessories Compatibility Layer without slot conflicts.
+- [ ] **Armory upgrade** — Obtain a Superior Armor Upgrade and Upgrade Crystal from End City or Ancient City chests. Upgrade RPG class armor into epic variant. Confirm 3D model, set bonuses, and spell modifiers apply.
+- [ ] **Arsenal legendary weapons** — Kill Ender Dragon, Wither, or Warden. Confirm Arsenal legendary weapons drop. Verify passive spells activate on use (Swirling, Shockwave, Radiance, etc.).
+- [ ] **Arsenal + TieredZ** — Check if Arsenal legendary weapons receive TieredZ modifiers. Confirm passive spells still function with tier bonuses.
+- [ ] **Skill Tree** — Press `K` to open skill tree. Spend XP-earned skill points on nodes. Confirm offensive/defensive specializations apply to class skills. Test spell modifier nodes that alter existing spells.
+- [ ] **Skill Tree reset** — Obtain and use an Orb of Oblivion. Confirm all skill points are refunded and skills are reset.
+- [ ] **Enchantment rebalancing** — Enchant a bow with Power V. Confirm damage bonus is +40% total (8%/level × 5) instead of vanilla +250%. Enchant a sword with Sharpness V. Confirm +40% instead of vanilla bonus.
+- [ ] **Gazebos in villages** — Locate a village (plains, desert, savanna, snowy, or taiga). Confirm a gazebo structure generates containing a Spell Binding Table. Verify players can use it to create spell books.
+- [ ] **Critical Strike melee** — Attack mobs with a melee weapon. Confirm RNG-based critical hits trigger with particle effects (sparkle/skull/circle) and sound effects. Verify base 5% crit chance and 1.5x damage.
+- [ ] **Critical Strike ranged** — Shoot mobs with a bow/crossbow. Confirm ranged critical hits trigger with visual/audio feedback.
+- [ ] **Critical Strike enchantments** — Enchant a weapon with Critical Hit and Critical Impact enchantments (via Enchanting Infuser or anvil). Confirm crit chance and damage increase per level.
+- [ ] **Critical Strike + Better Combat** — Attack with Better Combat swing animations. Confirm crit particles and sounds trigger correctly alongside Better Combat's directional hit detection.
+- [ ] **Critical Strike + vanilla jump crits** — Verify config option to toggle vanilla jump criticals. Confirm the chosen setting (enabled/disabled) works as expected.
 - [ ] **Boss fights** — Spawn or locate a Bosses of Mass Destruction boss. Fight it and confirm:
   - Boss mechanics work (phases, special attacks)
   - Combat mods (Better Combat, Combat Roll) don't break boss AI
-  - Loot drops correctly
+  - Loot drops correctly (including Arsenal weapons from applicable bosses)
 
 ## 6. Accessories & Equipment
 
-Key mods: Accessories, Trinkets, Accessories Compatibility Layer, Artifacts, Things, Accessorify.
+Key mods: Accessories, Trinkets, Accessories Compatibility Layer, Artifacts, Things, Accessorify, Jewelry.
 
 - [ ] **Accessories screen** — Open the Accessories GUI. Confirm slots render correctly (no crash — this was a previous bug with Simply Tooltips).
 - [ ] **Trinkets via compat layer** — Equip a Trinkets-based item (e.g., from Artifacts). Confirm it works through the Accessories Compatibility Layer.

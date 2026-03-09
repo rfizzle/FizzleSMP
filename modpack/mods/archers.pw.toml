@@ -1,0 +1,13 @@
+name = "Archers (RPG Series)"
+filename = "archers-fabric-2.7.0+1.21.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "1627efd3fc6a26efbba575612be00180889bca01"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7690242
+project-id = 932359

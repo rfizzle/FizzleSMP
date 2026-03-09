@@ -1,0 +1,13 @@
+name = "Skill Tree (RPG Series)"
+filename = "skill_tree-fabric-1.3.0+1.21.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "8e4ba49cd8150e3ff27ec82e11154a632579542e"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7690375
+project-id = 1311513
