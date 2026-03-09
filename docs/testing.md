@@ -213,11 +213,15 @@ Key mods: Ledger, Carpet, Connectivity, Chunky, Spark, Open Parties and Claims, 
 
 ## 11. Loot System
 
-Key mods: Lootr, Better Loot, Loot Integrations, YUNG's Structures Addon for Loot Integrations.
+Key mods: Lootr, Better Loot, Loot Integrations, YUNG's Structures Addon for Loot Integrations, LI: CTOV, LI: Philip's Ruins, LI: Moog's Voyager, LI: Better Archeology.
 
 - [ ] **Lootr instancing** — Open the same chest as two different players. Confirm each gets unique loot.
 - [ ] **Better Loot tables** — Check loot quality in vanilla structures. Confirm Better Loot overhauls are present.
 - [ ] **Loot Integrations** — Check loot in YUNG's structures. Confirm modded items (Simply Swords, Artifacts, Mythic Upgrades) appear in loot tables.
+- [ ] **LI: CTOV addon** — Find a CTOV village or outpost chest. Confirm modded items appear in the loot (Simply Swords, Artifacts, etc.).
+- [ ] **LI: Philip's Ruins addon** — Find a Philip's Ruins structure chest. Confirm modded items appear in loot tables.
+- [ ] **LI: Moog's Voyager addon** — Find an MVS structure chest. Confirm modded items appear in loot tables.
+- [ ] **LI: Better Archeology addon** — Find a Better Archeology structure chest. Confirm modded items appear in loot tables.
 - [ ] **Mythic Upgrades** — Mine in deep caves. Confirm new ores generate. Craft endgame items.
 
 ## 12. Decorative & Building

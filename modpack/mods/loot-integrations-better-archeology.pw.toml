@@ -1,0 +1,13 @@
+name = "Loot Integrations: Better Archeology"
+filename = "lootintegrations_betterarcheology-1.2.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "3f4b21264d80964e94d58c5d39133b4381792d89"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 6168609
+project-id = 1130800

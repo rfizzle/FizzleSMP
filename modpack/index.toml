@@ -551,6 +551,26 @@ hash = "d49477dba10c7b8431dde58fdaa0d5d9c9a36c2c8d8e5ffc30a7007ec7476b2f"
 metafile = true
 
 [[files]]
+file = "mods/loot-integrations-better-archeology.pw.toml"
+hash = "95206dcceba1420afcf7cc8498c4cce27f534bfa5e2b997dc814a12699c85cfe"
+metafile = true
+
+[[files]]
+file = "mods/loot-integrations-choicetheorems-overhauled.pw.toml"
+hash = "01be52ea84fb04197908d5d27e0747a8c2a2c487ae0ca328d25e44de04ed096c"
+metafile = true
+
+[[files]]
+file = "mods/loot-integrations-moogs-voyager-soaring-end-nether.pw.toml"
+hash = "454c9be1c3fe7bccec4bbdc6cdb660218bc32da8bf64f67c3c7e47c649d8a837"
+metafile = true
+
+[[files]]
+file = "mods/loot-integrations-philips-ruins.pw.toml"
+hash = "aad2485b7897747d413bfad963f1287aa3bb271df5845824e3343e1315183b3a"
+metafile = true
+
+[[files]]
 file = "mods/loot-integrations.pw.toml"
 hash = "7ec7b744c186929a37d105d01bea97021e34b4f1b1a99223c7c42fadbeeb8bd3"
 metafile = true

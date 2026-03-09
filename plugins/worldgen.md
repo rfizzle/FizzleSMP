@@ -249,6 +249,45 @@
 - **Dependencies:** Loot Integrations, YUNG's API
 - **Conflicts:** None known
 
+## Loot Integrations: ChoiceTheorem's Overhauled Village & Immersive Structures
+- **CurseForge ID:** 1135500
+- **Slug:** loot-integrations-choicetheorems-overhauled
+- **Modrinth Slug:** N/A
+- **Mod Loader:** Fabric
+- **Summary:** Adds better loot to ChoiceTheorem's Overhauled Village & Immersive Structures chests, including modded loot.
+- **Why:** Enriches loot in CTOV village and outpost chests with items from other mods in the pack via Loot Integrations.
+- **Dependencies:** Loot Integrations, ChoiceTheorem's Overhauled Village
+- **Conflicts:** None known
+
+## Loot Integrations: Philip's Ruins
+- **CurseForge ID:** 1152718
+- **Slug:** loot-integrations-philips-ruins
+- **Modrinth Slug:** N/A
+- **Mod Loader:** Fabric
+- **Summary:** Adds better loot to Philip's Ruins chests including modded loot.
+- **Why:** Enriches loot in Philip's Ruins structure chests with items from other mods in the pack via Loot Integrations.
+- **Dependencies:** Loot Integrations, Philip's Ruins
+- **Conflicts:** None known
+
+## Loot Integrations: Moog's Voyager, Soaring, End & Nether Structures
+- **CurseForge ID:** 1152715
+- **Slug:** loot-integrations-moogs-voyager-soaring-end-nether
+- **Modrinth Slug:** N/A
+- **Mod Loader:** Fabric
+- **Summary:** Adds better loot to Moog's Voyager, Soaring, End & Nether Structures chests, including modded loot.
+- **Why:** Enriches loot in MVS structure chests with items from other mods in the pack via Loot Integrations.
+- **Dependencies:** Loot Integrations, MVS - Moog's Voyager Structures
+- **Conflicts:** None known
+
+## Loot Integrations: Better Archeology
+- **CurseForge ID:** 1130800
+- **Slug:** loot-integrations-better-archeology
+- **Modrinth Slug:** N/A
+- **Mod Loader:** Fabric
+- **Summary:** Adds better loot to Better Archeology chests, including modded loot.
+- **Why:** Enriches loot in Better Archeology structure chests with items from other mods in the pack via Loot Integrations.
+- **Dependencies:** Loot Integrations, Better Archeology
+- **Conflicts:** None known
 
 ## Explorify
 - **CurseForge ID:** 698309
