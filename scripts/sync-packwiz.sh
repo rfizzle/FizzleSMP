@@ -245,6 +245,12 @@ main() {
             wanted_mr_slugs["$mr_slug"]=1
         fi
 
+        # Skip manually managed mods (custom builds, etc.)
+        if [[ "$mod_loader" == "Manual" ]]; then
+            (( skipped++ )) || true
+            continue
+        fi
+
         # Skip if already installed
         if is_installed "$slug" "$cf_id" "$mr_slug"; then
             (( skipped++ )) || true

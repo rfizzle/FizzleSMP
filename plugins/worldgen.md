@@ -39,21 +39,13 @@
 - **Dependencies:** Fabric API, MidnightLib
 - **Conflicts:** Soft conflict with YUNG's suite — overlapping structure types (dungeons, mineshafts, desert temples, jungle temples, witch huts). Resolved via `RS-YUNG-Compat-Config.zip` datapack (shipped in `modpack/config/paxi/datapacks/`) which disables RS overworld mineshafts, pyramids, temples, witch huts, and overworld dungeons to let YUNG's handle them. RS remains enabled for its unique shipwrecks, mansions, igloos, ruins, cities, bastions, villages, outposts, and nether/end variants.
 
-## Towns and Towers
-- **CurseForge ID:** 626761
-- **Slug:** towns-and-towers
+## ChoiceTheorem's Overhauled Village
+- **CurseForge ID:** 623908
+- **Slug:** choicetheorems-overhauled-village
+- **Modrinth Slug:** ct-overhaul-village
 - **Mod Loader:** Fabric
-- **Summary:** Expands villages, pillager outposts, and adds new ship structures with biome-appropriate designs.
-- **Why:** Enhances village and outpost variety to complement the expanded biome diversity from Terralith.
-- **Dependencies:** Cristel Lib
-- **Conflicts:** None known
-
-## Cristel Lib
-- **CurseForge ID:** 856996
-- **Slug:** cristel-lib
-- **Mod Loader:** Fabric
-- **Summary:** A library mod for easy structure config and runtime datapacks.
-- **Why:** Required dependency of Towns and Towers.
+- **Summary:** Completely overhauls villages and pillager outposts with detailed, biome-appropriate redesigns.
+- **Why:** Replaces vanilla villages with beautifully redesigned variants for every biome, making settlements feel unique and immersive.
 - **Dependencies:** None
 - **Conflicts:** None known
 

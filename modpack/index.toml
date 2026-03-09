@@ -34,6 +34,14 @@ hash = "73b877ef14e88cab2d1771894a0271472c1a5b0a464773f886678eb631603cab"
 metafile = true
 
 [[files]]
+file = "config/xaero/minimap/profiles/default.cfg"
+hash = "ef490f100b4dd9a8dc7f72cb25b352419bca91aaaa052fa1c6696e3c26cf0927"
+
+[[files]]
+file = "config/xaero/minimap/profiles/info_display_config/default.cfg.txt"
+hash = "8eb778712d3b0bbad918ed00fb0869563dac782e9ee96793abfabed510184144"
+
+[[files]]
 file = "mods/accessories-compat-layer.pw.toml"
 hash = "3949eebf3551ee3fc7cb97ba2971a1f0e2a54ad907d63fdc6701d4d8ff3dd7c4"
 metafile = true
@@ -184,6 +192,11 @@ hash = "a26fa538ff65bfa90d5abc69b712f6e8f04e18759315ea1ae7402e271f1c4797"
 metafile = true
 
 [[files]]
+file = "mods/choicetheorems-overhauled-village.pw.toml"
+hash = "d59799ff1d82781885fa73d181f633f7c8a266d73722886cb5c28c24fb4aad8b"
+metafile = true
+
+[[files]]
 file = "mods/chunky-pregenerator.pw.toml"
 hash = "49959ed7f5d7d6f8893856afe6674d7b34c2f5d6831c7c0c75550feec103e90d"
 metafile = true
@@ -246,11 +259,6 @@ metafile = true
 [[files]]
 file = "mods/creeper-overhaul.pw.toml"
 hash = "07a7599da1940a0023c06bc8ba04033b971f6cd99af4ef8babb12616a50952d8"
-metafile = true
-
-[[files]]
-file = "mods/cristel-lib.pw.toml"
-hash = "c92fd4a87e1ddbe0b9288a38cbf1491e4ba933eaeb4c209f7861de0235b2c81a"
 metafile = true
 
 [[files]]
@@ -371,11 +379,6 @@ metafile = true
 [[files]]
 file = "mods/fabric-language-kotlin.pw.toml"
 hash = "c27a08b54ab9b474a57211f383f511d67fd0023035ee2e76d247667e15183e63"
-metafile = true
-
-[[files]]
-file = "mods/fabric-waystones.pw.toml"
-hash = "da8aea4fd517b0e1f34da0960bd8a0111859d14bf60a4acb8b949ac41cb5dc82"
 metafile = true
 
 [[files]]
@@ -924,11 +927,6 @@ hash = "2c81621c20b317e0b8f81da6a254e5e5fe3cac42cbfa5e8a3052bb5eff397d3c"
 metafile = true
 
 [[files]]
-file = "mods/towns-and-towers.pw.toml"
-hash = "cab2f1d2bf3b9e4435f02cde12c270f3234599d63fc5c7383eaa9da3e4e9d5bb"
-metafile = true
-
-[[files]]
 file = "mods/trade-cycling.pw.toml"
 hash = "286be3eeb886c5e2e9eaa0a1860aab882f27f9cd1779811bb067f48fb4266ea0"
 metafile = true
@@ -972,6 +970,10 @@ metafile = true
 file = "mods/wizards.pw.toml"
 hash = "d0fe5573b9a6c471b15ad827a5cd07c39d41e45d8ec0af92dcb73b0fa67f6489"
 metafile = true
+
+[[files]]
+file = "mods/wraith-waystones-3.3.5+mc1.21.1.jar"
+hash = "b822272a4ecd64c229bab2739bcde34e10d2ad754e415654670a48199bc0283d"
 
 [[files]]
 file = "mods/xaeros-minimap.pw.toml"
@@ -1075,7 +1077,7 @@ metafile = true
 
 [[files]]
 file = "options.txt"
-hash = "948ccfefb0d0018ad76f55c64637b268b6c363086fb6a9a357e9938bc7a82675"
+hash = "f2cb6341274e1281c575cae80bcc44d0415bc888b65ecdbabc1ad0938fbb0d27"
 
 [[files]]
 file = "shaderpacks/complementary-reimagined.pw.toml"

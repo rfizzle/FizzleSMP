@@ -221,9 +221,9 @@
 ## Wraith Waystones
 - **CurseForge ID:** 410902
 - **Slug:** fabric-waystones
-- **Mod Loader:** Fabric
+- **Mod Loader:** Manual
 - **Summary:** Adds craftable waystones for fast travel, with natural spawning in villages (including modded villages from Repurposed Structures), scrolls, and configurable teleportation costs.
-- **Why:** Provides a balanced fast-travel system for the SMP — players discover waystones by exploring villages and can craft their own for base networks.
+- **Why:** Provides a balanced fast-travel system for the SMP — players discover waystones by exploring villages and can craft their own for base networks. Using custom build (3.3.5) — JAR managed manually, not via packwiz.
 - **Dependencies:** None
 - **Conflicts:** None known; compatible with Repurposed Structures villages.
 

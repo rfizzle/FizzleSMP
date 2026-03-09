@@ -66,7 +66,7 @@ Each file in `plugins/` uses this format:
 - **Slug:** <curseforge-slug>
 - **Modrinth Slug:** <modrinth-slug>
 - **Pin CurseForge File ID:** <file-id> *(optional — only when version-pinning is needed)*
-- **Mod Loader:** Fabric
+- **Mod Loader:** Fabric *(or `Manual` for custom builds not managed by packwiz)*
 - **Summary:** One-line description of what it does.
 - **Why:** Why we want it in the pack.
 - **Dependencies:** Required dependencies (or "None").
