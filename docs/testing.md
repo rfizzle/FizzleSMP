@@ -13,7 +13,7 @@ Systematic testing guide for verifying mod compatibility and pack stability. Run
 
 ## 2. World Creation & Chunk Generation
 
-These mods all touch worldgen and are the most likely to conflict: Terralith, Tectonic, Geophilic, Terraphilic, Incendium, Nullscape, C2ME, Noisium, TerraBlender, Sparse Structures, all YUNG's mods, Repurposed Structures, Towns and Towers, Structory.
+These mods all touch worldgen and are the most likely to conflict: Terralith, Tectonic, Geophilic, Terraphilic, Incendium, Nullscape, C2ME, Noisium, TerraBlender, Sparse Structures, all YUNG's mods, Repurposed Structures, Towns and Towers, Structory, When Dungeons Arise, When Dungeons Arise: Seven Seas, Explorify, MVS - Moog's Voyager Structures, Philip's Ruins, Tidal Towns, Better Archeology.
 
 - [ ] **New world creation** — Create a new world (default settings). Confirm no crash during initial chunk generation.
 - [ ] **Explore Overworld biomes** — Fly/teleport through at least 10 different biomes. Confirm:
@@ -21,7 +21,7 @@ These mods all touch worldgen and are the most likely to conflict: Terralith, Te
   - Tectonic terrain (mountains, valleys) looks correct
   - Geophilic biome tweaks appear (check flower meadows, etc.)
   - No floating structures, cut-off terrain, or void holes
-- [ ] **Structure generation** — Locate and enter at least one of each:
+- [ ] **Structure generation** — Locate and enter at least one of each. To identify which mod generated a structure, use **MiniHUD's structure bounding box overlay** (Renderer Hotkeys → "Structure Bounding Boxes") which displays namespaced IDs like `dungeons_arise:aviary` or `explorify:ruin_plains` — the prefix before `:` is the mod. As a fallback, stand inside the structure and check the **F3 debug screen** (BetterF3) which shows the namespaced structure ID you're currently in.
   - Vanilla village (verify Towns and Towers expansions)
   - YUNG's Better Dungeon
   - YUNG's Better Mineshaft
@@ -31,7 +31,15 @@ These mods all touch worldgen and are the most likely to conflict: Terralith, Te
   - Repurposed Structures variant (biome-themed)
   - Structory tower or ruin
   - Hopo Underwater Ruins
+  - When Dungeons Arise large structure (castle, keep, or tower)
+  - When Dungeons Arise: Seven Seas vessel
+  - Explorify structure (dungeon, ruin, or point of interest)
+  - MVS - Moog's Voyager Structures (at least 2-3 different structure types)
+  - Philip's Ruins ancient ruin
+  - Tidal Towns floating ocean village
+  - Better Archeology structure (confirm brush/archeology mechanic works)
 - [ ] **Structure overlap** — Check that YUNG's dungeons and Repurposed Structures dungeons don't spawn on top of each other (RS dungeons/temples should be disabled in RS config).
+- [ ] **Structure density** — With all structure mods active, fly across 2000+ blocks. Confirm Sparse Structures prevents oversaturation and structures don't generate on top of each other.
 - [ ] **Nether generation** — Enter the Nether. Confirm Incendium biomes, custom structures, and YUNG's Better Nether Fortresses generate.
 - [ ] **End generation** — Enter the End. Confirm Nullscape terrain and YUNG's Better End Island generate.
 - [ ] **Chunk gen performance** — Use `/chunky start` to pre-generate a 1000-block radius. Monitor TPS with Spark. Confirm C2ME and Noisium aren't conflicting (watch for deadlocks or errors in log).

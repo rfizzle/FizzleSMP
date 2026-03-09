@@ -86,6 +86,11 @@ hash = "3e020f352ab64f88d0bbbee740ae1784d17b44337c02e2fd670889bbdbfa4a9a"
 metafile = true
 
 [[files]]
+file = "mods/better-archeology.pw.toml"
+hash = "60192613114f8b31dc334135af134032f2a35d8de2980412ae8e97d6c9dd4ea1"
+metafile = true
+
+[[files]]
 file = "mods/better-combat-by-daedelus.pw.toml"
 hash = "589d21576a83ec1d08fc23cad06eceef83e883fab84487553eea0f4c910ecba4"
 metafile = true
@@ -318,6 +323,11 @@ metafile = true
 [[files]]
 file = "mods/explorers-compass.pw.toml"
 hash = "cc3ea0f2dec451d3dc489439bc6a3285f2aaab81b292b0f582d7905f75bef7a3"
+metafile = true
+
+[[files]]
+file = "mods/explorify.pw.toml"
+hash = "adcd67c419f4c88858298958287b1658e9a81b7d50c6794769ca01c8b856d3a6"
 metafile = true
 
 [[files]]
@@ -556,6 +566,16 @@ hash = "044248a2ec9a9d342300ea8841d56891602d0bd22824d23923248078a22d34cc"
 metafile = true
 
 [[files]]
+file = "mods/moogs-structure-lib.pw.toml"
+hash = "91f6dc7de966c88f9ef7b669a3ba68f0eb1030038ce3ff8f502f14be060a7380"
+metafile = true
+
+[[files]]
+file = "mods/moogs-voyager-structures.pw.toml"
+hash = "546c0f69729f25c09e7296d8e6c580734a9d29f7ec02020b1849cca1545d8f49"
+metafile = true
+
+[[files]]
 file = "mods/mouse-tweaks.pw.toml"
 hash = "3cd8155341a4233955ff9892a3b7b5da6dc6d8d892863b2f544328f2731f7f03"
 metafile = true
@@ -701,6 +721,11 @@ hash = "9766bba0a21c4bb834b47cee6a114f139373813902f21c833e4982498ff89f9e"
 metafile = true
 
 [[files]]
+file = "mods/ruins.pw.toml"
+hash = "d0f9d008ef7e0b58eeaffe5bea23683342b5ff816f5cf19465bd71033189d4a0"
+metafile = true
+
+[[files]]
 file = "mods/rune-crafting.pw.toml"
 hash = "d6b026804b9667f1d58cfb391319d352ae4eda535618d2c5e8a37e4d6a9b7ed3"
 metafile = true
@@ -836,6 +861,11 @@ hash = "668a0515ab70249e8e3e8c74d395d47373b3c5eb3162e76531ddc143c1aa73fd"
 metafile = true
 
 [[files]]
+file = "mods/tidal-towns.pw.toml"
+hash = "37d595b789dc86445ef6cf4773707a7a2e90ab9ecfec82e552ed7f2cdc598d78"
+metafile = true
+
+[[files]]
 file = "mods/tieredz.pw.toml"
 hash = "2c81621c20b317e0b8f81da6a254e5e5fe3cac42cbfa5e8a3052bb5eff397d3c"
 metafile = true
@@ -883,6 +913,16 @@ metafile = true
 [[files]]
 file = "mods/what-are-they-up-to.pw.toml"
 hash = "bbe626ae5e123ad07ad82ac39b94bbe2f9c8fc13513f9907e01115ba0cd5b40f"
+metafile = true
+
+[[files]]
+file = "mods/when-dungeons-arise-fabric.pw.toml"
+hash = "93f058360c92bb1d85afed003eae9a81b109089b0eaf9dfc88e4f1c3118ce513"
+metafile = true
+
+[[files]]
+file = "mods/when-dungeons-arise-seven-seas.pw.toml"
+hash = "65c8ab243c4569f4d5f985cd4330a23b23665b785fed8e3b66936ef5dc067d3c"
 metafile = true
 
 [[files]]

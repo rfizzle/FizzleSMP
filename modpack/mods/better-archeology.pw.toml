@@ -1,0 +1,13 @@
+name = "Better Archeology"
+filename = "betterarcheology-fabric-1.21.1-1.3.4.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "c2fb71a97a0a10880d00728a897d0462a5d3109a"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7229699
+project-id = 835687

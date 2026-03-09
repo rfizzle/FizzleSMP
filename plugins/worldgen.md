@@ -283,6 +283,86 @@
 - **Dependencies:** Loot Integrations, YUNG's API
 - **Conflicts:** None known
 
+## When Dungeons Arise
+- **CurseForge ID:** 511812
+- **Slug:** when-dungeons-arise-fabric
+- **Modrinth Slug:** when-dungeons-arise
+- **Mod Loader:** Fabric
+- **Summary:** Adds various elegant roguelike dungeons and large structures (castles, keeps, towers, ruins) that generate throughout the world.
+- **Why:** Fills the world with large, dramatic structures for dungeon-crawling and exploration, adding the kind of landmark structures missing from vanilla.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## When Dungeons Arise: Seven Seas
+- **CurseForge ID:** 953637
+- **Slug:** when-dungeons-arise-seven-seas
+- **Modrinth Slug:** when-dungeons-arise-seven-seas
+- **Mod Loader:** Fabric
+- **Summary:** Adds elegant and hostile vessels lost in the seven seas as explorable ocean structures.
+- **Why:** Expands ocean exploration with shipwrecks and vessels that complement When Dungeons Arise's overland structures.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Explorify
+- **CurseForge ID:** 698309
+- **Slug:** explorify
+- **Modrinth Slug:** explorify
+- **Mod Loader:** Fabric
+- **Summary:** A simplistic, vanilla-friendly collection of new structures including dungeons, ruins, and points of interest.
+- **Why:** Adds lightweight, vanilla-aesthetic structures that fill gaps between larger structure mods without feeling out of place.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## MVS - Moog's Voyager Structures
+- **CurseForge ID:** 656977
+- **Slug:** moogs-voyager-structures
+- **Modrinth Slug:** moogs-voyager-structures
+- **Mod Loader:** Fabric
+- **Summary:** Adds 130+ vanilla-style structures to the world using only vanilla blocks, including dungeons and enemies.
+- **Why:** Massively increases structure variety with vanilla-block structures that blend naturally into the world.
+- **Dependencies:** Moog's Structure Lib
+- **Conflicts:** None known
+
+## Moog's Structure Lib
+- **CurseForge ID:** 1337167
+- **Slug:** moogs-structure-lib
+- **Modrinth Slug:** moogs-structure-lib
+- **Mod Loader:** Fabric
+- **Summary:** A library mod for the Moog's Structure series.
+- **Why:** Required dependency of MVS - Moog's Voyager Structures.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Philip's Ruins
+- **CurseForge ID:** 569737
+- **Slug:** ruins
+- **Modrinth Slug:** philips-ruins
+- **Mod Loader:** Fabric
+- **Summary:** Adds ancient ruins scattered throughout the Minecraft world.
+- **Why:** Populates the world with atmospheric small ruins that add a sense of history and discovery during exploration.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Tidal Towns
+- **CurseForge ID:** 891880
+- **Slug:** tidal-towns
+- **Modrinth Slug:** tidal-towns
+- **Mod Loader:** Fabric
+- **Summary:** Adds floating ocean villages built from driftwood that generate on the waves.
+- **Why:** Adds unique ocean village structures, filling a gap in ocean content and giving players a reason to explore oceans.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Better Archeology
+- **CurseForge ID:** 835687
+- **Slug:** better-archeology
+- **Modrinth Slug:** better-archeology
+- **Mod Loader:** Fabric
+- **Summary:** Adds new archeology structures, artifacts, and fossils to discover throughout the world.
+- **Why:** Expands the vanilla archeology system with new structures and rewards, making brush-based exploration more worthwhile.
+- **Dependencies:** Architectury API, Resourceful Config
+- **Conflicts:** None known
+
 ## Repurposed Structures - Farmer's Delight Compat
 - **CurseForge ID:** 1071336
 - **Slug:** repurposed-structures-farmers-delight-compat-mod
