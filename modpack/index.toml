@@ -35,7 +35,7 @@ metafile = true
 
 [[files]]
 file = "config/sparsestructures.json5"
-hash = "78e7af2e5ae3a957844f6cee41d08f9687c4df7d51482b7d1dc912a1f964fba3"
+hash = "1c5274bee29912a4959fc862ef39ac192a31b7bb632e2f6d7e35e043b7e26273"
 
 [[files]]
 file = "config/xaero/minimap/profiles/default.cfg"
@@ -44,6 +44,10 @@ hash = "ef490f100b4dd9a8dc7f72cb25b352419bca91aaaa052fa1c6696e3c26cf0927"
 [[files]]
 file = "config/xaero/minimap/profiles/info_display_config/default.cfg.txt"
 hash = "8eb778712d3b0bbad918ed00fb0869563dac782e9ee96793abfabed510184144"
+
+[[files]]
+file = "config/xaerohud.txt"
+hash = "b302b8eee5feedb3ebafd4bc895de0acc997a165c2213d3b3020f9ed435b1d85"
 
 [[files]]
 file = "mods/accessories-compat-layer.pw.toml"

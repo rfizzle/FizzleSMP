@@ -351,6 +351,13 @@ main() {
         done < <(find_orphans wanted_cf_ids wanted_slugs wanted_mr_slugs)
     fi
 
+    # ── Refresh index ──────────────────────────────────────────────────
+    if ! $DRY_RUN && (( added > 0 || removed > 0 )); then
+        echo ""
+        echo "── Refreshing packwiz index ──"
+        run_packwiz refresh
+    fi
+
     # ── Summary Report ─────────────────────────────────────────────────
     echo ""
     echo "╔══════════════════════════════════════════════════════════════╗"
