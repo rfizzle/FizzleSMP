@@ -6,7 +6,7 @@ hash = "fe66b600b2e2b4a2d7c2d64ed736ef05fe902980e5a94e3d40cefa6469bd90cd"
 
 [[files]]
 file = "config/carryon-common.json"
-hash = "9da6b13556d5c05d06d2873c225541b8b5e03669fc9630cf30778d2efbabef40"
+hash = "cd9a918e7ca7312c41f34b75685a676ed2aae59793bd54915600be93850a653d"
 
 [[files]]
 file = "config/emi.css"
@@ -1005,6 +1005,11 @@ hash = "5d6abaadd99d9e779849c989017e752b93b5ad023d0a51ff84628c4bc22377fb"
 metafile = true
 
 [[files]]
+file = "mods/waystones.pw.toml"
+hash = "cc24de37de1d64a4e66d37ed7a57bc58a8959c881420e8a52f1eb869824fac52"
+metafile = true
+
+[[files]]
 file = "mods/what-are-they-up-to.pw.toml"
 hash = "bbe626ae5e123ad07ad82ac39b94bbe2f9c8fc13513f9907e01115ba0cd5b40f"
 metafile = true
@@ -1013,10 +1018,6 @@ metafile = true
 file = "mods/wizards.pw.toml"
 hash = "d0fe5573b9a6c471b15ad827a5cd07c39d41e45d8ec0af92dcb73b0fa67f6489"
 metafile = true
-
-[[files]]
-file = "mods/wraith-waystones-3.3.5+mc1.21.1.jar"
-hash = "b822272a4ecd64c229bab2739bcde34e10d2ad754e415654670a48199bc0283d"
 
 [[files]]
 file = "mods/xaeros-minimap.pw.toml"

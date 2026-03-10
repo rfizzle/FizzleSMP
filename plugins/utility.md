@@ -218,14 +218,25 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
-## Wraith Waystones
-- **CurseForge ID:** 410902
-- **Slug:** fabric-waystones
-- **Mod Loader:** Manual
-- **Summary:** Adds craftable waystones for fast travel, with natural spawning in villages (including modded villages from Repurposed Structures), scrolls, and configurable teleportation costs.
-- **Why:** Provides a balanced fast-travel system for the SMP — players discover waystones by exploring villages and can craft their own for base networks. Using custom build (3.3.5) — JAR managed manually, not via packwiz.
-- **Dependencies:** None
-- **Conflicts:** None known; compatible with Repurposed Structures villages.
+## Waystones
+- **CurseForge ID:** 245755
+- **Slug:** waystones
+- **Modrinth Slug:** waystones
+- **Mod Loader:** Fabric
+- **Summary:** Adds craftable waystones for fast travel, with natural spawning in villages, scrolls, and configurable teleportation costs.
+- **Why:** Provides a balanced fast-travel system for the SMP — players discover waystones by exploring villages and can craft their own for base networks. Replaces the previously maintained FabricWaystones fork with the actively maintained upstream mod by BlayTheNinth.
+- **Dependencies:** Balm, Fabric API
+- **Conflicts:** None known
+
+## Balm
+- **CurseForge ID:** 500525
+- **Slug:** balm-fabric
+- **Modrinth Slug:** balm
+- **Mod Loader:** Fabric
+- **Summary:** A cross-platform abstraction layer library used by BlayTheNinth's mods.
+- **Why:** Required dependency of Waystones.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
 
 ## Lavender
 - **CurseForge ID:** 962916

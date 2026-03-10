@@ -182,11 +182,11 @@ Key mods: Accessories, Trinkets, Accessories Compatibility Layer, Artifacts, Thi
 
 ## 8. Navigation & Travel
 
-Key mods: Xaero's Minimap, Xaero's World Map, Wraith Waystones, Nature's Compass, Explorer's Compass, Traveler's Titles, NetherPortalFix.
+Key mods: Xaero's Minimap, Xaero's World Map, Waystones, Nature's Compass, Explorer's Compass, Traveler's Titles, NetherPortalFix.
 
 - [ ] **Minimap** — Confirm Xaero's Minimap renders correctly. Check entity radar, waypoints.
 - [ ] **World map** — Open Xaero's World Map. Confirm explored chunks display. Create a waypoint and navigate to it.
-- [ ] **Waystones** — Craft and place a Wraith Waystone. Teleport between two waystones.
+- [ ] **Waystones** — Craft and place a Waystone. Teleport between two waystones.
 - [ ] **Nature's Compass** — Craft and use. Search for a biome. Confirm it locates correctly (including Terralith custom biomes).
 - [ ] **Explorer's Compass** — Search for a structure. Confirm it finds both vanilla and modded structures (YUNG's, RS, etc.).
 - [ ] **Traveler's Titles** — Enter a new biome. Confirm RPG-style title appears on screen.

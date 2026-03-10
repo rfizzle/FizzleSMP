@@ -83,16 +83,6 @@ The dump outputs every registered structure set in a format ready to paste into 
 | `/sparsestructures dump` | Dump all structure sets (see above) |
 | `/trigger` | List available Supplementaries triggers |
 
-## Modified Mods
-
-Some mods in the pack use custom-built JARs instead of the official release. These are committed directly to the repo (not managed by packwiz) because they contain local patches.
-
-| Mod | Version | Source | Why Modified |
-|-----|---------|--------|--------------|
-| [Wraith Waystones](https://github.com/LordDeatHunter/FabricWaystones/) | 3.3.5+mc1.21.1 | [LordDeatHunter/FabricWaystones](https://github.com/LordDeatHunter/FabricWaystones/) | Custom build; JAR at `modpack/mods/wraith-waystones-3.3.5+mc1.21.1.jar` |
-
-When updating these mods, rebuild from source rather than downloading the official release. The plugin entry in `plugins/utility.md` has `Mod Loader: Manual` to indicate it's not synced via packwiz.
-
 ## Managing the Pack with Claude Code
 
 | Command | Purpose |
