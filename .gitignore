@@ -9,3 +9,5 @@
 
 # Exclude exported Modrinth modpacks
 *.mrpack
+
+Minecraft/
