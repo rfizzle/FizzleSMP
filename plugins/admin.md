@@ -12,16 +12,6 @@
 - **Dependencies:** Fabric API, Fabric Language Kotlin
 - **Conflicts:** None known
 
-## Carpet
-- **CurseForge ID:** 349239
-- **Slug:** carpet
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Gives server admins full control over vanilla game mechanics with extensive rule toggles and technical tools.
-- **Why:** Allows fine-tuning of vanilla mechanics (tick speed, mob spawning, TNT behavior, etc.) for SMP server management and technical gameplay.
-- **Dependencies:** None
-- **Conflicts:** None known
-
 ## Connectivity
 - **CurseForge ID:** 470193
 - **Slug:** connectivity

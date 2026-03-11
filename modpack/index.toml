@@ -170,18 +170,8 @@ hash = "71df6736f94cde9e7b5ab070b7a3a5cca59648c98182cb25fb2563737994bf3a"
 metafile = true
 
 [[files]]
-file = "mods/c2me.pw.toml"
-hash = "512a9aa7d85f3cf154f36ac8e287889e5730088fe19b8eb0b1e9409ca2ba5756"
-metafile = true
-
-[[files]]
 file = "mods/cardinal-components-api.pw.toml"
 hash = "56cd11a88ada9e8ef8614ce57f23db929b06579752ca4a1458dcfdf4a5aead9a"
-metafile = true
-
-[[files]]
-file = "mods/carpet.pw.toml"
-hash = "48c6a4e310601532ac6a9e7f2f814128f75af9a541aee5a6e39d2d5475d967af"
 metafile = true
 
 [[files]]
