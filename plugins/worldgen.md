@@ -54,16 +54,6 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
-## YUNG's Better Caves
-- **CurseForge ID:** 408465
-- **Slug:** yungs-better-caves-fabric
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Completely overhauls Minecraft's cave systems with lava caverns, underground lakes and rivers, flooded caverns, and more.
-- **Why:** Makes underground exploration dramatically more interesting with varied cave types that get crazier the deeper you go.
-- **Dependencies:** YUNG's API, Fabric API, Cloth Config API
-- **Conflicts:** None known; compatible with Terralith.
-
 ## YUNG's Better Mineshafts
 - **CurseForge ID:** 373591
 - **Slug:** yungs-better-mineshafts-fabric

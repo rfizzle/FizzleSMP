@@ -18,7 +18,7 @@ hash = "c4332888117f2029298fe81c97a773d27104e5af3c62068d8f9eba31c61d7dfe"
 
 [[files]]
 file = "config/lithium.properties"
-hash = "fa8988198ae2d22fef700a88198449a74116732e1f35ec9758a18d7fb0394c96"
+hash = "80242f111b68ddc2d47cac5da4aba000737a121e864e068a697e0a805fbbce25"
 
 [[files]]
 file = "config/paxi/datapacks/RS-YUNG-Compat-Config.zip"
@@ -1042,11 +1042,6 @@ metafile = true
 [[files]]
 file = "mods/yungs-api-fabric.pw.toml"
 hash = "b9d687d2b4d66168fdf9bafa2dabc0d50a1b81910d7c71be941508213db2ffdc"
-metafile = true
-
-[[files]]
-file = "mods/yungs-better-caves-fabric.pw.toml"
-hash = "77633351c9b5db088f575677140a34ccc8fcd995ad2607f6fb7dd79c31f0adf5"
 metafile = true
 
 [[files]]
