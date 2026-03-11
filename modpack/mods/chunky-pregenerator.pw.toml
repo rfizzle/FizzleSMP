@@ -1,6 +1,6 @@
 name = "Chunky (Fabric)"
 filename = "Chunky-Fabric-1.4.23.jar"
-side = "both"
+side = "server"
 
 [download]
 hash-format = "sha1"

@@ -1,6 +1,6 @@
 name = "Ledger"
 filename = "ledger-1.3.5.jar"
-side = "both"
+side = "server"
 
 [download]
 hash-format = "sha1"

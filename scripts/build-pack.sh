@@ -1,55 +1,79 @@
 #!/usr/bin/env bash
-# install-server.sh — Download server-side mods from packwiz metadata into Minecraft/
+# build-pack.sh — Download mods and package a client or server pack as a ZIP
 #
 # Usage:
-#   ./scripts/install-server.sh           # Install/update server mods
-#   ./scripts/install-server.sh --clean   # Wipe Minecraft/ (except bootstrap jar) then install
-#   ./scripts/install-server.sh --dry-run # Preview what would be downloaded/removed
+#   ./scripts/build-pack.sh server              # Build FizzleSMP.server.zip
+#   ./scripts/build-pack.sh client              # Build FizzleSMP.client.zip
+#   ./scripts/build-pack.sh server --dry-run    # Preview without downloading
+#   ./scripts/build-pack.sh client --clean      # Wipe build dir, rebuild, and zip
 #
-# Reads all .pw.toml files in modpack/mods/ and modpack/config/paxi/datapacks/,
-# filters out client-only mods, downloads missing files, and removes stale ones.
+# Reads .pw.toml metadata, filters by side, downloads into a temp build dir,
+# and packages the result as a ZIP.
 
 set -eo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 MODPACK_DIR="$PROJECT_DIR/modpack"
-MINECRAFT_DIR="$PROJECT_DIR/Minecraft"
-MODS_DEST="$MINECRAFT_DIR/mods"
-DATAPACKS_DEST="$MINECRAFT_DIR/config/paxi/datapacks"
-BOOTSTRAP_JAR="packwiz-installer-bootstrap.jar"
+BUILD_DIR="$PROJECT_DIR/build"
+OUTPUT_DIR="$PROJECT_DIR"
 
 CLEAN=false
 DRY_RUN=false
-SIDE_FILTER="server"  # install mods with side = "server" or "both"
+TARGET=""
+
+# --- Argument parsing ---
+
+usage() {
+    echo "Usage: $0 <server|client> [--clean] [--dry-run]"
+    echo ""
+    echo "  server     Build server pack (server + both mods)"
+    echo "  client     Build client pack (client + both mods)"
+    echo "  --clean    Wipe build directory before downloading"
+    echo "  --dry-run  Preview changes without downloading or packaging"
+}
 
 for arg in "$@"; do
     case "$arg" in
-        --clean)   CLEAN=true ;;
-        --dry-run) DRY_RUN=true ;;
-        --help|-h)
-            echo "Usage: $0 [--clean] [--dry-run]"
-            echo ""
-            echo "  --clean    Wipe Minecraft/mods/ and datapacks before installing"
-            echo "  --dry-run  Preview changes without downloading or removing anything"
-            exit 0
-            ;;
+        server|client) TARGET="$arg" ;;
+        --clean)       CLEAN=true ;;
+        --dry-run)     DRY_RUN=true ;;
+        --help|-h)     usage; exit 0 ;;
         *)
             echo "Unknown option: $arg"
+            usage
             exit 1
             ;;
     esac
 done
 
+if [[ -z "$TARGET" ]]; then
+    echo "Error: must specify 'server' or 'client'"
+    echo ""
+    usage
+    exit 1
+fi
+
+# Set the opposite side to exclude
+if [[ "$TARGET" == "server" ]]; then
+    EXCLUDE_SIDE="client"
+else
+    EXCLUDE_SIDE="server"
+fi
+
+PACK_BUILD_DIR="$BUILD_DIR/$TARGET"
+MODS_DEST="$PACK_BUILD_DIR/mods"
+DATAPACKS_DEST="$PACK_BUILD_DIR/config/paxi/datapacks"
+ZIP_NAME="FizzleSMP.${TARGET}.zip"
+ZIP_PATH="$OUTPUT_DIR/$ZIP_NAME"
+
+echo "=== FizzleSMP $TARGET pack builder ==="
+echo ""
+
 # --- Preflight checks ---
 
 if [[ ! -d "$MODPACK_DIR" ]]; then
     echo "Error: modpack/ directory not found at $MODPACK_DIR"
-    exit 1
-fi
-
-if [[ ! -d "$MINECRAFT_DIR" ]]; then
-    echo "Error: Minecraft/ directory not found at $MINECRAFT_DIR"
     exit 1
 fi
 
@@ -65,18 +89,14 @@ parse_pw_toml() {
 
     local section=""
     while IFS= read -r line; do
-        # Track TOML sections
         if [[ "$line" =~ ^\[(.+)\]$ ]]; then
             section="${BASH_REMATCH[1]}"
             continue
         fi
-        # Skip empty lines and comments
         [[ -z "$line" || "$line" =~ ^# ]] && continue
-        # Parse key = value (strip quotes)
         if [[ "$line" =~ ^([a-zA-Z_-]+)[[:space:]]*=[[:space:]]*(.+)$ ]]; then
             local key="${BASH_REMATCH[1]}"
             local val="${BASH_REMATCH[2]}"
-            # Strip surrounding quotes
             val="${val#\"}"
             val="${val%\"}"
             case "$section" in
@@ -112,20 +132,16 @@ parse_pw_toml() {
     done < "$file"
 }
 
-# Build a CurseForge edge CDN URL from file-id and filename
-# Format: https://edge.forgecdn.net/files/{first 4 digits}/{remaining digits}/{filename}
 cf_cdn_url() {
     local file_id="$1"
     local filename="$2"
     local prefix="${file_id:0:4}"
     local suffix="${file_id:4}"
-    # URL-encode the filename (mainly + signs)
     local encoded_filename
     encoded_filename=$(printf '%s' "$filename" | sed 's/+/%2B/g; s/ /%20/g')
     echo "https://edge.forgecdn.net/files/${prefix}/${suffix}/${encoded_filename}"
 }
 
-# Verify file hash
 verify_hash() {
     local file="$1"
     local format="$2"
@@ -141,7 +157,6 @@ verify_hash() {
     [[ "$actual" == "$expected" ]]
 }
 
-# Download a file with curl, following redirects
 download_file() {
     local url="$1"
     local dest="$2"
@@ -152,45 +167,49 @@ download_file() {
 
 if [[ "$CLEAN" == true ]]; then
     if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY RUN] Would clean Minecraft/mods/ and datapacks/"
+        echo "[DRY RUN] Would clean $PACK_BUILD_DIR"
     else
-        echo "Cleaning Minecraft/mods/ and datapacks/..."
-        rm -rf "$MODS_DEST" "$DATAPACKS_DEST"
+        echo "Cleaning $PACK_BUILD_DIR..."
+        rm -rf "$PACK_BUILD_DIR"
         echo "Clean complete."
     fi
 fi
 
 # --- Collect expected files from pw.toml metadata ---
 
-declare -A EXPECTED_MODS      # filename -> pw.toml path
-declare -A EXPECTED_DATAPACKS  # filename -> pw.toml path
+declare -A EXPECTED_MODS
+declare -A EXPECTED_DATAPACKS
 
-# Process mods
+skipped_side_count=0
+
 for pw_file in "$MODPACK_DIR"/mods/*.pw.toml; do
     [[ -f "$pw_file" ]] || continue
     parse_pw_toml "$pw_file"
 
-    # Skip client-only mods for server install
-    if [[ "$PW_SIDE" == "client" ]]; then
+    if [[ "$PW_SIDE" == "$EXCLUDE_SIDE" ]]; then
+        ((skipped_side_count++)) || true
         continue
     fi
 
     EXPECTED_MODS["$PW_FILENAME"]="$pw_file"
 done
 
-# Process datapacks
 for pw_file in "$MODPACK_DIR"/config/paxi/datapacks/*.pw.toml; do
     [[ -f "$pw_file" ]] || continue
     parse_pw_toml "$pw_file"
 
-    if [[ "$PW_SIDE" == "client" ]]; then
+    if [[ "$PW_SIDE" == "$EXCLUDE_SIDE" ]]; then
+        ((skipped_side_count++)) || true
         continue
     fi
 
     EXPECTED_DATAPACKS["$PW_FILENAME"]="$pw_file"
 done
 
-echo "Found ${#EXPECTED_MODS[@]} mods and ${#EXPECTED_DATAPACKS[@]} datapacks to install."
+echo "Target:   $TARGET (excluding $EXCLUDE_SIDE-only mods)"
+echo "Mods:     ${#EXPECTED_MODS[@]}"
+echo "Datapacks: ${#EXPECTED_DATAPACKS[@]}"
+echo "Skipped:  $skipped_side_count ($EXCLUDE_SIDE-only)"
 echo ""
 
 # --- Ensure destination dirs exist ---
@@ -217,7 +236,6 @@ process_files() {
 
         parse_pw_toml "$pw_file"
 
-        # Check if file already exists with correct hash
         if [[ -f "$dest_path" ]] && verify_hash "$dest_path" "$PW_HASH_FORMAT" "$PW_HASH"; then
             ((skip_count++)) || true
             continue
@@ -228,10 +246,8 @@ process_files() {
         # Determine download URL
         local url=""
         if [[ -n "$PW_URL" ]]; then
-            # Direct URL (Modrinth mods, datapacks)
             url="$PW_URL"
         elif [[ "$PW_MODE" == "metadata:curseforge" && -n "$PW_CF_FILE_ID" ]]; then
-            # Build CurseForge edge CDN URL
             url=$(cf_cdn_url "$PW_CF_FILE_ID" "$PW_FILENAME")
         else
             echo "  ERROR: No download source for $PW_NAME ($filename)"
@@ -248,7 +264,6 @@ process_files() {
 
         printf "  Downloading: %-60s" "$filename"
 
-        # Try up to 3 times
         local success=false
         for try in 1 2 3; do
             if download_file "$url" "$dest_path"; then
@@ -292,7 +307,6 @@ remove_count=0
 remove_stale() {
     local dest_dir="$1"
     local -n file_map=$2
-    local label="$3"
 
     [[ -d "$dest_dir" ]] || return 0
 
@@ -300,11 +314,6 @@ remove_stale() {
         [[ -f "$file" ]] || continue
         local basename
         basename=$(basename "$file")
-
-        # Skip the bootstrap jar
-        [[ "$basename" == "$BOOTSTRAP_JAR" ]] && continue
-        # Skip packwiz-installer.jar
-        [[ "$basename" == "packwiz-installer.jar" ]] && continue
 
         if [[ -z "${file_map[$basename]+_}" ]]; then
             if [[ "$DRY_RUN" == true ]]; then
@@ -319,26 +328,48 @@ remove_stale() {
 }
 
 echo "=== Cleaning stale files ==="
-remove_stale "$MODS_DEST" EXPECTED_MODS "mod"
-remove_stale "$DATAPACKS_DEST" EXPECTED_DATAPACKS "datapack"
+remove_stale "$MODS_DEST" EXPECTED_MODS
+remove_stale "$DATAPACKS_DEST" EXPECTED_DATAPACKS
 if [[ $remove_count -eq 0 ]]; then
     echo "  No stale files found."
 fi
 echo ""
 
+# --- Package as ZIP ---
+
+if [[ "$DRY_RUN" != true && $fail_count -eq 0 ]]; then
+    echo "=== Packaging $ZIP_NAME ==="
+
+    # Remove old zip if it exists
+    rm -f "$ZIP_PATH"
+
+    # Create zip from the build directory
+    (cd "$PACK_BUILD_DIR" && zip -qr "$ZIP_PATH" .)
+
+    zip_size=$(du -h "$ZIP_PATH" | awk '{print $1}')
+    echo "  Created: $ZIP_NAME ($zip_size)"
+    echo ""
+elif [[ "$DRY_RUN" == true ]]; then
+    echo "[DRY RUN] Would package as $ZIP_NAME"
+    echo ""
+else
+    echo "Skipping ZIP — there were download failures."
+    echo ""
+fi
+
 # --- Summary ---
 
 echo "=========================================="
-echo " Summary"
+echo " $TARGET pack summary"
 echo "=========================================="
 echo "  Downloaded: $download_count"
-echo "  Skipped (already up-to-date): $skip_count"
+echo "  Skipped (cached): $skip_count"
 echo "  Removed (stale): $remove_count"
 echo "  Failed: $fail_count"
 
 if [[ ${#FAILED_MODS[@]} -gt 0 ]]; then
     echo ""
-    echo "  The following mods failed to download:"
+    echo "  Failed downloads:"
     for entry in "${FAILED_MODS[@]}"; do
         echo "    - $entry"
     done

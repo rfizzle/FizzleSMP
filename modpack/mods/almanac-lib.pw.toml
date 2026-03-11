@@ -1,6 +1,6 @@
 name = "Almanac Lib"
 filename = "Almanac-1.21.1-2-fabric-1.5.2.jar"
-side = "both"
+side = "server"
 
 [download]
 hash-format = "sha1"

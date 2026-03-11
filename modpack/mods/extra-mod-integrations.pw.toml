@@ -1,6 +1,6 @@
 name = "EMI Extra Integrations"
 filename = "extra-mod-integrations-all-fabric-1.0.3+1.21.1.jar"
-side = "both"
+side = "client"
 
 [download]
 hash-format = "sha1"

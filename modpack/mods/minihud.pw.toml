@@ -1,6 +1,6 @@
 name = "MiniHUD"
 filename = "minihud-fabric-1.21.1-0.32.50.jar"
-side = "both"
+side = "client"
 
 [download]
 hash-format = "sha1"

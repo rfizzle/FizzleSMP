@@ -44,7 +44,8 @@ FizzleSMP/
 │   ├── features-brainstorm.md      # Feature wishlist → mod mapping
 │   └── compatibility-matrix.md     # Known conflicts & compatibility notes
 ├── scripts/
-│   └── sync-packwiz.sh             # Sync plugins/*.md → modpack/mods/
+│   ├── sync-packwiz.sh             # Sync plugins/*.md → modpack/mods/
+│   └── build-pack.sh               # Build client/server ZIP packs
 └── .claude/
     └── commands/
         ├── review-plugins.md       # /review-plugins — audit the full mod list
@@ -141,6 +142,19 @@ packwiz curseforge export           # Export CurseForge-format zip
 packwiz modrinth export             # Export .mrpack for Modrinth
 ```
 
+### Build Script
+
+`scripts/build-pack.sh` downloads mods and packages them as ZIP files for distribution:
+
+```bash
+./scripts/build-pack.sh server              # Build FizzleSMP.server.zip
+./scripts/build-pack.sh client              # Build FizzleSMP.client.zip
+./scripts/build-pack.sh server --clean      # Wipe build dir, rebuild, and zip
+./scripts/build-pack.sh client --dry-run    # Preview without downloading
+```
+
+The script reads `.pw.toml` metadata, filters by the `side` field (server pack excludes `client`-only mods, client pack excludes `server`-only mods), downloads via CurseForge edge CDN or Modrinth CDN, verifies hashes, and packages the result. Downloads are cached in `build/server/` or `build/client/` between runs.
+
 ### Workflow Integration
 
 When adding a mod via `/add-mods`, the plugin file is the source of truth. **Do not** automatically run `sync-packwiz.sh` after adding mods — the user will trigger the sync manually when ready. The packwiz files (`modpack/pack.toml`, `modpack/index.toml`, `modpack/mods/`) should be committed alongside plugin changes when the sync is performed.
@@ -161,7 +175,7 @@ When adding a mod via `/add-mods`, the plugin file is the source of truth. **Do 
 2. **Research** — Find mods that fulfill those features; verify compatibility.
 3. **Evaluate** — Run `/check-conflicts` to surface issues. Update `docs/compatibility-matrix.md`.
 4. **Add** — Add the mod to the appropriate `plugins/*.md` file via `/add-mods` or manually.
-5. **Build** — Run `./scripts/sync-packwiz.sh` to sync packwiz, then `packwiz curseforge export` or `packwiz modrinth export` to build distributable packs.
+5. **Build** — Run `./scripts/sync-packwiz.sh` to sync packwiz, then `./scripts/build-pack.sh server` and `./scripts/build-pack.sh client` to build distributable packs.
 
 ## Git Commit Workflow
 
