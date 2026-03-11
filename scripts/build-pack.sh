@@ -385,6 +385,7 @@ remove_count=0
 remove_stale() {
     local dest_dir="$1"
     local -n file_map=$2
+    local src_dir="${3:-}"
 
     [[ -d "$dest_dir" ]] || return 0
 
@@ -392,6 +393,11 @@ remove_stale() {
         [[ -f "$file" ]] || continue
         local basename
         basename=$(basename "$file")
+
+        # Skip static files that exist in the source directory (not managed by pw.toml)
+        if [[ -n "$src_dir" && -f "$src_dir/$basename" ]]; then
+            continue
+        fi
 
         if [[ -z "${file_map[$basename]+_}" ]]; then
             if [[ "$DRY_RUN" == true ]]; then
@@ -406,9 +412,9 @@ remove_stale() {
 }
 
 echo "=== Cleaning stale files ==="
-remove_stale "$MODS_DEST" EXPECTED_MODS
-remove_stale "$DATAPACKS_DEST" EXPECTED_DATAPACKS
-remove_stale "$SHADERPACKS_DEST" EXPECTED_SHADERPACKS
+remove_stale "$MODS_DEST" EXPECTED_MODS "$MODPACK_DIR/mods"
+remove_stale "$DATAPACKS_DEST" EXPECTED_DATAPACKS "$MODPACK_DIR/config/paxi/datapacks"
+remove_stale "$SHADERPACKS_DEST" EXPECTED_SHADERPACKS "$MODPACK_DIR/shaderpacks"
 if [[ $remove_count -eq 0 ]]; then
     echo "  No stale files found."
 fi
