@@ -64,6 +64,7 @@ fi
 PACK_BUILD_DIR="$BUILD_DIR/$TARGET"
 MODS_DEST="$PACK_BUILD_DIR/mods"
 DATAPACKS_DEST="$PACK_BUILD_DIR/config/paxi/datapacks"
+SHADERPACKS_DEST="$PACK_BUILD_DIR/shaderpacks"
 ZIP_NAME="FizzleSMP.${TARGET}.zip"
 ZIP_PATH="$OUTPUT_DIR/$ZIP_NAME"
 
@@ -132,14 +133,25 @@ parse_pw_toml() {
     done < "$file"
 }
 
-cf_cdn_url() {
+# Build CurseForge CDN URLs (multiple fallbacks)
+# Returns newline-separated URLs to try in order
+cf_cdn_urls() {
     local file_id="$1"
     local filename="$2"
+    local project_id="$3"
     local prefix="${file_id:0:4}"
     local suffix="${file_id:4}"
     local encoded_filename
     encoded_filename=$(printf '%s' "$filename" | sed 's/+/%2B/g; s/ /%20/g')
+
+    # Primary: edge CDN (302 → mediafilez)
     echo "https://edge.forgecdn.net/files/${prefix}/${suffix}/${encoded_filename}"
+    # Fallback 1: direct mediafilez (no redirect)
+    echo "https://mediafilez.forgecdn.net/files/${prefix}/${suffix}/${encoded_filename}"
+    # Fallback 2: curseforge.com download API (307 → edge → mediafilez)
+    if [[ -n "$project_id" ]]; then
+        echo "https://www.curseforge.com/api/v1/mods/${project_id}/files/${file_id}/download"
+    fi
 }
 
 verify_hash() {
@@ -179,6 +191,7 @@ fi
 
 declare -A EXPECTED_MODS
 declare -A EXPECTED_DATAPACKS
+declare -A EXPECTED_SHADERPACKS
 
 skipped_side_count=0
 
@@ -206,16 +219,77 @@ for pw_file in "$MODPACK_DIR"/config/paxi/datapacks/*.pw.toml; do
     EXPECTED_DATAPACKS["$PW_FILENAME"]="$pw_file"
 done
 
-echo "Target:   $TARGET (excluding $EXCLUDE_SIDE-only mods)"
-echo "Mods:     ${#EXPECTED_MODS[@]}"
-echo "Datapacks: ${#EXPECTED_DATAPACKS[@]}"
-echo "Skipped:  $skipped_side_count ($EXCLUDE_SIDE-only)"
+# Shaderpacks
+for pw_file in "$MODPACK_DIR"/shaderpacks/*.pw.toml; do
+    [[ -f "$pw_file" ]] || continue
+    parse_pw_toml "$pw_file"
+
+    if [[ "$PW_SIDE" == "$EXCLUDE_SIDE" ]]; then
+        ((skipped_side_count++)) || true
+        continue
+    fi
+
+    EXPECTED_SHADERPACKS["$PW_FILENAME"]="$pw_file"
+done
+
+echo "Target:      $TARGET (excluding $EXCLUDE_SIDE-only)"
+echo "Mods:        ${#EXPECTED_MODS[@]}"
+echo "Datapacks:   ${#EXPECTED_DATAPACKS[@]}"
+echo "Shaderpacks: ${#EXPECTED_SHADERPACKS[@]}"
+echo "Skipped:     $skipped_side_count ($EXCLUDE_SIDE-only)"
 echo ""
 
 # --- Ensure destination dirs exist ---
 
 if [[ "$DRY_RUN" != true ]]; then
-    mkdir -p "$MODS_DEST" "$DATAPACKS_DEST"
+    mkdir -p "$MODS_DEST" "$DATAPACKS_DEST" "$SHADERPACKS_DEST"
+fi
+
+# --- Copy config files ---
+
+CONFIG_SRC="$MODPACK_DIR/config"
+CONFIG_DEST="$PACK_BUILD_DIR/config"
+
+config_count=0
+
+if [[ -d "$CONFIG_SRC" ]]; then
+    echo "=== Copying config files ==="
+
+    # Find all non-pw.toml files in modpack/config/
+    while IFS= read -r src_file; do
+        # Get relative path from config source
+        rel_path="${src_file#$CONFIG_SRC/}"
+        dest_file="$CONFIG_DEST/$rel_path"
+        dest_dir="$(dirname "$dest_file")"
+
+        if [[ "$DRY_RUN" == true ]]; then
+            echo "  [DRY RUN] Would copy: config/$rel_path"
+        else
+            mkdir -p "$dest_dir"
+            cp -f "$src_file" "$dest_file"
+        fi
+        ((config_count++)) || true
+    done < <(find "$CONFIG_SRC" -type f ! -name "*.pw.toml")
+
+    echo "  Copied $config_count config file(s)."
+    echo ""
+fi
+
+# --- Copy options.txt (client only) ---
+
+OPTIONS_SRC="$MODPACK_DIR/options.txt"
+
+if [[ "$TARGET" == "client" && -f "$OPTIONS_SRC" ]]; then
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "=== Copying options.txt ==="
+        echo "  [DRY RUN] Would copy: options.txt"
+        echo ""
+    else
+        echo "=== Copying options.txt ==="
+        cp -f "$OPTIONS_SRC" "$PACK_BUILD_DIR/options.txt"
+        echo "  Copied options.txt."
+        echo ""
+    fi
 fi
 
 # --- Download missing/changed files ---
@@ -243,12 +317,14 @@ process_files() {
             echo "  Hash mismatch: $filename (re-downloading)"
         fi
 
-        # Determine download URL
-        local url=""
+        # Determine download URLs
+        local -a urls=()
         if [[ -n "$PW_URL" ]]; then
-            url="$PW_URL"
+            urls+=("$PW_URL")
         elif [[ "$PW_MODE" == "metadata:curseforge" && -n "$PW_CF_FILE_ID" ]]; then
-            url=$(cf_cdn_url "$PW_CF_FILE_ID" "$PW_FILENAME")
+            while IFS= read -r u; do
+                urls+=("$u")
+            done < <(cf_cdn_urls "$PW_CF_FILE_ID" "$PW_FILENAME" "$PW_CF_PROJECT_ID")
         else
             echo "  ERROR: No download source for $PW_NAME ($filename)"
             FAILED_MODS+=("$PW_NAME ($filename) — no download URL found")
@@ -265,20 +341,19 @@ process_files() {
         printf "  Downloading: %-60s" "$filename"
 
         local success=false
-        for try in 1 2 3; do
+        for url in "${urls[@]}"; do
             if download_file "$url" "$dest_path"; then
                 if verify_hash "$dest_path" "$PW_HASH_FORMAT" "$PW_HASH"; then
                     success=true
                     break
                 else
-                    echo -n " (hash mismatch, retry $try)"
                     rm -f "$dest_path"
                 fi
             else
-                echo -n " (download failed, retry $try)"
                 rm -f "$dest_path"
             fi
-            sleep 1
+            # Brief pause before trying next CDN
+            sleep 0.5
         done
 
         if [[ "$success" == true ]]; then
@@ -286,7 +361,7 @@ process_files() {
             ((download_count++)) || true
         else
             echo " FAILED"
-            FAILED_MODS+=("$PW_NAME ($filename) — $url")
+            FAILED_MODS+=("$PW_NAME ($filename) — tried ${#urls[@]} CDN(s)")
             ((fail_count++)) || true
             rm -f "$dest_path"
         fi
@@ -298,6 +373,9 @@ process_files EXPECTED_MODS "$MODS_DEST" "mod"
 echo ""
 echo "=== Downloading datapacks ==="
 process_files EXPECTED_DATAPACKS "$DATAPACKS_DEST" "datapack"
+echo ""
+echo "=== Downloading shaderpacks ==="
+process_files EXPECTED_SHADERPACKS "$SHADERPACKS_DEST" "shaderpack"
 echo ""
 
 # --- Remove stale files ---
@@ -330,6 +408,7 @@ remove_stale() {
 echo "=== Cleaning stale files ==="
 remove_stale "$MODS_DEST" EXPECTED_MODS
 remove_stale "$DATAPACKS_DEST" EXPECTED_DATAPACKS
+remove_stale "$SHADERPACKS_DEST" EXPECTED_SHADERPACKS
 if [[ $remove_count -eq 0 ]]; then
     echo "  No stale files found."
 fi
