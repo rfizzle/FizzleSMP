@@ -67,11 +67,17 @@ Each file in `plugins/` uses this format:
 - **Modrinth Slug:** <modrinth-slug>
 - **Pin CurseForge File ID:** <file-id> *(optional — only when version-pinning is needed)*
 - **Mod Loader:** Fabric *(or `Manual` for custom builds not managed by packwiz)*
+- **Side:** client | server | both
 - **Summary:** One-line description of what it does.
 - **Why:** Why we want it in the pack.
 - **Dependencies:** Required dependencies (or "None").
 - **Conflicts:** Any known incompatibilities (or "None known").
 ```
+
+Side values:
+- `client` — Only needed on the client (rendering, HUD, UI, animations, sounds, visual effects, recipe viewers).
+- `server` — Only needed on the server (server-side logic, world gen in multiplayer, logging).
+- `both` — Required on both sides (new items/blocks, combat systems, gameplay mechanics that need client+server code).
 
 Only mods that belong in the pack should be listed. If a mod is rejected or removed, delete its entry entirely. When adding or editing mods, always populate all fields. Use `N/A` for **CurseForge ID** / **Slug** if the mod is Modrinth-only, or for **Modrinth Slug** if it is CurseForge-only. Only add the **Pin CurseForge File ID** field when a mod must be locked to a specific version (e.g., to avoid a dependency that conflicts with another mod). Document the reason in the **Conflicts** field and in `docs/compatibility-matrix.md`.
 
@@ -298,3 +304,4 @@ Do **not** attempt to `WebFetch` curseforge.com directly — it will return 403.
 - When web-searching for mod info, verify compatibility with **Minecraft 1.21.1** specifically.
 - Prefer mods with active maintenance (updated within the last 6 months).
 - The target mod loader is **Fabric** — flag any mods that don't support it.
+- The `Side` field in plugin files is the source of truth for pack distribution. When syncing to packwiz, the side value propagates to the pw.toml `side` field.

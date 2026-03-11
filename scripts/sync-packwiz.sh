@@ -53,14 +53,15 @@ if [[ ! -f "$MODPACK_DIR/pack.toml" ]]; then
 fi
 
 # ── Parse plugins/*.md ────────────────────────────────────────────────
-# Outputs lines: slug|curseforge_id|modrinth_slug|name|pin_cf_file_id|mod_loader
+# Outputs lines: slug|curseforge_id|modrinth_slug|name|pin_cf_file_id|mod_loader|side
 # curseforge_id is "N/A" for Modrinth-only mods.
 # modrinth_slug is "N/A" or empty if not on Modrinth.
 # pin_cf_file_id is empty if no pin is set.
 # mod_loader is "Fabric", "Iris", "Datapack", etc.
+# side is "client", "server", or "both" (defaults to "both" if not specified).
 
 parse_plugins() {
-    local name="" slug="" cf_id="" mr_slug="" pin_cf_file_id="" mod_loader=""
+    local name="" slug="" cf_id="" mr_slug="" pin_cf_file_id="" mod_loader="" side=""
 
     for file in "$PLUGINS_DIR"/*.md; do
         [[ -f "$file" ]] || continue
@@ -70,10 +71,10 @@ parse_plugins() {
             if [[ "$line" =~ ^##\  ]]; then
                 # Emit previous mod if it has a slug
                 if [[ -n "$slug" ]]; then
-                    echo "${slug}|${cf_id}|${mr_slug}|${name}|${pin_cf_file_id}|${mod_loader}"
+                    echo "${slug}|${cf_id}|${mr_slug}|${name}|${pin_cf_file_id}|${mod_loader}|${side:-both}"
                 fi
                 name="${line#\#\# }"
-                slug="" cf_id="" mr_slug="" pin_cf_file_id="" mod_loader=""
+                slug="" cf_id="" mr_slug="" pin_cf_file_id="" mod_loader="" side=""
             fi
 
             # Field extraction
@@ -87,14 +88,16 @@ parse_plugins() {
                 pin_cf_file_id="$(echo "$line" | sed 's/.*\*\*Pin CurseForge File ID:\*\* *//')"
             elif [[ "$line" == *"**Mod Loader:**"* ]]; then
                 mod_loader="$(echo "$line" | sed 's/.*\*\*Mod Loader:\*\* *//')"
+            elif [[ "$line" == *"**Side:**"* ]]; then
+                side="$(echo "$line" | sed 's/.*\*\*Side:\*\* *//' | tr '[:upper:]' '[:lower:]')"
             fi
         done < "$file"
 
         # Last mod in file
         if [[ -n "$slug" ]]; then
-            echo "${slug}|${cf_id}|${mr_slug}|${name}|${pin_cf_file_id}|${mod_loader}"
+            echo "${slug}|${cf_id}|${mr_slug}|${name}|${pin_cf_file_id}|${mod_loader}|${side:-both}"
         fi
-        name="" slug="" cf_id="" mr_slug="" pin_cf_file_id="" mod_loader=""
+        name="" slug="" cf_id="" mr_slug="" pin_cf_file_id="" mod_loader="" side=""
     done
 }
 
@@ -154,6 +157,75 @@ is_installed() {
     fi
 
     return 1
+}
+
+# ── Find the pw.toml file for a given mod ─────────────────────────────
+# Returns the full path to the pw.toml, or empty string if not found.
+
+find_pw_toml() {
+    local slug="$1" cf_id="$2" mr_slug="${3:-}"
+
+    # Search in all mod directories
+    local dir
+    for dir in "$MODS_DIR" "$DATAPACKS_DIR" "$SHADERPACKS_DIR"; do
+        [[ -d "$dir" ]] || continue
+
+        # Match by CurseForge project ID
+        if [[ "$cf_id" != "N/A"* ]]; then
+            for pw_file in "$dir"/*.pw.toml; do
+                [[ -f "$pw_file" ]] || continue
+                local cf_pid
+                cf_pid="$(grep -Po '(?<=^project-id = )\d+' "$pw_file" 2>/dev/null || true)"
+                if [[ "$cf_pid" == "$cf_id" ]]; then
+                    echo "$pw_file"
+                    return 0
+                fi
+            done
+        fi
+
+        # Match by slug as filename
+        if [[ -f "$dir/${slug}.pw.toml" ]]; then
+            echo "$dir/${slug}.pw.toml"
+            return 0
+        fi
+
+        # Match by Modrinth slug as filename
+        if [[ -n "$mr_slug" && "$mr_slug" != "N/A" && -f "$dir/${mr_slug}.pw.toml" ]]; then
+            echo "$dir/${mr_slug}.pw.toml"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
+# ── Update the side field in a pw.toml file ───────────────────────────
+
+update_pw_toml_side() {
+    local pw_file="$1" desired_side="$2"
+
+    if [[ ! -f "$pw_file" ]]; then
+        return 1
+    fi
+
+    # Read current side value from the pw.toml
+    local current_side
+    current_side="$(grep -Po '(?<=^side = ")[^"]+' "$pw_file" 2>/dev/null || true)"
+
+    if [[ "$current_side" == "$desired_side" ]]; then
+        # Already matches, nothing to do
+        return 1
+    fi
+
+    if [[ -n "$current_side" ]]; then
+        # Replace existing side line
+        sed -i "s/^side = \".*\"/side = \"${desired_side}\"/" "$pw_file"
+    else
+        # No side field exists — insert after the filename line
+        sed -i "/^filename = /a side = \"${desired_side}\"" "$pw_file"
+    fi
+
+    return 0
 }
 
 # ── Collect mods no longer in plugins (for --prune) ──────────────────
@@ -217,9 +289,9 @@ main() {
     declare -A wanted_cf_ids   # cf_id -> slug (for orphan detection)
     declare -A wanted_slugs    # slug -> 1
 
-    local total=0 added=0 skipped=0 failed=0 removed=0
+    local total=0 added=0 skipped=0 failed=0 removed=0 sides_updated=0
     declare -a added_names=() failed_names=() removed_names=() prune_failed_names=()
-    declare -a failed_errors=()
+    declare -a failed_errors=() side_updated_names=()
     declare -A wanted_mr_slugs  # modrinth_slug -> 1
 
     # Collect all mods first
@@ -234,7 +306,7 @@ main() {
 
     # Process each mod
     for entry in "${mod_lines[@]}"; do
-        IFS='|' read -r slug cf_id mr_slug name pin_cf_file_id mod_loader <<< "$entry"
+        IFS='|' read -r slug cf_id mr_slug name pin_cf_file_id mod_loader side <<< "$entry"
 
         # Track wanted mods for pruning
         if [[ "$cf_id" != "N/A"* ]]; then
@@ -248,12 +320,33 @@ main() {
         # Skip manually managed mods (custom builds, etc.)
         if [[ "$mod_loader" == "Manual" ]]; then
             (( skipped++ )) || true
+            # Still update side for manually managed mods if pw.toml exists
+            if [[ -n "$side" ]] && ! $DRY_RUN; then
+                local pw_file
+                pw_file="$(find_pw_toml "$slug" "$cf_id" "$mr_slug" 2>/dev/null || true)"
+                if [[ -n "$pw_file" ]] && update_pw_toml_side "$pw_file" "$side"; then
+                    echo "  ⊳ Updated side to '$side' for $name"
+                    side_updated_names+=("$name ($slug) → $side")
+                    (( sides_updated++ )) || true
+                fi
+            fi
             continue
         fi
 
         # Skip if already installed
         if is_installed "$slug" "$cf_id" "$mr_slug"; then
             (( skipped++ )) || true
+
+            # Update side field if needed for already-installed mods
+            if [[ -n "$side" ]] && ! $DRY_RUN; then
+                local pw_file
+                pw_file="$(find_pw_toml "$slug" "$cf_id" "$mr_slug" 2>/dev/null || true)"
+                if [[ -n "$pw_file" ]] && update_pw_toml_side "$pw_file" "$side"; then
+                    echo "  ⊳ Updated side to '$side' for $name"
+                    side_updated_names+=("$name ($slug) → $side")
+                    (( sides_updated++ )) || true
+                fi
+            fi
             continue
         fi
 
@@ -318,6 +411,17 @@ main() {
             added_names+=("$name ($slug)")
             # Re-index so subsequent checks see the new mod
             index_installed
+
+            # Update side field for newly installed mod
+            if [[ -n "$side" ]]; then
+                local pw_file
+                pw_file="$(find_pw_toml "$slug" "$cf_id" "$mr_slug" 2>/dev/null || true)"
+                if [[ -n "$pw_file" ]] && update_pw_toml_side "$pw_file" "$side"; then
+                    echo "  ⊳ Updated side to '$side' for $name"
+                    side_updated_names+=("$name ($slug) → $side")
+                    (( sides_updated++ )) || true
+                fi
+            fi
         else
             echo "  ✗ FAILED: $name ($slug)"
             (( failed++ )) || true
@@ -352,7 +456,7 @@ main() {
     fi
 
     # ── Refresh index ──────────────────────────────────────────────────
-    if ! $DRY_RUN && (( added > 0 || removed > 0 )); then
+    if ! $DRY_RUN && (( added > 0 || removed > 0 || sides_updated > 0 )); then
         echo ""
         echo "── Refreshing packwiz index ──"
         run_packwiz refresh
@@ -368,6 +472,7 @@ main() {
     printf "║  %-20s %5d                                 ║\n" "Newly added:" "$added"
     printf "║  %-20s %5d                                 ║\n" "Failed:" "$failed"
     printf "║  %-20s %5d                                 ║\n" "Removed:" "$removed"
+    printf "║  %-20s %5d                                 ║\n" "Side updated:" "$sides_updated"
     echo "╚══════════════════════════════════════════════════════════════╝"
 
     if (( ${#added_names[@]} > 0 )); then
@@ -384,6 +489,14 @@ main() {
         for i in "${!failed_names[@]}"; do
             echo "  ✗ ${failed_names[$i]}"
             echo "    └─ ${failed_errors[$i]}"
+        done
+    fi
+
+    if (( ${#side_updated_names[@]} > 0 )); then
+        echo ""
+        echo "── Side Updated ───────────────────────────────────────────────"
+        for mod in "${side_updated_names[@]}"; do
+            echo "  ⊳ $mod"
         done
     fi
 

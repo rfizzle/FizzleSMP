@@ -6,6 +6,7 @@
 - **CurseForge ID:** 452834
 - **Slug:** rightclickharvest
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Allows harvesting and replanting crops with a simple right-click.
 - **Why:** Essential farming QoL — lets players harvest mature crops with right-click, automatically replanting them.
 - **Dependencies:** Fabric API, Architectury API, JamLib
@@ -15,6 +16,7 @@
 - **CurseForge ID:** 419699
 - **Slug:** architectury-api
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** An intermediary API for developing multi-platform Minecraft mods.
 - **Why:** Required dependency of RightClickHarvest.
 - **Dependencies:** None
@@ -24,6 +26,7 @@
 - **CurseForge ID:** 623764
 - **Slug:** jamlib
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A library mod providing shared utilities for JamCoreModding mods.
 - **Why:** Required dependency of RightClickHarvest.
 - **Dependencies:** None
@@ -33,6 +36,7 @@
 - **CurseForge ID:** 615106
 - **Slug:** lootr-fabric
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Makes loot chests instanced per player so every player gets their own loot from the same container.
 - **Why:** Ensures all SMP players get fair loot from structures without racing, and discourages generating new chunks just for loot.
 - **Dependencies:** Fabric API, Cloth Config API
@@ -42,6 +46,7 @@
 - **CurseForge ID:** 541171
 - **Slug:** travelers-backpack-fabric
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds unique, upgradeable backpacks with tiers, fluid tanks, tool slots, crafting upgrades, and 45+ custom designs.
 - **Why:** Provides portable storage and crafting for exploration-heavy SMP gameplay, with tiered progression from leather to netherite.
 - **Dependencies:** Fabric API, Cloth Config API, Cardinal Components API
@@ -51,6 +56,7 @@
 - **CurseForge ID:** 318449
 - **Slug:** cardinal-components-api
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A data attachment API for attaching custom data to game objects like entities, chunks, and worlds.
 - **Why:** Required dependency of Traveler's Backpack.
 - **Dependencies:** None
@@ -61,6 +67,7 @@
 - **Slug:** artifacts-fabric
 - **Modrinth Slug:** artifacts
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds powerful, uncraftable accessory items found in structure chests, archaeology, or dropped by mimics in underground campsites.
 - **Why:** Makes exploration more rewarding with unique collectible items in accessory slots; uses Accessories (via Compat Layer) for slot management.
 - **Dependencies:** None required; Accessories Compatibility Layer (optional, for accessory slots), Cloth Config API (optional)
@@ -71,6 +78,7 @@
 - **Slug:** trinkets
 - **Modrinth Slug:** trinkets
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Provides an accessory/trinket slot system for equipping items beyond standard armor slots.
 - **Why:** Required dependency of Spectrum; works alongside Accessories via the Accessories Compatibility Layer.
 - **Dependencies:** Fabric API
@@ -80,6 +88,7 @@
 - **CurseForge ID:** 938917
 - **Slug:** accessories
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A data-driven accessory mod providing an extendable accessory slot system, inspired by Trinkets and Curios with a cross-platform API.
 - **Why:** Primary accessory slot framework; required by Things and compatible with Spell Engine. Used with Accessories Compatibility Layer to bridge Trinkets-dependent mods.
 - **Dependencies:** None
@@ -89,6 +98,7 @@
 - **CurseForge ID:** 1315611
 - **Slug:** accessories-compat-layer
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Wraps the Trinkets and Curios APIs to work under Accessories, unifying accessory management under one framework.
 - **Why:** Enables Trinkets-dependent mods (Artifacts, Spectrum) to work with Accessories without code changes.
 - **Dependencies:** Accessories, Trinkets (>= 3.10.0)
@@ -98,6 +108,7 @@
 - **CurseForge ID:** 663567
 - **Slug:** mythic-upgrades
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds new ores (Jade, Topaz, Aquamarine, Sapphire, Ruby, Peridot, Zircon, Citrine, Necoium, Ametrine) with craftable ingots and gear upgrades beyond netherite.
 - **Why:** Extends endgame progression with new materials and gear tiers, giving SMP players more goals beyond netherite.
 - **Dependencies:** Fabric API, owo-lib, Better Loot
@@ -108,6 +119,7 @@
 - **Slug:** better-loot
 - **Modrinth Slug:** N/A
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Completely overhauls vanilla loot tables to make them more rewarding.
 - **Why:** Required dependency of Mythic Upgrades.
 - **Dependencies:** None
@@ -117,6 +129,7 @@
 - **CurseForge ID:** 532610
 - **Slug:** owo-lib
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A general utility, GUI, and configuration library for Fabric mods.
 - **Why:** Required dependency of Mythic Upgrades.
 - **Dependencies:** None
@@ -126,6 +139,7 @@
 - **CurseForge ID:** 551151
 - **Slug:** enchanting-infuser
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds a new enchanting table block that lets players choose specific enchantments for fair, configurable prices.
 - **Why:** Removes enchanting randomness, letting SMP players pick exactly which enchantments they want instead of gambling at vanilla tables.
 - **Dependencies:** Fabric API, Puzzles Lib, Forge Config API Port
@@ -135,6 +149,7 @@
 - **CurseForge ID:** 456239
 - **Slug:** easy-magic
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Improves the vanilla enchanting table by keeping items in place after closing and enabling easy enchantment re-rolls.
 - **Why:** QoL improvement for vanilla enchanting — items stay in the table when you close the GUI and re-rolling enchantments is simplified.
 - **Dependencies:** Fabric API, Puzzles Lib, Forge Config API Port
@@ -144,6 +159,7 @@
 - **CurseForge ID:** 682567
 - **Slug:** easy-anvils
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Overhauls anvils with items staying after closing, removal of the "too expensive" cap, better name tags, and many configurable tweaks.
 - **Why:** Removes the frustrating "too expensive" anvil limit and adds QoL improvements, keeping anvils useful throughout endgame on the SMP.
 - **Dependencies:** Fabric API, Puzzles Lib, Forge Config API Port
@@ -153,6 +169,7 @@
 - **CurseForge ID:** 556967
 - **Slug:** spectrum
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A progression and exploration-based magic mod where you combine colors to create magical tools, machines, and equipment, with the goal of breaking through bedrock.
 - **Why:** Adds a deep, puzzle-driven magic progression system that rewards exploration and experimentation — perfect for long-term SMP engagement.
 - **Dependencies:** Fabric API, Cloth Config API, Trinkets (via Accessories Compat Layer), Revelationary, Modonomicon
@@ -162,6 +179,7 @@
 - **CurseForge ID:** 656526
 - **Slug:** revelationary
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A data-driven block and item revelation system that gates discovery of new blocks via advancements.
 - **Why:** Required dependency of Spectrum for its progressive discovery system.
 - **Dependencies:** None
@@ -171,6 +189,7 @@
 - **CurseForge ID:** 538392
 - **Slug:** modonomicon
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A data-driven in-game documentation mod with quest/advancement-style navigation, inspired by Thaumcraft's Thaumonomicon and Patchouli.
 - **Why:** Required dependency of Spectrum for its in-game guidebook.
 - **Dependencies:** None
@@ -180,6 +199,7 @@
 - **CurseForge ID:** 456151
 - **Slug:** things-fabric
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A collection of trinkets and utility items including a Displacement Tome (teleporter), Bater Wucket (infinite water), Ender Pouch (portable ender chest), and many accessory trinkets.
 - **Why:** Adds a variety of useful, fun trinket items and utilities that enhance casual vanilla+ gameplay on the SMP.
 - **Dependencies:** owo-lib, Lavender, Accessories
@@ -189,6 +209,7 @@
 - **CurseForge ID:** 636067
 - **Slug:** pickable-villagers
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Pick up villagers as items that remember their job, level, trades, and name, then place them wherever you want.
 - **Why:** Makes relocating villagers painless on the SMP — no more minecart/boat pushing across long distances.
 - **Dependencies:** Fabric API, Cloth Config API, Architectury API, Alexandria Lib
@@ -198,6 +219,7 @@
 - **CurseForge ID:** 992905
 - **Slug:** alexandria
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A shared library mod providing common utilities for Fabric mods.
 - **Why:** Required dependency of Pickable Villagers.
 - **Dependencies:** None
@@ -207,6 +229,7 @@
 - **CurseForge ID:** 345854
 - **Slug:** villager-names
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Gives all villager entities a random name from a pool of 5000+ names, with profession shown on the trade screen.
 - **Why:** Adds personality and immersion to villages on the SMP — every villager gets a unique name.
 - **Dependencies:** Collective
@@ -216,6 +239,7 @@
 - **CurseForge ID:** 342584
 - **Slug:** collective
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A shared library mod providing common utilities for Serilum's Fabric mods.
 - **Why:** Required dependency of Villager Names.
 - **Dependencies:** None
@@ -225,6 +249,7 @@
 - **CurseForge ID:** 570431
 - **Slug:** trade-cycling
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds a button to the villager trade screen to refresh available trades without breaking and replacing workstations.
 - **Why:** Eliminates tedious workstation-breaking when cycling for desired villager trades on the SMP.
 - **Dependencies:** None
@@ -234,6 +259,7 @@
 - **CurseForge ID:** 233564
 - **Slug:** techreborn
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A standalone tech mod with tools and machines to gather resources, process materials, and progress through a full tech tree inspired by GregTech and IndustrialCraft 2.
 - **Why:** Adds deep industrial tech progression with ore processing, power generation, and automation to the SMP.
 - **Dependencies:** Fabric API, Reborn Core
@@ -243,6 +269,7 @@
 - **CurseForge ID:** 237903
 - **Slug:** reborncore
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A library mod providing shared utilities for Tech Reborn and related mods.
 - **Why:** Required dependency of Tech Reborn.
 - **Dependencies:** Fabric API
@@ -252,6 +279,7 @@
 - **CurseForge ID:** 1030830
 - **Slug:** oritech
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A technology-focused mod with animated multiblock machinery, diverse ore processing chains, energy systems, pipes, drones, lasers, and cybernetic augmentation.
 - **Why:** Adds modern, well-designed tech content with animated machines, multiple processing paths, and extensive automation to the SMP.
 - **Dependencies:** owo-lib, GeckoLib, Architectury API, Athena
@@ -261,6 +289,7 @@
 - **CurseForge ID:** 841890
 - **Slug:** athena
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A cross-platform connected block textures library for Fabric and Forge.
 - **Why:** Required dependency of Oritech.
 - **Dependencies:** None
@@ -270,6 +299,7 @@
 - **CurseForge ID:** 388172
 - **Slug:** geckolib
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** An animation and model library for Minecraft mods, enabling complex entity animations.
 - **Why:** Required dependency of Oritech, Bosses of Mass Destruction, and Critters and Companions.
 - **Dependencies:** None
@@ -279,6 +309,7 @@
 - **CurseForge ID:** 456956
 - **Slug:** chipped
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds thousands of decorative block variants accessible through specialized workbenches (mason, botanist, glassblower, etc.).
 - **Why:** Massively expands building options with thousands of block variants for creative SMP builders.
 - **Dependencies:** Fabric API, Athena, Resourceful Lib
@@ -288,6 +319,7 @@
 - **CurseForge ID:** 570073
 - **Slug:** resourceful-lib
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A shared library mod providing common utilities for Team Resourceful mods.
 - **Why:** Required dependency of Chipped.
 - **Dependencies:** None
@@ -297,6 +329,7 @@
 - **CurseForge ID:** 421377
 - **Slug:** treechop
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds gradual tree chopping where trees are chopped block by block and can fall realistically.
 - **Why:** Makes tree chopping more satisfying and prevents floating tree tops on the SMP.
 - **Dependencies:** Forge Config API Port
@@ -306,6 +339,7 @@
 - **CurseForge ID:** 593981
 - **Slug:** magnum-torch
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds a powerful torch block that prevents hostile mob spawning in a configurable large area.
 - **Why:** Lets players protect large areas from mob spawning without placing hundreds of torches.
 - **Dependencies:** Fabric API, Forge Config API Port, Puzzles Lib
@@ -315,6 +349,7 @@
 - **CurseForge ID:** 1292980
 - **Slug:** simple-conveyor-belts
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds spline-based conveyor belts that transport items between inventories with flexible curves, bends, and filtering via chutes.
 - **Why:** Provides clean, visual item logistics for the SMP — connects machines and storage with flexible conveyor belts.
 - **Dependencies:** Architectury API, Fabric API
@@ -324,6 +359,7 @@
 - **CurseForge ID:** 714059
 - **Slug:** resourceful-config
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A configuration library for Minecraft mods by Team Resourceful.
 - **Why:** Required dependency of Creeper Overhaul.
 - **Dependencies:** None
@@ -333,6 +369,7 @@
 - **CurseForge ID:** 412082
 - **Slug:** supplementaries
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Vanilla+ additions including jars, signposts, faucets, weather vanes, planters, sconces, and many decorative and functional blocks.
 - **Why:** Adds a wide variety of useful and decorative blocks that feel vanilla-appropriate, enhancing building and automation options on the SMP.
 - **Dependencies:** Fabric API, Moonlight Lib
@@ -342,6 +379,7 @@
 - **CurseForge ID:** 499980
 - **Slug:** selene
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** A dynamic data pack and registration library providing shared utilities for MehVahdJukaar's mods.
 - **Why:** Required dependency of Supplementaries.
 - **Dependencies:** None
@@ -351,6 +389,7 @@
 - **CurseForge ID:** 438365
 - **Slug:** bosses-of-mass-destruction
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds challenging boss fights with unique mechanics and custom structures scattered throughout the world.
 - **Why:** Adds endgame boss encounters that give players meaningful PvE challenges beyond the Ender Dragon and Wither on the SMP.
 - **Dependencies:** Fabric API, Cloth Config API, GeckoLib, Fabric Language Kotlin, Cardinal Components API
@@ -360,6 +399,7 @@
 - **CurseForge ID:** 891324
 - **Slug:** illager-invasion
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds new illager mobs, structures, and raid content as a port of the Illager Expansion mod.
 - **Why:** Expands the illager faction with new hostile mobs and encounters, making raids and exploration more varied on the SMP.
 - **Dependencies:** Fabric API, Forge Config API Port, Puzzles Lib
@@ -369,6 +409,7 @@
 - **CurseForge ID:** 561625
 - **Slug:** creeper-overhaul
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Overhauls vanilla creepers with new biome-specific variants, each with unique textures and behaviors.
 - **Why:** Adds visual variety and biome-appropriate creeper variants, making encounters more interesting across different biomes.
 - **Dependencies:** GeckoLib, Resourceful Lib, Resourceful Config
@@ -378,6 +419,7 @@
 - **CurseForge ID:** 574913
 - **Slug:** critters-and-companions
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds new ambient and companion creatures to the world including ferrets, otters, red pandas, and more.
 - **Why:** Populates the world with charming ambient creatures and tameable companions, adding life and variety to exploration.
 - **Dependencies:** Fabric API
@@ -387,6 +429,7 @@
 - **CurseForge ID:** 551364
 - **Slug:** friends-and-foes
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds outvoted and forgotten mobs from Minecraft mob votes (Copper Golem, Moobloom, Iceologer, Glare, Rascal, and more) with vanilla-style implementations.
 - **Why:** Brings beloved mob vote losers into the game with faithful, vanilla-feeling implementations that expand mob variety on the SMP.
 - **Dependencies:** Fabric API, Resourceful Lib, YetAnotherConfigLib (YACL)
@@ -397,6 +440,7 @@
 - **Slug:** grind-enchantments
 - **Modrinth Slug:** grind-enchantments
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Disenchant and transfer enchantments using a grindstone instead of discarding them.
 - **Why:** Lets SMP players salvage enchantments from unwanted gear via the grindstone, avoiding conflicts with Easy Anvils' anvil modifications.
 - **Dependencies:** Fabric API
@@ -406,6 +450,7 @@
 - **CurseForge ID:** 544912
 - **Slug:** youre-in-grave-danger
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Spawns a grave at the player's death location that stores their items for safe retrieval.
 - **Why:** Prevents frustrating item loss on death — players can recover their gear from a grave instead of racing a despawn timer.
 - **Dependencies:** Fabric API, Cloth Config API
@@ -415,6 +460,7 @@
 - **CurseForge ID:** 993166
 - **Slug:** farmers-delight-refabricated
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Modern Fabric port of the cooking and farming mod, adding new crops, cooking mechanics, and food items via cutting boards, stoves, and more.
 - **Why:** Adds depth to farming and cooking with new crops, recipes, and food progression, encouraging players to explore cuisine beyond vanilla foods.
 - **Dependencies:** Fabric API
@@ -424,6 +470,7 @@
 - **CurseForge ID:** 736986
 - **Slug:** chefs-delight-fabric
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds Cook and Chef villager professions with food-related trades, plus custom village structures where they spawn naturally.
 - **Why:** Extends Farmer's Delight with new villager professions and village structures, making food trading a natural part of SMP village economies.
 - **Dependencies:** Farmer's Delight Refabricated
@@ -433,6 +480,7 @@
 - **CurseForge ID:** 616330
 - **Slug:** stevesrealisticsleep
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Makes sleeping speed up time instead of skipping instantly to day, with speed scaling by number of sleeping players.
 - **Why:** Adds immersion to sleeping on the SMP — time accelerates gradually instead of jumping to morning, and more players sleeping speeds it up.
 - **Dependencies:** Fabric API, Architectury API, Cloth Config API
@@ -442,6 +490,7 @@
 - **CurseForge ID:** 326652
 - **Slug:** cupboard
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Provides code, frameworks, and utilities for Minecraft mods.
 - **Why:** Required dependency of Loot Integrations.
 - **Dependencies:** None
@@ -451,6 +500,7 @@
 - **CurseForge ID:** 580689
 - **Slug:** loot-integrations
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Allows loot from loot tables to be integrated into other loot tables through datapacks, enriching structure chest loot with modded items.
 - **Why:** Enriches loot found in dungeon and structure chests by integrating items from all installed mods, making exploration more rewarding.
 - **Dependencies:** Fabric API, Cupboard
@@ -460,6 +510,7 @@
 - **CurseForge ID:** 1038427
 - **Slug:** rightclickharvest-supplementaries-compat
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds compatibility between RightClickHarvest and Supplementaries, making Flax and other Supplementaries crops right-click-harvestable.
 - **Why:** Bridges the gap between RightClickHarvest and Supplementaries so all crops (including Flax) support right-click harvesting.
 - **Dependencies:** RightClickHarvest, Supplementaries
@@ -469,6 +520,7 @@
 - **CurseForge ID:** 838411
 - **Slug:** supplementaries-squared
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** An addon for Supplementaries adding block variants like colored sacks, wood-variant item shelves, golden candle holders, daub stairs/walls, metal frames, and plaques.
 - **Why:** Expands Supplementaries with additional decorative and functional block variants for more building options on the SMP.
 - **Dependencies:** Moonlight Lib, Fabric API, Supplementaries
@@ -478,6 +530,7 @@
 - **CurseForge ID:** 1169634
 - **Slug:** accessorify
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Makes vanilla items (clock, compass, elytra, totem, spyglass, lantern, ender chest, shulker boxes, arrows) equippable as accessories.
 - **Why:** Frees up inventory space by letting players wear useful vanilla items as accessories, with configurable item support and modded variant compatibility.
 - **Dependencies:** Accessories, Fzzy Config, Fabric API
@@ -488,6 +541,7 @@
 - **Slug:** libz
 - **Modrinth Slug:** libz
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Open source library for Globox_Z mods, providing shared utilities.
 - **Why:** Required dependency of TieredZ.
 - **Dependencies:** Fabric API, Cloth Config API
@@ -498,6 +552,7 @@
 - **Slug:** tieredz
 - **Modrinth Slug:** tieredz
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds random tiers and stat modifiers to crafted tools and armor, with anvil-based reforging to improve tiers.
 - **Why:** Adds RPG-style item quality variance — every crafted tool/armor gets a random tier with bonus stats, and players can reforge gear at anvils to chase better rolls.
 - **Dependencies:** Fabric API, Cloth Config API, LibZ
@@ -508,6 +563,7 @@
 - **Slug:** easy-mob-farm
 - **Modrinth Slug:** easy-mob-farm
 - **Mod Loader:** Fabric
+- **Side:** both
 - **Summary:** Adds mob farm blocks that capture and automatically farm mobs for their loot drops in a server-friendly way.
 - **Why:** Provides a balanced, server-friendly way to automate mob farming without lag-inducing traditional mob grinders.
 - **Dependencies:** Fabric API
