@@ -164,34 +164,26 @@ is_installed() {
 
 find_pw_toml() {
     local slug="$1" cf_id="$2" mr_slug="${3:-}"
+    local base=""
 
-    # Search in all mod directories
+    # 1. Match by CurseForge project ID using the indexed map
+    if [[ "$cf_id" != "N/A"* && -n "${installed_cf_ids[$cf_id]+x}" ]]; then
+        base="${installed_cf_ids[$cf_id]}"
+    # 2. Match by CF slug as filename
+    elif [[ -n "${installed_files[$slug]+x}" ]]; then
+        base="$slug"
+    # 3. Match by Modrinth slug as filename
+    elif [[ -n "$mr_slug" && "$mr_slug" != "N/A" && -n "${installed_files[$mr_slug]+x}" ]]; then
+        base="$mr_slug"
+    fi
+
+    [[ -z "$base" ]] && return 1
+
+    # Resolve the actual file path from the known directories
     local dir
     for dir in "$MODS_DIR" "$DATAPACKS_DIR" "$SHADERPACKS_DIR"; do
-        [[ -d "$dir" ]] || continue
-
-        # Match by CurseForge project ID
-        if [[ "$cf_id" != "N/A"* ]]; then
-            for pw_file in "$dir"/*.pw.toml; do
-                [[ -f "$pw_file" ]] || continue
-                local cf_pid
-                cf_pid="$(grep -Po '(?<=^project-id = )\d+' "$pw_file" 2>/dev/null || true)"
-                if [[ "$cf_pid" == "$cf_id" ]]; then
-                    echo "$pw_file"
-                    return 0
-                fi
-            done
-        fi
-
-        # Match by slug as filename
-        if [[ -f "$dir/${slug}.pw.toml" ]]; then
-            echo "$dir/${slug}.pw.toml"
-            return 0
-        fi
-
-        # Match by Modrinth slug as filename
-        if [[ -n "$mr_slug" && "$mr_slug" != "N/A" && -f "$dir/${mr_slug}.pw.toml" ]]; then
-            echo "$dir/${mr_slug}.pw.toml"
+        if [[ -f "$dir/${base}.pw.toml" ]]; then
+            echo "$dir/${base}.pw.toml"
             return 0
         fi
     done
