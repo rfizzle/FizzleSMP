@@ -25,8 +25,8 @@ file = "config/lithium.properties"
 hash = "80242f111b68ddc2d47cac5da4aba000737a121e864e068a697e0a805fbbce25"
 
 [[files]]
-file = "config/paxi/datapacks/RS-YUNG-Compat-Config.zip"
-hash = "1cb323f43bb33ec0d8ffc2ad71f8074a2b7180ff4eb5aa43292cb50a13c6d95a"
+file = "config/paxi/datapacks/Aether-Accessories-Fix.zip"
+hash = "8531a1e80520a7ad52b8a0cfbff6563e11289c840bd2edc810781e649a1caede"
 
 [[files]]
 file = "config/paxi/datapacks/Spectrum-TechReborn-Recipe-Fix.zip"
@@ -148,11 +148,6 @@ metafile = true
 [[files]]
 file = "mods/beautify-refabricated.pw.toml"
 hash = "336f7857d0f5982ca6336899973b89d0a7349526be87f58dad7e12fae372ff0c"
-metafile = true
-
-[[files]]
-file = "mods/better-archeology.pw.toml"
-hash = "60192613114f8b31dc334135af134032f2a35d8de2980412ae8e97d6c9dd4ea1"
 metafile = true
 
 [[files]]
@@ -601,11 +596,6 @@ hash = "d49477dba10c7b8431dde58fdaa0d5d9c9a36c2c8d8e5ffc30a7007ec7476b2f"
 metafile = true
 
 [[files]]
-file = "mods/loot-integrations-better-archeology.pw.toml"
-hash = "95206dcceba1420afcf7cc8498c4cce27f534bfa5e2b997dc814a12699c85cfe"
-metafile = true
-
-[[files]]
 file = "mods/loot-integrations-choicetheorems-overhauled.pw.toml"
 hash = "01be52ea84fb04197908d5d27e0747a8c2a2c487ae0ca328d25e44de04ed096c"
 metafile = true
@@ -816,16 +806,6 @@ hash = "03879632a7143e8955128c63bec2a1666329b50b77f4ea6b6309558394a37e31"
 metafile = true
 
 [[files]]
-file = "mods/repurposed-structures-fabric.pw.toml"
-hash = "bb091a4a83360b4a7dc658c76df72bcf31a66f55100ba1bf15e9596a01ec59f6"
-metafile = true
-
-[[files]]
-file = "mods/repurposed-structures-farmers-delight-compat-mod.pw.toml"
-hash = "491004187034b4fda65b99d19f19efab14100760ae4ce080f5e454277c3e3351"
-metafile = true
-
-[[files]]
 file = "mods/resourceful-config.pw.toml"
 hash = "3ce0ab5d205fc7e63684e99cfd62ac905a4cf8ff980adbd798b08b7c7ba98a8e"
 metafile = true
@@ -948,16 +928,6 @@ metafile = true
 [[files]]
 file = "mods/stevesrealisticsleep.pw.toml"
 hash = "a77072dac0dc042684732bf2331e1a444176fda1cde6f4fb6f8f0eea53b06721"
-metafile = true
-
-[[files]]
-file = "mods/structory-towers.pw.toml"
-hash = "da653c26b1e82b8a718786ccd2fd6cf31dd07e1d9552c80024d47c0397aa5523"
-metafile = true
-
-[[files]]
-file = "mods/structory.pw.toml"
-hash = "ad278104876f2e043fa466b90be7b71c1ad4f53710e30f3c43a52ab4cbeb24a6"
 metafile = true
 
 [[files]]

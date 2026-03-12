@@ -373,7 +373,7 @@
 - **Summary:** Vanilla+ additions including jars, signposts, faucets, weather vanes, planters, sconces, and many decorative and functional blocks.
 - **Why:** Adds a wide variety of useful and decorative blocks that feel vanilla-appropriate, enhancing building and automation options on the SMP.
 - **Dependencies:** Fabric API, Moonlight Lib
-- **Conflicts:** Road sign auto-generation causes severe lag with CTOV + Repurposed Structures (12+ village types make structure locate calls expensive). Disable road signs in `config/supplementaries-common.json`. See compatibility matrix.
+- **Conflicts:** Road sign auto-generation causes lag with CTOV (many village types make structure locate calls expensive). Disable road signs in `config/supplementaries-common.json`. See compatibility matrix.
 
 ## Moonlight Lib
 - **CurseForge ID:** 499980

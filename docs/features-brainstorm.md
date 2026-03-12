@@ -19,22 +19,20 @@ Use this document to capture feature ideas first, then map them to specific mods
 |---|---|---|---|
 | Overhauled biomes | Nearly 100 new biomes with dramatic terrain, grander mountains and valleys | Terralith, Tectonic, Geophilic, Terraphilic | In pack |
 | Redesigned vanilla structures | Every vanilla structure (dungeons, mineshafts, temples, strongholds, monuments, fortresses, witch huts, End island) rebuilt with new rooms, puzzles, traps, and loot | YUNG's Better Caves/Mineshafts/Strongholds/Dungeons/Desert Temples/Ocean Monuments/Nether Fortresses/Jungle Temples/Witch Huts/End Island/Extras/Bridges | In pack |
-| Biome-themed structure variants | Structures adapt to the biome they spawn in — desert villages look different from taiga villages | Repurposed Structures, ChoiceTheorem's Overhauled Village | In pack |
+| Biome-themed structure variants | Structures adapt to the biome they spawn in — desert villages look different from taiga villages | ChoiceTheorem's Overhauled Village | In pack |
 | Nether overhaul | The Nether has new biomes, structures, weapons, and mobs worth exploring | Incendium | In pack |
 | End dimension overhaul | The End has surreal terrain, new biomes, and structures beyond just the dragon fight | Nullscape, MES - Moog's End Structures | In pack |
-| Atmospheric world structures | Small-to-medium lore-rich structures, towers, ruins, and points of interest scattered throughout the world | Structory, Structory: Towers, Explorify, Philip's Ruins | In pack |
+| Atmospheric world structures | Small-to-medium lore-rich structures, towers, ruins, and points of interest scattered throughout the world | Explorify, Philip's Ruins | In pack |
 | Massive structure variety | 130+ vanilla-style structures across overworld, nether, end, and sky | MVS, MES, MNS, MSS (Moog's series) | In pack |
 | Ocean content | Floating ocean villages, overhauled underwater ruins, better ocean monuments | Tidal Towns, Hopo Better Underwater Ruins, YUNG's Better Ocean Monuments | In pack |
-| Archeology expansion | New archeology structures, artifacts, and fossils to brush and discover | Better Archeology | In pack |
+| Archeology expansion | New archeology structures, artifacts, and fossils to brush and discover | — | Removed |
 | Structure spacing control | Prevent structure spam — make discoveries feel earned by spacing structures out | Sparse Structures | In pack |
-| Better loot in structures | Structure chests contain items from all installed mods, not just vanilla | Loot Integrations + YUNG's/CTOV/Philip's Ruins/Moog's/Better Archeology addons | In pack |
+| Better loot in structures | Structure chests contain items from all installed mods, not just vanilla | Loot Integrations + YUNG's/CTOV/Philip's Ruins/Moog's addons | In pack |
 | Per-player loot | Every player gets their own loot from structure chests — no racing for loot | Lootr | In pack |
 | Collectible accessories | Powerful uncraftable items found in structures and dropped by mimics | Artifacts | In pack |
 | Biome & structure finding | Craftable compasses that point to any biome or structure | Nature's Compass, Explorer's Compass | In pack |
 | Biome discovery titles | RPG-style title text when entering new biomes or dimensions | Traveler's Titles | In pack |
 | Fast travel network | Discoverable waystones in villages with craftable personal waypoints | Waystones | In pack |
-| Farmer's Delight in villages | Modded crops and buildings appear in generated villages | Repurposed Structures - Farmer's Delight Compat | In pack |
-
 ### Building & Creativity
 <!-- Ideas about giving builders more tools, blocks, decorations. -->
 

@@ -33,16 +33,6 @@
 - **Dependencies:** Lithostitched
 - **Conflicts:** None known; mod version auto-loads Terratonic compatibility when Terralith is detected.
 
-## Repurposed Structures
-- **CurseForge ID:** 391366
-- **Slug:** repurposed-structures-fabric
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Adds biome-themed variants of vanilla structures (pyramids, villages, dungeons, mineshafts, and more).
-- **Why:** Adds structure variety across biomes so exploration feels fresh and structures fit their surroundings.
-- **Dependencies:** Fabric API, MidnightLib
-- **Conflicts:** Soft conflict with YUNG's suite — overlapping structure types (dungeons, mineshafts, desert temples, jungle temples, witch huts). Resolved via `RS-YUNG-Compat-Config.zip` datapack (shipped in `modpack/config/paxi/datapacks/`) which disables RS overworld mineshafts, pyramids, temples, witch huts, and overworld dungeons to let YUNG's handle them. RS remains enabled for its unique shipwrecks, mansions, igloos, ruins, cities, bastions, villages, outposts, and nether/end variants.
-
 ## ChoiceTheorem's Overhauled Village
 - **CurseForge ID:** 623908
 - **Slug:** choicetheorems-overhauled-village
@@ -82,7 +72,7 @@
 - **Summary:** Redesigns vanilla dungeons and adds three new types: Catacombs, Fortresses of the Undead, and Spider Caves.
 - **Why:** Replaces boring single-room spawner dungeons with varied, atmospheric dungeon experiences.
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API
-- **Conflicts:** Overlaps with Repurposed Structures dungeon variants; disable RS dungeons in its config.
+- **Conflicts:** None known
 
 ## YUNG's Better Desert Temples
 - **CurseForge ID:** 631020
@@ -194,27 +184,6 @@
 - **Dependencies:** None
 - **Conflicts:** None known; compatible with Terralith and Incendium (same author — Stardust Labs).
 
-## Structory
-- **CurseForge ID:** 636540
-- **Slug:** structory
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Adds atmospheric, lore-rich structures throughout the world with seasonal updates.
-- **Why:** Fills the world with immersive small-to-medium structures that enhance exploration and world atmosphere.
-- **Dependencies:** None
-- **Conflicts:** None known
-
-## Structory: Towers
-- **CurseForge ID:** 783522
-- **Slug:** structory-towers
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Adds immersive biome-themed towers to the world as a standalone option or add-on to Structory.
-- **Why:** Complements Structory with vertical tower structures that serve as landmarks and exploration targets.
-- **Dependencies:** None (standalone, but designed to pair with Structory)
-- **Conflicts:** None known
-
-
 ## Geophilic
 - **CurseForge ID:** 711216
 - **Slug:** geophilic
@@ -297,17 +266,6 @@
 - **Summary:** Adds better loot to Moog's Voyager, Soaring, End & Nether Structures chests, including modded loot.
 - **Why:** Enriches loot in MVS structure chests with items from other mods in the pack via Loot Integrations.
 - **Dependencies:** Loot Integrations, MVS - Moog's Voyager Structures (also covers MES, MNS, MSS)
-- **Conflicts:** None known
-
-## Loot Integrations: Better Archeology
-- **CurseForge ID:** 1130800
-- **Slug:** loot-integrations-better-archeology
-- **Modrinth Slug:** N/A
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Adds better loot to Better Archeology chests, including modded loot.
-- **Why:** Enriches loot in Better Archeology structure chests with items from other mods in the pack via Loot Integrations.
-- **Dependencies:** Loot Integrations, Better Archeology
 - **Conflicts:** None known
 
 ## Explorify
@@ -398,17 +356,6 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
-## Better Archeology
-- **CurseForge ID:** 835687
-- **Slug:** better-archeology
-- **Modrinth Slug:** better-archeology
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Adds new archeology structures, artifacts, and fossils to discover throughout the world.
-- **Why:** Expands the vanilla archeology system with new structures and rewards, making brush-based exploration more worthwhile.
-- **Dependencies:** Architectury API, Resourceful Config
-- **Conflicts:** None known
-
 ## The Aether
 - **CurseForge ID:** 255308
 - **Slug:** aether
@@ -431,12 +378,3 @@
 - **Dependencies:** Fabric API, owo-lib
 - **Conflicts:** None known; operates in its own dimension with no overlap to Overworld/Nether/End worldgen mods.
 
-## Repurposed Structures - Farmer's Delight Compat
-- **CurseForge ID:** 1071336
-- **Slug:** repurposed-structures-farmers-delight-compat-mod
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Adds Farmer's Delight crops and compost buildings to Repurposed Structures villages.
-- **Why:** Integrates Farmer's Delight content into RS village generation, making modded village farms use FD crops and buildings.
-- **Dependencies:** Repurposed Structures, Farmer's Delight Refabricated
-- **Conflicts:** None known

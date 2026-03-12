@@ -494,7 +494,7 @@
 - **Mod Loader:** Fabric
 - **Side:** both
 - **Summary:** Adds a craftable compass that locates any structure in the world, including modded structures.
-- **Why:** Helps SMP players find specific structures without aimless wandering; works with modded structures from YUNG's suite, Repurposed Structures, etc.
+- **Why:** Helps SMP players find specific structures without aimless wandering; works with modded structures from YUNG's suite, CTOV, Moog's, etc.
 - **Dependencies:** None
 - **Conflicts:** None known
 
