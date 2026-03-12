@@ -9,6 +9,10 @@ file = "config/carryon-common.json"
 hash = "cd9a918e7ca7312c41f34b75685a676ed2aae59793bd54915600be93850a653d"
 
 [[files]]
+file = "config/creeper-healing.toml"
+hash = "6578e5c172d7f25077958eaef214dfea8b69ef8b43a9ca910551024cb41dfc03"
+
+[[files]]
 file = "config/emi.css"
 hash = "c786f704eb7c0e147d187863f36133a2544cfe10ba9b2d26678a72ad6a45d694"
 
