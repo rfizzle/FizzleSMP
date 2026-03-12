@@ -1,6 +1,6 @@
 name = "EMI Loot"
 filename = "emi_loot-0.7.9+1.21+fabric.jar"
-side = "client"
+side = "both"
 
 [download]
 hash-format = "sha1"
