@@ -379,7 +379,7 @@
 - **CurseForge ID:** 681783
 - **Slug:** emi-loot
 - **Mod Loader:** Fabric
-- **Side:** client
+- **Side:** both
 - **Summary:** Displays mob loot tables and chest loot tables directly in EMI.
 - **Why:** Lets players see what mobs drop and what loot chests contain in EMI, reducing wiki dependency.
 - **Dependencies:** EMI, Fzzy Config
