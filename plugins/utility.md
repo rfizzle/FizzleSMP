@@ -314,6 +314,17 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## SeasonHud (Fabric)
+- **CurseForge ID:** 848022
+- **Slug:** seasonhud-fabric
+- **Modrinth Slug:** seasonhud-fabric
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** Displays the current Fabric Seasons season on the HUD or under Xaero's Minimap, with configurable position and format.
+- **Why:** Lets players see the current season at a glance, integrated with Xaero's Minimap for a clean HUD experience.
+- **Dependencies:** Forge Config API Port; Fabric Seasons (optional), Xaero's Minimap (optional)
+- **Conflicts:** None known
+
 ## Zoomify
 - **CurseForge ID:** 574741
 - **Slug:** zoomify

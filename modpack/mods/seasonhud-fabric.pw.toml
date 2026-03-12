@@ -1,0 +1,13 @@
+name = "SeasonHud (Fabric)"
+filename = "seasonhud-fabric-1.21.1-2.0.1.jar"
+side = "client"
+
+[download]
+hash-format = "sha1"
+hash = "fe482fbd51c0d8b7d1ad3e52aa05d5c40170f5c0"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7719979
+project-id = 848022

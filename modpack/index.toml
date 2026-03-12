@@ -38,6 +38,10 @@ file = "config/sparsestructures.json5"
 hash = "1c5274bee29912a4959fc862ef39ac192a31b7bb632e2f6d7e35e043b7e26273"
 
 [[files]]
+file = "config/supplementaries-common.json"
+hash = "0d7ef5a33a556aa2d973114a6c5c44ae30a4814d073816c6ce233f40551f1fdc"
+
+[[files]]
 file = "config/xaero/minimap/profiles/default.cfg"
 hash = "ef490f100b4dd9a8dc7f72cb25b352419bca91aaaa052fa1c6696e3c26cf0927"
 
@@ -62,6 +66,11 @@ metafile = true
 [[files]]
 file = "mods/accessorify.pw.toml"
 hash = "81561ec67c90d0fbbef517baeb47e1e50f7b24c327cd107bfc0fea7082d6dc4d"
+metafile = true
+
+[[files]]
+file = "mods/aether.pw.toml"
+hash = "ad2bd993b17bb22f3b0a315743028f34cc514da255ab540f61dcf54f972c8489"
 metafile = true
 
 [[files]]
@@ -122,6 +131,11 @@ metafile = true
 [[files]]
 file = "mods/balm-fabric.pw.toml"
 hash = "3e020f352ab64f88d0bbbee740ae1784d17b44337c02e2fd670889bbdbfa4a9a"
+metafile = true
+
+[[files]]
+file = "mods/beautify-refabricated.pw.toml"
+hash = "336f7857d0f5982ca6336899973b89d0a7349526be87f58dad7e12fae372ff0c"
 metafile = true
 
 [[files]]
@@ -280,6 +294,11 @@ hash = "8f89f3db3ee1ee8d91f28ad870dadb0a66ac3792f2bef83b0f29f413000bdc1d"
 metafile = true
 
 [[files]]
+file = "mods/deeperdarker.pw.toml"
+hash = "a9e43d7f29370cc9ac12a30d95748ef09add06a131469f928d722d34be0745a8"
+metafile = true
+
+[[files]]
 file = "mods/double-doors.pw.toml"
 hash = "00f40009395dc60d8a67b6dddf155239b6e94867da16f1e26718f697c3065d73"
 metafile = true
@@ -355,6 +374,11 @@ hash = "7b60847c523d8c91b894f1ad1712631e9a2c6d67d484d1c19956f7103e9e9c15"
 metafile = true
 
 [[files]]
+file = "mods/every-compat.pw.toml"
+hash = "bfcadada05f20cd49916d728ffe53bf2f6a6fcb9c344319e7f481910b62df67c"
+metafile = true
+
+[[files]]
 file = "mods/explorers-compass.pw.toml"
 hash = "cc3ea0f2dec451d3dc489439bc6a3285f2aaab81b292b0f582d7905f75bef7a3"
 metafile = true
@@ -377,6 +401,21 @@ metafile = true
 [[files]]
 file = "mods/fabric-language-kotlin.pw.toml"
 hash = "c27a08b54ab9b474a57211f383f511d67fd0023035ee2e76d247667e15183e63"
+metafile = true
+
+[[files]]
+file = "mods/fabric-seasons-delight-compat.pw.toml"
+hash = "827062b1202634995b14a90dd2035f8d7ac5d428c44d6e0ad3881a39772bd404"
+metafile = true
+
+[[files]]
+file = "mods/fabric-seasons-terralith-compat.pw.toml"
+hash = "e5098c92b82cf09b96b572dbe78e07b69c93b5a4f9a1624e3f44ed9b85a08a15"
+metafile = true
+
+[[files]]
+file = "mods/fabric-seasons.pw.toml"
+hash = "4b4bd067a0ede224fc89340b383f34780229628821912d4d7b9502a410bdbb2e"
 metafile = true
 
 [[files]]
@@ -437,6 +476,11 @@ metafile = true
 [[files]]
 file = "mods/guys-armor-hud.pw.toml"
 hash = "7ccba1211a60be6e136d676fe6f9ac658402338dd12d33eb54f38951a64e3ef3"
+metafile = true
+
+[[files]]
+file = "mods/handcrafted.pw.toml"
+hash = "00eaafc399810122b7522b172e12aec41f8d8b787192a78362f77e1274c21451"
 metafile = true
 
 [[files]]
@@ -817,6 +861,11 @@ metafile = true
 [[files]]
 file = "mods/searchables.pw.toml"
 hash = "717b181cd4fe7ca42c59f3e7ca45d891f61e7a443c8b2bb20dee8ab2a733b73b"
+metafile = true
+
+[[files]]
+file = "mods/seasonhud-fabric.pw.toml"
+hash = "06815232b92b53192787e68a570fba45219f979fa273aaff900686958558a528"
 metafile = true
 
 [[files]]

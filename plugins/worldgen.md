@@ -409,6 +409,28 @@
 - **Dependencies:** Architectury API, Resourceful Config
 - **Conflicts:** None known
 
+## The Aether
+- **CurseForge ID:** 255308
+- **Slug:** aether
+- **Modrinth Slug:** aether
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds the iconic Aether sky dimension accessed via a glowstone portal, with unique biomes, mobs, dungeons, three boss fights, and custom loot progression.
+- **Why:** Adds a full adventure dimension with structured boss progression and unique exploration, giving the SMP a major endgame content pillar beyond the vanilla End.
+- **Dependencies:** owo-lib (Accessories and Cumulus are embedded)
+- **Conflicts:** None known; operates in its own dimension with no overlap to Overworld/Nether/End worldgen mods.
+
+## Deeper and Darker
+- **CurseForge ID:** 659011
+- **Slug:** deeperdarker
+- **Modrinth Slug:** deeperdarker
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds "The Otherside" sculk-themed dimension accessed through Ancient Cities, with new biomes, blocks, armor, and the Warden's domain.
+- **Why:** Gives Ancient Cities a real purpose by adding a full dimension beyond them, creating meaningful endgame content tied to the Deep Dark.
+- **Dependencies:** Fabric API, owo-lib
+- **Conflicts:** None known; operates in its own dimension with no overlap to Overworld/Nether/End worldgen mods.
+
 ## Repurposed Structures - Farmer's Delight Compat
 - **CurseForge ID:** 1071336
 - **Slug:** repurposed-structures-farmers-delight-compat-mod

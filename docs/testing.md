@@ -13,7 +13,7 @@ Systematic testing guide for verifying mod compatibility and pack stability. Run
 
 ## 2. World Creation & Chunk Generation
 
-These mods all touch worldgen and are the most likely to conflict: Terralith, Tectonic, Geophilic, Terraphilic, Incendium, Nullscape, C2ME, NoisiumForked, Sparse Structures, all YUNG's mods, Repurposed Structures, Towns and Towers, Structory, Explorify, MVS - Moog's Voyager Structures, MES - Moog's End Structures, MNS - Moog's Nether Structures, MSS - Moog's Soaring Structures, Philip's Ruins, Tidal Towns, Better Archeology.
+These mods all touch worldgen and are the most likely to conflict: Terralith, Tectonic, Geophilic, Terraphilic, Incendium, Nullscape, C2ME, NoisiumForked, Sparse Structures, all YUNG's mods, Repurposed Structures, Towns and Towers, Structory, Explorify, MVS - Moog's Voyager Structures, MES - Moog's End Structures, MNS - Moog's Nether Structures, MSS - Moog's Soaring Structures, Philip's Ruins, Tidal Towns, Better Archeology, The Aether, Deeper and Darker.
 
 - [ ] **New world creation** — Create a new world (default settings). Confirm no crash during initial chunk generation.
 - [ ] **Explore Overworld biomes** — Fly/teleport through at least 10 different biomes. Confirm:
@@ -43,6 +43,15 @@ These mods all touch worldgen and are the most likely to conflict: Terralith, Te
 - [ ] **MNS - Moog's Nether Structures** — Explore the Nether beyond fortresses. Locate at least 1-2 MNS structures. Confirm loot and enemies spawn.
 - [ ] **End generation** — Enter the End. Confirm Nullscape terrain and YUNG's Better End Island generate.
 - [ ] **MES - Moog's End Structures** — Explore outer End islands. Locate at least 1-2 MES structures. Confirm loot and enemies spawn on Nullscape terrain.
+- [ ] **The Aether dimension** — Build a glowstone portal and light it with a water bucket. Enter the Aether. Confirm:
+  - Aether biomes generate correctly (floating islands, clouds)
+  - Mobs spawn (Moas, Aechor Plants, Swets, Zephyrs)
+  - Locate a Bronze Dungeon. Confirm structure generates with loot and boss
+  - Loot chests work with Lootr (per-player instancing)
+- [ ] **Deeper and Darker dimension** — Find an Ancient City. Locate the portal to The Otherside. Enter and confirm:
+  - Sculk-themed biomes generate correctly
+  - New blocks and mobs spawn
+  - Loot containers work with Lootr (per-player instancing)
 - [ ] **Chunk gen performance** — Use `/chunky start` to pre-generate a 1000-block radius. Monitor TPS with Spark. Confirm C2ME and NoisiumForked aren't conflicting (watch for deadlocks or errors in log).
 
 ## 3. Rendering & Visual Mods
@@ -229,11 +238,15 @@ Key mods: Lootr, Better Loot, Loot Integrations, YUNG's Structures Addon for Loo
 
 ## 12. Decorative & Building
 
-Key mods: Chipped, Supplementaries, Supplementaries Squared.
+Key mods: Chipped, Supplementaries, Supplementaries Squared, Handcrafted, Beautify: Refabricated, Every Compat.
 
 - [ ] **Chipped** — Open a Chipped workbench. Browse decorative variants. Confirm textures render correctly.
 - [ ] **Supplementaries** — Place jars, signposts, planters. Interact with each. Confirm functionality.
 - [ ] **Supplementaries Squared** — Place additional variants. Confirm no visual issues.
+- [ ] **Handcrafted** — Craft and place furniture: chair, table, couch, shelf, lamp. Confirm player can sit in chairs. Test multiple wood-type variants.
+- [ ] **Beautify: Refabricated** — Place hanging planters, blinds, lamps, and trellis. Confirm textures render and interactions work.
+- [ ] **Every Compat wood variants** — If modded wood types are available (e.g., from Terralith or Incendium), confirm Handcrafted, Supplementaries, and Chipped blocks have matching wood variants via Every Compat.
+- [ ] **Handcrafted + Chipped coexistence** — Place furniture and decorative block variants in the same build. Confirm no visual or interaction conflicts.
 
 ## 13. Performance Stress Tests
 
@@ -249,7 +262,19 @@ Key mods: Chipped, Supplementaries, Supplementaries Squared.
 - [ ] **Enchantment stacking** — Combine enchantments from different mods. Confirm no crashes or impossible combinations.
 - [ ] **Trade Cycling** — Cycle villager trades. Confirm modded items appear in trade pools where expected.
 
-## 15. Miscellaneous
+## 15. Seasons
+
+Key mods: Fabric Seasons, Fabric Seasons: Terralith Compat, Fabric Seasons: Delight Compat.
+
+- [ ] **Season cycle** — Use `/season set` commands to cycle through Spring, Summer, Autumn, Winter. Confirm foliage colors change appropriately for each season.
+- [ ] **Terralith biome seasons** — Visit Terralith custom biomes in different seasons. Confirm seasonal color changes apply (Terralith Compat working).
+- [ ] **Crop growth rates** — Plant wheat and other vanilla crops. Change season to Winter. Confirm growth slows or stops. Change to Spring/Summer. Confirm growth resumes.
+- [ ] **Farmer's Delight seasonal crops** — Plant Farmer's Delight crops (tomatoes, cabbages). Confirm they respect seasonal growth rates (Delight Compat working).
+- [ ] **Falling Leaves + Seasons** — Check if Falling Leaves particle colors adjust with seasonal foliage changes.
+- [ ] **Traveler's Titles + Seasons** — Enter a biome during different seasons. Confirm no visual conflicts with biome title display.
+- [ ] **SeasonHud display** — Confirm current season displays on the HUD or under Xaero's Minimap. Cycle through seasons and verify the display updates.
+
+## 16. Miscellaneous
 
 - [ ] **Zoomify** — Press zoom key. Confirm smooth zoom without conflicts with Xaero's Minimap keybinds.
 - [ ] **Better Than Mending** — Sneak + right-click with a Mending item and XP. Confirm instant repair.

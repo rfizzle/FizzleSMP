@@ -568,3 +568,69 @@
 - **Why:** Provides a balanced, server-friendly way to automate mob farming without lag-inducing traditional mob grinders.
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
+
+## Handcrafted
+- **CurseForge ID:** 538214
+- **Slug:** handcrafted
+- **Modrinth Slug:** handcrafted
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds a variety of furniture and decoration blocks including chairs, tables, couches, shelves, lamps, and more with wood-type variants.
+- **Why:** Fills a major gap in building options by adding high-quality furniture for player homes, taverns, shops, and community builds on the SMP.
+- **Dependencies:** Fabric API, Resourceful Lib
+- **Conflicts:** None known
+
+## Beautify: Refabricated
+- **CurseForge ID:** 809311
+- **Slug:** beautify-refabricated
+- **Modrinth Slug:** beautify-refabricated
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds decorative blocks including hanging planters, blinds, lamps, shelves, trellis, and rope for interior and exterior decoration.
+- **Why:** Complements Handcrafted and Supplementaries with additional decorative blocks focused on planters, lighting, and window treatments.
+- **Dependencies:** None required; Jade (optional, in pack)
+- **Conflicts:** None known
+
+## Every Compat
+- **CurseForge ID:** 628539
+- **Slug:** every-compat
+- **Modrinth Slug:** every-compat
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Automatically generates wood-type variants (stairs, slabs, fences, bookshelves, chests, furniture) for all modded wood types across compatible mods.
+- **Why:** Bridges the gap between wood-adding mods and furniture/block mods so all modded wood types get proper variants for Handcrafted, Supplementaries, Chipped, etc.
+- **Dependencies:** Fabric API, Moonlight Lib
+- **Conflicts:** None known
+
+## Fabric Seasons
+- **CurseForge ID:** 413523
+- **Slug:** fabric-seasons
+- **Modrinth Slug:** fabric-seasons
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds a four-season cycle that changes foliage colors, crop growth rates, weather patterns, and mob spawning behavior throughout the year.
+- **Why:** Adds dynamic seasonal changes to the SMP world, making the passage of time meaningful and creating visual variety across the year.
+- **Dependencies:** Fabric API
+- **Conflicts:** Requires Fabric Seasons: Terralith Compat when used with Terralith; requires Fabric Seasons: Delight Compat for Farmer's Delight crop integration.
+
+## Fabric Seasons: Terralith Compat
+- **CurseForge ID:** 839881
+- **Slug:** fabric-seasons-terralith-compat
+- **Modrinth Slug:** fabric-seasons-terralith-compat
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** Compatibility patch that applies Fabric Seasons foliage color changes to Terralith's custom biomes.
+- **Why:** Required compatibility mod to make Fabric Seasons' seasonal color changes work correctly with Terralith's ~100 custom biomes.
+- **Dependencies:** Fabric Seasons, Terralith
+- **Conflicts:** None — this mod resolves the Fabric Seasons/Terralith incompatibility.
+
+## Fabric Seasons: Delight Compat
+- **CurseForge ID:** 859370
+- **Slug:** fabric-seasons-delight-compat
+- **Modrinth Slug:** fabric-seasons-delight-compat
+- **Mod Loader:** Fabric
+- **Side:** server
+- **Summary:** Compatibility patch that integrates Farmer's Delight crops with Fabric Seasons' seasonal growth mechanics.
+- **Why:** Required compatibility mod so Farmer's Delight crops (tomatoes, cabbages, etc.) respect seasonal growth rates from Fabric Seasons.
+- **Dependencies:** Fabric Seasons, Farmer's Delight Refabricated
+- **Conflicts:** None — this mod resolves the Fabric Seasons/Farmer's Delight incompatibility.
