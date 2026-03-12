@@ -148,7 +148,7 @@ Use this document to capture feature ideas first, then map them to specific mods
 | Material-based footsteps | Footstep sounds change based on the block you're walking on | Presence Footsteps | In pack |
 | Ambient environmental sounds | Biome-appropriate nature sounds, wind, and environmental audio | AmbientSounds | In pack |
 | Dynamic lighting | Held torches and glowing items illuminate surroundings in real time | LambDynamicLights | In pack |
-| Enhanced particles | Hit particles, enchantment glints, mob-specific effects, falling leaves, realistic bubbles | Visuality, Falling Leaves, Make Bubbles Pop | In pack |
+| Enhanced particles | Hit particles, enchantment glints, mob-specific effects, falling leaves | Visuality, Falling Leaves | In pack |
 | Shader support | OptiFine-compatible shader packs running on Sodium | Iris Shaders, Complementary Reimagined, Complementary Unbound | In pack |
 
 ### Performance & Stability

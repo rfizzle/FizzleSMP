@@ -467,16 +467,6 @@
 - **Dependencies:** Fabric API, Cloth Config API
 - **Conflicts:** None known
 
-## Make Bubbles Pop
-- **CurseForge ID:** 605235
-- **Slug:** make-bubbles-pop
-- **Mod Loader:** Fabric
-- **Side:** client
-- **Summary:** Makes bubble particles pop and rise realistically to the water surface instead of disappearing.
-- **Why:** Small visual polish that makes underwater environments feel more alive and realistic.
-- **Dependencies:** Fabric API
-- **Conflicts:** None known
-
 ## Not Enough Animations
 - **CurseForge ID:** 433760
 - **Slug:** not-enough-animations

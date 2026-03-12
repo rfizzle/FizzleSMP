@@ -636,11 +636,6 @@ hash = "9ff01447dcf88f5e39aef4fe12a2435a7e158c301a94fd8a58218ea2d691355b"
 metafile = true
 
 [[files]]
-file = "mods/make-bubbles-pop.pw.toml"
-hash = "8cc4a6b45d640818dbd694b7e51949a623a24eacf41ba91345e9ce06172e00ce"
-metafile = true
-
-[[files]]
 file = "mods/malilib.pw.toml"
 hash = "ebf06d8852092e26e6a739e93f46f7e9f34e102792a7bc8762b88615d8125751"
 metafile = true
