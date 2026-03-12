@@ -34,6 +34,14 @@ hash = "73b877ef14e88cab2d1771894a0271472c1a5b0a464773f886678eb631603cab"
 metafile = true
 
 [[files]]
+file = "config/paxi/resourcepacks/terralith-lang/assets/terralith/lang/en_us.json"
+hash = "9a99996037cbc64a1425bb6c3797e8c220dc8b9fa223b8be6df5bf7504fa2492"
+
+[[files]]
+file = "config/paxi/resourcepacks/terralith-lang/pack.mcmeta"
+hash = "75794b27618d1574f95edcdb4d6f61370c0ada6ea0e4a01f1f0fc754d4c9639f"
+
+[[files]]
 file = "config/sparsestructures.json5"
 hash = "1c5274bee29912a4959fc862ef39ac192a31b7bb632e2f6d7e35e043b7e26273"
 
