@@ -193,24 +193,48 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
-## Equipment Compare
-- **CurseForge ID:** 541329
-- **Slug:** equipment-compare-fabric
-- **Mod Loader:** Fabric
-- **Side:** client
-- **Summary:** Shows a comparison tooltip of currently equipped gear alongside hovered items for easy stat comparison.
-- **Why:** Essential QoL for comparing weapons and armor at a glance, especially valuable with Simply Swords and Mythic Upgrades adding many new items.
-- **Dependencies:** Fabric API, Iceberg
-- **Conflicts:** None known; client-side only.
-
 ## Iceberg
 - **CurseForge ID:** 539382
 - **Slug:** iceberg-fabric
+- **Modrinth Slug:** iceberg
 - **Mod Loader:** Fabric
 - **Side:** client
 - **Summary:** A modding library providing common utilities for Grend's mods.
-- **Why:** Required dependency of Equipment Compare.
+- **Why:** Required dependency of Legendary Tooltips and Item Borders.
 - **Dependencies:** None
+- **Conflicts:** None known
+
+## Prism
+- **CurseForge ID:** 665526
+- **Slug:** prism-fabric
+- **Modrinth Slug:** prism-lib
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** A color library providing color-related functionality for Grend's mods.
+- **Why:** Required dependency of Legendary Tooltips and Item Borders.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Legendary Tooltips
+- **CurseForge ID:** 542478
+- **Slug:** legendary-tooltips-fabric
+- **Modrinth Slug:** legendary-tooltips
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** Adds styled tooltip borders, frames, and colored backgrounds based on item rarity or custom rules.
+- **Why:** Adds Prominence-style fancy tooltip visuals that color-code items by rarity tier, making rare items feel special.
+- **Dependencies:** Fabric API, Iceberg, Prism
+- **Conflicts:** None known
+
+## Item Borders
+- **CurseForge ID:** 541604
+- **Slug:** item-borders-fabric
+- **Modrinth Slug:** item-borders
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** Adds colored glowing borders around inventory slots based on item rarity to make rare items stand out.
+- **Why:** Adds Prominence-style colored inventory slot backgrounds that visually distinguish item rarity tiers at a glance.
+- **Dependencies:** Iceberg, Prism; Legendary Tooltips (optional integration)
 - **Conflicts:** None known
 
 ## Traveler's Titles

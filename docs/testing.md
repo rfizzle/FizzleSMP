@@ -69,7 +69,7 @@ Key mods: Sodium, Iris, ImmediatelyFast, Entity Culling, Continuity, LambDynamic
 
 ## 4. HUD & UI Mods
 
-Key mods: Jade, MiniHUD, AppleSkin, Colorful Hearts, guy's Armor HUD, BetterF3, EMI, Mod Menu, Inventory Profiles Next, Mouse Tweaks, Blur+, Equipment Compare, Shulker Box Tooltip, Controlling.
+Key mods: Jade, MiniHUD, AppleSkin, Colorful Hearts, guy's Armor HUD, BetterF3, EMI, Mod Menu, Inventory Profiles Next, Mouse Tweaks, Blur+, Legendary Tooltips, Item Borders, Shulker Box Tooltip, Controlling.
 
 - [ ] **Jade overlay** — Look at blocks and entities. Confirm Jade tooltip appears with correct info. Check Jade Addons shows info for modded blocks (Tech Reborn machines, Iron Chests, etc.).
 - [ ] **MiniHUD** — Enable light level overlay and slime chunk overlay. Confirm they render without conflicts with BetterF3.
@@ -90,7 +90,9 @@ Key mods: Jade, MiniHUD, AppleSkin, Colorful Hearts, guy's Armor HUD, BetterF3, 
 - [ ] **Item Scroller — full inventory craft** — Fill inventory completely except for one partial stack of a craftable item. Place the recipe in a crafting table. Use Item Scroller scroll-craft on the output. Confirm crafted items merge into the partial stack.
 - [ ] **Item Scroller + Mouse Tweaks coexistence** — With both mods active, test scroll-transfer in a chest and scroll-craft in a crafting table. Confirm no keybind conflicts or unexpected behavior.
 - [ ] **Item Scroller + IPN coexistence** — Use IPN sort button and Item Scroller mass-move in the same inventory session. Confirm both work without interfering.
-- [ ] **Equipment Compare** — Hover over armor/weapons while wearing gear. Confirm comparison tooltip appears.
+- [ ] **Legendary Tooltips** — Hover over items of different rarities (common, uncommon, rare, epic). Confirm tooltip borders and backgrounds change style/color based on rarity tier. Check that Enchantment Descriptions text and Shulker Box Tooltip previews render correctly inside styled frames.
+- [ ] **Item Borders** — Open inventory with items of different rarities. Confirm colored glowing borders appear around inventory slots matching each item's rarity tier. Verify TieredZ-modified items show border colors reflecting their tier.
+- [ ] **Legendary Tooltips + Item Borders integration** — Confirm tooltip styling and inventory slot borders use consistent rarity color scheme. Check that both activate simultaneously without visual glitches.
 - [ ] **Shulker Box Tooltip** — Hover over a filled shulker box. Confirm contents display.
 - [ ] **Blur+** — Open any GUI. Confirm background blurs without artifacts or performance drops.
 - [ ] **Controlling** — Open Controls screen. Search for a keybind. Confirm Controlling search/filter works and Searchables integration functions.
@@ -214,10 +216,9 @@ Key mods: Sound Physics Remastered, Presence Footsteps, AmbientSounds, Simple Vo
 
 ## 10. Server-Side & Admin Tools
 
-Key mods: Ledger, Carpet, Connectivity, Chunky, Spark, Open Parties and Claims, No Chat Reports, Fabric Tailor, Neruina, Not Enough Crashes, MixinTrace.
+Key mods: Ledger, Connectivity, Chunky, Spark, Open Parties and Claims, No Chat Reports, Fabric Tailor, Neruina, Not Enough Crashes, MixinTrace.
 
 - [ ] **Ledger** — Break/place blocks. Run `/ledger search` to confirm action logging. Test rollback on a small area.
-- [ ] **Carpet** — Run a Carpet command (e.g., `/carpet setDefault simulationDistance 10`). Confirm it applies.
 - [ ] **Spark** — Run `/spark profiler start`, wait 30 seconds, then `/spark profiler stop`. Review the report for abnormal tick times.
 - [ ] **Chunky** — Run `/chunky start` for a small radius. Confirm chunks pre-generate without errors.
 - [ ] **Connectivity + Krypton** — With both loaded, connect/disconnect from the server multiple times. Monitor for timeout errors or failed handshakes (known soft conflict — both modify networking).
