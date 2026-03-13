@@ -447,6 +447,17 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## Disable Custom Worlds Advice
+- **CurseForge ID:** 401978
+- **Slug:** fabric-disable-custom-worlds-advice
+- **Modrinth Slug:** dcwa
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** Suppresses the "Experimental Settings" warning screen that appears when loading worlds with custom worldgen datapacks.
+- **Why:** Terraphilic (Geophilic/Terralith compat datapack) overrides vanilla biome files, triggering the experimental warning on every world load. This mod silences it.
+- **Dependencies:** None
+- **Conflicts:** None known
+
 ## Visuality
 - **CurseForge ID:** 521126
 - **Slug:** visuality

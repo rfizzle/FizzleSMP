@@ -411,6 +411,11 @@ hash = "cd98ddb3d38d3402b89ab669d423dbc199d70c4d655eaea615add89c30b95241"
 metafile = true
 
 [[files]]
+file = "mods/fabric-disable-custom-worlds-advice.pw.toml"
+hash = "f09084f87289ddb78a43a789927029bcda1b3a1559af97e34410a7c0c2b1dcc3"
+metafile = true
+
+[[files]]
 file = "mods/fabric-language-kotlin.pw.toml"
 hash = "c27a08b54ab9b474a57211f383f511d67fd0023035ee2e76d247667e15183e63"
 metafile = true

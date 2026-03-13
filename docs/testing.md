@@ -15,6 +15,7 @@ Systematic testing guide for verifying mod compatibility and pack stability. Run
 
 These mods all touch worldgen and are the most likely to conflict: Terralith, Tectonic, Geophilic, Terraphilic, Incendium, Nullscape, NoisiumForked, Sparse Structures, all YUNG's mods, Explorify, MVS - Moog's Voyager Structures, MES - Moog's End Structures, MNS - Moog's Nether Structures, MSS - Moog's Soaring Structures, Philip's Ruins, Tidal Towns, The Aether, Deeper and Darker.
 
+- [ ] **No experimental warning** — Create a new world. Confirm the "Experimental Settings" warning screen does NOT appear (Disable Custom Worlds Advice suppresses it).
 - [ ] **New world creation** — Create a new world (default settings). Confirm no crash during initial chunk generation.
 - [ ] **Explore Overworld biomes** — Fly/teleport through at least 10 different biomes. Confirm:
   - Terralith custom biomes generate correctly
