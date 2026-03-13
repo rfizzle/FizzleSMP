@@ -13,7 +13,7 @@ Systematic testing guide for verifying mod compatibility and pack stability. Run
 
 ## 2. World Creation & Chunk Generation
 
-These mods all touch worldgen and are the most likely to conflict: Terralith, Tectonic, Geophilic, Terraphilic, Incendium, Nullscape, C2ME, NoisiumForked, Sparse Structures, all YUNG's mods, Repurposed Structures, Towns and Towers, Structory, Explorify, MVS - Moog's Voyager Structures, MES - Moog's End Structures, MNS - Moog's Nether Structures, MSS - Moog's Soaring Structures, Philip's Ruins, Tidal Towns, Better Archeology, The Aether, Deeper and Darker.
+These mods all touch worldgen and are the most likely to conflict: Terralith, Tectonic, Geophilic, Terraphilic, Incendium, Nullscape, NoisiumForked, Sparse Structures, all YUNG's mods, Explorify, MVS - Moog's Voyager Structures, MES - Moog's End Structures, MNS - Moog's Nether Structures, MSS - Moog's Soaring Structures, Philip's Ruins, Tidal Towns, The Aether, Deeper and Darker.
 
 - [ ] **New world creation** — Create a new world (default settings). Confirm no crash during initial chunk generation.
 - [ ] **Explore Overworld biomes** — Fly/teleport through at least 10 different biomes. Confirm:
@@ -22,21 +22,17 @@ These mods all touch worldgen and are the most likely to conflict: Terralith, Te
   - Geophilic biome tweaks appear (check flower meadows, etc.)
   - No floating structures, cut-off terrain, or void holes
 - [ ] **Structure generation** — Locate and enter at least one of each. To identify which mod generated a structure, use **MiniHUD's structure bounding box overlay** (Renderer Hotkeys → "Structure Bounding Boxes") which displays namespaced IDs like `explorify:ruin_plains` — the prefix before `:` is the mod. As a fallback, stand inside the structure and check the **F3 debug screen** (BetterF3) which shows the namespaced structure ID you're currently in.
-  - Vanilla village (verify Towns and Towers expansions + Gazebos with Spell Binding Table)
+  - Vanilla village (verify CTOV overhauls + Gazebos with Spell Binding Table)
   - YUNG's Better Dungeon
   - YUNG's Better Mineshaft
   - YUNG's Better Stronghold
   - YUNG's Better Desert Temple
   - YUNG's Better Ocean Monument
-  - Repurposed Structures variant (biome-themed)
-  - Structory tower or ruin
   - Hopo Underwater Ruins
   - Explorify structure (dungeon, ruin, or point of interest)
   - MVS - Moog's Voyager Structures (at least 2-3 different structure types)
   - Philip's Ruins ancient ruin
   - Tidal Towns floating ocean village
-  - Better Archeology structure (confirm brush/archeology mechanic works)
-- [ ] **Structure overlap** — Check that YUNG's dungeons and Repurposed Structures dungeons don't spawn on top of each other (RS dungeons/temples should be disabled in RS config).
 - [ ] **Structure density** — With all structure mods active, fly across 2000+ blocks. Confirm Sparse Structures prevents oversaturation and structures don't generate on top of each other.
 - [ ] **MSS - Moog's Soaring Structures** — Look for floating islands in the sky while exploring. Confirm structures generate with loot and mobs.
 - [ ] **Nether generation** — Enter the Nether. Confirm Incendium biomes, custom structures, and YUNG's Better Nether Fortresses generate.
@@ -52,7 +48,7 @@ These mods all touch worldgen and are the most likely to conflict: Terralith, Te
   - Sculk-themed biomes generate correctly
   - New blocks and mobs spawn
   - Loot containers work with Lootr (per-player instancing)
-- [ ] **Chunk gen performance** — Use `/chunky start` to pre-generate a 1000-block radius. Monitor TPS with Spark. Confirm C2ME and NoisiumForked aren't conflicting (watch for deadlocks or errors in log).
+- [ ] **Chunk gen performance** — Use `/chunky start` to pre-generate a 1000-block radius. Monitor TPS with Spark. Confirm NoisiumForked generates chunks without errors in log.
 
 ## 3. Rendering & Visual Mods
 
@@ -197,7 +193,7 @@ Key mods: Xaero's Minimap, Xaero's World Map, Waystones, Nature's Compass, Explo
 - [ ] **World map** — Open Xaero's World Map. Confirm explored chunks display. Create a waypoint and navigate to it.
 - [ ] **Waystones** — Craft and place a Waystone. Teleport between two waystones.
 - [ ] **Nature's Compass** — Craft and use. Search for a biome. Confirm it locates correctly (including Terralith custom biomes).
-- [ ] **Explorer's Compass** — Search for a structure. Confirm it finds both vanilla and modded structures (YUNG's, RS, etc.).
+- [ ] **Explorer's Compass** — Search for a structure. Confirm it finds both vanilla and modded structures (YUNG's, CTOV, Moog's, etc.).
 - [ ] **Traveler's Titles** — Enter a new biome. Confirm RPG-style title appears on screen.
 - [ ] **NetherPortalFix** — Enter a nether portal from a non-standard location. Return and confirm you arrive at the correct overworld portal.
 - [ ] **Open Parties and Claims** — Claim a chunk. Confirm claim appears on Xaero's Minimap (OPAC integration).
@@ -213,7 +209,7 @@ Key mods: Sound Physics Remastered, Presence Footsteps, AmbientSounds, Simple Vo
 
 ## 10. Server-Side & Admin Tools
 
-Key mods: Ledger, Carpet, Connectivity, Chunky, Spark, Open Parties and Claims, No Chat Reports, Fabric Tailor.
+Key mods: Ledger, Carpet, Connectivity, Chunky, Spark, Open Parties and Claims, No Chat Reports, Fabric Tailor, Neruina, Not Enough Crashes, MixinTrace.
 
 - [ ] **Ledger** — Break/place blocks. Run `/ledger search` to confirm action logging. Test rollback on a small area.
 - [ ] **Carpet** — Run a Carpet command (e.g., `/carpet setDefault simulationDistance 10`). Confirm it applies.
@@ -222,10 +218,13 @@ Key mods: Ledger, Carpet, Connectivity, Chunky, Spark, Open Parties and Claims, 
 - [ ] **Connectivity + Krypton** — With both loaded, connect/disconnect from the server multiple times. Monitor for timeout errors or failed handshakes (known soft conflict — both modify networking).
 - [ ] **No Chat Reports** — Send a chat message. Confirm the signature stripping icon appears and messages send successfully.
 - [ ] **Fabric Tailor** — Change skin via command. Confirm it updates for other players.
+- [ ] **Neruina ticking entity catch** — Spawn or encounter a ticking entity crash scenario (e.g., modded entity with broken AI). Confirm Neruina catches the crash, logs the offending entity, and removes it instead of crashing the server. Check `/neruina` command for entity kill log.
+- [ ] **Not Enough Crashes recovery** — If a client crash occurs, confirm the game returns to the title screen instead of closing. Check that the crash report identifies the responsible mod.
+- [ ] **MixinTrace in crash reports** — After any crash, open the crash report. Confirm mixin class names appear in the stack trace with mod attribution (e.g., `at modid.mixin.ClassName`).
 
 ## 11. Loot System
 
-Key mods: Lootr, Better Loot, Loot Integrations, YUNG's Structures Addon for Loot Integrations, LI: CTOV, LI: Philip's Ruins, LI: Moog's Voyager, LI: Better Archeology.
+Key mods: Lootr, Better Loot, Loot Integrations, YUNG's Structures Addon for Loot Integrations, LI: CTOV, LI: Philip's Ruins, LI: Moog's Voyager.
 
 - [ ] **Lootr instancing** — Open the same chest as two different players. Confirm each gets unique loot.
 - [ ] **Better Loot tables** — Check loot quality in vanilla structures. Confirm Better Loot overhauls are present.
@@ -233,7 +232,6 @@ Key mods: Lootr, Better Loot, Loot Integrations, YUNG's Structures Addon for Loo
 - [ ] **LI: CTOV addon** — Find a CTOV village or outpost chest. Confirm modded items appear in the loot (Simply Swords, Artifacts, etc.).
 - [ ] **LI: Philip's Ruins addon** — Find a Philip's Ruins structure chest. Confirm modded items appear in loot tables.
 - [ ] **LI: Moog's Voyager addon** — Find an MVS structure chest. Confirm modded items appear in loot tables.
-- [ ] **LI: Better Archeology addon** — Find a Better Archeology structure chest. Confirm modded items appear in loot tables.
 - [ ] **Mythic Upgrades** — Mine in deep caves. Confirm new ores generate. Craft endgame items.
 
 ## 12. Decorative & Building
@@ -252,7 +250,7 @@ Key mods: Chipped, Supplementaries, Supplementaries Squared, Handcrafted, Beauti
 
 - [ ] **Entity stress** — Spawn 200+ mobs in a small area. Monitor FPS and TPS. Confirm Entity Culling, Clumps (for XP), and Let Me Despawn help manage load.
 - [ ] **Redstone stress** — Build a large redstone contraption. Confirm Lithium optimizations keep TPS stable.
-- [ ] **Chunk loading stress** — Fly at high speed across unloaded chunks. Confirm C2ME + NoisiumForked handle parallel generation without crashes.
+- [ ] **Chunk loading stress** — Fly at high speed across unloaded chunks. Confirm NoisiumForked handles generation without crashes.
 - [ ] **Memory usage** — After 30+ minutes of gameplay, check F3 memory. Confirm FerriteCore and ModernFix keep usage reasonable.
 - [ ] **Background performance** — Alt-tab away from the game. Confirm Dynamic FPS reduces resource usage.
 

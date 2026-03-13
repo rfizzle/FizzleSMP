@@ -246,6 +246,11 @@ hash = "84b25ae5de55e613be0e8823f307fe0f6d40b5384de3af4d143b0a1cbfe528a6"
 metafile = true
 
 [[files]]
+file = "mods/configurable.pw.toml"
+hash = "0184d9025212821027fdb1978234c13cc422e44ac122a2be86a5de6804d286f9"
+metafile = true
+
+[[files]]
 file = "mods/connectivity.pw.toml"
 hash = "b2e116a7b6991e03668f2cfddd84084daf267c37c7282b03bcac97f800bc0f71"
 metafile = true
@@ -646,6 +651,11 @@ hash = "96e387d01a896c852fb054054c2910addc5082a7dfd41e342e42f91ba9b55716"
 metafile = true
 
 [[files]]
+file = "mods/mixintrace.pw.toml"
+hash = "f8c57b83b826e6447a6a97f88f0fab03bb76caebc8272b74f3b890c6b5821d5d"
+metafile = true
+
+[[files]]
 file = "mods/mns-moogs-nether-structures.pw.toml"
 hash = "1262c73d6e6b1d83bca0e5e48d81c92e943915323710ff310fdfce2fde119465"
 metafile = true
@@ -706,6 +716,11 @@ hash = "f85bbc82f8801b099dc53b89d5b52f9b4b9f364b746290c26f6e5447aaaa1db7"
 metafile = true
 
 [[files]]
+file = "mods/neruina.pw.toml"
+hash = "43ac68f0b79ffa313dcf7a8351a65eabe006e96219ba9de5cfdeb894bce0e9d4"
+metafile = true
+
+[[files]]
 file = "mods/nether-chested.pw.toml"
 hash = "3475dc3d84612e43d58b078d5da4128f724c91970e3f7d46222b7814d77e514c"
 metafile = true
@@ -728,6 +743,11 @@ metafile = true
 [[files]]
 file = "mods/not-enough-animations.pw.toml"
 hash = "0eff1785685114f8f4456a3092afec0be77859aa1289467fab801597ff4fec0d"
+metafile = true
+
+[[files]]
+file = "mods/not-enough-crashes.pw.toml"
+hash = "56ba0b18bf1f7134d33269859038b19e548c856fd1fcab7db7793c5a28b0bb2c"
 metafile = true
 
 [[files]]

@@ -167,3 +167,4 @@ Use this document to capture feature ideas first, then map them to specific mods
 | Performance profiling | Identify TPS drops, lag spikes, and memory issues | Spark | In pack |
 | Action logging & rollback | Track block/entity/container changes with full rollback support | Ledger | In pack |
 | Server mechanic tuning | Fine-tune vanilla mechanics (tick speed, spawning, TNT) via rule toggles | Carpet | In pack |
+| Crash resilience | Catch ticking entity crashes, recover to title screen instead of closing, and identify which mod caused crashes | Neruina, Not Enough Crashes, MixinTrace | In pack |

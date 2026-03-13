@@ -41,3 +41,47 @@
 - **Why:** Essential diagnostic tool for identifying TPS drops, lag spikes, and memory issues on the SMP server.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## Neruina
+- **CurseForge ID:** 851046
+- **Slug:** neruina
+- **Modrinth Slug:** neruina
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Prevents ticking entity/block entity crashes from bricking worlds by catching and removing the offending entity.
+- **Why:** Critical stability mod — catches ticking crashes at runtime and removes the problem entity instead of crashing the server, keeping the world playable.
+- **Dependencies:** Fabric API, Configurable
+- **Conflicts:** None known
+
+## Configurable
+- **CurseForge ID:** 1092048
+- **Slug:** configurable
+- **Modrinth Slug:** configurable
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Config library that allows decentralised settings in a mod.
+- **Why:** Required dependency of Neruina.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## Not Enough Crashes
+- **CurseForge ID:** 353890
+- **Slug:** not-enough-crashes
+- **Modrinth Slug:** notenoughcrashes
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** Recovers from crashes to the title screen instead of closing the game, with deobfuscated crash reports and mod identification.
+- **Why:** Lets players recover from client crashes without restarting, and identifies which mod caused the crash for faster debugging.
+- **Dependencies:** None
+- **Conflicts:** None known
+
+## MixinTrace
+- **CurseForge ID:** 433447
+- **Slug:** mixintrace
+- **Modrinth Slug:** mixintrace
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds a list of mixins in the stack trace to crash reports for easier mod conflict identification.
+- **Why:** Makes crash reports actionable by showing exactly which mod's mixin caused the crash, essential for diagnosing conflicts in a large modpack.
+- **Dependencies:** None
+- **Conflicts:** None known
