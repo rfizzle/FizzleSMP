@@ -241,7 +241,7 @@
 - **Mod Loader:** Fabric
 - **Side:** both
 - **Summary:** A shared library mod providing common utilities for Serilum's Fabric mods.
-- **Why:** Required dependency of Villager Names.
+- **Why:** Required dependency of Villager Names, Double Doors, and Stack Refill.
 - **Dependencies:** None
 - **Conflicts:** None known
 

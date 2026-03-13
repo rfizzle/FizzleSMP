@@ -385,11 +385,6 @@ hash = "745f857049c9143b05cc255a1fc1379d7d454a4b8ce75c0d23fe39e5acd2c4b3"
 metafile = true
 
 [[files]]
-file = "mods/equipment-compare-fabric.pw.toml"
-hash = "7b60847c523d8c91b894f1ad1712631e9a2c6d67d484d1c19956f7103e9e9c15"
-metafile = true
-
-[[files]]
 file = "mods/every-compat.pw.toml"
 hash = "bfcadada05f20cd49916d728ffe53bf2f6a6fcb9c344319e7f481910b62df67c"
 metafile = true
@@ -530,11 +525,6 @@ hash = "5a1604eb3c113c5a540de4768de72660ea652b41730ea318798a24b9f60d88b7"
 metafile = true
 
 [[files]]
-file = "mods/inventory-profiles-next.pw.toml"
-hash = "4405bfe1f84a34b68b8236e71461bbbef6245faa747e2b11f7bba1fc2970ec31"
-metafile = true
-
-[[files]]
 file = "mods/irisshaders.pw.toml"
 hash = "e22f858428c3559e60cd513831f15d49a25a915be4e88c09db8bcb055c1c2d27"
 metafile = true
@@ -542,6 +532,11 @@ metafile = true
 [[files]]
 file = "mods/iron-chests-for-fabric.pw.toml"
 hash = "c3656a65bfd7ab4c2ebf4278939906386ec88165fbd24bc33fbc1c31470d1924"
+metafile = true
+
+[[files]]
+file = "mods/item-borders-fabric.pw.toml"
+hash = "62a66beea064efe39bb2b01523be12360a0fc0ef1bb019b6327880305b3c3362"
 metafile = true
 
 [[files]]
@@ -590,13 +585,13 @@ hash = "a03a13cc80277a1937d9a59760ed137b147ad81e881118acf70515930298e4d6"
 metafile = true
 
 [[files]]
-file = "mods/let-me-despawn.pw.toml"
-hash = "e7b3616b2899931a555612ccbec989d27e5bc0b90b200aa9eb597ce4c54476e1"
+file = "mods/legendary-tooltips-fabric.pw.toml"
+hash = "79ca126588d05ac3d09282f47711471963615b9d33fff1397c55023ec37aabca"
 metafile = true
 
 [[files]]
-file = "mods/libipn.pw.toml"
-hash = "fd89e390802b56f2836de60dd8006ad14bbaade29c17831006852703f46c09c2"
+file = "mods/let-me-despawn.pw.toml"
+hash = "e7b3616b2899931a555612ccbec989d27e5bc0b90b200aa9eb597ce4c54476e1"
 metafile = true
 
 [[files]]
@@ -820,6 +815,11 @@ hash = "910b7d375f82f0f733cd90246ba6f67b9a05e9363880163555dc5ffeebff84e0"
 metafile = true
 
 [[files]]
+file = "mods/prism-fabric.pw.toml"
+hash = "6fc62b4837a036c4dca3696e37d442adef63b953636af083941ed02bd515dc31"
+metafile = true
+
+[[files]]
 file = "mods/puffish-skills.pw.toml"
 hash = "392cdfe8252c343e7e2ac45eff6072901f99163dbffa706c5095b18cca6c92da"
 metafile = true
@@ -957,6 +957,11 @@ metafile = true
 [[files]]
 file = "mods/spell-power.pw.toml"
 hash = "174c727584c2667b7b9fe3dfb22036e95fd11546651212d2c455ea515b8169ac"
+metafile = true
+
+[[files]]
+file = "mods/stack-refill.pw.toml"
+hash = "cbbd729ae00922ec7a0130aaf1dc279a7879198f44465ed2e357e4033608fb1a"
 metafile = true
 
 [[files]]

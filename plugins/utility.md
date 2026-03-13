@@ -81,7 +81,7 @@
 - **Summary:** A client mod that adds many shortcuts to move items easier and craft faster in inventory screens.
 - **Why:** Fixes shift-click crafting limitation when inventory is full but has partial stacks; adds scroll-to-craft, mass move, and crafting memory shortcuts.
 - **Dependencies:** MaLiLib
-- **Conflicts:** Soft conflict with Mouse Tweaks and Inventory Profiles Next — all modify inventory interaction. Configure keybinds to avoid overlap.
+- **Conflicts:** Soft conflict with Mouse Tweaks — both modify inventory interaction. Configure keybinds to avoid overlap.
 
 ## Blur+
 - **CurseForge ID:** 393563
@@ -163,24 +163,15 @@
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
 
-## Inventory Profiles Next
-- **CurseForge ID:** 495267
-- **Slug:** inventory-profiles-next
+## Stack Refill
+- **CurseForge ID:** 411813
+- **Slug:** stack-refill
+- **Modrinth Slug:** stack-refill
 - **Mod Loader:** Fabric
 - **Side:** both
-- **Summary:** Advanced inventory management with sorting, auto-refill, locked slots, gear sets, and more.
-- **Why:** Comprehensive inventory QoL — auto-sorts, replaces broken tools, dumps items to chests, and locks slots for organized gameplay.
-- **Dependencies:** Fabric API, Fabric Language Kotlin, libIPN, Mod Menu (optional)
-- **Conflicts:** None known; may have keybind overlap with Mouse Tweaks (configure keybinds to avoid collision)
-
-## libIPN
-- **CurseForge ID:** 679177
-- **Slug:** libipn
-- **Mod Loader:** Fabric
-- **Side:** client
-- **Summary:** GUI and configuration library for Inventory Profiles Next and related mods.
-- **Why:** Required dependency of Inventory Profiles Next.
-- **Dependencies:** None
+- **Summary:** Automatically refills the player's hand when using the final item if a replacement exists.
+- **Why:** Lightweight auto-refill — replaces depleted stacks (blocks, food, tools) from inventory without the overhead of a full inventory management suite.
+- **Dependencies:** Collective
 - **Conflicts:** None known
 
 ## Fabric Language Kotlin
@@ -189,7 +180,7 @@
 - **Mod Loader:** Fabric
 - **Side:** both
 - **Summary:** Enables Fabric mods written in Kotlin to run on the Fabric mod loader.
-- **Why:** Required dependency of Inventory Profiles Next and Zoomify.
+- **Why:** Required dependency of Zoomify.
 - **Dependencies:** None
 - **Conflicts:** None known
 
