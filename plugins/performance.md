@@ -172,7 +172,7 @@
 - **Mod Loader:** Fabric
 - **Side:** both
 - **Summary:** Caches crafting recipes and reduces redundant recipe matching operations, fixing the shift-click crafting lag introduced in 1.12.
-- **Why:** Optimizes crafting table performance by caching the last recipe used and only rechecking when inputs actually change; may also fix shift-click crafting into partial stacks in a full inventory.
+- **Why:** Optimizes crafting table performance by caching the last recipe used and only rechecking when inputs actually change. Confirmed fix for the shift-click crafting bug where output couldn't be shift-clicked into a full/partial inventory.
 - **Dependencies:** Cloth Config, Mod Menu
 - **Conflicts:** None known
 
