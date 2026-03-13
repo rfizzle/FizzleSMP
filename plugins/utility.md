@@ -90,7 +90,7 @@
 - **Mod Loader:** Fabric
 - **Side:** both
 - **Summary:** Essential inventory tweaks including Ctrl-click single-item transfer, sorting, and improved item movement.
-- **Why:** Broadly improves inventory transfer logic — companion to Crafting Tweaks for fixing shift-click crafting into partial stacks.
+- **Why:** Adds Ctrl-click single-item transfer, shift-drag to quick-move multiple items, and middle-click inventory sorting.
 - **Dependencies:** Balm, Fabric API
 - **Conflicts:** None known
 

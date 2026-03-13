@@ -1,0 +1,13 @@
+name = "FastWorkbench [FABRIC]"
+filename = "FastWorkbench-1.21.1-9.1.3.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/ZfW9nBVI/versions/ffsaW3Bo/FastWorkbench-1.21.1-9.1.3.jar"
+hash-format = "sha512"
+hash = "c47a38eee213d0a6a8918467bf152cb6da9d5ef2f4fa90b02a20974d46002d066112643ae206c8297e7057337a2d8a7b67392da4e4b54ed1864585a2bf896a24"
+
+[update]
+[update.modrinth]
+mod-id = "ZfW9nBVI"
+version = "ffsaW3Bo"

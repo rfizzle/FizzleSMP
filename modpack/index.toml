@@ -2,7 +2,7 @@ hash-format = "sha256"
 
 [[files]]
 file = "config/MouseTweaks.cfg"
-hash = "438de2af36bf905993252e5015ad3b2f907473f0ad2722d6c79185728bb9b20b"
+hash = "4069ce1a439d8c37453c1b1e9f2037e0942674c7e48723a39b37eab245792ad4"
 
 [[files]]
 file = "config/Spectrum.json5"
@@ -11,6 +11,10 @@ hash = "fe66b600b2e2b4a2d7c2d64ed736ef05fe902980e5a94e3d40cefa6469bd90cd"
 [[files]]
 file = "config/carryon-common.json"
 hash = "cd9a918e7ca7312c41f34b75685a676ed2aae59793bd54915600be93850a653d"
+
+[[files]]
+file = "config/craftingtweaks-common.toml"
+hash = "f96d8c4a6ef09ec7785c4da4714463a58b82cff51385abe778256703e83f075f"
 
 [[files]]
 file = "config/creeper-healing.toml"
@@ -222,7 +226,7 @@ metafile = true
 
 [[files]]
 file = "mods/cloth-config.pw.toml"
-hash = "9e21cc4fae5ed88e306b4601c5e1533f883aa8b60c6e36dedeec82718be87059"
+hash = "446c173c87b7908daee86b0dee89c6b628c77beb7a0bc091ff5252b7c0062080"
 metafile = true
 
 [[files]]
@@ -448,6 +452,11 @@ metafile = true
 [[files]]
 file = "mods/farmers-delight-refabricated.pw.toml"
 hash = "af1056ae2372dda2a65e73d403fb8f12a1835fe59b75342e6174bf04c5a52a3d"
+metafile = true
+
+[[files]]
+file = "mods/fastworkbench-fabric.pw.toml"
+hash = "92b4fe216e478e20a4455a46ed8d42b2e9cd5f3f405a79dc406708ecde044430"
 metafile = true
 
 [[files]]
@@ -677,7 +686,7 @@ metafile = true
 
 [[files]]
 file = "mods/modmenu.pw.toml"
-hash = "4c55eb1298bc0f186a47b22436feeb0a20fd344d56ad6eb30b482a902c74a5f7"
+hash = "d917697e84a95f857a447d26f94d93169a5a62176c93193cdf80c8d8bc1e280a"
 metafile = true
 
 [[files]]
