@@ -86,6 +86,10 @@ Key mods: Jade, MiniHUD, AppleSkin, Colorful Hearts, guy's Armor HUD, BetterF3, 
   - EMI Professions shows villager trades
 - [ ] **Inventory sorting** — Open a chest. Use Inventory Profiles Next sort button. Confirm it works without breaking Mouse Tweaks scroll behavior.
 - [ ] **Mouse Tweaks** — Shift-click, scroll-transfer items between inventory and chest. Confirm no keybind conflicts with IPN.
+- [ ] **Item Scroller — scroll crafting** — Open a crafting table, place a recipe, scroll over the output slot. Confirm items craft one at a time into the cursor.
+- [ ] **Item Scroller — full inventory craft** — Fill inventory completely except for one partial stack of a craftable item. Place the recipe in a crafting table. Use Item Scroller scroll-craft on the output. Confirm crafted items merge into the partial stack.
+- [ ] **Item Scroller + Mouse Tweaks coexistence** — With both mods active, test scroll-transfer in a chest and scroll-craft in a crafting table. Confirm no keybind conflicts or unexpected behavior.
+- [ ] **Item Scroller + IPN coexistence** — Use IPN sort button and Item Scroller mass-move in the same inventory session. Confirm both work without interfering.
 - [ ] **Equipment Compare** — Hover over armor/weapons while wearing gear. Confirm comparison tooltip appears.
 - [ ] **Shulker Box Tooltip** — Hover over a filled shulker box. Confirm contents display.
 - [ ] **Blur+** — Open any GUI. Confirm background blurs without artifacts or performance drops.

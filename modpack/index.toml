@@ -1,6 +1,10 @@
 hash-format = "sha256"
 
 [[files]]
+file = "config/MouseTweaks.cfg"
+hash = "438de2af36bf905993252e5015ad3b2f907473f0ad2722d6c79185728bb9b20b"
+
+[[files]]
 file = "config/Spectrum.json5"
 hash = "fe66b600b2e2b4a2d7c2d64ed736ef05fe902980e5a94e3d40cefa6469bd90cd"
 
@@ -18,7 +22,7 @@ hash = "c786f704eb7c0e147d187863f36133a2544cfe10ba9b2d26678a72ad6a45d694"
 
 [[files]]
 file = "config/inventoryprofilesnext/inventoryprofiles.json"
-hash = "c4332888117f2029298fe81c97a773d27104e5af3c62068d8f9eba31c61d7dfe"
+hash = "a575cbbfac1520daa4a4b95baa9d0e6e1a1e8f5103a42c4c86019d253ee42f03"
 
 [[files]]
 file = "config/lithium.properties"
@@ -538,6 +542,11 @@ metafile = true
 [[files]]
 file = "mods/iron-chests-for-fabric.pw.toml"
 hash = "c3656a65bfd7ab4c2ebf4278939906386ec88165fbd24bc33fbc1c31470d1924"
+metafile = true
+
+[[files]]
+file = "mods/item-scroller.pw.toml"
+hash = "ddbe87dd7dffe3997042d1ea50e7e981eae7ad18118ab514e38e046072cb768d"
 metafile = true
 
 [[files]]

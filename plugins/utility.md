@@ -58,7 +58,7 @@
 - **Mod Loader:** Fabric
 - **Side:** client
 - **Summary:** A library mod containing shared code for masa's client-side mods (MiniHUD, Litematica, etc.).
-- **Why:** Required dependency of MiniHUD.
+- **Why:** Required dependency of MiniHUD and Item Scroller.
 - **Dependencies:** None
 - **Conflicts:** None known
 
@@ -71,6 +71,17 @@
 - **Why:** Essential QoL for inventory management — adds RMB drag, LMB drag-splitting, and scroll wheel item movement.
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
+
+## Item Scroller
+- **CurseForge ID:** 242064
+- **Slug:** item-scroller
+- **Modrinth Slug:** item-scroller
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** A client mod that adds many shortcuts to move items easier and craft faster in inventory screens.
+- **Why:** Fixes shift-click crafting limitation when inventory is full but has partial stacks; adds scroll-to-craft, mass move, and crafting memory shortcuts.
+- **Dependencies:** MaLiLib
+- **Conflicts:** Soft conflict with Mouse Tweaks and Inventory Profiles Next — all modify inventory interaction. Configure keybinds to avoid overlap.
 
 ## Blur+
 - **CurseForge ID:** 393563
