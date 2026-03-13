@@ -20,7 +20,7 @@ Tracks known conflicts between mods in the pack and how to resolve them.
 | Mod A | Mod B | Details | Resolution |
 |---|---|---|---|
 | Geophilic | Terralith | Both modify vanilla biome files; features may override each other | Use Terraphilic compatibility pack (must load after both mods) |
-| Item Scroller | Mouse Tweaks | Both add scroll-based inventory interactions; Item Scroller uses scroll for crafting/moving, Mouse Tweaks uses scroll for item transfer | Configure keybinds to avoid overlap; Item Scroller handles crafting shortcuts, Mouse Tweaks handles drag-splitting. |
+| Crafting Tweaks | Mouse Tweaks | Both modify crafting grid interactions (Crafting Tweaks: rotate/balance/clear buttons and shift-click output, Mouse Tweaks: drag-splitting) | Complementary — different interaction types. Verify no keybind overlap. |
 | Illager Invasion | Friends & Foes | Both add illager-adjacent mobs (new illagers vs Iceologer/Illusioner); both modify raid/patrol systems | Test raid mechanics together; disable overlapping mob spawns if duplicates appear in config. |
 | Creeper Overhaul | Creeper Healing | Both modify creeper entities (visual variants vs explosion aftermath) | Generally compatible — different aspects of creeper behavior. Verify biome variants still trigger healing. |
 | Carry On | Lootr | Carry On can pick up Lootr chests; carried chests may not retain per-player loot instancing, causing teammates to be unable to open them ([#705](https://github.com/Tschipp/CarryOn/issues/705)) | Configure Carry On to blacklist Lootr chest block entities, or accept that carried loot chests lose instancing. |

@@ -69,7 +69,7 @@ Key mods: Sodium, Iris, ImmediatelyFast, Entity Culling, Continuity, LambDynamic
 
 ## 4. HUD & UI Mods
 
-Key mods: Jade, MiniHUD, AppleSkin, Colorful Hearts, guy's Armor HUD, BetterF3, EMI, Mod Menu, Inventory Profiles Next, Mouse Tweaks, Blur+, Legendary Tooltips, Item Borders, Shulker Box Tooltip, Controlling.
+Key mods: Jade, MiniHUD, AppleSkin, Colorful Hearts, guy's Armor HUD, BetterF3, EMI, Mod Menu, Mouse Tweaks, Crafting Tweaks, Inventory Essentials, Blur+, Legendary Tooltips, Item Borders, Shulker Box Tooltip, Controlling.
 
 - [ ] **Jade overlay** — Look at blocks and entities. Confirm Jade tooltip appears with correct info. Check Jade Addons shows info for modded blocks (Tech Reborn machines, Iron Chests, etc.).
 - [ ] **MiniHUD** — Enable light level overlay and slime chunk overlay. Confirm they render without conflicts with BetterF3.
@@ -84,12 +84,12 @@ Key mods: Jade, MiniHUD, AppleSkin, Colorful Hearts, guy's Armor HUD, BetterF3, 
   - EMI Addon shows Tech Reborn / Farmer's Delight recipes
   - EMIffect shows potion effects
   - EMI Professions shows villager trades
-- [ ] **Inventory sorting** — Open a chest. Use Inventory Profiles Next sort button. Confirm it works without breaking Mouse Tweaks scroll behavior.
-- [ ] **Mouse Tweaks** — Shift-click, scroll-transfer items between inventory and chest. Confirm no keybind conflicts with IPN.
-- [ ] **Item Scroller — scroll crafting** — Open a crafting table, place a recipe, scroll over the output slot. Confirm items craft one at a time into the cursor.
-- [ ] **Item Scroller — full inventory craft** — Fill inventory completely except for one partial stack of a craftable item. Place the recipe in a crafting table. Use Item Scroller scroll-craft on the output. Confirm crafted items merge into the partial stack.
-- [ ] **Item Scroller + Mouse Tweaks coexistence** — With both mods active, test scroll-transfer in a chest and scroll-craft in a crafting table. Confirm no keybind conflicts or unexpected behavior.
-- [ ] **Item Scroller + IPN coexistence** — Use IPN sort button and Item Scroller mass-move in the same inventory session. Confirm both work without interfering.
+- [ ] **Mouse Tweaks** — Shift-click, scroll-transfer items between inventory and chest. Confirm drag-splitting and scroll behavior work correctly.
+- [ ] **Crafting Tweaks — grid buttons** — Open a crafting table. Confirm rotate, balance, and clear buttons appear next to the crafting grid. Test each button with items in the grid.
+- [ ] **Crafting Tweaks — shift-click partial stack fix** — Fill inventory completely except for one partial stack of a craftable item (e.g., 32 sticks). Place the recipe in a crafting table. Shift-click the output. Confirm crafted items merge into the existing partial stack instead of failing silently.
+- [ ] **Crafting Tweaks — right-click craft stack** — Place a recipe in the crafting table. Right-click the output slot. Confirm it crafts the maximum possible amount.
+- [ ] **Inventory Essentials — Ctrl-click** — Open a chest. Ctrl-click an item. Confirm only a single item transfers (instead of the full stack).
+- [ ] **Crafting Tweaks + Mouse Tweaks coexistence** — With both mods active, test drag-splitting in a crafting grid and shift-clicking output. Confirm no keybind conflicts or unexpected behavior.
 - [ ] **Legendary Tooltips** — Hover over items of different rarities (common, uncommon, rare, epic). Confirm tooltip borders and backgrounds change style/color based on rarity tier. Check that Enchantment Descriptions text and Shulker Box Tooltip previews render correctly inside styled frames.
 - [ ] **Item Borders** — Open inventory with items of different rarities. Confirm colored glowing borders appear around inventory slots matching each item's rarity tier. Verify TieredZ-modified items show border colors reflecting their tier.
 - [ ] **Legendary Tooltips + Item Borders integration** — Confirm tooltip styling and inventory slot borders use consistent rarity color scheme. Check that both activate simultaneously without visual glitches.

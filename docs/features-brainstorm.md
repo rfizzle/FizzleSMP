@@ -102,7 +102,7 @@ Use this document to capture feature ideas first, then map them to specific mods
 |---|---|---|---|
 | Minimap & world map | Self-writing minimap with waypoints plus full-screen explored terrain map | Xaero's Minimap, Xaero's World Map | In pack |
 | Recipe & item browser | Look up recipes, usages, loot tables, enchantments, ore levels, and status effects in-game | EMI + addons (Extra Mod Integrations, Loot, Professions, Enchanting, Ores, ffect) | In pack |
-| Inventory sorting & management | Auto-sort, auto-refill broken tools, locked slots, gear sets, and dump-to-chest | Inventory Profiles Next, Mouse Tweaks | In pack |
+| Inventory sorting & management | Drag-splitting, Ctrl-click single transfer, crafting grid buttons, inventory sorting | Mouse Tweaks, Crafting Tweaks, Inventory Essentials | In pack |
 | Block & entity info HUD | See details about what you're looking at without F3 — includes mod-specific tooltips | Jade, Jade Addons | In pack |
 | Food & hunger visibility | See saturation and exhaustion values on the HUD | AppleSkin | In pack |
 | Clean health display | Colored hearts instead of multiple rows for extra HP | Colorful Hearts | In pack |

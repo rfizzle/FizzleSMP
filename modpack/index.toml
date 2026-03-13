@@ -21,10 +21,6 @@ file = "config/emi.css"
 hash = "c786f704eb7c0e147d187863f36133a2544cfe10ba9b2d26678a72ad6a45d694"
 
 [[files]]
-file = "config/inventoryprofilesnext/inventoryprofiles.json"
-hash = "a575cbbfac1520daa4a4b95baa9d0e6e1a1e8f5103a42c4c86019d253ee42f03"
-
-[[files]]
 file = "config/lithium.properties"
 hash = "80242f111b68ddc2d47cac5da4aba000737a121e864e068a697e0a805fbbce25"
 
@@ -272,6 +268,11 @@ metafile = true
 [[files]]
 file = "mods/coroutil.pw.toml"
 hash = "74b82158cadd5d72b6f1c706aa7f190c4e791681472fc98735cec30acf622535"
+metafile = true
+
+[[files]]
+file = "mods/crafting-tweaks.pw.toml"
+hash = "2e10122f9cadd2d63deb39f37cf1351c9cde85fb50df0d8bc9a7737b233de0dd"
 metafile = true
 
 [[files]]
@@ -525,6 +526,11 @@ hash = "5a1604eb3c113c5a540de4768de72660ea652b41730ea318798a24b9f60d88b7"
 metafile = true
 
 [[files]]
+file = "mods/inventory-essentials.pw.toml"
+hash = "b03fd45cc31432ddd04245ec0418e071c170950133ed2d91c53dd9956c8e3db0"
+metafile = true
+
+[[files]]
 file = "mods/irisshaders.pw.toml"
 hash = "e22f858428c3559e60cd513831f15d49a25a915be4e88c09db8bcb055c1c2d27"
 metafile = true
@@ -537,11 +543,6 @@ metafile = true
 [[files]]
 file = "mods/item-borders-fabric.pw.toml"
 hash = "62a66beea064efe39bb2b01523be12360a0fc0ef1bb019b6327880305b3c3362"
-metafile = true
-
-[[files]]
-file = "mods/item-scroller.pw.toml"
-hash = "ddbe87dd7dffe3997042d1ea50e7e981eae7ad18118ab514e38e046072cb768d"
 metafile = true
 
 [[files]]

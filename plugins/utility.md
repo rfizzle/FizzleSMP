@@ -58,7 +58,7 @@
 - **Mod Loader:** Fabric
 - **Side:** client
 - **Summary:** A library mod containing shared code for masa's client-side mods (MiniHUD, Litematica, etc.).
-- **Why:** Required dependency of MiniHUD and Item Scroller.
+- **Why:** Required dependency of MiniHUD.
 - **Dependencies:** None
 - **Conflicts:** None known
 
@@ -72,16 +72,27 @@
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
 
-## Item Scroller
-- **CurseForge ID:** 242064
-- **Slug:** item-scroller
-- **Modrinth Slug:** item-scroller
+## Crafting Tweaks
+- **CurseForge ID:** 233071
+- **Slug:** crafting-tweaks
+- **Modrinth Slug:** crafting-tweaks
 - **Mod Loader:** Fabric
-- **Side:** client
-- **Summary:** A client mod that adds many shortcuts to move items easier and craft faster in inventory screens.
-- **Why:** Fixes shift-click crafting limitation when inventory is full but has partial stacks; adds scroll-to-craft, mass move, and crafting memory shortcuts.
-- **Dependencies:** MaLiLib
-- **Conflicts:** Soft conflict with Mouse Tweaks — both modify inventory interaction. Configure keybinds to avoid overlap.
+- **Side:** both
+- **Summary:** Adds rotate, balance, and clear buttons to crafting grids, plus improved crafting output handling.
+- **Why:** Replaces vanilla crafting output click logic — may fix shift-click into partial stacks when inventory is full. Also adds rotate/balance/clear grid buttons.
+- **Dependencies:** Balm, Fabric API
+- **Conflicts:** None known
+
+## Inventory Essentials
+- **CurseForge ID:** 368825
+- **Slug:** inventory-essentials
+- **Modrinth Slug:** inventory-essentials
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Essential inventory tweaks including Ctrl-click single-item transfer, sorting, and improved item movement.
+- **Why:** Broadly improves inventory transfer logic — companion to Crafting Tweaks for fixing shift-click crafting into partial stacks.
+- **Dependencies:** Balm, Fabric API
+- **Conflicts:** None known
 
 ## Blur+
 - **CurseForge ID:** 393563
