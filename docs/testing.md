@@ -53,7 +53,7 @@ These mods all touch worldgen and are the most likely to conflict: Terralith, Te
 
 ## 3. Rendering & Visual Mods
 
-Key mods: Sodium, Iris, ImmediatelyFast, Entity Culling, Continuity, LambDynamicLights, Visuality, Falling Leaves, Not Enough Animations.
+Key mods: Sodium, Sodium Extra, Iris, ImmediatelyFast, Entity Culling, Enhanced Block Entities, More Culling, Continuity, LambDynamicLights, Visuality, Falling Leaves, Not Enough Animations.
 
 - [ ] **Sodium rendering** — Confirm smooth rendering with Sodium's default settings. Check no graphical glitches (z-fighting, missing faces).
 - [ ] **Shader loading** — Enable Complementary Reimagined via Iris. Walk around and confirm:
@@ -63,6 +63,9 @@ Key mods: Sodium, Iris, ImmediatelyFast, Entity Culling, Continuity, LambDynamic
   - Switch to Complementary Unbound and verify it also loads cleanly
 - [ ] **Connected textures** — Place glass panes and bookshelves. Confirm Continuity connected textures work.
 - [ ] **Dynamic lighting** — Hold a torch in hand (LambDynamicLights). Confirm light emits around the player and doesn't conflict with Sodium.
+- [ ] **Enhanced Block Entities** — Place several chests, signs, beds, and shulker boxes in a room. Confirm they render correctly (no invisible or flickering blocks). Compare FPS with EBE enabled vs disabled in a storage room with 50+ chests.
+- [ ] **More Culling** — Stand inside a dense forest (leaf blocks). Confirm FPS improvement from hidden leaf face culling. Check no visual artifacts on block edges.
+- [ ] **Sodium Extra toggles** — Open Sodium settings. Confirm Sodium Extra adds toggles for animations, particles, weather, fog, and FPS display. Toggle each setting and verify the change takes effect in-game.
 - [ ] **Entity culling** — Stand behind a wall near a mob farm. Open F3 and confirm entity render count drops (Entity Culling working).
 - [ ] **Particles** — Break blocks near leaves (Falling Leaves), hit entities (Visuality). Confirm particles render without lag spikes.
 - [ ] **Animations** — Perform actions (eating, using bow, mining) and confirm Not Enough Animations adds proper third-person animations.
@@ -259,6 +262,7 @@ Key mods: Chipped, Supplementaries, Supplementaries Squared, Handcrafted, Beauti
 - [ ] **Chunk loading stress** — Fly at high speed across unloaded chunks. Confirm NoisiumForked handles generation without crashes.
 - [ ] **Memory usage** — After 30+ minutes of gameplay, check F3 memory. Confirm FerriteCore and ModernFix keep usage reasonable.
 - [ ] **Background performance** — Alt-tab away from the game. Confirm Dynamic FPS reduces resource usage.
+- [ ] **Block entity performance** — Build a room with 100+ chests. Compare FPS with Enhanced Block Entities enabled vs disabled. Confirm significant improvement.
 
 ## 14. Cross-Mod Recipe & Item Conflicts
 

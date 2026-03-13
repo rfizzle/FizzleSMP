@@ -226,7 +226,7 @@ metafile = true
 
 [[files]]
 file = "mods/cloth-config.pw.toml"
-hash = "446c173c87b7908daee86b0dee89c6b628c77beb7a0bc091ff5252b7c0062080"
+hash = "9e21cc4fae5ed88e306b4601c5e1533f883aa8b60c6e36dedeec82718be87059"
 metafile = true
 
 [[files]]
@@ -382,6 +382,11 @@ metafile = true
 [[files]]
 file = "mods/enchantment-descriptions.pw.toml"
 hash = "b116aa5c24c335312737e1a816359496da7fbc9cb41b303e836827eea56ab362"
+metafile = true
+
+[[files]]
+file = "mods/enhanced-block-entities.pw.toml"
+hash = "6ecb2f3a8d26f00767ccb856a57d804aa1f2578938a55df5a1238ea36b51b727"
 metafile = true
 
 [[files]]
@@ -715,6 +720,11 @@ hash = "546c0f69729f25c09e7296d8e6c580734a9d29f7ec02020b1849cca1545d8f49"
 metafile = true
 
 [[files]]
+file = "mods/moreculling.pw.toml"
+hash = "2f5ed07ae4084cdfc77a58dfc8a8c72583073c38500d45fed477043ec832d719"
+metafile = true
+
+[[files]]
 file = "mods/mouse-tweaks.pw.toml"
 hash = "5b80b30e9740f237800bc458d5929ca349530e8a85b974d958acd066d4242b1c"
 metafile = true
@@ -932,6 +942,11 @@ metafile = true
 [[files]]
 file = "mods/skill-tree.pw.toml"
 hash = "227ad32f561011efc446df1d9e5acf138588b47c142128f5a95eeace0bf9d9ea"
+metafile = true
+
+[[files]]
+file = "mods/sodium-extra.pw.toml"
+hash = "34f502a233413c6ffc3d50942eca7651dbef3b1f77a02634736214abcac1190d"
 metafile = true
 
 [[files]]

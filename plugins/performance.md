@@ -176,6 +176,39 @@
 - **Dependencies:** Cloth Config, Mod Menu
 - **Conflicts:** None known
 
+## Enhanced Block Entities
+- **CurseForge ID:** 452046
+- **Slug:** enhanced-block-entities
+- **Modrinth Slug:** ebe
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** Replaces block entity renderers (chests, signs, beds, shulker boxes) with baked block models for significant FPS gains.
+- **Why:** Major FPS improvement in storage rooms and built-up areas by converting expensive block entity renders to optimized baked models.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known; some resource packs may cause invisible chests (enable "Force Resource Pack Compatibility" in EBE settings).
+
+## More Culling
+- **CurseForge ID:** 630104
+- **Slug:** moreculling
+- **Modrinth Slug:** moreculling
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** Improves culling of hidden block faces (leaves, snow, powder snow) to reduce unnecessary rendering.
+- **Why:** Complements Entity Culling by optimizing block-level face culling; significant FPS gain in foliage-heavy and snowy areas.
+- **Dependencies:** Cloth Config API
+- **Conflicts:** None known
+
+## Sodium Extra
+- **CurseForge ID:** 447673
+- **Slug:** sodium-extra
+- **Modrinth Slug:** sodium-extra
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** Adds extra toggle options to Sodium's settings for animations, particles, weather, fog, and FPS display.
+- **Why:** Gives players fine-grained control over visual features for performance tuning; essential companion to Sodium.
+- **Dependencies:** Sodium
+- **Conflicts:** None known
+
 ## Almanac Lib
 - **CurseForge ID:** 1115285
 - **Slug:** almanac-lib
