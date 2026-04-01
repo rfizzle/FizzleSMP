@@ -25,8 +25,12 @@ file = "config/emi.css"
 hash = "c786f704eb7c0e147d187863f36133a2544cfe10ba9b2d26678a72ad6a45d694"
 
 [[files]]
+file = "config/itemborders.toml"
+hash = "eca4a6607f46002a5871e60f771215c93e784287b7647963b17a696e1e76ea1a"
+
+[[files]]
 file = "config/lithium.properties"
-hash = "80242f111b68ddc2d47cac5da4aba000737a121e864e068a697e0a805fbbce25"
+hash = "fa8988198ae2d22fef700a88198449a74116732e1f35ec9758a18d7fb0394c96"
 
 [[files]]
 file = "config/paxi/datapacks/Aether-Accessories-Fix.zip"
@@ -192,6 +196,11 @@ metafile = true
 [[files]]
 file = "mods/bundle-api.pw.toml"
 hash = "71df6736f94cde9e7b5ab070b7a3a5cca59648c98182cb25fb2563737994bf3a"
+metafile = true
+
+[[files]]
+file = "mods/c2me.pw.toml"
+hash = "512a9aa7d85f3cf154f36ac8e287889e5730088fe19b8eb0b1e9409ca2ba5756"
 metafile = true
 
 [[files]]

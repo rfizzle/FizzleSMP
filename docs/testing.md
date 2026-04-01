@@ -13,7 +13,7 @@ Systematic testing guide for verifying mod compatibility and pack stability. Run
 
 ## 2. World Creation & Chunk Generation
 
-These mods all touch worldgen and are the most likely to conflict: Terralith, Tectonic, Geophilic, Terraphilic, Incendium, Nullscape, NoisiumForked, Sparse Structures, all YUNG's mods, Explorify, MVS - Moog's Voyager Structures, MES - Moog's End Structures, MNS - Moog's Nether Structures, MSS - Moog's Soaring Structures, Philip's Ruins, Tidal Towns, The Aether, Deeper and Darker.
+These mods all touch worldgen and are the most likely to conflict: Terralith, Tectonic, Geophilic, Terraphilic, Incendium, Nullscape, C2ME, NoisiumForked, Sparse Structures, all YUNG's mods, Explorify, MVS - Moog's Voyager Structures, MES - Moog's End Structures, MNS - Moog's Nether Structures, MSS - Moog's Soaring Structures, Philip's Ruins, Tidal Towns, The Aether, Deeper and Darker.
 
 - [ ] **No experimental warning** — Create a new world. Confirm the "Experimental Settings" warning screen does NOT appear (Disable Custom Worlds Advice suppresses it).
 - [ ] **New world creation** — Create a new world (default settings). Confirm no crash during initial chunk generation.
@@ -49,6 +49,9 @@ These mods all touch worldgen and are the most likely to conflict: Terralith, Te
   - Sculk-themed biomes generate correctly
   - New blocks and mobs spawn
   - Loot containers work with Lootr (per-player instancing)
+- [ ] **C2ME parallel chunk gen** — Create a new world and fly rapidly across terrain. Monitor TPS with Spark. Confirm C2ME parallelizes chunk generation across CPU cores without errors. Check `latest.log` for any thread-safety exceptions.
+- [ ] **C2ME + Lithium coexistence** — With both mods active, generate chunks in a fresh world near sculk sensors/wardens. Confirm no `ArrayIndexOutOfBoundsException` from `GameEventDispatcherStorage`. If issues arise, disable Lithium's `mixin.world.game_events` in `modpack/config/lithium.properties`.
+- [ ] **C2ME + NoisiumForked coexistence** — Pre-generate 1000-block radius with `/chunky start`. Confirm both optimizations stack (C2ME threading + NoisiumForked algorithms) without conflicts or log errors.
 - [ ] **Chunk gen performance** — Use `/chunky start` to pre-generate a 1000-block radius. Monitor TPS with Spark. Confirm NoisiumForked generates chunks without errors in log.
 
 ## 3. Rendering & Visual Mods
@@ -259,7 +262,7 @@ Key mods: Chipped, Supplementaries, Supplementaries Squared, Handcrafted, Beauti
 
 - [ ] **Entity stress** — Spawn 200+ mobs in a small area. Monitor FPS and TPS. Confirm Entity Culling, Clumps (for XP), and Let Me Despawn help manage load.
 - [ ] **Redstone stress** — Build a large redstone contraption. Confirm Lithium optimizations keep TPS stable.
-- [ ] **Chunk loading stress** — Fly at high speed across unloaded chunks. Confirm NoisiumForked handles generation without crashes.
+- [ ] **Chunk loading stress** — Fly at high speed across unloaded chunks. Confirm C2ME and NoisiumForked handle parallel generation without crashes.
 - [ ] **Memory usage** — After 30+ minutes of gameplay, check F3 memory. Confirm FerriteCore and ModernFix keep usage reasonable.
 - [ ] **Background performance** — Alt-tab away from the game. Confirm Dynamic FPS reduces resource usage.
 - [ ] **Block entity performance** — Build a room with 100+ chests. Compare FPS with Enhanced Block Entities enabled vs disabled. Confirm significant improvement.

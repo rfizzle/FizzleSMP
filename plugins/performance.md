@@ -85,6 +85,17 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## C2ME (Concurrent Chunk Management Engine)
+- **CurseForge ID:** 533097
+- **Slug:** c2me
+- **Modrinth Slug:** c2me-fabric
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Parallelizes chunk loading, generation, and I/O operations to leverage multi-core CPUs for faster chunk performance.
+- **Why:** Significantly speeds up chunk generation and loading on the SMP server, complementing Lithium and NoisiumForked.
+- **Dependencies:** None
+- **Conflicts:** None known (alpha stage — backup worlds recommended)
+
 ## FerriteCore
 - **CurseForge ID:** 459857
 - **Slug:** ferritecore-fabric
