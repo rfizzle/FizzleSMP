@@ -1,13 +1,13 @@
 name = "Spell Engine"
-filename = "spell_engine-fabric-1.9.6+1.21.1.jar"
+filename = "spell_engine-fabric-1.9.9+1.21.1.jar"
 side = "both"
 
 [download]
 hash-format = "sha1"
-hash = "405ae547404fe335abc62c61ff085be2e24b66b7"
+hash = "f59355b98cf545b203b6e736104778d5b4004209"
 mode = "metadata:curseforge"
 
 [update]
 [update.curseforge]
-file-id = 7725382
+file-id = 7789264
 project-id = 807653

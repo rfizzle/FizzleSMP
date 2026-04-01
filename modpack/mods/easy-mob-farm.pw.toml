@@ -1,13 +1,13 @@
 name = "Easy Mob Farm"
-filename = "easy_mob_farm-fabric-1.21.1-10.5.0.jar"
+filename = "easy_mob_farm-fabric-1.21.1-10.6.1.jar"
 side = "both"
 
 [download]
 hash-format = "sha1"
-hash = "dd0a2d2bfa6cd24cf69960e007970856cb02bc29"
+hash = "8bc25fea205a3e59f75c186f46c9710e978ec44b"
 mode = "metadata:curseforge"
 
 [update]
 [update.curseforge]
-file-id = 7697141
+file-id = 7737833
 project-id = 563464

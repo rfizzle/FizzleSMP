@@ -1,13 +1,13 @@
 name = "Spectrum"
-filename = "spectrum-1.10.2.jar"
+filename = "spectrum-1.10.4.jar"
 side = "both"
 
 [download]
 hash-format = "sha1"
-hash = "ceb6fb3036b67b44600bdffec7199d66c294ae91"
+hash = "a0524826abc130061f100ba4564893a7ef03576c"
 mode = "metadata:curseforge"
 
 [update]
 [update.curseforge]
-file-id = 7300632
+file-id = 7781959
 project-id = 556967
