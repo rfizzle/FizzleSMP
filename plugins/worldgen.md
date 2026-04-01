@@ -356,6 +356,17 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## The Bumblezone
+- **CurseForge ID:** 363949
+- **Slug:** the-bumblezone-fabric
+- **Modrinth Slug:** the-bumblezone-fabric
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds an bee-themed dimension accessed by throwing an Ender Pearl at a Bee Nest, featuring unique biomes, mobs, structures, bosses, and bee-related items.
+- **Why:** Adds a fun, fully-featured adventure dimension with unique progression, filling a similar role to the removed Aether as an alternate-dimension content pillar.
+- **Dependencies:** Fabric API, Resourceful Lib, MidnightLib
+- **Conflicts:** None known; operates in its own dimension with no overlap to Overworld/Nether/End worldgen mods.
+
 ## Deeper and Darker
 - **CurseForge ID:** 659011
 - **Slug:** deeperdarker

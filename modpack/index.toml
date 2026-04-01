@@ -1035,6 +1035,11 @@ hash = "605e24df28c2facc0e22397656ff507548b86badc0a8fbc278c72f6ccd3da242"
 metafile = true
 
 [[files]]
+file = "mods/the-bumblezone-fabric.pw.toml"
+hash = "7bbf42e9354fc9d0b58da645fd29b65cec2360084168b479d51317c171577bb3"
+metafile = true
+
+[[files]]
 file = "mods/things-fabric.pw.toml"
 hash = "668a0515ab70249e8e3e8c74d395d47373b3c5eb3162e76531ddc143c1aa73fd"
 metafile = true
