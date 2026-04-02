@@ -9,6 +9,10 @@ file = "config/Spectrum.json5"
 hash = "fe66b600b2e2b4a2d7c2d64ed736ef05fe902980e5a94e3d40cefa6469bd90cd"
 
 [[files]]
+file = "config/artifacts/general.toml"
+hash = "b80ec9f6754ed7039f41bc44034f10a6896e76f0310cfe226e928c07911a9c05"
+
+[[files]]
 file = "config/carryon-common.json"
 hash = "cd9a918e7ca7312c41f34b75685a676ed2aae59793bd54915600be93850a653d"
 
@@ -22,11 +26,15 @@ hash = "6578e5c172d7f25077958eaef214dfea8b69ef8b43a9ca910551024cb41dfc03"
 
 [[files]]
 file = "config/emi.css"
-hash = "c786f704eb7c0e147d187863f36133a2544cfe10ba9b2d26678a72ad6a45d694"
+hash = "c2d60fb6c0b70dabe22cb3bebc173d56fea4666a3ce4e20a484a34cb0bf51e80"
 
 [[files]]
 file = "config/itemborders.toml"
 hash = "eca4a6607f46002a5871e60f771215c93e784287b7647963b17a696e1e76ea1a"
+
+[[files]]
+file = "config/jewelry/fabric_compatibility.json"
+hash = "f24ca146d4ee698636701b21111a0d20d7d371c4b54d0714f1d035c0ec7bf0eb"
 
 [[files]]
 file = "config/lithium.properties"
