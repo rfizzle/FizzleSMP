@@ -155,6 +155,11 @@ Key mods: Accessories, Trinkets, Accessories Compatibility Layer, Artifacts, Thi
 - [ ] **Farmer's Delight** — Craft a Cooking Pot. Cook a recipe. Confirm Chef's Delight professions appear on villagers.
 - [ ] **RightClickHarvest + Supplementaries** — Grow Flax (Supplementaries). Confirm RightClickHarvest compat allows right-click harvest.
 - [ ] **HT's TreeChop** — Chop a tree. Confirm gradual chopping animation and tree falls.
+- [ ] **JustHammers crafting** — Craft an Iron Hammer and a Diamond Hammer. Confirm recipes appear in EMI and crafting succeeds.
+- [ ] **JustHammers mining radius** — Mine stone with an Iron Hammer (3x3), Gold Hammer (3x3x3), Diamond Hammer (5x5), and Netherite Hammer (5x5x5). Confirm each tier mines the correct area.
+- [ ] **JustHammers durability** — Use a hammer until it reaches 1 durability. Confirm it stops working but does not break. Repair it in an anvil and confirm it functions again.
+- [ ] **JustHammers + TieredZ** — Craft a hammer and confirm it receives a TieredZ random tier modifier. Verify stat bonuses apply and the hammer's area-mining still functions correctly.
+- [ ] **JustHammers enchanting** — Enchant a hammer with Efficiency and Unbreaking via Enchanting Infuser or anvil. Confirm enchantments apply and function during multi-block mining.
 
 ### Storage & Transport
 - [ ] **Iron Chests** — Craft and place copper → obsidian chests. Confirm they open and store items.

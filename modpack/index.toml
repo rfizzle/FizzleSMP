@@ -9,6 +9,10 @@ file = "config/Spectrum.json5"
 hash = "fe66b600b2e2b4a2d7c2d64ed736ef05fe902980e5a94e3d40cefa6469bd90cd"
 
 [[files]]
+file = "config/accessories.json5"
+hash = "e38612d1819390c708c08c42572172a7a2220b54c8fce69edb7f91d4e17f96c6"
+
+[[files]]
 file = "config/artifacts/general.toml"
 hash = "b80ec9f6754ed7039f41bc44034f10a6896e76f0310cfe226e928c07911a9c05"
 
@@ -585,6 +589,11 @@ metafile = true
 [[files]]
 file = "mods/jewelry.pw.toml"
 hash = "82f4e5354270642ac4b75ef1ec0bcdb1395a1ee0a179f717115381013b62755e"
+metafile = true
+
+[[files]]
+file = "mods/justhammers.pw.toml"
+hash = "87d7de61e7d6ef64badb3e47faa85487acd42ab8322d8d5c1fb9f6299b78fd5a"
 metafile = true
 
 [[files]]

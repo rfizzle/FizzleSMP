@@ -335,6 +335,17 @@
 - **Dependencies:** Forge Config API Port
 - **Conflicts:** None known
 
+## JustHammers
+- **CurseForge ID:** 681606
+- **Slug:** justhammers
+- **Modrinth Slug:** just-hammers
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds tiered hammers (iron through netherite) that mine in increasingly large areas from 3x3 up to 5x5x5.
+- **Why:** Gives players multi-block mining tools for large excavation projects, with a natural progression from iron (3x3) to netherite (5x5x5). Hammers never fully break (stop at 1 durability) and are repairable at anvils.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
 ## Magnum Torch
 - **CurseForge ID:** 593981
 - **Slug:** magnum-torch
