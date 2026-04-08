@@ -708,3 +708,14 @@
 - **Why:** Simple QoL improvement — clicking one side of a double door opens both, also works with trapdoors and fence gates.
 - **Dependencies:** Collective
 - **Conflicts:** None known
+
+## Stylish Effects
+- **CurseForge ID:** 543661
+- **Slug:** stylish-effects
+- **Modrinth Slug:** stylish-effects
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** Overhauls the status effect display with a compact, configurable layout that can appear in any menu screen.
+- **Why:** Cleaner potion/effect HUD that works well with the many status effects from RPG Series classes, Critical Strike, and combat mods.
+- **Dependencies:** Fabric API, Forge Config API Port, Puzzles Lib
+- **Conflicts:** None known

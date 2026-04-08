@@ -1022,6 +1022,11 @@ hash = "7ca99c3abc7367b614877927a4c8c76163758a09b37556f7116c7e8dfbba40ab"
 metafile = true
 
 [[files]]
+file = "mods/stylish-effects.pw.toml"
+hash = "2bdc5e9de389bbe562540385272bdff6b48d1ac0b5b685937f27e2234087e555"
+metafile = true
+
+[[files]]
 file = "mods/supplementaries-squared.pw.toml"
 hash = "89ebb5702b4582cfc5032d620e525b72bdaeedf96f893d36537ee7263484b8af"
 metafile = true
