@@ -1,0 +1,13 @@
+name = "BeyondEnchant"
+filename = "Mods-beyondenchant-1.21-1.21.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "7ef64863ca2aa7bdb5de335ee698daa1e6749485"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 5882073
+project-id = 1135664

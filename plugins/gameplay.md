@@ -446,6 +446,28 @@
 - **Dependencies:** Fabric API, Resourceful Lib, YetAnotherConfigLib (YACL)
 - **Conflicts:** None known
 
+## NeoEnchant+
+- **CurseForge ID:** 1135663
+- **Slug:** neoenchant
+- **Modrinth Slug:** neoenchant
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds a suite of new enchantments (Fury, Life+, Bright Vision, Builder Arms, Rebound, and more) using Minecraft's Data Driven Enchant system.
+- **Why:** Expands the enchantment pool with creative new options that add depth to gear customization and character builds on the SMP.
+- **Dependencies:** None required; BeyondEnchant (optional companion)
+- **Conflicts:** None known
+
+## BeyondEnchant
+- **CurseForge ID:** 1135664
+- **Slug:** beyondenchant
+- **Modrinth Slug:** beyondenchant
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Raises vanilla enchantment level caps (Sharpness to 7, Efficiency to 10, Protection to 5, Unbreaking to 10, Fortune to 5, Mending to 5, and more) with an online configurator.
+- **Why:** Extends endgame gear progression by allowing higher enchantment levels, giving SMP players more to work toward beyond vanilla caps.
+- **Dependencies:** None required; NeoEnchant+ (optional companion)
+- **Conflicts:** None known
+
 ## Grind Enchantments
 - **CurseForge ID:** 379680
 - **Slug:** grind-enchantments

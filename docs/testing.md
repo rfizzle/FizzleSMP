@@ -201,6 +201,17 @@ Key mods: Accessories, Trinkets, Accessories Compatibility Layer, Artifacts, Thi
 - [ ] **Mutant Monsters + Creeper Overhaul** — Confirm Mutant Creeper spawns independently of Creeper Overhaul's biome variants.
 - [ ] **Hostile Mobs Improve Over Time** — Play through several in-game days. Confirm hostile mobs progressively gain stronger stats (more HP, damage, armor). Check config for tuning scaling rate.
 
+### Enchantment Expansion
+- [ ] **NeoEnchant+ enchantments** — Open an enchanting table or Enchanting Infuser. Confirm NeoEnchant+ enchantments (Fury, Life+, Bright Vision, Builder Arms, Rebound) appear in the enchantment pool and can be applied to gear.
+- [ ] **NeoEnchant+ + Enchanting Infuser** — Use the Enchanting Infuser to select a NeoEnchant+ enchantment. Confirm it applies correctly and the effect activates in-game.
+- [ ] **NeoEnchant+ + Grind Enchantments** — Disenchant a NeoEnchant+ enchantment via grindstone onto a book. Confirm the enchantment transfers successfully.
+- [ ] **NeoEnchant+ + Enchantment Descriptions** — Hover over an item with a NeoEnchant+ enchantment. Confirm the description text appears in the tooltip.
+- [ ] **BeyondEnchant level caps** — Enchant a sword with Sharpness. Confirm the cap exceeds vanilla level V (up to VII). Repeat with Efficiency (up to X) and Protection (up to V).
+- [ ] **BeyondEnchant + Easy Anvils** — Combine high-level BeyondEnchant enchantments on an anvil. Confirm Easy Anvils removes the "too expensive" restriction and allows the combination.
+- [ ] **BeyondEnchant + Archers rebalancing** — Enchant a bow with Power beyond vanilla cap. Confirm Archers' +8%/level scaling applies to the higher levels (not vanilla +50%/level).
+- [ ] **BeyondEnchant + Rogues & Warriors rebalancing** — Enchant a sword with Sharpness beyond vanilla cap. Confirm R&W's +8%/level scaling applies to the higher levels.
+- [ ] **NeoEnchant+ + BeyondEnchant together** — Load both mods simultaneously. Confirm new enchantments from NeoEnchant+ and raised caps from BeyondEnchant both function without conflicts.
+
 ### Death & Respawn
 - [ ] **You're in Grave Danger** — Die with items. Return to death location. Confirm grave spawns and contains all items.
 - [ ] **Grave + Lootr interaction** — Die near a Lootr chest. Confirm grave doesn't interfere with Lootr instancing.

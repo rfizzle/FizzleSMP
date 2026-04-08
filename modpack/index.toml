@@ -182,6 +182,11 @@ hash = "275071850e1740da8843583f6c3c85aed19eddaba2508ec9d5bf3224be49b58d"
 metafile = true
 
 [[files]]
+file = "mods/beyondenchant.pw.toml"
+hash = "835d57284849a56d9c81189d4d331456261cae84e1d0c55ba31dbbc7aca1fb3f"
+metafile = true
+
+[[files]]
 file = "mods/blur-fabric.pw.toml"
 hash = "d698c674db51d6a6825cfda419bc7ce61424a3e649bc2951a1a79df16d07a3e7"
 metafile = true
@@ -764,6 +769,11 @@ metafile = true
 [[files]]
 file = "mods/natures-compass.pw.toml"
 hash = "f85bbc82f8801b099dc53b89d5b52f9b4b9f364b746290c26f6e5447aaaa1db7"
+metafile = true
+
+[[files]]
+file = "mods/neoenchant.pw.toml"
+hash = "53342e10075fad32022d3f554321a817b6d1b6a6b22656c26a203992feeed8d5"
 metafile = true
 
 [[files]]
