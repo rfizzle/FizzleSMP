@@ -66,7 +66,7 @@ Use this document to capture feature ideas first, then map them to specific mods
 | Magic progression | Combine colors to create magical tools and machines, with the goal of breaking through bedrock | Spectrum | In pack |
 | Post-netherite gear | New ores and craftable gear upgrades beyond netherite | Mythic Upgrades | In pack |
 | Expanded cooking & farming | New crops, cooking mechanics, and food items with cutting boards, stoves, and recipes | Farmer's Delight Refabricated, Chef's Delight | In pack |
-| RPG item quality | Random tiers and stat modifiers on crafted gear, with anvil-based reforging | TieredZ | In pack |
+| RPG item quality | Random tiers and stat modifiers on crafted gear, with anvil-based reforging | TieredZ | Removed |
 | RPG class specialization | 100+ node skill tree for all RPG classes with offensive/defensive paths | Skill Tree (RPG Series) | In pack |
 | Jewelry crafting | Mineable gem veins, craftable rings and necklaces with combat bonuses, Jeweler villagers | Jewelry (RPG Series) | In pack |
 | Endgame armor sets | Unique 3D-modeled armor with set bonuses for each RPG class | Armory (RPG Series) | In pack |
@@ -93,6 +93,8 @@ Use this document to capture feature ideas first, then map them to specific mods
 | Ambient & companion creatures | Ferrets, otters, red pandas, and other tameable companion mobs | Critters and Companions | In pack |
 | Attack through grass | Target and hit mobs through transparent blocks like grass and flowers | SwingThrough | In pack |
 | Explosion healing | Creeper and other explosions heal naturally over time instead of scarring terrain | Creeper Healing | In pack |
+| Mutant mini-bosses | Roaming mutant variants of vanilla mobs as organic mini-boss encounters | Mutant Monsters | In pack |
+| Progressive mob difficulty | Hostile mobs get stronger over time as the world ages, scaling naturally with player progression | Hostile Mobs Improve Over Time | In pack |
 | RPG village structures | Spell Binding Tables in village gazebos, Wizard Towers, Sanctuaries, Barracks | Gazebos, Wizards, Paladins & Priests, Rogues & Warriors (RPG Series) | In pack |
 
 ### Server Quality of Life

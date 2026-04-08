@@ -547,27 +547,6 @@
 - **Dependencies:** Accessories, Fzzy Config, Fabric API
 - **Conflicts:** None known
 
-## LibZ
-- **CurseForge ID:** 841617
-- **Slug:** libz
-- **Modrinth Slug:** libz
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Open source library for Globox_Z mods, providing shared utilities.
-- **Why:** Required dependency of TieredZ.
-- **Dependencies:** Fabric API, Cloth Config API
-- **Conflicts:** None known
-
-## TieredZ
-- **CurseForge ID:** 615948
-- **Slug:** tieredz
-- **Modrinth Slug:** tieredz
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Adds random tiers and stat modifiers to crafted tools and armor, with anvil-based reforging to improve tiers.
-- **Why:** Adds RPG-style item quality variance — every crafted tool/armor gets a random tier with bonus stats, and players can reforge gear at anvils to chase better rolls.
-- **Dependencies:** Fabric API, Cloth Config API, LibZ
-- **Conflicts:** None known
 
 ## Easy Mob Farm
 - **CurseForge ID:** 563464

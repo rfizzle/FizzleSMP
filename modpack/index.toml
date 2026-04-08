@@ -532,6 +532,11 @@ hash = "68c48eeaee34bdd0d22981a4f85105bc1037d558be74d2c115696430049f839d"
 metafile = true
 
 [[files]]
+file = "mods/hostile-mobs-improve-over-time.pw.toml"
+hash = "713acb52c8925ee44a5571c2ab3426820962b9ad045be4af6c953f44f793cf9c"
+metafile = true
+
+[[files]]
 file = "mods/iceberg-fabric.pw.toml"
 hash = "277d7964612313128a767bc36179a8a28b4339e21cad0b8a8059b3f1f750c976"
 metafile = true
@@ -624,11 +629,6 @@ metafile = true
 [[files]]
 file = "mods/let-me-despawn.pw.toml"
 hash = "e7b3616b2899931a555612ccbec989d27e5bc0b90b200aa9eb597ce4c54476e1"
-metafile = true
-
-[[files]]
-file = "mods/libz.pw.toml"
-hash = "5cf1dea6b7a960aefadfd61a7ed17eeb85ea1c9da88835832d9e17496187a76f"
 metafile = true
 
 [[files]]
@@ -749,6 +749,11 @@ metafile = true
 [[files]]
 file = "mods/mss-moogs-soaring-structures.pw.toml"
 hash = "754ec9e9d76c7d53977a1a85e74394f59855e315d8b9f96f050aa926280bb44f"
+metafile = true
+
+[[files]]
+file = "mods/mutant-monsters.pw.toml"
+hash = "070eb02fb18572631c16e3d128aafd5add4e5d7330a537bd50131ef4aa8f53f0"
 metafile = true
 
 [[files]]
@@ -1064,11 +1069,6 @@ metafile = true
 [[files]]
 file = "mods/tidal-towns.pw.toml"
 hash = "37d595b789dc86445ef6cf4773707a7a2e90ab9ecfec82e552ed7f2cdc598d78"
-metafile = true
-
-[[files]]
-file = "mods/tieredz.pw.toml"
-hash = "2c81621c20b317e0b8f81da6a254e5e5fe3cac42cbfa5e8a3052bb5eff397d3c"
 metafile = true
 
 [[files]]

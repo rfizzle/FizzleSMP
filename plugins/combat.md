@@ -263,3 +263,36 @@
 - **Why:** Adds meaningful combat RNG depth with crit chance builds via enchantments and potions, complementing the RPG class system and Better Combat.
 - **Dependencies:** Fabric API
 - **Conflicts:** Replaces vanilla jump-critical system with RNG-based crits (configurable). Toggle vanilla jump crits in config.
+
+## Illager Invasion
+- **CurseForge ID:** 891324
+- **Slug:** illager-invasion
+- **Modrinth Slug:** illager-invasion
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds new illager enemy types with expanded raid mechanics and new structures, ported from Illager Expansion.
+- **Why:** Makes raids genuinely dangerous and adds organic combat encounters through new illager variants without forced progression.
+- **Dependencies:** Fabric API, Forge Config API Port, Puzzles Lib
+- **Conflicts:** Overlaps with Friends & Foes on illager-adjacent mobs and raid/patrol systems; test raid mechanics together.
+
+## Mutant Monsters
+- **CurseForge ID:** 852665
+- **Slug:** mutant-monsters
+- **Modrinth Slug:** mutant-monsters
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds mutant variants of vanilla mobs (Mutant Zombie, Mutant Creeper, Mutant Skeleton, etc.) that serve as roaming mini-bosses with unique attacks and drops.
+- **Why:** Provides organic mini-boss encounters you stumble into while exploring — no quest gates, just dangerous mutants that spawn naturally.
+- **Dependencies:** Fabric API, Forge Config API Port, Puzzles Lib
+- **Conflicts:** None known
+
+## Hostile Mobs Improve Over Time
+- **CurseForge ID:** 1409469
+- **Slug:** hostile-mobs-improve-over-time-unofficial
+- **Modrinth Slug:** hostile-mobs-improve-over-time
+- **Mod Loader:** Fabric
+- **Side:** server
+- **Summary:** Hostile mobs progressively gain stronger stats and new abilities the longer the world exists, with configurable scaling.
+- **Why:** Adds natural difficulty escalation — the world gets harder as players progress, without gates or quest requirements. Keeps combat challenging in late-game.
+- **Dependencies:** None
+- **Conflicts:** None known

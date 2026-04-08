@@ -97,7 +97,7 @@ Key mods: Jade, MiniHUD, AppleSkin, Colorful Hearts, guy's Armor HUD, BetterF3, 
 - [ ] **Inventory Essentials — Ctrl-click** — Open a chest. Ctrl-click an item. Confirm only a single item transfers (instead of the full stack).
 - [ ] **Crafting Tweaks + Mouse Tweaks coexistence** — With both mods active, test drag-splitting in a crafting grid and shift-clicking output. Confirm no keybind conflicts or unexpected behavior.
 - [ ] **Legendary Tooltips** — Hover over items of different rarities (common, uncommon, rare, epic). Confirm tooltip borders and backgrounds change style/color based on rarity tier. Check that Enchantment Descriptions text and Shulker Box Tooltip previews render correctly inside styled frames.
-- [ ] **Item Borders** — Open inventory with items of different rarities. Confirm colored glowing borders appear around inventory slots matching each item's rarity tier. Verify TieredZ-modified items show border colors reflecting their tier.
+- [ ] **Item Borders** — Open inventory with items of different rarities. Confirm colored glowing borders appear around inventory slots matching each item's rarity tier.
 - [ ] **Legendary Tooltips + Item Borders integration** — Confirm tooltip styling and inventory slot borders use consistent rarity color scheme. Check that both activate simultaneously without visual glitches.
 - [ ] **Shulker Box Tooltip** — Hover over a filled shulker box. Confirm contents display.
 - [ ] **Blur+** — Open any GUI. Confirm background blurs without artifacts or performance drops.
@@ -122,7 +122,7 @@ Key mods: Better Combat, Combat Roll, Simply Swords, SwingThrough, Spell Engine,
 - [ ] **Jewelry + Accessories Compat** — Equip jewelry alongside Artifacts trinkets. Confirm both work through Accessories Compatibility Layer without slot conflicts.
 - [ ] **Armory upgrade** — Obtain a Superior Armor Upgrade and Upgrade Crystal from End City or Ancient City chests. Upgrade RPG class armor into epic variant. Confirm 3D model, set bonuses, and spell modifiers apply.
 - [ ] **Arsenal legendary weapons** — Kill Ender Dragon, Wither, or Warden. Confirm Arsenal legendary weapons drop. Verify passive spells activate on use (Swirling, Shockwave, Radiance, etc.).
-- [ ] **Arsenal + TieredZ** — Check if Arsenal legendary weapons receive TieredZ modifiers. Confirm passive spells still function with tier bonuses.
+- [ ] **Arsenal loot drops** — Confirm Arsenal legendary weapons drop from bosses and end-game chests. Verify passive spells activate on use.
 - [ ] **Skill Tree** — Press `K` to open skill tree. Spend XP-earned skill points on nodes. Confirm offensive/defensive specializations apply to class skills. Test spell modifier nodes that alter existing spells.
 - [ ] **Skill Tree reset** — Obtain and use an Orb of Oblivion. Confirm all skill points are refunded and skills are reset.
 - [ ] **Enchantment rebalancing** — Enchant a bow with Power V. Confirm damage bonus is +40% total (8%/level × 5) instead of vanilla +250%. Enchant a sword with Sharpness V. Confirm +40% instead of vanilla bonus.
@@ -158,7 +158,7 @@ Key mods: Accessories, Trinkets, Accessories Compatibility Layer, Artifacts, Thi
 - [ ] **JustHammers crafting** — Craft an Iron Hammer and a Diamond Hammer. Confirm recipes appear in EMI and crafting succeeds.
 - [ ] **JustHammers mining radius** — Mine stone with an Iron Hammer (3x3), Gold Hammer (3x3x3), Diamond Hammer (5x5), and Netherite Hammer (5x5x5). Confirm each tier mines the correct area.
 - [ ] **JustHammers durability** — Use a hammer until it reaches 1 durability. Confirm it stops working but does not break. Repair it in an anvil and confirm it functions again.
-- [ ] **JustHammers + TieredZ** — Craft a hammer and confirm it receives a TieredZ random tier modifier. Verify stat bonuses apply and the hammer's area-mining still functions correctly.
+- [ ] **JustHammers area-mining** — Craft a hammer and confirm area-mining functions correctly across all tiers.
 - [ ] **JustHammers enchanting** — Enchant a hammer with Efficiency and Unbreaking via Enchanting Infuser or anvil. Confirm enchantments apply and function during multi-block mining.
 
 ### Storage & Transport
@@ -192,12 +192,14 @@ Key mods: Accessories, Trinkets, Accessories Compatibility Layer, Artifacts, Thi
 - [ ] **Villager Names** — Check that villagers have random names displayed.
 - [ ] **Let Me Despawn** — Give an item to a mob. Wait for despawn timer. Confirm it despawns (vanilla would keep it).
 
-### Item Tiers & Reforging
-- [ ] **TieredZ tier assignment** — Craft a diamond sword and pickaxe. Confirm each receives a random tier modifier with stat bonuses shown in the tooltip.
-- [ ] **TieredZ reforging** — Place flint, a tiered item, and an amethyst shard in an anvil. Confirm reforging changes the tier and that higher-tier results become more likely with repeated reforges.
-- [ ] **TieredZ + Simply Swords** — Craft or spawn a Simply Swords weapon. Confirm it receives a TieredZ modifier and that the weapon's special ability still functions correctly.
-- [ ] **TieredZ + Mythic Upgrades** — Craft a Mythic Upgrades item (e.g., Ruby Sword). Confirm it receives a TieredZ tier and that the material bonuses stack correctly with the tier modifier.
-- [ ] **TieredZ + Enchanting** — Apply enchantments to a tiered item via Enchanting Infuser and Easy Anvils. Confirm enchantments and tier modifiers coexist without issues.
+### Mob Difficulty & Mini-Bosses
+- [ ] **Illager Invasion structures** — Explore the overworld for new illager structures. Confirm new illager types spawn and have unique behaviors.
+- [ ] **Illager Invasion raids** — Trigger a village raid. Confirm new illager types participate and expanded raid mechanics function.
+- [ ] **Illager Invasion + Friends & Foes** — Trigger a raid with both mods loaded. Confirm no duplicate or conflicting illager-adjacent mobs in raid waves.
+- [ ] **Mutant Monsters spawning** — Explore the overworld. Confirm mutant variants (Mutant Zombie, Mutant Creeper, Mutant Skeleton, etc.) spawn naturally as mini-bosses.
+- [ ] **Mutant Monsters combat** — Fight a mutant mob. Confirm unique attacks, animations, and drops function correctly.
+- [ ] **Mutant Monsters + Creeper Overhaul** — Confirm Mutant Creeper spawns independently of Creeper Overhaul's biome variants.
+- [ ] **Hostile Mobs Improve Over Time** — Play through several in-game days. Confirm hostile mobs progressively gain stronger stats (more HP, damage, armor). Check config for tuning scaling rate.
 
 ### Death & Respawn
 - [ ] **You're in Grave Danger** — Die with items. Return to death location. Confirm grave spawns and contains all items.
