@@ -86,13 +86,3 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
-## Carpet
-- **CurseForge ID:** 349239
-- **Slug:** carpet
-- **Modrinth Slug:** carpet
-- **Mod Loader:** Fabric
-- **Side:** server
-- **Summary:** Server-side rule engine for fine-tuning vanilla mechanics (spawning, tick speed, TNT, random tick rates) via toggleable rules.
-- **Why:** Fulfills the "server mechanic tuning" feature — gives admins granular control over vanilla mechanics without per-mod config files, essential for balancing an SMP with 160+ mods.
-- **Dependencies:** None
-- **Conflicts:** Previously removed (28dfbf0) due to CustomPacketPayload mixin ClassCastException — traced to a Vivecraft bug, not Carpet (gnembon/fabric-carpet#2021, closed). No current conflicts known.

@@ -217,11 +217,6 @@ hash = "56cd11a88ada9e8ef8614ce57f23db929b06579752ca4a1458dcfdf4a5aead9a"
 metafile = true
 
 [[files]]
-file = "mods/carpet.pw.toml"
-hash = "d753b022376600aa0b1c6d5f218f89a4bf56e54d8b6d80bd9d27c4a56e0efaae"
-metafile = true
-
-[[files]]
 file = "mods/carry-on.pw.toml"
 hash = "d2477bde2046b9d2021acbd206915d63eceba39309f20f697aaa06533278bef0"
 metafile = true
@@ -1243,7 +1238,7 @@ metafile = true
 
 [[files]]
 file = "options.txt"
-hash = "f2cb6341274e1281c575cae80bcc44d0415bc888b65ecdbabc1ad0938fbb0d27"
+hash = "046fd8e558fad87976f361e4ffbda360bb78539293443ed11519317fb497ad38"
 
 [[files]]
 file = "shaderpacks/complementary-reimagined.pw.toml"
