@@ -1,6 +1,6 @@
 name = "spark"
 filename = "spark-1.10.109-fabric.jar"
-side = "server"
+side = "both"
 
 [download]
 hash-format = "sha1"

@@ -36,7 +36,7 @@
 - **CurseForge ID:** 361579
 - **Slug:** spark
 - **Mod Loader:** Fabric
-- **Side:** server
+- **Side:** both
 - **Summary:** A performance profiler for Minecraft clients, servers, and proxies.
 - **Why:** Essential diagnostic tool for identifying TPS drops, lag spikes, and memory issues on the SMP server.
 - **Dependencies:** None
