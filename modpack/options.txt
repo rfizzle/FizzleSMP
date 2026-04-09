@@ -109,7 +109,7 @@ key_key.togglePerspective:key.keyboard.f5
 key_key.smoothCamera:key.keyboard.unknown
 key_key.fullscreen:key.keyboard.f11
 key_key.spectatorOutlines:key.keyboard.unknown
-key_key.swapOffhand:key.keyboard.f
+key_key.swapOffhand:key.keyboard.f15
 key_key.saveToolbarActivator:key.keyboard.unknown
 key_key.loadToolbarActivator:key.keyboard.unknown
 key_key.advancements:key.keyboard.l
@@ -138,7 +138,7 @@ key_artifacts.key.universal_attractor.toggle:key.keyboard.unknown
 key_keybinds.bettercombat.feint:key.keyboard.unknown
 key_keybinds.bettercombat.toggle_mine_with_weapons:key.keyboard.unknown
 key_key.carry.desc:key.keyboard.unknown
-key_keybinds.combat_roll.roll:key.keyboard.r
+key_keybinds.combat_roll.roll:key.keyboard.f13
 key_key.entityculling.toggle:key.keyboard.unknown
 key_equipmentcompare.key.showTooltips:key.keyboard.left.shift
 key_key.fabrictailor.toggle_skin_gui:key.keyboard.o
@@ -172,7 +172,7 @@ key_key.things.place_item:key.keyboard.j
 key_key.things.openenderchest:key.keyboard.unknown
 key_key.things.toggle_socks_jump_boost:key.keyboard.caps.lock
 key_key.trade_cycling.cycle_trades:key.keyboard.grave.accent
-key_key.travelersbackpack.inventory:key.keyboard.b
+key_key.travelersbackpack.inventory:key.keyboard.f16
 key_key.travelersbackpack.sort:key.keyboard.unknown
 key_key.travelersbackpack.ability:key.keyboard.unknown
 key_key.travelersbackpack.cycle_tool:key.keyboard.unknown
@@ -212,14 +212,14 @@ key_gui.xaero_alternative_list_players:key.keyboard.unknown
 key_gui.xaero_toggle_tracked_players_on_map:key.keyboard.unknown
 key_gui.xaero_toggle_tracked_players_in_world:key.keyboard.unknown
 key_gui.xaero_toggle_pac_chunk_claims:key.keyboard.unknown
-key_gui.xaero_open_map:key.keyboard.m
+key_gui.xaero_open_map:key.keyboard.f17
 key_gui.xaero_open_settings:key.keyboard.right.bracket
 key_gui.xaero_world_map_server_settings:key.keyboard.unknown
 key_gui.xaero_map_zoom_in:key.keyboard.unknown
 key_gui.xaero_map_zoom_out:key.keyboard.unknown
 key_gui.xaero_quick_confirm:key.keyboard.right.shift
 key_gui.xaero_toggle_dimension:key.keyboard.unknown
-key_zoomify.key.zoom:key.keyboard.c
+key_zoomify.key.zoom:key.keyboard.f14
 key_zoomify.key.zoom.secondary:key.keyboard.f6
 key_iris.keybind.reload:key.keyboard.unknown
 key_iris.keybind.toggleShaders:key.keyboard.unknown
