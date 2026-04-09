@@ -709,6 +709,17 @@
 - **Dependencies:** Collective
 - **Conflicts:** None known
 
+## Controlify
+- **CurseForge ID:** 835847
+- **Slug:** controlify
+- **Modrinth Slug:** controlify
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** Adds full controller support to Minecraft Java Edition with vibration, gyro, radial menus, on-screen button prompts, and GUI navigation.
+- **Why:** Enables players to use gamepads/controllers for the SMP, supporting accessibility needs and couch gaming preferences.
+- **Dependencies:** Fabric API, YetAnotherConfigLib (YACL); Mod Menu (optional)
+- **Conflicts:** None known
+
 ## Stylish Effects
 - **CurseForge ID:** 543661
 - **Slug:** stylish-effects

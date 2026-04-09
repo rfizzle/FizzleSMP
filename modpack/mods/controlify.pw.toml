@@ -1,0 +1,13 @@
+name = "Controlify (Controller support)"
+filename = "controlify-3.0.0-beta.3+1.21.1-fabric.jar"
+side = "client"
+
+[download]
+hash-format = "sha1"
+hash = "d4efd82b986b151de1c3bd2a919def19d8becb95"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7677323
+project-id = 835847

@@ -303,7 +303,22 @@ Key mods: Fabric Seasons, Fabric Seasons: Terralith Compat, Fabric Seasons: Deli
 - [ ] **Traveler's Titles + Seasons** — Enter a biome during different seasons. Confirm no visual conflicts with biome title display.
 - [ ] **SeasonHud display** — Confirm current season displays on the HUD or under Xaero's Minimap. Cycle through seasons and verify the display updates.
 
-## 16. Miscellaneous
+## 16. Controller Support
+
+Key mods: Controlify, Better Combat, EMI, Controlling.
+
+- [ ] **Controller detection** — Connect a gamepad/controller. Launch the game. Confirm Controlify detects the controller and runs automatic deadzone calibration.
+- [ ] **Controller navigation** — Navigate the main menu, inventory, and settings screens using only the controller. Confirm cursor snapping works in inventory slots.
+- [ ] **On-screen button prompts** — With a controller active, confirm on-screen button guides display correct glyphs for your controller model (Xbox, PlayStation, etc.).
+- [ ] **Controller combat** — Attack mobs using controller inputs. Confirm Better Combat swing animations trigger correctly from controller attack button.
+- [ ] **Controller + Combat Roll** — Trigger a combat roll via controller input. Confirm dodge animation plays.
+- [ ] **Controller + EMI** — Open inventory with controller. Navigate EMI recipe sidebar using controller. Search for and view a recipe.
+- [ ] **Radial menu** — Open the Controlify radial menu. Confirm bound actions are accessible and functional.
+- [ ] **Vibration feedback** — Take damage, break blocks, and trigger lightning. Confirm controller vibrates on each event (if supported by controller).
+- [ ] **Controller + Controlling keybinds** — Open Controls screen. Confirm controller bindings are accessible and Controlling's search/filter works for controller-mapped keys.
+- [ ] **Gyro aiming** (if supported) — Enable gyro in Controlify settings. Confirm fine aim control works for looking around.
+
+## 17. Miscellaneous
 
 - [ ] **Zoomify** — Press zoom key. Confirm smooth zoom without conflicts with Xaero's Minimap keybinds.
 - [ ] **Better Than Mending** — Sneak + right-click with a Mending item and XP. Confirm instant repair.
