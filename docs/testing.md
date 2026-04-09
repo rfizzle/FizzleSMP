@@ -251,6 +251,10 @@ Key mods: Ledger, Connectivity, Chunky, Spark, Open Parties and Claims, No Chat 
 - [ ] **Neruina ticking entity catch** — Spawn or encounter a ticking entity crash scenario (e.g., modded entity with broken AI). Confirm Neruina catches the crash, logs the offending entity, and removes it instead of crashing the server. Check `/neruina` command for entity kill log.
 - [ ] **Not Enough Crashes recovery** — If a client crash occurs, confirm the game returns to the title screen instead of closing. Check that the crash report identifies the responsible mod.
 - [ ] **MixinTrace in crash reports** — After any crash, open the crash report. Confirm mixin class names appear in the stack trace with mod attribution (e.g., `at modid.mixin.ClassName`).
+- [ ] **Carpet loading** — Confirm Carpet loads on the server. Run `/carpet list` to verify the rule list is accessible.
+- [ ] **Carpet rules** — Toggle a rule (e.g., `/carpet setDefault commandPlayer true`). Confirm it takes effect. Reset it and confirm it reverts.
+- [ ] **Carpet + C2ME coexistence** — With both mods loaded, fly rapidly across unloaded chunks while Carpet rules are active. Monitor TPS with Spark. Confirm no thread-safety exceptions in `latest.log`.
+- [ ] **Carpet + Lithium coexistence** — With both mods loaded, run a Spark profiler during normal gameplay. Confirm both optimizations stack without conflicts.
 
 ## 11. Loot System
 
