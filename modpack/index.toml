@@ -33,6 +33,10 @@ file = "config/emi.css"
 hash = "c2d60fb6c0b70dabe22cb3bebc173d56fea4666a3ce4e20a484a34cb0bf51e80"
 
 [[files]]
+file = "config/enhanced_bes.properties"
+hash = "21d14939c5ac3b7c79083fbf9de7c14d9ae4cc1e4fa85848a931be5bf5b08deb"
+
+[[files]]
 file = "config/itemborders.toml"
 hash = "eca4a6607f46002a5871e60f771215c93e784287b7647963b17a696e1e76ea1a"
 
@@ -894,6 +898,11 @@ metafile = true
 [[files]]
 file = "mods/reborncore.pw.toml"
 hash = "03879632a7143e8955128c63bec2a1666329b50b77f4ea6b6309558394a37e31"
+metafile = true
+
+[[files]]
+file = "mods/refined-storage.pw.toml"
+hash = "4c3a04d610e2cbeb09c71c0df6c5ba2d9b9b12599457b0e2a4bbc78fa8c07e69"
 metafile = true
 
 [[files]]

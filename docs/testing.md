@@ -174,6 +174,13 @@ Key mods: Accessories, Trinkets, Accessories Compatibility Layer, Artifacts, Thi
 - [ ] **Oritech** — Craft Oritech machines. Confirm animations play and ore processing functions.
 - [ ] **Tech Reborn + Oritech coexistence** — Confirm both tech mods load without recipe conflicts. Check Polymorph resolves any overlapping recipes.
 - [ ] **Polymorph** — Craft an item with conflicting recipes (e.g., if both tech mods add a gear recipe). Confirm Polymorph popup lets you choose.
+- [ ] **Refined Storage controller** — Craft a Controller, Grid, and a Disk Drive with storage disks. Place and connect with cables. Open the Grid and confirm items can be inserted and retrieved from the network.
+- [ ] **Refined Storage importer/exporter** — Place an Importer on a chest of items and an Exporter on an empty chest. Confirm items flow into the network and out to the target chest.
+- [ ] **Refined Storage autocrafting** — Set up a Crafter with a recipe pattern. Request autocrafting from the Grid. Confirm the recipe completes and the result enters the network.
+- [ ] **Refined Storage + Tech Reborn** — Use an RS Exporter to feed ore into a Tech Reborn Grinder, and an Importer on the output. Confirm processed materials return to the network.
+- [ ] **Refined Storage + Oritech** — Use RS Importer/Exporter on an Oritech machine. Confirm items flow correctly between the network and Oritech automation.
+- [ ] **Refined Storage + Simple Conveyor Belts** — Feed a conveyor belt into an RS Importer chest, and pull from an RS Exporter chest with a belt. Confirm items move between both logistics systems.
+- [ ] **Refined Storage + Carry On** — Pick up an active RS network node (cable, importer, controller) with Carry On and place it elsewhere. Confirm the network does not corrupt or lose connectivity. If issues occur, blacklist RS blocks in Carry On config.
 
 ### Magic & Progression
 - [ ] **Spectrum** — Begin Spectrum progression. Place a Pedestal, craft basic items. Confirm Revelationary block revelation works.
