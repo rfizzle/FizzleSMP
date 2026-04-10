@@ -1,0 +1,13 @@
+name = "Item Obliterator (Modpack Utils Series)"
+filename = "Item_Obliterator-Fabric_Quilt-MC_1.21-3.1.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "42202c67ef7166ffb5255ada7370b36c9d50110c"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 5424645
+project-id = 835861

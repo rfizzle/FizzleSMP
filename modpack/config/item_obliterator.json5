@@ -1,0 +1,60 @@
+{
+  // -----------------------------------------------------------
+  //              Item Obliterator — FizzleSMP
+  // -----------------------------------------------------------
+  //
+  // Strategy: Kibe is added as a *whitelist*, not a blacklist.
+  // We only want a handful of items from Kibe; everything else
+  // in the kibe: namespace should be disabled.
+  //
+  // Item Obliterator only supports blacklists, so we use a single
+  // negative-lookahead regex to match "anything in kibe: that is
+  // NOT one of the whitelisted IDs". To add a Kibe item back,
+  // append it to the alternation inside the (?!...) group.
+  //
+  // Entries beginning with ! are treated as regular expressions
+  // and use Java's String.matches() (full-string match).
+  // Do NOT enable use_hashmap_optimizations — it disables regex.
+  //
+  // Whitelisted Kibe items (everything else is disabled):
+  //   - kibe:cobblestone_generator_mk1..mk5
+  //   - kibe:basalt_generator_mk1..mk5
+  //   - kibe:trash_can
+  //   - kibe:measuring_tape
+  //   - kibe:vacuum_hopper
+  //
+  // Item registry IDs verified against Kibe source
+  // (lucaargolo/kibe ItemCompendium.kt / BlockCompendium.kt).
+  //
+  // -----------------------------------------------------------
+
+  "configVersion": 3,
+
+  // Items here are completely disabled (unobtainable, unusable,
+  // hidden from creative tabs, recipes, trades, and EMI).
+  "blacklisted_items": [
+    // Disable everything in kibe: namespace EXCEPT the whitelisted items.
+    // Negative lookahead: matches kibe:<id> only when <id> is not one of
+    // the whitelisted IDs. Anchored implicitly via String.matches().
+    "!kibe:(?!(?:cobblestone_generator_mk[1-5]|basalt_generator_mk[1-5]|trash_can|measuring_tape|vacuum_hopper)$).*",
+  ],
+
+  // Component-data based banning (e.g., specific potions). Unused.
+  "blacklisted_component_data": [],
+
+  // Debug helper for finding component data of held items. Keep off.
+  "debug_print_components": false,
+
+  // Items that cannot be right-clicked but are otherwise usable. Unused.
+  "only_disable_interactions": [],
+
+  // Items that cannot be used to attack. Unused.
+  "only_disable_attacks": [],
+
+  // Items where only the recipe is disabled (item still usable if obtained).
+  // Unused — full bans above already remove recipes.
+  "only_disable_recipes": [],
+
+  // Hashmap optimization disables regex. We use regex, so keep false.
+  "use_hashmap_optimizations": false,
+}

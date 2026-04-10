@@ -37,6 +37,10 @@ file = "config/enhanced_bes.properties"
 hash = "21d14939c5ac3b7c79083fbf9de7c14d9ae4cc1e4fa85848a931be5bf5b08deb"
 
 [[files]]
+file = "config/item_obliterator.json5"
+hash = "9f5c60116f63cfd4dcb985454146351274d8198b1bcf99e7046ebe27546d02cd"
+
+[[files]]
 file = "config/itemborders.toml"
 hash = "eca4a6607f46002a5871e60f771215c93e784287b7647963b17a696e1e76ea1a"
 
@@ -591,6 +595,11 @@ hash = "62a66beea064efe39bb2b01523be12360a0fc0ef1bb019b6327880305b3c3362"
 metafile = true
 
 [[files]]
+file = "mods/item-obliterator.pw.toml"
+hash = "8db45783e99950f2e298ff16d445b3469837718cfc55b8ddc8ffb81937c2a4d4"
+metafile = true
+
+[[files]]
 file = "mods/jade-addons-fabric.pw.toml"
 hash = "340f82c204b32babdb0d11748180b230e6094a38d407690bc5c8266b1f5b0030"
 metafile = true
@@ -613,6 +622,11 @@ metafile = true
 [[files]]
 file = "mods/justhammers.pw.toml"
 hash = "87d7de61e7d6ef64badb3e47faa85487acd42ab8322d8d5c1fb9f6299b78fd5a"
+metafile = true
+
+[[files]]
+file = "mods/kibe.pw.toml"
+hash = "bdf777b36aa02e40f2f7b20b2832cb761a0a71264447a36f19835179f2086405"
 metafile = true
 
 [[files]]
@@ -778,6 +792,11 @@ metafile = true
 [[files]]
 file = "mods/natures-compass.pw.toml"
 hash = "f85bbc82f8801b099dc53b89d5b52f9b4b9f364b746290c26f6e5447aaaa1db7"
+metafile = true
+
+[[files]]
+file = "mods/necronomicon.pw.toml"
+hash = "371965bfb813789b1f9127ca4b9bfc2312d4721153b1863c56ebdd8b83c76530"
 metafile = true
 
 [[files]]
@@ -1247,7 +1266,7 @@ metafile = true
 
 [[files]]
 file = "options.txt"
-hash = "046fd8e558fad87976f361e4ffbda360bb78539293443ed11519317fb497ad38"
+hash = "f2cb6341274e1281c575cae80bcc44d0415bc888b65ecdbabc1ad0938fbb0d27"
 
 [[files]]
 file = "shaderpacks/complementary-reimagined.pw.toml"

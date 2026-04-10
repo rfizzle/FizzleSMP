@@ -182,6 +182,27 @@ Key mods: Accessories, Trinkets, Accessories Compatibility Layer, Artifacts, Thi
 - [ ] **Refined Storage + Simple Conveyor Belts** — Feed a conveyor belt into an RS Importer chest, and pull from an RS Exporter chest with a belt. Confirm items move between both logistics systems.
 - [ ] **Refined Storage + Carry On** — Pick up an active RS network node (cable, importer, controller) with Carry On and place it elsewhere. Confirm the network does not corrupt or lose connectivity. If issues occur, blacklist RS blocks in Carry On config.
 
+### Kibe Utilities
+- [ ] **Kibe Entangled Chests** — Craft two Entangled Chests with the same color code, place in different dimensions, confirm shared inventory.
+- [ ] **Kibe Vacuum Hopper** — Place a Vacuum Hopper, drop items nearby, confirm it sucks them in. Drop XP orbs and confirm storage.
+- [ ] **Kibe Tanks/Fluid Hoppers** — Place tanks side by side, fill with water, confirm fluid flow between connected tanks.
+- [ ] **Kibe Placers/Breakers** — Wire a Placer and a Breaker with redstone. Confirm placement and breaking on signal.
+- [ ] **Kibe Slime Boots/Sling** — Equip Slime Boots, fall from height, confirm bounce and fall damage negation.
+- [ ] **Kibe Glider** — Hold a Glider mid-air, confirm gliding behavior.
+- [ ] **Kibe Lassos** — Use a Golden Lasso on a passive mob, release in another location, confirm capture/release.
+- [ ] **Kibe Witherproof Blocks** — Place Witherproof blocks, summon a Wither nearby, confirm blocks are not destroyed.
+
+### Item Obliterator
+- [ ] **Item Obliterator config** — Edit `config/item_obliterator/` JSON to add Kibe item IDs (`kibe:big_torch`, `kibe:angel_ring`, `kibe:sleeping_bag`, `kibe:magnet`, conveyor belt IDs). Restart server.
+- [ ] **Item Obliterator EMI hiding** — Open EMI and search for disabled Kibe items. Confirm they do not appear in the recipe viewer.
+- [ ] **Item Obliterator creative tab** — Open the creative inventory and Kibe creative tab. Confirm disabled items are absent.
+- [ ] **Item Obliterator recipe removal** — Attempt to craft a disabled item via its recipe in a crafting table. Confirm the recipe does not yield the item.
+- [ ] **Item Obliterator existing items** — Spawn a disabled item via `/give` or have one in inventory before the disable. Confirm Item Obliterator removes/handles it according to its config (some configs sweep inventories).
+- [ ] **Kibe Big Torch disabled vs Magnum Torch** — Confirm Magnum Torch still functions and Kibe Big Torch is unobtainable.
+- [ ] **Kibe Conveyor Belt disabled vs Simple Conveyor Belts** — Confirm Simple Conveyor Belts still functions and Kibe conveyor belts are unobtainable.
+- [ ] **Kibe Sleeping Bag disabled vs Steve's Realistic Sleep** — Confirm players must use a bed (no Sleeping Bag shortcut), and Steve's Realistic Sleep time-scaling activates correctly.
+- [ ] **Kibe Angel Ring disabled** — Confirm Angel Ring cannot be crafted, looted, or used. No creative flight via this item.
+
 ### Magic & Progression
 - [ ] **Spectrum** — Begin Spectrum progression. Place a Pedestal, craft basic items. Confirm Revelationary block revelation works.
 - [ ] **Enchanting Infuser** — Craft an Enchanting Infuser. Select specific enchantments. Confirm it works alongside Easy Magic's vanilla table improvements.

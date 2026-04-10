@@ -1,0 +1,13 @@
+name = "Kibe Utilities"
+filename = "kibe-2.3.1-fabric-1.21.1.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "188737b6c757ae046dab9ede48431edcf6275114"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 7131203
+project-id = 388832

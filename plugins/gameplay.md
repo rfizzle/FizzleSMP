@@ -377,6 +377,17 @@
 - **Dependencies:** Fabric API
 - **Conflicts:** None known; complementary with Tech Reborn and Oritech (industrial machinery + digital storage layer). Verify Carry On does not break network nodes when picked up.
 
+## Kibe
+- **CurseForge ID:** 388832
+- **Slug:** kibe
+- **Modrinth Slug:** kibe
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** A miscellaneous utility mod adding Entangled Chests/Tanks, Big Torch, Elevators, Vacuum Hoppers, Tanks, Placers/Breakers, Witherproof blocks, Slime Boots/Sling, Gliders, Rings, Lassos, Spikes, and many other vanilla+ utility items.
+- **Why:** Adds a wide collection of QoL utility blocks and items (cross-dimensional storage, mob farming tools, redstone helpers) that complement the SMP's tech and survival gameplay.
+- **Dependencies:** Fabric API
+- **Conflicts:** Soft overlap with Magnum Torch (Big Torch), Simple Conveyor Belts (Kibe Conveyor Belts), Steve's Realistic Sleep (Sleeping Bag), and Things (Magnet). Item Obliterator is added alongside to disable Kibe items that conflict or break balance (e.g., Angel Ring's creative flight). See compatibility matrix.
+
 ## Resourceful Config
 - **CurseForge ID:** 714059
 - **Slug:** resourceful-config

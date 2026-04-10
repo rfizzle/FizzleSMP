@@ -86,3 +86,25 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## Item Obliterator
+- **CurseForge ID:** 835861
+- **Slug:** item-obliterator
+- **Modrinth Slug:** item-obliterator
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Modpack utility that disables items and their interactions via JSON5 config, removing them from creative tabs, recipes, trades, and EMI/JEI/REI.
+- **Why:** Lets the pack maintainer surgically disable conflicting or unwanted items from other mods (e.g., Kibe's Big Torch, Angel Ring, Conveyor Belts, Sleeping Bag) without removing the host mod entirely.
+- **Dependencies:** Necronomicon API
+- **Conflicts:** None known; designed to integrate with EMI for proper recipe/item hiding.
+
+## Necronomicon API
+- **CurseForge ID:** 586157
+- **Slug:** necronomicon
+- **Modrinth Slug:** necronomicon
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** A utility library by ElocinDev providing config helpers and shared code for their mods.
+- **Why:** Required dependency of Item Obliterator (provides the JSON5 config loader).
+- **Dependencies:** None
+- **Conflicts:** None known
+
