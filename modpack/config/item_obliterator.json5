@@ -56,5 +56,5 @@
   "only_disable_recipes": [],
 
   // Hashmap optimization disables regex. We use regex, so keep false.
-  "use_hashmap_optimizations": false,
+  "use_hashmap_optimizations": false
 }
