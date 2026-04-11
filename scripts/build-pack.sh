@@ -1,14 +1,22 @@
 #!/usr/bin/env bash
-# build-pack.sh — Download mods and package a client or server pack as a ZIP
+# build-pack.sh — Build a versioned client or server release artifact.
 #
 # Usage:
-#   ./scripts/build-pack.sh server              # Build FizzleSMP.server.zip
-#   ./scripts/build-pack.sh client              # Build FizzleSMP.client.zip
-#   ./scripts/build-pack.sh server --dry-run    # Preview without downloading
-#   ./scripts/build-pack.sh client --clean      # Wipe build dir, rebuild, and zip
+#   ./scripts/build-pack.sh client               # Build FizzleSMP-client-X.Y.Z.zip via packwiz curseforge export
+#   ./scripts/build-pack.sh server               # Build FizzleSMP-server-X.Y.Z.zip (drop-in server directory)
+#   ./scripts/build-pack.sh server --dry-run     # Preview without downloading
+#   ./scripts/build-pack.sh server --clean       # Wipe build dir, rebuild, and zip
 #
-# Reads .pw.toml metadata, filters by side, downloads into a temp build dir,
-# and packages the result as a ZIP.
+# Client target: shells out to `packwiz curseforge export --side client`, which
+# produces a CurseForge-compatible modpack ZIP that players import into the
+# CurseForge launcher. The --clean / --dry-run flags are ignored for client.
+#
+# Server target: reads .pw.toml metadata, filters by side, downloads into
+# build/server/, and packages a drop-in Fabric server directory as a ZIP.
+# Fabric server launcher, eula.txt, and server.properties are NOT included —
+# install those separately alongside this pack.
+#
+# Version is read from modpack/pack.toml and embedded in the output filename.
 
 set -eo pipefail
 
@@ -17,6 +25,14 @@ PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 MODPACK_DIR="$PROJECT_DIR/modpack"
 BUILD_DIR="$PROJECT_DIR/build"
 OUTPUT_DIR="$PROJECT_DIR"
+
+# Parse pack version from pack.toml — embedded into output filenames so every
+# release artifact is self-describing.
+PACK_VERSION=$(awk -F' = ' '/^version = / { gsub(/"/, "", $2); print $2; exit }' "$MODPACK_DIR/pack.toml")
+if [[ -z "$PACK_VERSION" ]]; then
+    echo "Error: could not parse version from $MODPACK_DIR/pack.toml"
+    exit 1
+fi
 
 CLEAN=false
 DRY_RUN=false
@@ -54,29 +70,63 @@ if [[ -z "$TARGET" ]]; then
     exit 1
 fi
 
-# Set the opposite side to exclude
-if [[ "$TARGET" == "server" ]]; then
-    EXCLUDE_SIDE="client"
-else
-    EXCLUDE_SIDE="server"
+if [[ ! -d "$MODPACK_DIR" ]]; then
+    echo "Error: modpack/ directory not found at $MODPACK_DIR"
+    exit 1
 fi
+
+ZIP_NAME="FizzleSMP-${TARGET}-${PACK_VERSION}.zip"
+ZIP_PATH="$OUTPUT_DIR/$ZIP_NAME"
+
+echo "=== FizzleSMP $TARGET pack builder (v${PACK_VERSION}) ==="
+echo ""
+
+# --- Client target: delegate to packwiz curseforge export -----------------
+
+if [[ "$TARGET" == "client" ]]; then
+    if ! command -v packwiz >/dev/null 2>&1; then
+        echo "Error: packwiz CLI not found in PATH."
+        echo "       Install with: go install github.com/packwiz/packwiz@latest"
+        exit 1
+    fi
+
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY RUN] Would run: packwiz curseforge export --side client -o $ZIP_PATH"
+        echo ""
+        echo "Done."
+        exit 0
+    fi
+
+    # Remove old zip if it exists
+    rm -f "$ZIP_PATH"
+
+    echo "▸ Running: packwiz curseforge export --side client"
+    (cd "$MODPACK_DIR" && packwiz curseforge export --side client -o "$ZIP_PATH")
+
+    if [[ ! -f "$ZIP_PATH" ]]; then
+        echo "Error: packwiz did not produce $ZIP_PATH"
+        exit 1
+    fi
+
+    zip_size=$(du -h "$ZIP_PATH" | awk '{print $1}')
+    echo ""
+    echo "=========================================="
+    echo " client pack summary"
+    echo "=========================================="
+    echo "  Output: $ZIP_NAME ($zip_size)"
+    echo ""
+    echo "Done."
+    exit 0
+fi
+
+# --- Server target: custom download + drop-in directory ZIP ---------------
+
+EXCLUDE_SIDE="client"
 
 PACK_BUILD_DIR="$BUILD_DIR/$TARGET"
 MODS_DEST="$PACK_BUILD_DIR/mods"
 DATAPACKS_DEST="$PACK_BUILD_DIR/config/paxi/datapacks"
 SHADERPACKS_DEST="$PACK_BUILD_DIR/shaderpacks"
-ZIP_NAME="FizzleSMP.${TARGET}.zip"
-ZIP_PATH="$OUTPUT_DIR/$ZIP_NAME"
-
-echo "=== FizzleSMP $TARGET pack builder ==="
-echo ""
-
-# --- Preflight checks ---
-
-if [[ ! -d "$MODPACK_DIR" ]]; then
-    echo "Error: modpack/ directory not found at $MODPACK_DIR"
-    exit 1
-fi
 
 # --- Helpers ---
 
@@ -273,23 +323,6 @@ if [[ -d "$CONFIG_SRC" ]]; then
 
     echo "  Copied $config_count config file(s)."
     echo ""
-fi
-
-# --- Copy options.txt (client only) ---
-
-OPTIONS_SRC="$MODPACK_DIR/options.txt"
-
-if [[ "$TARGET" == "client" && -f "$OPTIONS_SRC" ]]; then
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "=== Copying options.txt ==="
-        echo "  [DRY RUN] Would copy: options.txt"
-        echo ""
-    else
-        echo "=== Copying options.txt ==="
-        cp -f "$OPTIONS_SRC" "$PACK_BUILD_DIR/options.txt"
-        echo "  Copied options.txt."
-        echo ""
-    fi
 fi
 
 # --- Download missing/changed files ---

@@ -8,7 +8,9 @@ This repository defines **FizzleSMP**, a curated Minecraft 1.21.1 modpack manage
 - Packwiz metadata (`modpack/pack.toml`, `modpack/index.toml`, `modpack/mods/*.pw.toml`) — the machine-readable modpack definition
 - A feature brainstorming document that maps ideas to mods (`docs/features-brainstorm.md`)
 - A compatibility matrix tracking known conflicts (`docs/compatibility-matrix.md`)
-- A sync script (`scripts/sync-packwiz.sh`) that keeps packwiz in sync with the plugin lists
+- A server deployment guide (`docs/server-deployment.md`) for the live SMP server
+- A changelog (`CHANGELOG.md`) following Keep a Changelog
+- Release scripts (`scripts/release.sh`, `scripts/server-install.sh`) and a GitHub Actions workflow (`.github/workflows/release.yml`) for cutting versioned releases and updating the live server in place
 
 ## Target Platform
 
@@ -158,6 +160,62 @@ The script reads `.pw.toml` metadata, filters by the `side` field (server pack e
 ### Workflow Integration
 
 When adding a mod via `/add-mods`, the plugin file is the source of truth. **Do not** automatically run `sync-packwiz.sh` after adding mods — the user will trigger the sync manually when ready. The packwiz files (`modpack/pack.toml`, `modpack/index.toml`, `modpack/mods/`) should be committed alongside plugin changes when the sync is performed.
+
+## Release Workflow
+
+FizzleSMP is cut into versioned releases that ship to the live SMP server and to players.
+
+### Versioning (pragmatic SemVer)
+
+- **MAJOR** — world-breaking changes (worldgen or dimension mods added/removed). Existing worlds may need reset or migration.
+- **MINOR** — additive changes (new mods, new content). Safe to apply to an existing world.
+- **PATCH** — config tweaks, mod version bumps, bug fixes, compatibility fixes.
+
+The version lives in `modpack/pack.toml` as the `version = "X.Y.Z"` field and is embedded in release artifact filenames (`FizzleSMP-client-X.Y.Z.zip`, `FizzleSMP-server-X.Y.Z.zip`).
+
+### Cutting a release
+
+```bash
+./scripts/release.sh patch          # 1.2.3 → 1.2.4
+./scripts/release.sh minor          # 1.2.3 → 1.3.0
+./scripts/release.sh major          # 1.2.3 → 2.0.0
+./scripts/release.sh 1.4.0          # explicit version
+./scripts/release.sh patch --no-push # tag locally, do not push
+```
+
+The script checks that the working tree is clean and that the current branch is master, bumps `pack.toml`, refreshes the packwiz index, rolls `CHANGELOG.md`'s `[Unreleased]` section into a new `[X.Y.Z] - DATE` heading, commits as `chore(release): vX.Y.Z`, tags `vX.Y.Z`, and pushes both master and the tag to `origin`. Pushing the tag triggers the GitHub Actions release workflow.
+
+### GitHub Actions release pipeline
+
+`.github/workflows/release.yml` runs on any pushed tag matching `v*.*.*`. It:
+
+1. Installs the `packwiz` CLI via `go install`.
+2. Verifies `modpack/pack.toml`'s version matches the tag (fails if not — forces the use of `release.sh`).
+3. Runs `./scripts/build-pack.sh client` → `FizzleSMP-client-X.Y.Z.zip` (CurseForge-compatible ZIP via `packwiz curseforge export --side client`).
+4. Runs `./scripts/build-pack.sh server` → `FizzleSMP-server-X.Y.Z.zip` (drop-in Fabric server directory ZIP built by the custom download loop in `build-pack.sh`).
+5. Extracts the changelog section for the new version from `CHANGELOG.md`.
+6. Publishes a GitHub Release with both ZIPs and the changelog as the release body.
+
+### Updating the live server
+
+The server uses [packwiz-installer-bootstrap](https://github.com/packwiz/packwiz-installer-bootstrap) to diff against the published `pack.toml` and update in place — no wipe-and-recreate. Worlds, player data, `server.properties`, and the Fabric launcher are never touched.
+
+```bash
+./server-install.sh              # install/update to the latest release (via GitHub API)
+./server-install.sh v1.3.0       # install/update to a specific tag (rollback path)
+./server-install.sh master       # install/update to the current master branch (unreleased, for testing)
+```
+
+The installer URL pattern is `https://raw.githubusercontent.com/rfizzle/FizzleSMP/<ref>/modpack/pack.toml`, so every tag is a self-contained, pinnable release. Full operator docs are in `docs/server-deployment.md`.
+
+### Build script split
+
+`scripts/build-pack.sh` has two distinct code paths:
+
+- **Client:** delegates entirely to `packwiz curseforge export --side client`. Produces the CurseForge-compatible ZIP that players import into the CurseForge launcher.
+- **Server:** reads `.pw.toml` metadata directly, downloads all `server`/`both` mods into `build/server/`, copies configs, and zips the result as a drop-in Fabric server directory. Does **not** include the Fabric server jar, `eula.txt`, or `server.properties` — those are managed separately on the host.
+
+Both paths read the version from `modpack/pack.toml` and embed it in the output filename.
 
 ## Custom Commands
 

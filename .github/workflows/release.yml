@@ -1,0 +1,100 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and publish release artifacts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout (with tags)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go (for packwiz CLI)
+        uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Install packwiz CLI
+        run: |
+          go install github.com/packwiz/packwiz@latest
+          echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          echo "tag=$TAG"       >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Verify pack.toml version matches tag
+        run: |
+          PACK_VERSION=$(awk -F' = ' '/^version = / { gsub(/"/, "", $2); print $2; exit }' modpack/pack.toml)
+          if [[ "$PACK_VERSION" != "${{ steps.version.outputs.version }}" ]]; then
+            echo "::error::pack.toml version ($PACK_VERSION) does not match tag (${{ steps.version.outputs.version }})"
+            echo "Run scripts/release.sh to cut releases — do not tag manually."
+            exit 1
+          fi
+
+      - name: Build client pack (CurseForge export)
+        run: ./scripts/build-pack.sh client
+
+      - name: Build server pack (drop-in directory)
+        run: ./scripts/build-pack.sh server
+
+      - name: List build artifacts
+        run: ls -lh FizzleSMP-*.zip
+
+      - name: Extract changelog section for this release
+        id: changelog
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          BODY=$(awk -v ver="$VERSION" '
+            BEGIN { found = 0 }
+            /^## \[/ {
+              if (found) exit
+              if ($0 ~ "\\["ver"\\]") { found = 1; next }
+            }
+            found { print }
+          ' CHANGELOG.md)
+
+          if [[ -z "$BODY" ]]; then
+            BODY="See CHANGELOG.md for details."
+          fi
+
+          # Emit the body as a multiline GitHub Actions output
+          {
+            echo "body<<CHANGELOG_EOF"
+            echo "$BODY"
+            echo "CHANGELOG_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: FizzleSMP ${{ steps.version.outputs.tag }}
+          body: |
+            ${{ steps.changelog.outputs.body }}
+
+            ## Install / update the server
+
+            ```bash
+            ./server-install.sh ${{ steps.version.outputs.tag }}
+            ```
+
+            See [`docs/server-deployment.md`](https://github.com/rfizzle/FizzleSMP/blob/${{ steps.version.outputs.tag }}/docs/server-deployment.md) for the full guide.
+          files: |
+            FizzleSMP-client-${{ steps.version.outputs.version }}.zip
+            FizzleSMP-server-${{ steps.version.outputs.version }}.zip
+          fail_on_unmatched_files: true
