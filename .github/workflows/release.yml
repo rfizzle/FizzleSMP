@@ -49,6 +49,17 @@ jobs:
       - name: Build client pack (CurseForge export)
         run: ./scripts/build-pack.sh client
 
+      - name: Cache server pack downloads
+        uses: actions/cache@v4
+        with:
+          path: |
+            build/server/mods
+            build/server/config/paxi/datapacks
+            build/server/shaderpacks
+          key: server-pack-${{ hashFiles('modpack/mods/*.pw.toml', 'modpack/config/paxi/datapacks/*.pw.toml', 'modpack/shaderpacks/*.pw.toml') }}
+          restore-keys: |
+            server-pack-
+
       - name: Build server pack (drop-in directory)
         run: ./scripts/build-pack.sh server
 
