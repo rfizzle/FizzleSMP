@@ -16,6 +16,12 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ### Changed
 
 ### Fixed
+- Savanna village house chests can now be filled. Better Loot 2.0+mc1.21.1 ships
+  a `village_savanna_house.json` loot table that references `minecraft:grass`,
+  which was renamed to `minecraft:short_grass` in MC 1.20.5. The broken table
+  failed to parse on startup, causing every savanna house chest to error out
+  with "loot table couldn't be resolved". Patched via a Paxi datapack override
+  at `modpack/config/paxi/datapacks/BetterLoot-Savanna-Grass-Fix.zip`.
 
 ### Removed
 
