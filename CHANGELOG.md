@@ -17,6 +17,7 @@ Version numbers follow a pragmatic SemVer for modpacks:
 
 ### Fixed
 - Savanna village house chest loot table fix with Lootr.
+- Spectrum enchantment upgrade recipes now load alongside Mr. BeyondEnchant.
 
 ### Removed
 
