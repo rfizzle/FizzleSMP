@@ -18,7 +18,7 @@ hash = "b80ec9f6754ed7039f41bc44034f10a6896e76f0310cfe226e928c07911a9c05"
 
 [[files]]
 file = "config/carryon-common.json"
-hash = "cd9a918e7ca7312c41f34b75685a676ed2aae59793bd54915600be93850a653d"
+hash = "0b6f2e8795ddbc2c94ca68cad1a0b73540e30f032525f2d744afac02c2f4db24"
 
 [[files]]
 file = "config/craftingtweaks-common.toml"
