@@ -49,6 +49,14 @@ file = "config/lithium.properties"
 hash = "fa8988198ae2d22fef700a88198449a74116732e1f35ec9758a18d7fb0394c96"
 
 [[files]]
+file = "config/paxi/datapacks/BetterLoot-Savanna-Grass-Fix.zip"
+hash = "07265fcba7679d9f38c4e6206b6189e2e30c0d583ce5654e3f27222d9010dc56"
+
+[[files]]
+file = "config/paxi/datapacks/Spectrum-BeyondEnchant-LevelCap-Fix.zip"
+hash = "1e6b308ffe6ca06357ba4ee094895e4579ca1ed85e3b3391b066061141a5b0da"
+
+[[files]]
 file = "config/paxi/datapacks/Spectrum-TechReborn-Recipe-Fix.zip"
 hash = "0ac9654e95e6eccda0b7c73ce662e6f4e58435026abda70c605ad0aa18c4dcb4"
 
