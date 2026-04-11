@@ -17,10 +17,6 @@ file = "config/artifacts/general.toml"
 hash = "b80ec9f6754ed7039f41bc44034f10a6896e76f0310cfe226e928c07911a9c05"
 
 [[files]]
-file = "config/carryon-common.json"
-hash = "0b6f2e8795ddbc2c94ca68cad1a0b73540e30f032525f2d744afac02c2f4db24"
-
-[[files]]
 file = "config/craftingtweaks-common.toml"
 hash = "f96d8c4a6ef09ec7785c4da4714463a58b82cff51385abe778256703e83f075f"
 
@@ -222,11 +218,6 @@ metafile = true
 [[files]]
 file = "mods/cardinal-components-api.pw.toml"
 hash = "56cd11a88ada9e8ef8614ce57f23db929b06579752ca4a1458dcfdf4a5aead9a"
-metafile = true
-
-[[files]]
-file = "mods/carry-on.pw.toml"
-hash = "d2477bde2046b9d2021acbd206915d63eceba39309f20f697aaa06533278bef0"
 metafile = true
 
 [[files]]

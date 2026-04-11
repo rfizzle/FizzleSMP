@@ -375,7 +375,7 @@
 - **Summary:** A mass storage mod offering a network-based digital storage system with importers, exporters, constructors, destructors, autocrafting, and a unified Grid interface across all connected devices.
 - **Why:** Provides the endgame digital storage layer for the SMP's tech ecosystem — players can centralize all items/fluids from Tech Reborn and Oritech machines into a single searchable network with autocrafting.
 - **Dependencies:** Fabric API
-- **Conflicts:** None known; complementary with Tech Reborn and Oritech (industrial machinery + digital storage layer). Verify Carry On does not break network nodes when picked up.
+- **Conflicts:** None known; complementary with Tech Reborn and Oritech (industrial machinery + digital storage layer).
 
 ## Kibe
 - **CurseForge ID:** 388832

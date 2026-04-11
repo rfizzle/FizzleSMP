@@ -546,16 +546,6 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
-## Carry On
-- **CurseForge ID:** 274259
-- **Slug:** carry-on
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Allows picking up and carrying tile entities (chests, furnaces, etc.) and mobs with bare hands.
-- **Why:** Convenient way to relocate blocks with inventories and mobs without breaking/killing them on the SMP.
-- **Dependencies:** None
-- **Conflicts:** Soft conflict with Lootr — carried Lootr chests may not open properly for other players (see compatibility matrix).
-
 ## Sound Physics Remastered
 - **CurseForge ID:** 535489
 - **Slug:** sound-physics-remastered
