@@ -20,6 +20,7 @@ Version numbers follow a pragmatic SemVer for modpacks:
 - Spectrum enchantment upgrade recipes now load alongside Mr. BeyondEnchant.
 
 ### Removed
+- Carry On removed due to a `sync_carry_data` crash loop on 1.21.1.
 
 ## [1.0.0] - 2026-04-11
 
