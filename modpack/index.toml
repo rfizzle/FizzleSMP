@@ -57,6 +57,10 @@ file = "config/paxi/datapacks/Spectrum-BeyondEnchant-LevelCap-Fix.zip"
 hash = "1e6b308ffe6ca06357ba4ee094895e4579ca1ed85e3b3391b066061141a5b0da"
 
 [[files]]
+file = "config/paxi/datapacks/Spectrum-MythicUpgrades-Fix.zip"
+hash = "9c2c526110115647692cbac23270b76f11e1c92d3d38a9fbad329ceae12bb2f3"
+
+[[files]]
 file = "config/paxi/datapacks/Spectrum-TechReborn-Recipe-Fix.zip"
 hash = "0ac9654e95e6eccda0b7c73ce662e6f4e58435026abda70c605ad0aa18c4dcb4"
 
@@ -459,8 +463,8 @@ hash = "151e599df2c5f3df4234f50a3a6df42add337c8aaecb1a7d71340fe12f2482ca"
 metafile = true
 
 [[files]]
-file = "mods/fabric-seasons-delight-compat.pw.toml"
-hash = "827062b1202634995b14a90dd2035f8d7ac5d428c44d6e0ad3881a39772bd404"
+file = "mods/fabric-seasons-extras.pw.toml"
+hash = "c68ad2b807b6867ed17e6633000d447441ea5d0e831536c96abe9d6d8b5e11d4"
 metafile = true
 
 [[files]]
@@ -971,6 +975,11 @@ metafile = true
 [[files]]
 file = "mods/seasonhud-fabric.pw.toml"
 hash = "c0a9680d36ec1c81b0fcd500a676c5aeacbb7252f1f65d37f82f0e5c0ddcc8f7"
+metafile = true
+
+[[files]]
+file = "mods/seasons-delight-refab-compat.pw.toml"
+hash = "3351c6531b08bc26a9e96bfa0e911fbe07d3f9749135d50e1f242f40835f8e58"
 metafile = true
 
 [[files]]

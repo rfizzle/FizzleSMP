@@ -1,0 +1,13 @@
+name = "Fabric Seasons: Delight Refabricated Compat"
+filename = "fabric-seasons-delight-refabricated-1.21.1-2.2.2+refabricated-compat-1.0.jar"
+side = "both"
+
+[download]
+url = "https://cdn.modrinth.com/data/zymiVH65/versions/vKBFG6EG/fabric-seasons-delight-refabricated-1.21.1-2.2.2%2Brefabricated-compat-1.0.jar"
+hash-format = "sha512"
+hash = "f7664b2c9ea65de8bfa1187b4ae5817a5de6ca592636bcb80ef46dfc1b01756e8f130aea6f6873e0af9604d6f6e2a77ebb3cbee9f7c63c00840f0fd367ef233a"
+
+[update]
+[update.modrinth]
+mod-id = "zymiVH65"
+version = "vKBFG6EG"

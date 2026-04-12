@@ -325,12 +325,16 @@ Key mods: Chipped, Supplementaries, Supplementaries Squared, Handcrafted, Beauti
 
 ## 15. Seasons
 
-Key mods: Fabric Seasons, Fabric Seasons: Terralith Compat, Fabric Seasons: Delight Compat.
+Key mods: Fabric Seasons, Fabric Seasons: Extras, Fabric Seasons: Terralith Compat, Fabric Seasons: Delight Refabricated Compat.
 
 - [ ] **Season cycle** — Use `/season set` commands to cycle through Spring, Summer, Autumn, Winter. Confirm foliage colors change appropriately for each season.
 - [ ] **Terralith biome seasons** — Visit Terralith custom biomes in different seasons. Confirm seasonal color changes apply (Terralith Compat working).
 - [ ] **Crop growth rates** — Plant wheat and other vanilla crops. Change season to Winter. Confirm growth slows or stops. Change to Spring/Summer. Confirm growth resumes.
-- [ ] **Farmer's Delight seasonal crops** — Plant Farmer's Delight crops (tomatoes, cabbages). Confirm they respect seasonal growth rates (Delight Compat working).
+- [ ] **Farmer's Delight seasonal crops** — Plant Farmer's Delight Refabricated crops (tomatoes, cabbages, rice). Confirm they respect seasonal growth rates (Delight Refabricated Compat working). Verify rice and tomato specifically, as these were broken in the old Delight Compat.
+- [ ] **Greenhouse Glass** — Craft Greenhouse Glass and Tinted Greenhouse Glass. Build a small greenhouse enclosure around crops. Confirm crops inside grow at modified seasonal rates (warmer/colder microclimate).
+- [ ] **Crop Heater/Chiller** — Craft a Crop Heater and Crop Chiller. Place near crops and power them. Confirm warmth/cooling levels apply (up to 3 levels each).
+- [ ] **Season Detector** — Craft a Season Detector. Place it and verify it outputs a redstone signal that changes based on the current season.
+- [ ] **Season Calendar** — Craft a Season Calendar. Place it and confirm it displays the current season progress and days until the next season.
 - [ ] **Falling Leaves + Seasons** — Check if Falling Leaves particle colors adjust with seasonal foliage changes.
 - [ ] **Traveler's Titles + Seasons** — Enter a biome during different seasons. Confirm no visual conflicts with biome title display.
 - [ ] **SeasonHud display** — Confirm current season displays on the HUD or under Xaero's Minimap. Cycle through seasons and verify the display updates.

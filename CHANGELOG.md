@@ -12,10 +12,13 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ## [Unreleased]
 
 ### Added
+- Fabric Seasons: Extras — greenhouse blocks (Glass, Heater, Chiller), Season Detector, and Season Calendar
+- Fabric Seasons: Delight Refabricated Compat — replaces Delight Compat with a fork that correctly targets FD Refabricated crop classes
 
 ### Changed
 
 ### Fixed
+- Farmer's Delight crops now respect seasonal growth rates (rice, tomato, cabbage) — old Delight Compat had broken mixins targeting non-existent FD Refabricated class names
 - Spectrum x Mythic Upgrades integration errors — MU 4.x removed budding crystal blocks that Spectrum's Crystal Apothecary and guidebook referenced; added `Spectrum-MythicUpgrades-Fix.zip` datapack to suppress broken recipes and fix guidebook icon
 
 ### Removed

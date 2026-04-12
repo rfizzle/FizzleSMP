@@ -645,7 +645,7 @@
 - **Summary:** Adds a four-season cycle that changes foliage colors, crop growth rates, weather patterns, and mob spawning behavior throughout the year.
 - **Why:** Adds dynamic seasonal changes to the SMP world, making the passage of time meaningful and creating visual variety across the year.
 - **Dependencies:** Fabric API
-- **Conflicts:** Requires Fabric Seasons: Terralith Compat when used with Terralith; requires Fabric Seasons: Delight Compat for Farmer's Delight crop integration.
+- **Conflicts:** Requires Fabric Seasons: Terralith Compat when used with Terralith; requires Fabric Seasons: Delight Refabricated Compat for Farmer's Delight crop integration.
 
 ## Fabric Seasons: Terralith Compat
 - **CurseForge ID:** 839881
@@ -658,13 +658,24 @@
 - **Dependencies:** Fabric Seasons, Terralith
 - **Conflicts:** None — this mod resolves the Fabric Seasons/Terralith incompatibility.
 
-## Fabric Seasons: Delight Compat
-- **CurseForge ID:** 859370
-- **Slug:** fabric-seasons-delight-compat
-- **Modrinth Slug:** fabric-seasons-delight-compat
+## Fabric Seasons: Extras
+- **CurseForge ID:** 839878
+- **Slug:** fabric-seasons-extras
+- **Modrinth Slug:** fabric-seasons-extras
 - **Mod Loader:** Fabric
-- **Side:** server
-- **Summary:** Compatibility patch that integrates Farmer's Delight crops with Fabric Seasons' seasonal growth mechanics.
-- **Why:** Required compatibility mod so Farmer's Delight crops (tomatoes, cabbages, etc.) respect seasonal growth rates from Fabric Seasons.
+- **Side:** both
+- **Summary:** Adds greenhouse blocks (glass, heater, chiller), a Season Detector (redstone output by season), and a Season Calendar to enhance Fabric Seasons gameplay.
+- **Why:** Fabric Seasons alone has no items or blocks — this addon adds functional greenhouse mechanics for crop control and utility blocks for season awareness.
+- **Dependencies:** Fabric API, Fabric Seasons
+- **Conflicts:** None known
+
+## Fabric Seasons: Delight Refabricated Compat
+- **CurseForge ID:** N/A
+- **Slug:** N/A
+- **Modrinth Slug:** seasons-delight-refab-compat
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Compatibility patch that integrates Farmer's Delight Refabricated crops with Fabric Seasons' seasonal growth mechanics, fixing rice and tomato support.
+- **Why:** Replaces the original Delight Compat whose mixins targeted wrong class names for FD Refabricated. This fork correctly maps FD Refabricated's crop classes so seasonal growth rates actually apply.
 - **Dependencies:** Fabric Seasons, Farmer's Delight Refabricated
-- **Conflicts:** None — this mod resolves the Fabric Seasons/Farmer's Delight incompatibility.
+- **Conflicts:** Replaces Fabric Seasons: Delight Compat (removed — its mixins were incompatible with FD Refabricated).
