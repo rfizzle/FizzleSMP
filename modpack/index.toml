@@ -610,6 +610,11 @@ hash = "5a1604eb3c113c5a540de4768de72660ea652b41730ea318798a24b9f60d88b7"
 metafile = true
 
 [[files]]
+file = "mods/infinite-trading.pw.toml"
+hash = "d1690272330ff6f0abbf5c1e61fb09bed7835a615215294067582eb5b4d918f0"
+metafile = true
+
+[[files]]
 file = "mods/inventory-essentials.pw.toml"
 hash = "b03fd45cc31432ddd04245ec0418e071c170950133ed2d91c53dd9956c8e3db0"
 metafile = true

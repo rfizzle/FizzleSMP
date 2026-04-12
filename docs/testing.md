@@ -340,6 +340,8 @@ Key mods: Chipped, Supplementaries, Supplementaries Squared, Handcrafted, Beauti
 - [ ] **Recipe conflicts** — Search EMI for items with multiple recipes (gears, plates, rods). Confirm Polymorph resolves conflicts with a chooser popup.
 - [ ] **Enchantment stacking** — Combine enchantments from different mods. Confirm no crashes or impossible combinations.
 - [ ] **Trade Cycling** — Cycle villager trades. Confirm modded items appear in trade pools where expected.
+- [ ] **Infinite Trading** — Trade with a villager until a trade would normally lock. Confirm the trade remains available and does not show the red X. Test with a wandering trader as well.
+- [ ] **Infinite Trading + Trade Cycling** — Cycle a villager's trades, then buy repeatedly. Confirm cycled trades also remain unlocked.
 
 ## 15. Seasons
 

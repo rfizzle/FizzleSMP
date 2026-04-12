@@ -16,6 +16,7 @@ Version numbers follow a pragmatic SemVer for modpacks:
 - Euphoria Patches — add-on for Complementary Shaders with extra visual features and settings
 - GriefLogger — SQLite/MySQL-backed player interaction logger, replacing Ledger
 - SuperMartijn642's Config Lib — required dependency for GriefLogger
+- Infinite Trading — prevents villager and wandering trader trades from locking up
 
 ### Changed
 
