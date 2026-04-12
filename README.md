@@ -1,6 +1,20 @@
 # FizzleSMP
 
-A curated Minecraft 1.21.1 Fabric modpack for a survival multiplayer server. Managed with [packwiz](https://packwiz.infra.link/) and distributable to CurseForge and Modrinth.
+*Forge your path. Master your craft. Shape the world.*
+
+**FizzleSMP** is a handcrafted multiplayer survival experience built for friends who want more from their world — without losing what makes Minecraft feel like home.
+
+**A World Worth Exploring** — Nearly a hundred biomes reshape the Overworld with dramatic cliffs, lush valleys, and forgotten ruins. The Nether burns hotter with Incendium's volcanic wastes, the End stretches into alien landscapes, and hidden dimensions like the Bumblezone and the depths of Deeper and Darker reward the bold. Every dungeon, stronghold, and ocean temple has been rebuilt from the ground up — no two adventures are the same.
+
+**Choose Your Path** — Train as a Wizard, Paladin, Rogue, Warrior, or Archer through a full RPG class system with spells, skills, and progression trees. Build industrial empires with Tech Reborn and Oritech. Unravel the mysteries of color-based magic with Spectrum. Hunt legendary weapons from massive bosses. Or simply build a farm, open a shop, and watch the economy grow around you.
+
+**Combat That Feels Alive** — Forget spam-clicking. FizzleSMP overhauls combat with directional swings, combat rolls, unique weapon types — from claymores to chakrams — and enemies that grow smarter and tougher the longer your world survives. Boss encounters are designed for groups, and the loot is worth the fight.
+
+**Built for Community** — Proximity voice chat. Player-run shops and economies. Land claims that protect what you've built. Per-player loot so every chest feels like yours. Waystones to stay connected across a massive world. This is an SMP designed for people who play together.
+
+**Runs Well, Plays Better** — Under the hood, a full performance stack (Sodium, Lithium, Noisium, and more) keeps frame rates high and load times low — so the experience stays smooth even with all of this packed in.
+
+Minecraft 1.21.1 · Fabric · Managed with [packwiz](https://packwiz.infra.link/)
 
 ## Quick Start
 
