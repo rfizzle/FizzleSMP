@@ -12,6 +12,15 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+## [1.1.0] - 2026-04-12
+### Added
 - Fabric Seasons: Extras — greenhouse blocks (Glass, Heater, Chiller), Season Detector, and Season Calendar
 - Fabric Seasons: Delight Refabricated Compat — replaces Delight Compat with a fork that correctly targets FD Refabricated crop classes
 - Dark Utilities — added for vector plates (4 speed tiers for entity/item transport in mob farms); all other content disabled via Item Obliterator
