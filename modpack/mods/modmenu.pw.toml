@@ -3,11 +3,11 @@ filename = "modmenu-11.0.4.jar"
 side = "client"
 
 [download]
-url = "https://cdn.modrinth.com/data/mOgUt4GM/versions/v6Xx3fbU/modmenu-11.0.4.jar"
-hash-format = "sha512"
-hash = "45ea8f7e0749bc0eb98900f94486e323f153b199617fa43977b46472e4196ee5a6739f41a1e7f68e270f84a367df5f7f53c2a1f46145ad7d349ede4297895396"
+hash-format = "sha1"
+hash = "8af1b0b9ee18eab5cd5e5c97c497f0e473c49e9a"
+mode = "metadata:curseforge"
 
 [update]
-[update.modrinth]
-mod-id = "mOgUt4GM"
-version = "v6Xx3fbU"
+[update.curseforge]
+file-id = 7808443
+project-id = 308702

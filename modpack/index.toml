@@ -57,6 +57,10 @@ file = "config/paxi/datapacks/BetterLoot-Savanna-Grass-Fix.zip"
 hash = "07265fcba7679d9f38c4e6206b6189e2e30c0d583ce5654e3f27222d9010dc56"
 
 [[files]]
+file = "config/paxi/datapacks/NeoEnchant-AutoSmelt-Disable.zip"
+hash = "9b4a14e644c4e18f4e095e5423312101f5818be3ca4f72cf2753ce4e0dc9712e"
+
+[[files]]
 file = "config/paxi/datapacks/Spectrum-BeyondEnchant-LevelCap-Fix.zip"
 hash = "1e6b308ffe6ca06357ba4ee094895e4579ca1ed85e3b3391b066061141a5b0da"
 
@@ -67,6 +71,10 @@ hash = "9c2c526110115647692cbac23270b76f11e1c92d3d38a9fbad329ceae12bb2f3"
 [[files]]
 file = "config/paxi/datapacks/Spectrum-TechReborn-Recipe-Fix.zip"
 hash = "0ac9654e95e6eccda0b7c73ce662e6f4e58435026abda70c605ad0aa18c4dcb4"
+
+[[files]]
+file = "config/paxi/datapacks/YIGD-Soulbound-Backpack-Artifacts-Fix.zip"
+hash = "30fdd9f81125ae17dfd824ae1ec74b1ba6a8cc4d673b1b101e0c5cb50f9aec81"
 
 [[files]]
 file = "config/paxi/datapacks/terraphilic.pw.toml"
@@ -158,7 +166,7 @@ metafile = true
 
 [[files]]
 file = "mods/artifacts.pw.toml"
-hash = "752300203d7552e000734b344dc6f545ec450bcdb6c3aed3e96b2e8d4de4d78d"
+hash = "539d6d2230c16b543ef1070ec3d7d43ea599efabff084137bead5114d1546506"
 metafile = true
 
 [[files]]
@@ -758,7 +766,7 @@ metafile = true
 
 [[files]]
 file = "mods/modmenu.pw.toml"
-hash = "4a33f888af603e0859359f44b068854e4148d4fba35ee0818bb977171236a805"
+hash = "4e39045f14a11c49fab16c7ce56ffc94e61d07a92d338205940a4c0631964a70"
 metafile = true
 
 [[files]]

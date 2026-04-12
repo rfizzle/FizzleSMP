@@ -63,8 +63,9 @@
 - **Conflicts:** None known
 
 ## Artifacts
-- **CurseForge ID:** 401236
-- **Slug:** artifacts-fabric
+- **CurseForge ID:** 312353
+- **Slug:** artifacts
+- **Pin CurseForge File ID:** 7468996
 - **Modrinth Slug:** artifacts
 - **Mod Loader:** Fabric
 - **Side:** both
@@ -520,7 +521,7 @@
 - **Summary:** Spawns a grave at the player's death location that stores their items for safe retrieval.
 - **Why:** Prevents frustrating item loss on death — players can recover their gear from a grave instead of racing a despawn timer.
 - **Dependencies:** Fabric API, Cloth Config API
-- **Conflicts:** None known
+- **Conflicts:** Soulbound enchantment's `supported_items` tag (`yigd:soulbindable`) only includes vanilla durability/equippable items by default — modded items (Traveler's Backpack, Artifacts, Jewelry) cannot receive Soulbound without a datapack fix (resolved via `YIGD-Soulbound-Modded-Items-Fix.zip`)
 
 ## Farmer's Delight Refabricated
 - **CurseForge ID:** 993166
