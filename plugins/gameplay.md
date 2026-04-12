@@ -112,7 +112,7 @@
 - **Summary:** Adds new ores (Jade, Topaz, Aquamarine, Sapphire, Ruby, Peridot, Zircon, Citrine, Necoium, Ametrine) with craftable ingots and gear upgrades beyond netherite.
 - **Why:** Extends endgame progression with new materials and gear tiers, giving SMP players more goals beyond netherite.
 - **Dependencies:** Fabric API, owo-lib, Better Loot
-- **Conflicts:** None known
+- **Conflicts:** Spectrum (soft — MU 4.x removed budding crystal blocks that Spectrum's integration expects; resolved via Spectrum-MythicUpgrades-Fix.zip datapack)
 
 ## Better Loot
 - **CurseForge ID:** 906394
@@ -173,7 +173,7 @@
 - **Summary:** A progression and exploration-based magic mod where you combine colors to create magical tools, machines, and equipment, with the goal of breaking through bedrock.
 - **Why:** Adds a deep, puzzle-driven magic progression system that rewards exploration and experimentation — perfect for long-term SMP engagement.
 - **Dependencies:** Fabric API, Cloth Config API, Trinkets (via Accessories Compat Layer), Revelationary, Modonomicon
-- **Conflicts:** None known
+- **Conflicts:** Mythic Upgrades (soft — bundled MU integration references removed registry IDs; resolved via Spectrum-MythicUpgrades-Fix.zip datapack), Tech Reborn (soft — resolved via datapack), BeyondEnchant (soft — resolved via datapack)
 
 ## Revelationary
 - **CurseForge ID:** 656526

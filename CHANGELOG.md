@@ -16,6 +16,7 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ### Changed
 
 ### Fixed
+- Spectrum x Mythic Upgrades integration errors — MU 4.x removed budding crystal blocks that Spectrum's Crystal Apothecary and guidebook referenced; added `Spectrum-MythicUpgrades-Fix.zip` datapack to suppress broken recipes and fix guidebook icon
 
 ### Removed
 
