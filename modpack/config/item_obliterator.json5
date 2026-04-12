@@ -3,14 +3,10 @@
   //              Item Obliterator — FizzleSMP
   // -----------------------------------------------------------
   //
-  // Strategy: Kibe is added as a *whitelist*, not a blacklist.
-  // We only want a handful of items from Kibe; everything else
-  // in the kibe: namespace should be disabled.
-  //
-  // Item Obliterator only supports blacklists, so we use a single
-  // negative-lookahead regex to match "anything in kibe: that is
-  // NOT one of the whitelisted IDs". To add a Kibe item back,
-  // append it to the alternation inside the (?!...) group.
+  // Strategy: mods with partial whitelists use negative-lookahead
+  // regexes to match "anything in <namespace>: that is NOT one of
+  // the whitelisted IDs". To whitelist a new item, append it to
+  // the alternation inside the (?!...) group for that namespace.
   //
   // Entries beginning with ! are treated as regular expressions
   // and use Java's String.matches() (full-string match).
@@ -23,8 +19,15 @@
   //   - kibe:measuring_tape
   //   - kibe:vacuum_hopper
   //
-  // Item registry IDs verified against Kibe source
-  // (lucaargolo/kibe ItemCompendium.kt / BlockCompendium.kt).
+  // Whitelisted Dark Utilities items (everything else is disabled):
+  //   - darkutils:vector_plate
+  //   - darkutils:vector_plate_fast
+  //   - darkutils:vector_plate_extreme
+  //   - darkutils:vector_plate_ultra
+  //
+  // Item registry IDs verified against source:
+  //   Kibe: lucaargolo/kibe ItemCompendium.kt / BlockCompendium.kt
+  //   Dark Utilities: Darkhax-Minecraft/Dark-Utilities Content.java
   //
   // -----------------------------------------------------------
 
@@ -36,7 +39,11 @@
     // Disable everything in kibe: namespace EXCEPT the whitelisted items.
     // Negative lookahead: matches kibe:<id> only when <id> is not one of
     // the whitelisted IDs. Anchored implicitly via String.matches().
+    // Kibe: keep generators, trash can, measuring tape, vacuum hopper
     "!kibe:(?!(?:cobblestone_generator_mk[1-5]|basalt_generator_mk[1-5]|trash_can|measuring_tape|vacuum_hopper)$).*",
+
+    // Dark Utilities: keep only the 4 vector plate tiers
+    "!darkutils:(?!vector_plate(?:_(?:fast|extreme|ultra))?$).*",
   ],
 
   // Component-data based banning (e.g., specific potions). Unused.

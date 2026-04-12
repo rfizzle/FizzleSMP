@@ -34,7 +34,7 @@ hash = "21d14939c5ac3b7c79083fbf9de7c14d9ae4cc1e4fa85848a931be5bf5b08deb"
 
 [[files]]
 file = "config/item_obliterator.json5"
-hash = "417d46e666bd164c79f4a34b94dc4901d1713d456148af0849e449d7e4cb6c00"
+hash = "472e3bc9c430aeb65526dce15d850abb85968145179762dcd72253277aaf9fae"
 
 [[files]]
 file = "config/itemborders.toml"

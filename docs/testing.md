@@ -193,7 +193,7 @@ Key mods: Accessories, Trinkets, Accessories Compatibility Layer, Artifacts, Thi
 - [ ] **Kibe Witherproof Blocks** — Place Witherproof blocks, summon a Wither nearby, confirm blocks are not destroyed.
 
 ### Item Obliterator
-- [ ] **Item Obliterator config** — Edit `config/item_obliterator/` JSON to add Kibe item IDs (`kibe:big_torch`, `kibe:angel_ring`, `kibe:sleeping_bag`, `kibe:magnet`, conveyor belt IDs). Restart server.
+- [ ] **Item Obliterator config** — Edit `config/item_obliterator/` JSON to add Kibe item IDs (`kibe:big_torch`, `kibe:angel_ring`, `kibe:sleeping_bag`, `kibe:magnet`, conveyor belt IDs) and Dark Utilities item IDs (all `darkutils:` items except the 4 vector plates). Restart server.
 - [ ] **Item Obliterator EMI hiding** — Open EMI and search for disabled Kibe items. Confirm they do not appear in the recipe viewer.
 - [ ] **Item Obliterator creative tab** — Open the creative inventory and Kibe creative tab. Confirm disabled items are absent.
 - [ ] **Item Obliterator recipe removal** — Attempt to craft a disabled item via its recipe in a crafting table. Confirm the recipe does not yield the item.
@@ -239,6 +239,14 @@ Key mods: Accessories, Trinkets, Accessories Compatibility Layer, Artifacts, Thi
 - [ ] **BeyondEnchant + Archers rebalancing** — Enchant a bow with Power beyond vanilla cap. Confirm Archers' +8%/level scaling applies to the higher levels (not vanilla +50%/level).
 - [ ] **BeyondEnchant + Rogues & Warriors rebalancing** — Enchant a sword with Sharpness beyond vanilla cap. Confirm R&W's +8%/level scaling applies to the higher levels.
 - [ ] **NeoEnchant+ + BeyondEnchant together** — Load both mods simultaneously. Confirm new enchantments from NeoEnchant+ and raised caps from BeyondEnchant both function without conflicts.
+
+### Dark Utilities
+- [ ] **Vector Plates** — Craft and place vector plates (all 4 tiers: normal, fast, extreme, ultra). Drop items and walk mobs onto them. Confirm entities are pushed in the arrow direction. Test rotation by placing plates in different orientations.
+- [ ] **Vector Plate speed tiers** — Place each tier side by side. Push a mob across each. Confirm speed increases from normal → fast → extreme → ultra.
+- [ ] **Vector Plate lightning upgrade** — Strike an Extreme Vector Plate with lightning. Confirm it upgrades to an Ultra Vector Plate.
+- [ ] **Dark Utilities + Simple Conveyor Belts** — Place vector plates and conveyor belts in the same item transport chain. Confirm items transfer between both systems without issues.
+- [ ] **Dark Utilities disabled items** — Open EMI and search for `darkutils`. Confirm only the 4 vector plate tiers appear. Confirm damage plates, effect plates, mob filters, charms, runes, anchor plate, blank plate, redstone randomizer, and shielded redstone are hidden.
+- [ ] **Dark Utilities disabled crafting** — Attempt to craft a disabled Dark Utilities item (e.g., `darkutils:damage_plate`). Confirm the recipe does not yield the item.
 
 ### Death & Respawn
 - [ ] **You're in Grave Danger** — Die with items. Return to death location. Confirm grave spawns and contains all items.

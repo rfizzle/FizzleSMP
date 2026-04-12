@@ -93,7 +93,7 @@
 - **Mod Loader:** Fabric
 - **Side:** both
 - **Summary:** Modpack utility that disables items and their interactions via JSON5 config, removing them from creative tabs, recipes, trades, and EMI/JEI/REI.
-- **Why:** Lets the pack maintainer surgically disable conflicting or unwanted items from other mods (e.g., Kibe's Big Torch, Angel Ring, Conveyor Belts, Sleeping Bag) without removing the host mod entirely.
+- **Why:** Lets the pack maintainer surgically disable conflicting or unwanted items from other mods (e.g., Kibe's Big Torch, Angel Ring, Conveyor Belts, Sleeping Bag; Dark Utilities' damage/effect plates, mob filters, charms, runes, redstone blocks) without removing the host mod entirely.
 - **Dependencies:** Necronomicon API
 - **Conflicts:** None known; designed to integrate with EMI for proper recipe/item hiding.
 

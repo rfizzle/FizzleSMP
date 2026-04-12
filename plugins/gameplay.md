@@ -679,3 +679,14 @@
 - **Why:** Replaces the original Delight Compat whose mixins targeted wrong class names for FD Refabricated. This fork correctly maps FD Refabricated's crop classes so seasonal growth rates actually apply.
 - **Dependencies:** Fabric Seasons, Farmer's Delight Refabricated
 - **Conflicts:** Replaces Fabric Seasons: Delight Compat (removed — its mixins were incompatible with FD Refabricated).
+
+## Dark Utilities
+- **CurseForge ID:** 242195
+- **Slug:** dark-utilities
+- **Modrinth Slug:** dark-utilities
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Expansive content mod used here primarily for its vector plates — flat rotatable blocks that push entities in a direction at four speed tiers.
+- **Why:** Vector plates are the best-in-class solution for pushing mobs and items in mob farms and automation builds. All other Dark Utilities content (damage/effect plates, mob filters, charms, runes, redstone blocks) is disabled via Item Obliterator.
+- **Dependencies:** Fabric API, Bookshelf, Prickle
+- **Conflicts:** Soft overlap with Simple Conveyor Belts (vector plates provide similar entity/item transport). Most content disabled via Item Obliterator to reduce feature bloat.
