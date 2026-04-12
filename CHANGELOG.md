@@ -20,6 +20,7 @@ Version numbers follow a pragmatic SemVer for modpacks:
 
 ### Fixed
 - Server crash caused by Ledger's `ledgerCloseScreenLogChanges` mixin NPE when players interacted with Easy Mob Farm containers — resolved by replacing Ledger with GriefLogger
+- NeoEnchant+ Auto Smelt enchantment producing ingots with extra data components that don't stack — disabled via datapack override (upstream closed as Not Planned: Hardel-DW/NeoEnchant#73); Artifacts' Smelting item covers the use case
 
 ### Removed
 - Ledger — abandoned on 1.21.1 (last update Nov 2024), crashes with Easy Mob Farm's custom containers
