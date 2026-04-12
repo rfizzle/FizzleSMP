@@ -44,6 +44,17 @@
 - **Dependencies:** Iris Shaders
 - **Conflicts:** None known
 
+## Euphoria Patches
+- **CurseForge ID:** 915902
+- **Slug:** euphoria-patches
+- **Modrinth Slug:** euphoria-patches
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** An add-on for Complementary Shaders that extends them with more optional features and settings.
+- **Why:** Enhances both Complementary Reimagined and Unbound with additional visual options like waving plants, better water, and more customization.
+- **Dependencies:** Complementary Shaders - Reimagined or Complementary Shaders - Unbound, Iris Shaders
+- **Conflicts:** None known
+
 ## ImmediatelyFast
 - **CurseForge ID:** 686911
 - **Slug:** immediatelyfast

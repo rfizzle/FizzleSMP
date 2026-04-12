@@ -12,6 +12,7 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ## [Unreleased]
 
 ### Added
+- Euphoria Patches — add-on for Complementary Shaders with extra visual features and settings
 
 ### Changed
 
