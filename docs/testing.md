@@ -75,10 +75,13 @@ Key mods: Sodium, Sodium Extra, Iris, ImmediatelyFast, Entity Culling, Enhanced 
 
 ## 4. HUD & UI Mods
 
-Key mods: Jade, MiniHUD, AppleSkin, Colorful Hearts, guy's Armor HUD, BetterF3, EMI, Mod Menu, Mouse Tweaks, Crafting Tweaks, Inventory Essentials, Blur+, Legendary Tooltips, Item Borders, Shulker Box Tooltip, Controlling.
+Key mods: Jade, MiniHUD, Lighty, AppleSkin, Colorful Hearts, guy's Armor HUD, BetterF3, EMI, Mod Menu, Mouse Tweaks, Crafting Tweaks, Inventory Essentials, Blur+, Legendary Tooltips, Item Borders, Shulker Box Tooltip, Controlling.
 
 - [ ] **Jade overlay** — Look at blocks and entities. Confirm Jade tooltip appears with correct info. Check Jade Addons shows info for modded blocks (Tech Reborn machines, Iron Chests, etc.).
 - [ ] **MiniHUD** — Enable light level overlay and slime chunk overlay. Confirm they render without conflicts with BetterF3.
+- [ ] **Lighty overlay** — Press F7 to open the Lighty config/mode screen. Select carpet mode. Confirm transparent carpet-like overlays appear on blocks where mobs can spawn (red = spawnable at any light, orange = spawnable at night only). Toggle to number mode and cross mode; confirm each renders correctly.
+- [ ] **Lighty toggle** — Press F8 to quickly toggle the Lighty overlay on/off. Confirm it responds instantly without lag.
+- [ ] **Lighty + MiniHUD coexistence** — Enable both Lighty (F7) and MiniHUD light level overlay simultaneously. Confirm both render without z-fighting or visual artifacts. Verify no keybind conflicts (Lighty: F7/F8, MiniHUD: MaLiLib hotkeys).
 - [ ] **BetterF3** — Press F3 and confirm the custom debug screen displays properly (no overlap with MiniHUD elements).
 - [ ] **Health display** — Take damage and confirm Colorful Hearts renders colored hearts in a single row. No overlap with guy's Armor HUD.
 - [ ] **AppleSkin** — Hold food and confirm saturation/exhaustion overlays appear on the hunger bar.

@@ -393,6 +393,17 @@
 - **Dependencies:** Cloth Config API
 - **Conflicts:** None known
 
+## Lighty
+- **CurseForge ID:** 986380
+- **Slug:** lighty
+- **Modrinth Slug:** lighty
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** Light overlay mod that displays mob spawn potential using carpet-like transparent blocks, numbers, or crosses (toggle with F7/F8).
+- **Why:** Gives players a quick, visually distinct way to check light levels and mob-proof builds — complements MiniHUD's numeric overlay with a more intuitive carpet-style visualization.
+- **Dependencies:** Mod Menu (optional)
+- **Conflicts:** None known (soft overlap with MiniHUD light level overlay — different visualization styles)
+
 ## Polymorph
 - **CurseForge ID:** 388800
 - **Slug:** polymorph
