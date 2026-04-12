@@ -501,6 +501,17 @@
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
 
+## Gear Tinkering
+- **CurseForge ID:** N/A
+- **Slug:** N/A
+- **Modrinth Slug:** gear-tinkering
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds new smithing table uses: repair cost resetting, trim removal, curse removal, enchantment transferring, and book unsigning.
+- **Why:** Gives the smithing table meaningful utility beyond netherite upgrades — players can reset repair costs with amethyst shards, remove curses, transfer enchantments, and strip armor trims, all by throwing items onto a smithing table.
+- **Dependencies:** None
+- **Conflicts:** None known; complementary with Easy Anvils (different blocks) and Grind Enchantments (different transfer method).
+
 ## You're in Grave Danger
 - **CurseForge ID:** 544912
 - **Slug:** youre-in-grave-danger

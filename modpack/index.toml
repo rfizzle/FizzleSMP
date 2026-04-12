@@ -347,6 +347,11 @@ hash = "9e444b3cfef7e5874823dc34c529c3ab322fda7ec56d96a06dd3c763bad238df"
 metafile = true
 
 [[files]]
+file = "mods/dark-utilities.pw.toml"
+hash = "7dc16a0e2ae767c76cd12e57038811997603af1c3aca6ffaea0c8cbfc5990182"
+metafile = true
+
+[[files]]
 file = "mods/debugify.pw.toml"
 hash = "8f89f3db3ee1ee8d91f28ad870dadb0a66ac3792f2bef83b0f29f413000bdc1d"
 metafile = true
@@ -524,6 +529,11 @@ metafile = true
 [[files]]
 file = "mods/gazebos.pw.toml"
 hash = "66e48cbd5a8a8e416b96adb952fe48f0fda9cc27f83f46d2072d3296096ed939"
+metafile = true
+
+[[files]]
+file = "mods/gear-tinkering.pw.toml"
+hash = "d9421c1ab0673f91ffc5587083b8d6fef8e66b6d1c937eb26b801cf4cce6ebc9"
 metafile = true
 
 [[files]]
@@ -852,6 +862,11 @@ hash = "c183fb8843a6c04da0417e5d51c62b2def40b994f0e9f1176243877b104d88a8"
 metafile = true
 
 [[files]]
+file = "mods/nyctography.pw.toml"
+hash = "c1a453a23c06b69482b1b84e521d3911891da806a056965f3519d02ed35001b8"
+metafile = true
+
+[[files]]
 file = "mods/open-parties-and-claims.pw.toml"
 hash = "4877ee9d78dc0b634632cc7e8e559f9bdaf35fa03d439a52bdaa0512493bfcc0"
 metafile = true
@@ -879,6 +894,11 @@ metafile = true
 [[files]]
 file = "mods/pickable-villagers.pw.toml"
 hash = "f132cdf02927e0144244818339417efb7341cccf4b91315512250cc601fdf817"
+metafile = true
+
+[[files]]
+file = "mods/pig-pen-cipher.pw.toml"
+hash = "86490ff20263e192dc7ec9112b2a1f36c944b58034b75b6cf2ce0cfb9b9d74b3"
 metafile = true
 
 [[files]]
@@ -969,6 +989,11 @@ metafile = true
 [[files]]
 file = "mods/rune-crafting.pw.toml"
 hash = "d6b026804b9667f1d58cfb391319d352ae4eda535618d2c5e8a37e4d6a9b7ed3"
+metafile = true
+
+[[files]]
+file = "mods/runelic.pw.toml"
+hash = "9616f0a73c57981579f7f689f7fa21e9a22707370d01a10d4500f770ae8811f7"
 metafile = true
 
 [[files]]

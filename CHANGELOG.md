@@ -15,6 +15,7 @@ Version numbers follow a pragmatic SemVer for modpacks:
 - Fabric Seasons: Extras — greenhouse blocks (Glass, Heater, Chiller), Season Detector, and Season Calendar
 - Fabric Seasons: Delight Refabricated Compat — replaces Delight Compat with a fork that correctly targets FD Refabricated crop classes
 - Dark Utilities — added for vector plates (4 speed tiers for entity/item transport in mob farms); all other content disabled via Item Obliterator
+- Gear Tinkering — adds new smithing table uses: repair cost resetting (amethyst shards), trim removal, curse removal, enchantment transferring, and book unsigning
 
 ### Changed
 - Easy Mob Farm: buffed tier progression — base cycle reduced to 4 min (from 5), tier speed bonuses increased significantly (T1: 2.5 min, T2: 1.7 min, T3: 1 min per cycle)
