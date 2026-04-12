@@ -25,6 +25,10 @@ file = "config/creeper-healing.toml"
 hash = "6578e5c172d7f25077958eaef214dfea8b69ef8b43a9ca910551024cb41dfc03"
 
 [[files]]
+file = "config/easy_mob_farm/mob_farm.cfg"
+hash = "91ecaf6c63e062422eb2887b05cf6404b13f0510370e47b16a4f1d19a6c01618"
+
+[[files]]
 file = "config/emi.css"
 hash = "c2d60fb6c0b70dabe22cb3bebc173d56fea4666a3ce4e20a484a34cb0bf51e80"
 

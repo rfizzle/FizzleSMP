@@ -17,6 +17,7 @@ Version numbers follow a pragmatic SemVer for modpacks:
 - Dark Utilities — added for vector plates (4 speed tiers for entity/item transport in mob farms); all other content disabled via Item Obliterator
 
 ### Changed
+- Easy Mob Farm: buffed tier progression — base cycle reduced to 4 min (from 5), tier speed bonuses increased significantly (T1: 2.5 min, T2: 1.7 min, T3: 1 min per cycle)
 
 ### Fixed
 - Farmer's Delight crops now respect seasonal growth rates (rice, tomato, cabbage) — old Delight Compat had broken mixins targeting non-existent FD Refabricated class names
