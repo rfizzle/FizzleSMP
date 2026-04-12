@@ -73,8 +73,8 @@ file = "config/paxi/datapacks/Spectrum-TechReborn-Recipe-Fix.zip"
 hash = "0ac9654e95e6eccda0b7c73ce662e6f4e58435026abda70c605ad0aa18c4dcb4"
 
 [[files]]
-file = "config/paxi/datapacks/YIGD-Soulbound-Backpack-Artifacts-Fix.zip"
-hash = "30fdd9f81125ae17dfd824ae1ec74b1ba6a8cc4d673b1b101e0c5cb50f9aec81"
+file = "config/paxi/datapacks/YIGD-Soulbound-Modded-Items-Fix.zip"
+hash = "0a483983f307042c0cabaacda0203cae9ce08dc7d751f67e23e1fd7c60b6fc0d"
 
 [[files]]
 file = "config/paxi/datapacks/terraphilic.pw.toml"
