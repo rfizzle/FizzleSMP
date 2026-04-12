@@ -134,6 +134,17 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
+## SuperMartijn642's Config Lib
+- **CurseForge ID:** 438332
+- **Slug:** supermartijn642s-config-lib
+- **Modrinth Slug:** supermartijn642s-config-lib
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** A configuration library providing a standardized config system for mods by SuperMartijn642 and others.
+- **Why:** Required dependency of GriefLogger.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
 ## MidnightLib
 - **CurseForge ID:** 488090
 - **Slug:** midnightlib

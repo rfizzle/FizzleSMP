@@ -2,14 +2,15 @@
 
 <!-- Mods for permissions, world management, backups, monitoring, and server tooling. -->
 
-## Ledger
-- **CurseForge ID:** 491137
-- **Slug:** ledger
+## GriefLogger
+- **CurseForge ID:** 435029
+- **Slug:** grieflogger
+- **Modrinth Slug:** grieflogger
 - **Mod Loader:** Fabric
 - **Side:** server
-- **Summary:** A server-side block/entity/container action logging mod with rollback support.
-- **Why:** Essential admin tool for tracking griefing, theft, and other player actions on the SMP with full rollback capability.
-- **Dependencies:** Fabric API, Fabric Language Kotlin
+- **Summary:** A fast SQLite/MySQL-backed player interaction logger, like CoreProtect for modded Fabric.
+- **Why:** Replaces Ledger for tracking griefing, theft, and player actions on the SMP. Ledger's 1.21.1 build (v1.3.5, Nov 2024) is abandoned and crashes with a NullPointerException in its screen-close mixin when players use Easy Mob Farm.
+- **Dependencies:** Fabric API, Architectury API, SuperMartijn642's Config Lib
 - **Conflicts:** None known
 
 ## Connectivity

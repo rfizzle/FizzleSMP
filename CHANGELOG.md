@@ -13,12 +13,16 @@ Version numbers follow a pragmatic SemVer for modpacks:
 
 ### Added
 - Euphoria Patches — add-on for Complementary Shaders with extra visual features and settings
+- GriefLogger — SQLite/MySQL-backed player interaction logger, replacing Ledger
+- SuperMartijn642's Config Lib — required dependency for GriefLogger
 
 ### Changed
 
 ### Fixed
+- Server crash caused by Ledger's `ledgerCloseScreenLogChanges` mixin NPE when players interacted with Easy Mob Farm containers — resolved by replacing Ledger with GriefLogger
 
 ### Removed
+- Ledger — abandoned on 1.21.1 (last update Nov 2024), crashes with Easy Mob Farm's custom containers
 
 ## [1.1.0] - 2026-04-12
 ### Added

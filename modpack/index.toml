@@ -552,6 +552,11 @@ hash = "093711628f921153cd954c278f237665b2c7cb3e91f304b8c0483c5ba8be5347"
 metafile = true
 
 [[files]]
+file = "mods/grieflogger.pw.toml"
+hash = "ad0541bcf18622a3eaa0ff32c639a0b34ea52c3c81c5c5db45b363aca8ca55c3"
+metafile = true
+
+[[files]]
 file = "mods/grind-enchantments.pw.toml"
 hash = "55c1e79e52cf4a8ebf8871bd467781962357ba30b4aaaf1694c204cddb7106e7"
 metafile = true
@@ -664,11 +669,6 @@ metafile = true
 [[files]]
 file = "mods/lavender-api.pw.toml"
 hash = "28cf84fff0ff633c399548b6623812da378a81359ef3dbc520493c7a358ac7eb"
-metafile = true
-
-[[files]]
-file = "mods/ledger.pw.toml"
-hash = "a03a13cc80277a1937d9a59760ed137b147ad81e881118acf70515930298e4d6"
 metafile = true
 
 [[files]]
@@ -1109,6 +1109,11 @@ metafile = true
 [[files]]
 file = "mods/stylish-effects.pw.toml"
 hash = "2bdc5e9de389bbe562540385272bdff6b48d1ac0b5b685937f27e2234087e555"
+metafile = true
+
+[[files]]
+file = "mods/supermartijn642s-config-lib.pw.toml"
+hash = "c702e025298d58a90705f502abad07bb03e1dcc22733c95e1379665aa149918e"
 metafile = true
 
 [[files]]
