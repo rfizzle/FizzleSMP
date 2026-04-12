@@ -12,6 +12,15 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+## [1.2.0] - 2026-04-12
+### Added
 - Lighty — light overlay mod with carpet-style, number, and cross visualization modes (F7/F8 toggle)
 - Euphoria Patches — add-on for Complementary Shaders with extra visual features and settings
 - GriefLogger — SQLite/MySQL-backed player interaction logger, replacing Ledger
