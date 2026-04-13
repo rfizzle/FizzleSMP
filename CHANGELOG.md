@@ -12,6 +12,15 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+## [1.3.0] - 2026-04-14
+### Added
 - RpgDifficulty — distance-based mob scaling that complements HMIOT's time-based curve; 1000-block safe ring at spawn, damage capped at 2×, speed at 1.3×
 
 ### Changed
