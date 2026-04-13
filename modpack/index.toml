@@ -166,7 +166,7 @@ metafile = true
 
 [[files]]
 file = "mods/artifacts.pw.toml"
-hash = "539d6d2230c16b543ef1070ec3d7d43ea599efabff084137bead5114d1546506"
+hash = "1ba853afdb997a47495eda44e2affbf5b33f88f39ee40f2712e6034c14e6b6d8"
 metafile = true
 
 [[files]]
@@ -276,7 +276,7 @@ metafile = true
 
 [[files]]
 file = "mods/collective.pw.toml"
-hash = "42c658ecafe98b802924b2a8a10bfc995d743efdc2cf7a1965274d302380f1e7"
+hash = "aa4c93434d4d290412ed611bfeb10c561c5ebdf1805cb15fc7d1a7dec99bda53"
 metafile = true
 
 [[files]]
@@ -441,7 +441,7 @@ metafile = true
 
 [[files]]
 file = "mods/entityculling.pw.toml"
-hash = "e46fbbd37583e7a348318b15ef9b32eda02858134907f3ac73e311418ee6b682"
+hash = "22ac284f3d89ba956df0fac7c78468d8003e8d9d90e7ad22e49c0027b50a0f71"
 metafile = true
 
 [[files]]
@@ -451,12 +451,12 @@ metafile = true
 
 [[files]]
 file = "mods/every-compat.pw.toml"
-hash = "30d9387ebac3be0b6825a84221cd879923cccbeeb8f7a201e147fa656362d5e4"
+hash = "9c0a4d3b191a57f9522fc48790b5929931086fc7fdfae2fd62bc2659d2c1270d"
 metafile = true
 
 [[files]]
 file = "mods/explorers-compass.pw.toml"
-hash = "cc3ea0f2dec451d3dc489439bc6a3285f2aaab81b292b0f582d7905f75bef7a3"
+hash = "3ba0dff600ceb7716124b7353e027ac6b7b06c9fc315cfa3280282526c5f8841"
 metafile = true
 
 [[files]]
@@ -471,7 +471,7 @@ metafile = true
 
 [[files]]
 file = "mods/fabric-api.pw.toml"
-hash = "cd98ddb3d38d3402b89ab669d423dbc199d70c4d655eaea615add89c30b95241"
+hash = "66ac143c4ec19d2cf25c9cfb9cf749cd2ff379e860950b4e624f582ba36eb3df"
 metafile = true
 
 [[files]]
@@ -511,7 +511,7 @@ metafile = true
 
 [[files]]
 file = "mods/farmers-delight-refabricated.pw.toml"
-hash = "af1056ae2372dda2a65e73d403fb8f12a1835fe59b75342e6174bf04c5a52a3d"
+hash = "64430605ed12ebd90283b1f0716751b71d40b4ec15273fe81947bdcc5171c608"
 metafile = true
 
 [[files]]
@@ -831,7 +831,7 @@ metafile = true
 
 [[files]]
 file = "mods/natures-compass.pw.toml"
-hash = "f85bbc82f8801b099dc53b89d5b52f9b4b9f364b746290c26f6e5447aaaa1db7"
+hash = "6ad3a07f305436daf07308665c39afa809d89c7c2f7ca4f2cc73160d51553b37"
 metafile = true
 
 [[files]]
@@ -871,7 +871,7 @@ metafile = true
 
 [[files]]
 file = "mods/not-enough-animations.pw.toml"
-hash = "ce1787c57a649e4a7c933569f2b0c40e18e4002b043ab7c7b7d3c95e27c967be"
+hash = "a7fd409aeddeb32e4199fd6d07b7ad35eaf9c975e7f0f148fe720c3b8222c904"
 metafile = true
 
 [[files]]
@@ -891,7 +891,7 @@ metafile = true
 
 [[files]]
 file = "mods/open-parties-and-claims.pw.toml"
-hash = "4877ee9d78dc0b634632cc7e8e559f9bdaf35fa03d439a52bdaa0512493bfcc0"
+hash = "bbae11fcf64f248c2dbec73178868a764c5107b9191dc670ebff8a703dc43206"
 metafile = true
 
 [[files]]
@@ -916,7 +916,7 @@ metafile = true
 
 [[files]]
 file = "mods/pickable-villagers.pw.toml"
-hash = "f132cdf02927e0144244818339417efb7341cccf4b91315512250cc601fdf817"
+hash = "10c9d868fe4d5c97a6613090ade1502b8172a639024febd003d7f4571d886288"
 metafile = true
 
 [[files]]
@@ -1026,7 +1026,7 @@ metafile = true
 
 [[files]]
 file = "mods/seasonhud-fabric.pw.toml"
-hash = "c0a9680d36ec1c81b0fcd500a676c5aeacbb7252f1f65d37f82f0e5c0ddcc8f7"
+hash = "baff27c2a47f82eff3939db2f6e090d489b90ae07bd0340808e6694f9f20f5f8"
 metafile = true
 
 [[files]]
@@ -1036,7 +1036,7 @@ metafile = true
 
 [[files]]
 file = "mods/selene.pw.toml"
-hash = "00c1cbe48a7154402faac5015a7b2f674f03fc321b9ebe933f99388f24dbda6d"
+hash = "c47343db2c2eb62d771100dc5a66da99a831651e50f7dee892ad1f6a8ace0419"
 metafile = true
 
 [[files]]
@@ -1056,7 +1056,7 @@ metafile = true
 
 [[files]]
 file = "mods/simple-voice-chat.pw.toml"
-hash = "b9b85769aa4f0f7d03cc097e2528af38b243f3873e071649ca381053b7ead0fa"
+hash = "a0f6392c22ab1813ca7df417a69426174a2f010fa1a55a4195a0369b498dcd34"
 metafile = true
 
 [[files]]
@@ -1141,7 +1141,7 @@ metafile = true
 
 [[files]]
 file = "mods/supplementaries.pw.toml"
-hash = "2cf0fb10e89b619b190a49f1cf68af50b6b4082fea0d28c32327faaafa9a3330"
+hash = "ea8b5d3157a86ab6e3a432ff9f87100c4ef6434539ec955f039046762c413370"
 metafile = true
 
 [[files]]
@@ -1156,7 +1156,7 @@ metafile = true
 
 [[files]]
 file = "mods/tectonic.pw.toml"
-hash = "d3783840e0b904445e57611c1c10f12b7f26a6ed8eb88deaa9ad9b0a176a26a8"
+hash = "17c9b4d78834b4193fb15e251b64dbda0be6f132e005d374a99a92584b1093df"
 metafile = true
 
 [[files]]
@@ -1171,7 +1171,7 @@ metafile = true
 
 [[files]]
 file = "mods/the-bumblezone-fabric.pw.toml"
-hash = "7bbf42e9354fc9d0b58da645fd29b65cec2360084168b479d51317c171577bb3"
+hash = "c2f9901ef3984dc070e23c13137144a5c6284230cf9efa6072033edd13fbf79f"
 metafile = true
 
 [[files]]
