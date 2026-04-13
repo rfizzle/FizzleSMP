@@ -12,6 +12,8 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ## [Unreleased]
 
 ### Added
+- `EnchantingInfuser-Mending-Soulbound.zip` datapack — adds Mending and YIGD Soulbound to the `enchantinginfuser:in_enchanting_infuser` and `in_advanced_enchanting_infuser` tags so both enchantments can be applied at the infuser
+- `config/enchantinginfuser-server.toml` — raises `maximumCost` to 100 (normal infuser) and 150 (advanced infuser) to rebalance the infuser's XP cost
 
 ### Changed
 

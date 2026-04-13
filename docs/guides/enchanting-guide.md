@@ -26,6 +26,10 @@ A separate block that lets you **pick exactly which enchantments** you want inst
 4. Browse available enchantments and select the ones you want.
 5. Pay the XP cost shown — prices are configurable by the server.
 
+**Available enchantments include Mending and YIGD's Soulbound** (both added via datapack — they don't normally appear in enchanting tables).
+
+XP costs on FizzleSMP are raised above the infuser's default to preserve vanilla enchanting table viability. Expect to pay up to **100 levels** at the normal infuser and **150 levels** at the advanced infuser for a full top-tier enchantment set.
+
 This is the best way to get specific enchantments without re-rolling at a vanilla table.
 
 ---
