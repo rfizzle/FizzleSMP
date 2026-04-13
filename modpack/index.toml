@@ -17,6 +17,10 @@ file = "config/artifacts/general.toml"
 hash = "b80ec9f6754ed7039f41bc44034f10a6896e76f0310cfe226e928c07911a9c05"
 
 [[files]]
+file = "config/bosses_of_mass_destruction.json5"
+hash = "4852fdc5e936f8a2b3e16be721670aa74f8becdb63f42c0403b2ec6393cda8ed"
+
+[[files]]
 file = "config/craftingtweaks-common.toml"
 hash = "f96d8c4a6ef09ec7785c4da4714463a58b82cff51385abe778256703e83f075f"
 
