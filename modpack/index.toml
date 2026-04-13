@@ -33,6 +33,10 @@ file = "config/emi.css"
 hash = "c2d60fb6c0b70dabe22cb3bebc173d56fea4666a3ce4e20a484a34cb0bf51e80"
 
 [[files]]
+file = "config/enchantinginfuser-server.toml"
+hash = "7b55feed86e69836879acc09559bdba7819f843a34d074a221cf419a1ab97aab"
+
+[[files]]
 file = "config/enhanced_bes.properties"
 hash = "21d14939c5ac3b7c79083fbf9de7c14d9ae4cc1e4fa85848a931be5bf5b08deb"
 
@@ -57,8 +61,12 @@ file = "config/paxi/datapacks/BetterLoot-Savanna-Grass-Fix.zip"
 hash = "07265fcba7679d9f38c4e6206b6189e2e30c0d583ce5654e3f27222d9010dc56"
 
 [[files]]
+file = "config/paxi/datapacks/EnchantingInfuser-Mending-Soulbound.zip"
+hash = "2a6b6299c283861c1d41c8fec373ed46461eee9a45efa577e9acec7c968f0aa1"
+
+[[files]]
 file = "config/paxi/datapacks/NeoEnchant-AutoSmelt-Disable.zip"
-hash = "9b4a14e644c4e18f4e095e5423312101f5818be3ca4f72cf2753ce4e0dc9712e"
+hash = "e0c998512935b0bf3c890c8d546e3eef41655dbe8e206bd223be5d145c4d2630"
 
 [[files]]
 file = "config/paxi/datapacks/Spectrum-BeyondEnchant-LevelCap-Fix.zip"

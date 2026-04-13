@@ -18,6 +18,7 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ### Changed
 
 ### Fixed
+- `NeoEnchant-AutoSmelt-Disable.zip` datapack — changed enchantment `weight` from `0` to `1` to satisfy the 1.21.1 enchantment codec range `[1, 1024]`, which was causing server startup to fail during registry load (`slots` and `effects` remain empty so the enchantment is still effectively disabled)
 
 ### Removed
 
