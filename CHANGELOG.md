@@ -12,12 +12,13 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ## [Unreleased]
 
 ### Added
+- RpgDifficulty — distance-based mob scaling that complements HMIOT's time-based curve; 1000-block safe ring at spawn, damage capped at 2×, speed at 1.3×
 
 ### Changed
+- Bosses of Mass Destruction: doubled HP across all four bosses and buffed attack/armor/healing to stay threatening at high HMIOT progression
 
 ### Fixed
-
-### Removed
+- Easy Mob Farm: blacklisted bosses (Ender Dragon, Wither, Warden, Elder Guardian, BMD, Illager Invasion, Mutant Monsters, Friends & Foes) from all catchers to prevent exploits like Warden grinders; raised buffer to 1024 with overflow pausing instead of item entity spawning to eliminate lag
 
 ## [1.2.1] - 2026-04-14
 ### Added
