@@ -192,6 +192,39 @@ awk -v version="$new_version" -v date="$today" '
 ' "$CHANGELOG" > "$tmp_changelog"
 mv "$tmp_changelog" "$CHANGELOG"
 
+# Strip empty ### subsections from the newly-versioned block only.
+# Buffers each ### section and emits it only if it has a non-empty body line.
+tmp_changelog=$(mktemp)
+awk -v version="$new_version" '
+    function flush() {
+        # Drop empty ### sections in the target version; emit otherwise.
+        if (header != "" && !(in_target && !has_body)) {
+            print header
+            for (i = 1; i <= n; i++) print buf[i]
+        }
+        header = ""; n = 0; has_body = 0
+    }
+    /^## \[/ {
+        flush()
+        in_target = ($0 ~ ("^## \\[" version "\\] "))
+        print
+        next
+    }
+    in_target && /^### / {
+        flush()
+        header = $0
+        next
+    }
+    in_target && header != "" {
+        buf[++n] = $0
+        if ($0 ~ /[^[:space:]]/) has_body = 1
+        next
+    }
+    { print }
+    END { flush() }
+' "$CHANGELOG" > "$tmp_changelog"
+mv "$tmp_changelog" "$CHANGELOG"
+
 # --- 4. Git commit + tag ---
 
 echo "▸ Committing release..."
