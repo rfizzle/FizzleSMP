@@ -238,6 +238,9 @@ Key mods: Accessories, Trinkets, Accessories Compatibility Layer, Artifacts, Thi
 - [ ] **Mutant Monsters combat** — Fight a mutant mob. Confirm unique attacks, animations, and drops function correctly.
 - [ ] **Mutant Monsters + Creeper Overhaul** — Confirm Mutant Creeper spawns independently of Creeper Overhaul's biome variants.
 - [ ] **Hostile Mobs Improve Over Time** — Play through several in-game days. Confirm hostile mobs progressively gain stronger stats (more HP, damage, armor). Check config for tuning scaling rate.
+- [ ] **RpgDifficulty distance scaling** — Travel 2,000+ blocks from world spawn. Confirm mobs near your location have noticeably higher HP/damage than mobs near spawn. Verify time-axis scaling is disabled in config (so it doesn't double-stack with HMIOT).
+- [ ] **RpgDifficulty + HMIOT stacking** — With an aged world AND distance from spawn, confirm mob stats are challenging but not unkillable. Check max-cap settings in RpgDifficulty config if mobs feel oppressive.
+- [ ] **RpgDifficulty + BoMD bosses** — Fight a BoMD boss far from spawn. Confirm distance buff applies to the boss (unlike HMIOT, which doesn't reliably affect BoMD bosses).
 
 ### Enchantment Expansion
 - [ ] **NeoEnchant+ enchantments** — Open an enchanting table or Enchanting Infuser. Confirm NeoEnchant+ enchantments (Fury, Life+, Bright Vision, Builder Arms, Rebound) appear in the enchantment pool and can be applied to gear.

@@ -106,6 +106,10 @@ file = "config/paxi/resourcepacks/terralith-lang/pack.mcmeta"
 hash = "75794b27618d1574f95edcdb4d6f61370c0ada6ea0e4a01f1f0fc754d4c9639f"
 
 [[files]]
+file = "config/rpgdifficulty.json"
+hash = "f9e28652d06b98ee0493c2d15685dad6e1cbf1557852c287884fb70d07921a15"
+
+[[files]]
 file = "config/sparsestructures.json5"
 hash = "1c5274bee29912a4959fc862ef39ac192a31b7bb632e2f6d7e35e043b7e26273"
 
@@ -1018,6 +1022,11 @@ metafile = true
 [[files]]
 file = "mods/rogues-and-warriors.pw.toml"
 hash = "dd94cf9174ce88206139d9b5ff7e10425ebe5af90c24698d394ba8dcafadb82c"
+metafile = true
+
+[[files]]
+file = "mods/rpgdifficulty.pw.toml"
+hash = "c14421cf5ebab9416000cb57907e00d2aefec9ef7e5b2ab5d7346076c1b134fb"
 metafile = true
 
 [[files]]
