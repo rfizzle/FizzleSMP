@@ -16,9 +16,12 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ### Changed
 
 ### Fixed
-- RpgDifficulty side classification: was shipped as `server`-only in v1.3.0, but the mod modifies entity attributes/tracked data and must run on the client too. Missing it on the client caused a `DataTracker` `ArrayIndexOutOfBoundsException` crash when the server sent tracked data for a scaled mob. Flipped to `both` so the client pack includes it.
 
 ### Removed
+
+## [1.3.1] - 2026-04-14
+### Fixed
+- RpgDifficulty side classification: was shipped as `server`-only in v1.3.0, but the mod modifies entity attributes/tracked data and must run on the client too. Missing it on the client caused a `DataTracker` `ArrayIndexOutOfBoundsException` crash when the server sent tracked data for a scaled mob. Flipped to `both` so the client pack includes it.
 
 ## [1.3.0] - 2026-04-14
 ### Added
