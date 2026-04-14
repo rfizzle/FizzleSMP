@@ -29,13 +29,21 @@ jobs:
       - name: Install packwiz
         run: go install github.com/packwiz/packwiz@latest
 
+      - name: Cache mod downloads
+        uses: actions/cache@v4
+        with:
+          path: build/server
+          key: server-mods-${{ hashFiles('modpack/pack.toml', 'modpack/mods/*.pw.toml', 'modpack/config/paxi/datapacks/*.pw.toml') }}
+          restore-keys: |
+            server-mods-
+
       - name: Build server pack
         run: ./scripts/build-pack.sh server
 
       - name: Stage server
         run: |
           mkdir -p test-server
-          unzip -q build/FizzleSMP-server-*.zip -d test-server
+          unzip -q FizzleSMP-server-*.zip -d test-server
           cd test-server
           curl -sL -o fabric-installer.jar \
             https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar
