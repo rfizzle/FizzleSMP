@@ -1026,7 +1026,7 @@ metafile = true
 
 [[files]]
 file = "mods/rpgdifficulty.pw.toml"
-hash = "c14421cf5ebab9416000cb57907e00d2aefec9ef7e5b2ab5d7346076c1b134fb"
+hash = "acf280013089a815f809ce059af81c12e9fabe0609a979f2ec8a6059e4234244"
 metafile = true
 
 [[files]]

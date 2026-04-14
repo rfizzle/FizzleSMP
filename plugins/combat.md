@@ -302,7 +302,7 @@
 - **Slug:** rpgdifficulty
 - **Modrinth Slug:** rpgdifficulty
 - **Mod Loader:** Fabric
-- **Side:** server
+- **Side:** both
 - **Summary:** Strengthens mob health/damage/armor/XP based on distance from world spawn and/or in-game time.
 - **Why:** Fills the distance-scaling gap that HMIOT doesn't cover — rewards exploration with tougher encounters. Time-axis disabled in config so HMIOT owns the temporal curve.
 - **Dependencies:** Fabric API, Cloth Config

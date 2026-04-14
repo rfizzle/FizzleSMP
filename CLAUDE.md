@@ -79,8 +79,18 @@ Each file in `plugins/` uses this format:
 
 Side values:
 - `client` — Only needed on the client (rendering, HUD, UI, animations, sounds, visual effects, recipe viewers).
-- `server` — Only needed on the server (server-side logic, world gen in multiplayer, logging).
+- `server` — Only needed on the server (server-side logic, world gen in multiplayer, logging). A mod is only truly `server` if it never alters network-serialized state the vanilla client would not already expect.
 - `both` — Required on both sides (new items/blocks, combat systems, gameplay mechanics that need client+server code).
+
+**When in doubt, pick `both`.** A mod's author describing it as "server-side" usually means "no client UI required," not "safe to omit from the client." If the mod does any of the following, it is `both` — even if it has no client renderers:
+- Modifies entity attributes, health, damage, speed, or scales mobs
+- Registers new `TrackedData` entries or entity components/attachments
+- Adds or alters enchantments, status effects, or damage types
+- Changes combat math, crit behavior, or hit detection
+- Adds/changes items, blocks, entities, or recipes the client will encounter
+- Hooks network packets in a way that changes their payload shape
+
+A client missing such a mod will desync (classic symptom: `ArrayIndexOutOfBoundsException` in `DataTracker` handling a clientbound bundle packet).
 
 Only mods that belong in the pack should be listed. If a mod is rejected or removed, delete its entry entirely. When adding or editing mods, always populate all fields. Use `N/A` for **CurseForge ID** / **Slug** if the mod is Modrinth-only, or for **Modrinth Slug** if it is CurseForge-only. Only add the **Pin CurseForge File ID** field when a mod must be locked to a specific version (e.g., to avoid a dependency that conflicts with another mod). Document the reason in the **Conflicts** field and in `docs/compatibility-matrix.md`.
 
