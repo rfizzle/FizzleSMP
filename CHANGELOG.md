@@ -18,6 +18,9 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ### Fixed
 
 ### Removed
+
+## [1.3.2] - 2026-04-14
+### Removed
 - Infinite Trading — removed from the pack. Combined with Pickable Villagers' housed traders, unlimited trade volume caused vanilla `demandBonus` to inflate prices far beyond the intended base (e.g. iron 4 → 25 per emerald); vanilla's lockout is the safety valve keeping demand in check, so removing the mod restores balance
 
 ## [1.3.1] - 2026-04-14
