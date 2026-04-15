@@ -49,12 +49,12 @@ file = "config/enhanced_bes.properties"
 hash = "21d14939c5ac3b7c79083fbf9de7c14d9ae4cc1e4fa85848a931be5bf5b08deb"
 
 [[files]]
-file = "config/inventoryprofiles/rules.txt"
-hash = "47e4b96963af3000f52f33ce1d1d83c5f5ccd87eacac7ba42cb57c1d11804caf"
-
-[[files]]
 file = "config/inventoryprofilesnext/inventoryprofiles.json"
 hash = "bbbeb4b130f993307308b0375ecbee82c0f143f6996c48f62e352c93e48b9ea1"
+
+[[files]]
+file = "config/inventoryprofilesnext/rules-v2.fizzlesmp.txt"
+hash = "2ca7fd4f9fe81dcef0f0cdcd6f03155580957d567ce13e2afd7d59b91dc40ec2"
 
 [[files]]
 file = "config/item_obliterator.json5"

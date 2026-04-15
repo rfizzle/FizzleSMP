@@ -1,0 +1,14 @@
+// Override IPN's @creative_menu_order rule to avoid the native
+// ::search_tab_index creative-tab walk, which freezes clients on
+// first use while building every creative tab.
+// See: https://github.com/blackd/Inventory-Profiles/issues/440
+//
+// @default already delegates to @creative_menu_order, so redirecting
+// this one rule covers both the main sort button and the creative-
+// menu sort code path.
+//
+// Filename must match ^rules-v2\.(?:.*\.)?txt$ on IPN 1.20.5+/1.21.1;
+// plain rules.txt is silently ignored.
+
+@creative_menu_order
+    @item_name

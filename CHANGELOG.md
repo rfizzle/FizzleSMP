@@ -21,7 +21,7 @@ Version numbers follow a pragmatic SemVer for modpacks:
 - guy's Armor HUD — ship a default config that anchors the widget to the bottom-left in vertical orientation (offset 0,0) instead of the horizontal hotbar-side default
 
 ### Fixed
-- Inventory Profiles Next — ship `config/inventoryprofiles/rules.txt` that overrides the default sort rule to `::display_name` (locale-aware alphabetical) instead of `::creative_menu_group_index`. The native creative-tab sort freezes/crashes clients on first use as it builds every creative tab (upstream blackd/Inventory-Profiles#440); alphabet and item-ID sort modes were unaffected and remain available
+- Inventory Profiles Next — ship `config/inventoryprofilesnext/rules-v2.fizzlesmp.txt` overriding `@creative_menu_order` to delegate to `@item_name`. The native rule uses `::search_tab_index` which freezes/crashes clients on first use as it builds every creative tab (upstream blackd/Inventory-Profiles#440); alphabet and item-ID sort modes were unaffected and remain available. IPN 1.20.5+ requires the `rules-v2.*.txt` filename scheme — plain `rules.txt` in the legacy `inventoryprofiles/` directory is silently ignored
 
 ### Removed
 - Inventory Essentials — swapped out in favor of Inventory Profiles Next
