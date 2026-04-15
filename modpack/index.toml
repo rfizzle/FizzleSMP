@@ -50,7 +50,7 @@ hash = "21d14939c5ac3b7c79083fbf9de7c14d9ae4cc1e4fa85848a931be5bf5b08deb"
 
 [[files]]
 file = "config/inventoryprofilesnext/inventoryprofiles.json"
-hash = "bbbeb4b130f993307308b0375ecbee82c0f143f6996c48f62e352c93e48b9ea1"
+hash = "8c5e9ac2dfb75bb73f44151107d596c36268b193f18c1b123a5969137bd7ca1a"
 
 [[files]]
 file = "config/inventoryprofilesnext/rules-v2.fizzlesmp.txt"

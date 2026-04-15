@@ -35,5 +35,10 @@
         "enable_profiles": {
             "value": false
         }
+    },
+    "GuiSettings": {
+        "regular_sort_order": "ITEM_NAME",
+        "in_columns_sort_order": "ITEM_NAME",
+        "in_rows_sort_order": "ITEM_NAME"
     }
 }
