@@ -14,16 +14,11 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ### Added
 - Amecs — enables multi-key keybind combos (modifier + key chords) for players who need more bindable actions than vanilla allows
 - Default Options — ships curated default keybinds, video, and control settings so new players get a sensible baseline on first launch
-- Inventory Profiles Next — restored as the inventory sorting/management mod, replacing Inventory Essentials
+- Inventory Profiles Next — replaces Inventory Essentials as the sorting/management mod. Configured with alphabetical (`ITEM_NAME`) sort as the default, slimmed in-GUI controls, and a `rules-v2` override that neutralizes the creative-menu sort rule (which freezes clients on first use per blackd/Inventory-Profiles#440)
 
 ### Changed
 - Removed `options.txt` from packwiz overrides so the client no longer overwrites player-customized Minecraft settings on update; Default Options now seeds first-run defaults instead
 - guy's Armor HUD — ship a default config that anchors the widget to the bottom-left in vertical orientation (offset 0,0) instead of the horizontal hotbar-side default
-
-### Fixed
-- Inventory Profiles Next — default all three sort buttons (`regular_sort_order`, `in_columns_sort_order`, `in_rows_sort_order`) to `ITEM_NAME` in `inventoryprofiles.json` so new players get alphabetical sort out of the box instead of the creative-menu default
-- Inventory Profiles Next — slim the in-GUI controls: hide the sort-in-columns and sort-in-rows buttons, inventory editor/settings buttons, and profiles UI; disable scroll-wheel sort-order switching. Reduces the surface area for players to accidentally pick the creative-menu sort
-- Inventory Profiles Next — ship `config/inventoryprofilesnext/rules-v2.fizzlesmp.txt` overriding `@creative_menu_order` to delegate to `@item_name`. The native rule uses `::search_tab_index` which freezes/crashes clients on first use as it builds every creative tab (upstream blackd/Inventory-Profiles#440); alphabet and item-ID sort modes were unaffected and remain available. IPN 1.20.5+ requires the `rules-v2.*.txt` filename scheme — plain `rules.txt` in the legacy `inventoryprofiles/` directory is silently ignored
 
 ### Removed
 - Inventory Essentials — swapped out in favor of Inventory Profiles Next
