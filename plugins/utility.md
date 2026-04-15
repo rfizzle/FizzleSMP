@@ -83,15 +83,26 @@
 - **Dependencies:** Balm, Fabric API
 - **Conflicts:** None known
 
-## Inventory Essentials
-- **CurseForge ID:** 368825
-- **Slug:** inventory-essentials
-- **Modrinth Slug:** inventory-essentials
+## Inventory Profiles Next
+- **CurseForge ID:** 495267
+- **Slug:** inventory-profiles-next
+- **Modrinth Slug:** inventory-profiles-next
 - **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Essential inventory tweaks including Ctrl-click single-item transfer, sorting, and improved item movement.
-- **Why:** Adds Ctrl-click single-item transfer, shift-drag to quick-move multiple items, and middle-click inventory sorting.
-- **Dependencies:** Balm, Fabric API
+- **Side:** client
+- **Summary:** Adds in-GUI sort buttons, auto-refill, slot locking, and item profile management to inventory and container screens.
+- **Why:** Provides sort buttons rendered directly on chest/inventory GUIs that work with modded containers like Iron Chests, unlike Inventory Essentials.
+- **Dependencies:** libIPN, Fabric API
+- **Conflicts:** None known
+
+## libIPN
+- **CurseForge ID:** 679177
+- **Slug:** libipn
+- **Modrinth Slug:** libipn
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** Shared library providing common utilities for Inventory Profiles Next.
+- **Why:** Required dependency of Inventory Profiles Next.
+- **Dependencies:** Fabric API
 - **Conflicts:** None known
 
 ## Blur+
@@ -340,6 +351,39 @@
 - **Summary:** Adds a full-screen world map showing explored terrain, designed to work alongside Xaero's Minimap.
 - **Why:** Complements Xaero's Minimap with a full-screen map view for planning routes, reviewing explored territory, and managing waypoints on the SMP.
 - **Dependencies:** Fabric API; Open Parties and Claims (optional, for claim overlay)
+- **Conflicts:** None known
+
+## Pig Pen Cipher
+- **CurseForge ID:** 396234
+- **Slug:** pig-pen-cipher
+- **Modrinth Slug:** pig-pen-cipher
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds the pigpen substitution cipher as a usable Minecraft font.
+- **Why:** Required dependency of Dark Utilities.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## Nyctography
+- **CurseForge ID:** 1126493
+- **Slug:** nyctography
+- **Modrinth Slug:** nyctography
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds the Nyctography substitution cipher as a usable Minecraft font.
+- **Why:** Required dependency of Dark Utilities.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known
+
+## Runelic
+- **CurseForge ID:** 393149
+- **Slug:** runelic
+- **Modrinth Slug:** runelic
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds a runic font to Minecraft.
+- **Why:** Required dependency of Dark Utilities.
+- **Dependencies:** Fabric API
 - **Conflicts:** None known
 
 ## Puzzles Lib

@@ -689,5 +689,5 @@
 - **Side:** both
 - **Summary:** Expansive content mod used here primarily for its vector plates — flat rotatable blocks that push entities in a direction at four speed tiers.
 - **Why:** Vector plates are the best-in-class solution for pushing mobs and items in mob farms and automation builds. All other Dark Utilities content (damage/effect plates, mob filters, charms, runes, redstone blocks) is disabled via Item Obliterator.
-- **Dependencies:** Fabric API, Bookshelf, Prickle
+- **Dependencies:** Fabric API, Bookshelf, Prickle, Pig Pen Cipher, Nyctography, Runelic
 - **Conflicts:** Soft overlap with Simple Conveyor Belts (vector plates provide similar entity/item transport). Most content disabled via Item Obliterator to reduce feature bloat.

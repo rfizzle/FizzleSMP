@@ -25,6 +25,10 @@ file = "config/craftingtweaks-common.toml"
 hash = "f96d8c4a6ef09ec7785c4da4714463a58b82cff51385abe778256703e83f075f"
 
 [[files]]
+file = "config/defaultoptions-common.toml"
+hash = "a186d6ab6468353cb2a49f5a4229c16b004580a557d4bccaf12041e8a46f9d9e"
+
+[[files]]
 file = "config/easy_mob_farm/mob_catcher.cfg"
 hash = "a5a8005873bb59c83dcec7269c230ce4dbd7c57694b2581627a4d60c1fdfa776"
 
@@ -43,6 +47,10 @@ hash = "7b55feed86e69836879acc09559bdba7819f843a34d074a221cf419a1ab97aab"
 [[files]]
 file = "config/enhanced_bes.properties"
 hash = "21d14939c5ac3b7c79083fbf9de7c14d9ae4cc1e4fa85848a931be5bf5b08deb"
+
+[[files]]
+file = "config/inventoryprofilesnext/inventoryprofiles.json"
+hash = "bbbeb4b130f993307308b0375ecbee82c0f143f6996c48f62e352c93e48b9ea1"
 
 [[files]]
 file = "config/item_obliterator.json5"
@@ -621,8 +629,8 @@ hash = "5a1604eb3c113c5a540de4768de72660ea652b41730ea318798a24b9f60d88b7"
 metafile = true
 
 [[files]]
-file = "mods/inventory-essentials.pw.toml"
-hash = "b03fd45cc31432ddd04245ec0418e071c170950133ed2d91c53dd9956c8e3db0"
+file = "mods/inventory-profiles-next.pw.toml"
+hash = "986c2a1bc594d647ca1b6e38ce527af5cae5f6da9a07373d0ed44c25ec7086ae"
 metafile = true
 
 [[files]]
@@ -698,6 +706,11 @@ metafile = true
 [[files]]
 file = "mods/let-me-despawn.pw.toml"
 hash = "e7b3616b2899931a555612ccbec989d27e5bc0b90b200aa9eb597ce4c54476e1"
+metafile = true
+
+[[files]]
+file = "mods/libipn.pw.toml"
+hash = "1b81adc5966f09c9bb63e2f85620a5fcc5f60c3d4a7831b8bb3e3e1c6fa0f662"
 metafile = true
 
 [[files]]

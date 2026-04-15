@@ -1,0 +1,39 @@
+{
+    "Features": {
+        "enable_auto_refill": {
+            "value": false
+        },
+        "highlight_foused_items": {
+            "value": false
+        },
+        "enable_profiles": {
+            "value": false
+        },
+        "item_scrolling": {
+            "value": false
+        }
+    },
+    "ModSettings": {
+        "enable_updates_check": false,
+        "first_run": false,
+        "enable_profiles": {
+            "value": false
+        },
+        "enable_auto_refill": {
+            "value": false
+        },
+        "highlight_foused_items": {
+            "value": false
+        }
+    },
+    "AutoRefillSettings": {
+        "auto_refill_enable_indicator_icons": {
+            "value": false
+        }
+    },
+    "EditProfiles": {
+        "enable_profiles": {
+            "value": false
+        }
+    }
+}
