@@ -398,11 +398,6 @@ hash = "a9e43d7f29370cc9ac12a30d95748ef09add06a131469f928d722d34be0745a8"
 metafile = true
 
 [[files]]
-file = "mods/default-options.pw.toml"
-hash = "d76810672e812065da2204841186c036e7aed92f5bb532705c05f4742ccd47f7"
-metafile = true
-
-[[files]]
 file = "mods/double-doors.pw.toml"
 hash = "00f40009395dc60d8a67b6dddf155239b6e94867da16f1e26718f697c3065d73"
 metafile = true

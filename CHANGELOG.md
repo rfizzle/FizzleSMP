@@ -13,11 +13,10 @@ Version numbers follow a pragmatic SemVer for modpacks:
 
 ### Added
 - Amecs — enables multi-key keybind combos (modifier + key chords) for players who need more bindable actions than vanilla allows
-- Default Options — ships curated default keybinds, video, and control settings so new players get a sensible baseline on first launch
 - Inventory Profiles Next — replaces Inventory Essentials as the sorting/management mod. Configured with alphabetical (`ITEM_NAME`) sort as the default, slimmed in-GUI controls, and a `rules-v2` override that neutralizes the creative-menu sort rule (which freezes clients on first use per blackd/Inventory-Profiles#440)
 
 ### Changed
-- Removed `options.txt` from packwiz overrides so the client no longer overwrites player-customized Minecraft settings on update; Default Options now seeds first-run defaults instead
+- Removed `options.txt` from packwiz overrides so the client no longer overwrites player-customized Minecraft settings on update
 - guy's Armor HUD — ship a default config that anchors the widget to the bottom-left in vertical orientation (offset 0,0) instead of the horizontal hotbar-side default
 
 ### Removed
