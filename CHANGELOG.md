@@ -22,6 +22,7 @@ Version numbers follow a pragmatic SemVer for modpacks:
 
 ### Fixed
 - Inventory Profiles Next — default all three sort buttons (`regular_sort_order`, `in_columns_sort_order`, `in_rows_sort_order`) to `ITEM_NAME` in `inventoryprofiles.json` so new players get alphabetical sort out of the box instead of the creative-menu default
+- Inventory Profiles Next — slim the in-GUI controls: hide the sort-in-columns and sort-in-rows buttons, inventory editor/settings buttons, and profiles UI; disable scroll-wheel sort-order switching. Reduces the surface area for players to accidentally pick the creative-menu sort
 - Inventory Profiles Next — ship `config/inventoryprofilesnext/rules-v2.fizzlesmp.txt` overriding `@creative_menu_order` to delegate to `@item_name`. The native rule uses `::search_tab_index` which freezes/crashes clients on first use as it builds every creative tab (upstream blackd/Inventory-Profiles#440); alphabet and item-ID sort modes were unaffected and remain available. IPN 1.20.5+ requires the `rules-v2.*.txt` filename scheme — plain `rules.txt` in the legacy `inventoryprofiles/` directory is silently ignored
 
 ### Removed
