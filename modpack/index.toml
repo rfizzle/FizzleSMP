@@ -49,6 +49,10 @@ file = "config/enhanced_bes.properties"
 hash = "21d14939c5ac3b7c79083fbf9de7c14d9ae4cc1e4fa85848a931be5bf5b08deb"
 
 [[files]]
+file = "config/inventoryprofiles/rules.txt"
+hash = "abd07e380883ce22fb7a625360d8a826b45ffe81494b59bc0766d9da201d5ad4"
+
+[[files]]
 file = "config/inventoryprofilesnext/inventoryprofiles.json"
 hash = "bbbeb4b130f993307308b0375ecbee82c0f143f6996c48f62e352c93e48b9ea1"
 

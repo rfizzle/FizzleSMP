@@ -92,7 +92,7 @@
 - **Summary:** Adds in-GUI sort buttons, auto-refill, slot locking, and item profile management to inventory and container screens.
 - **Why:** Provides sort buttons rendered directly on chest/inventory GUIs that work with modded containers like Iron Chests, unlike Inventory Essentials.
 - **Dependencies:** libIPN, Fabric API
-- **Conflicts:** None known
+- **Conflicts:** None known. Ships `config/inventoryprofiles/rules.txt` overriding the default sort rule from `::creative_menu_group_index` to `::display_name` — the creative-tab sort freezes clients on first use while building every creative tab (upstream blackd/Inventory-Profiles#440).
 
 ## libIPN
 - **CurseForge ID:** 679177

@@ -1,0 +1,6 @@
+// Override IPN's default sort rule to avoid ::creative_menu_group_index,
+// which freezes clients on first use while building every creative tab.
+// See: https://github.com/blackd/Inventory-Profiles/issues/440
+@default
+    ::display_name
+        string_compare = locale
