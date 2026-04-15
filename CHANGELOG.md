@@ -18,6 +18,9 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ### Fixed
 
 ### Removed
+
+## [1.3.3] - 2026-04-15
+### Removed
 - Gear Tinkering — removed from the pack. Spark profiling traced ~77% of server-thread tick time to vanilla command dispatch driven by its bundled `gear_tinkering:tick` datapack, which runs `execute as @e[type=item, nbt={OnGround:1b, Item:{count:1}}] …` every tick (an unbounded `@e` scan with NBT predicate across every loaded chunk). Grind Enchantments already covers the core enchantment-extraction workflow without a tick datapack.
 - Creeper Healing (and its Monkey Utils dependency) — removed proactively alongside Gear Tinkering. Not implicated in the spark report, but the explosion-restore workflow is non-essential and trimming server-side mods reduces tick budget pressure.
 
