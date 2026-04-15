@@ -12,12 +12,17 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ## [Unreleased]
 
 ### Added
+- Amecs — enables multi-key keybind combos (modifier + key chords) for players who need more bindable actions than vanilla allows
+- Default Options — ships curated default keybinds, video, and control settings so new players get a sensible baseline on first launch
+- Inventory Profiles Next — restored as the inventory sorting/management mod, replacing Inventory Essentials
 
 ### Changed
+- Removed `options.txt` from packwiz overrides so the client no longer overwrites player-customized Minecraft settings on update; Default Options now seeds first-run defaults instead
 
 ### Fixed
 
 ### Removed
+- Inventory Essentials — swapped out in favor of Inventory Profiles Next
 
 ## [1.3.3] - 2026-04-15
 ### Removed

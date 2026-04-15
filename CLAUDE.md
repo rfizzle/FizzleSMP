@@ -288,6 +288,27 @@ refactor(plugins): split utility mods into utility and admin
 - Stage only the files relevant to the change — avoid catch-all `git add .`.
 - One logical change per commit. If adding a mod touches `plugins/`, `docs/compatibility-matrix.md`, and `modpack/mods/*.pw.toml`, commit them together as one `feat` commit.
 
+### CHANGELOG pre-processing (REQUIRED for mod-related commits)
+
+Any commit that affects what ships in the pack — adding, removing, swapping, version-pinning, or reconfiguring a mod, datapack, or shipped config — MUST include a matching entry in the `[Unreleased]` section of `CHANGELOG.md` in the **same commit**. This is non-negotiable: `release.sh` rolls `[Unreleased]` into the tagged section, so anything missing here is missing from the release notes players see.
+
+**Which commits require a CHANGELOG entry:**
+- `feat(plugins|<category>)` — mod added → `### Added`
+- `fix(plugins|<category>|compat)` involving a mod swap or removal → `### Removed` (and `### Added` if replaced)
+- `fix(packwiz|config|compat)` that changes shipped behavior (config tweak, datapack, override change, version pin) → `### Fixed` or `### Changed`
+- `feat(config)` / `chore(packwiz)` bulk version bumps that players will notice → `### Changed`
+- `revert(plugins|...)` → matching `### Removed` or `### Changed` entry
+
+**Which commits do NOT require an entry:**
+- Pure documentation changes (`docs(...)`) that don't touch shipped files
+- CI/workflow changes (`chore(ci)`, `fix(ci)`)
+- Script/tooling changes that don't alter pack contents (`chore(scripts)`, doc refactors)
+- `chore(release)` — handled by `release.sh` itself
+
+**Entry format:** one bullet per change under the correct subsection, written in the same voice as existing entries — lead with the mod/subsystem name, then a terse explanation of what changed and *why* if non-obvious. Match the detail level of past entries (a removal with a spark-profiled root cause gets a sentence; a simple add gets a phrase).
+
+**When in doubt, add the entry.** It is cheaper to trim an over-eager changelog line at release time than to reconstruct history from `git log` later.
+
 ## Modrinth API Access
 
 The project uses the [Modrinth API v2](https://docs.modrinth.com/) for mod lookups. No authentication required. Do **not** use Python — use `curl` and `jq` exclusively.
