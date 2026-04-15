@@ -742,3 +742,14 @@
 - **Why:** Cleaner potion/effect HUD that works well with the many status effects from RPG Series classes, Critical Strike, and combat mods.
 - **Dependencies:** Fabric API, Forge Config API Port, Puzzles Lib
 - **Conflicts:** None known
+
+## Default Options
+- **CurseForge ID:** 232131
+- **Slug:** default-options
+- **Modrinth Slug:** default-options
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** Seeds recommended default client options (keybinds, video, sound, mod configs) on first launch without overwriting user changes on subsequent updates.
+- **Why:** Lets the pack ship sensible defaults (render distance, FOV, Sodium/Iris settings) without clobbering players' personal settings each time the modpack updates — replaces the old practice of shipping `options.txt` in overrides.
+- **Dependencies:** Fabric API, Balm
+- **Conflicts:** None known

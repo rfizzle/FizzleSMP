@@ -381,6 +381,11 @@ hash = "a9e43d7f29370cc9ac12a30d95748ef09add06a131469f928d722d34be0745a8"
 metafile = true
 
 [[files]]
+file = "mods/default-options.pw.toml"
+hash = "d76810672e812065da2204841186c036e7aed92f5bb532705c05f4742ccd47f7"
+metafile = true
+
+[[files]]
 file = "mods/double-doors.pw.toml"
 hash = "00f40009395dc60d8a67b6dddf155239b6e94867da16f1e26718f697c3065d73"
 metafile = true
@@ -1329,10 +1334,6 @@ metafile = true
 file = "mods/zoomify.pw.toml"
 hash = "bfe08a4c053d5c05d077b0b5089fed8183766dbe5c447da848cd1d82e6f57b96"
 metafile = true
-
-[[files]]
-file = "options.txt"
-hash = "f2cb6341274e1281c575cae80bcc44d0415bc888b65ecdbabc1ad0938fbb0d27"
 
 [[files]]
 file = "shaderpacks/complementary-reimagined.pw.toml"
