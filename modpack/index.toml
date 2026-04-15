@@ -13,6 +13,10 @@ file = "config/accessories.json5"
 hash = "e38612d1819390c708c08c42572172a7a2220b54c8fce69edb7f91d4e17f96c6"
 
 [[files]]
+file = "config/armor_hud.json"
+hash = "d461d6f18e3be7093042264890513c1fb67a8cfdedeb22abb076fd1d83993893"
+
+[[files]]
 file = "config/artifacts/general.toml"
 hash = "b80ec9f6754ed7039f41bc44034f10a6896e76f0310cfe226e928c07911a9c05"
 

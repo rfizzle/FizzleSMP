@@ -18,6 +18,7 @@ Version numbers follow a pragmatic SemVer for modpacks:
 
 ### Changed
 - Removed `options.txt` from packwiz overrides so the client no longer overwrites player-customized Minecraft settings on update; Default Options now seeds first-run defaults instead
+- guy's Armor HUD — ship a default config that anchors the widget to the bottom-left in vertical orientation (offset 0,0) instead of the horizontal hotbar-side default
 
 ### Fixed
 
