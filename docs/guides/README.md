@@ -12,3 +12,4 @@ Guides for players on the FizzleSMP server. These cover the non-obvious mods and
 | [Spectrum](spectrum-guide.md) | Spectrum's discovery system, guidebook, pedestal crafting, color-based progression |
 | [Community & Utilities](community-utilities-guide.md) | Land claims, voice chat, graves, sleep, storage upgrades, building & decoration, QoL features |
 | [Visuals & Shaders](visuals-shaders-guide.md) | Iris + Complementary Shaders, dynamic lighting, visual/audio enhancements, performance mods |
+| [Modded Villager Trades](modded-villager-trades.md) | Trade tables for Tech Reborn (Metallurgist, Electrician), Paladins & Priests (Monk), Jewelry (Jeweler), Chef's Delight (Cook, Chef) |
