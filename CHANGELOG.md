@@ -12,6 +12,15 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+### Removed
+
+## [1.4.0] - 2026-04-16
+### Added
 - Amecs — enables multi-key keybind combos (modifier + key chords) for players who need more bindable actions than vanilla allows
 - Inventory Profiles Next — replaces Inventory Essentials as the sorting/management mod. Configured with alphabetical (`ITEM_NAME`) sort as the default, slimmed in-GUI controls, and a `rules-v2` override that neutralizes the creative-menu sort rule (which freezes clients on first use per blackd/Inventory-Profiles#440)
 
