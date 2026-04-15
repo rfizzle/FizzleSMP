@@ -12,3 +12,7 @@
 
 Minecraft/
 build/
+
+# Local Minecraft log output from testing
+latest.log
+*.log
