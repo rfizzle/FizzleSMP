@@ -25,10 +25,6 @@ file = "config/craftingtweaks-common.toml"
 hash = "f96d8c4a6ef09ec7785c4da4714463a58b82cff51385abe778256703e83f075f"
 
 [[files]]
-file = "config/defaultoptions-common.toml"
-hash = "a186d6ab6468353cb2a49f5a4229c16b004580a557d4bccaf12041e8a46f9d9e"
-
-[[files]]
 file = "config/easy_mob_farm/mob_catcher.cfg"
 hash = "a5a8005873bb59c83dcec7269c230ce4dbd7c57694b2581627a4d60c1fdfa776"
 
@@ -161,6 +157,11 @@ metafile = true
 [[files]]
 file = "mods/ambientsounds.pw.toml"
 hash = "f32df4cd1566e163ae7308d13a7879a688e2bb155e400c440343a93eb8c199c6"
+metafile = true
+
+[[files]]
+file = "mods/amecs.pw.toml"
+hash = "255c2af85e062bae9117eda6e161abc85f1d543f1908c331b26649c3a429ae57"
 metafile = true
 
 [[files]]

@@ -787,6 +787,17 @@
 - **Dependencies:** Fabric API, Forge Config API Port, Puzzles Lib
 - **Conflicts:** None known
 
+## Amecs
+- **CurseForge ID:** 324564
+- **Slug:** amecs
+- **Modrinth Slug:** amecs
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** Enables multi-key keybinds (modifier keys like Shift, Ctrl, Alt combined with other keys) and improves the keybinding UI.
+- **Why:** Frees up keybind space in a large modpack by allowing combos like Shift+B, Ctrl+G, etc., reducing conflicts between mod keybinds.
+- **Dependencies:** None
+- **Conflicts:** None known
+
 ## Default Options
 - **CurseForge ID:** 232131
 - **Slug:** default-options
