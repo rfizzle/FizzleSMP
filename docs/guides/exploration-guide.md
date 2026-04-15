@@ -139,7 +139,6 @@ This gives Ancient Cities a real purpose beyond just finding the Ward music disc
 Several mods add new mobs you'll encounter while exploring:
 
 - **Creeper Overhaul** — Biome-specific creeper variants (desert, jungle, ocean, etc.) with custom models. They behave like normal creepers but look different per biome.
-- **Creeper Healing** — After a creeper explodes, the terrain **regenerates over time**. No more permanent creeper craters.
 - **Friends & Foes** — Adds mobs from rejected Minecraft mob votes: Copper Golems, Glare, Moobloom, Iceologer, and more. Found in various biomes.
 - **Critters and Companions** — Ambient wildlife you can find and tame. Adds atmosphere to exploration.
 - **Villager Names** — Villagers now have randomly generated names displayed above their heads.

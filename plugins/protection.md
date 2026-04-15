@@ -2,26 +2,6 @@
 
 <!-- Mods for land claims, region protection, anti-cheat, and grief prevention. -->
 
-## Creeper Healing
-- **CurseForge ID:** N/A (Modrinth only)
-- **Slug:** creeper-healing
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** A server-side mod that automatically and naturally heals Creeper explosions and other explosion types.
-- **Why:** Prevents permanent terrain damage from Creeper explosions on the SMP, keeping the world looking clean without disabling mob griefing.
-- **Dependencies:** Fabric API, Monkey Utils
-- **Conflicts:** None known
-
-## Monkey Utils
-- **CurseForge ID:** N/A (Modrinth only)
-- **Slug:** monkey-utils
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** A declarative Kotlin-focused Minecraft utility library for commonly used features.
-- **Why:** Required dependency of Creeper Healing.
-- **Dependencies:** None
-- **Conflicts:** None known
-
 ## Open Parties and Claims
 - **CurseForge ID:** 636608
 - **Slug:** open-parties-and-claims

@@ -447,7 +447,7 @@
 - **Summary:** Overhauls vanilla creepers with new biome-specific variants, each with unique textures and behaviors.
 - **Why:** Adds visual variety and biome-appropriate creeper variants, making encounters more interesting across different biomes.
 - **Dependencies:** GeckoLib, Resourceful Lib, Resourceful Config
-- **Conflicts:** None known; compatible with Creeper Healing (different aspects — visual variants vs explosion repair).
+- **Conflicts:** None known.
 
 ## Critters and Companions
 - **CurseForge ID:** 574913
@@ -501,17 +501,6 @@
 - **Why:** Lets SMP players salvage enchantments from unwanted gear via the grindstone, avoiding conflicts with Easy Anvils' anvil modifications.
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
-
-## Gear Tinkering
-- **CurseForge ID:** N/A
-- **Slug:** N/A
-- **Modrinth Slug:** gear-tinkering
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Adds new smithing table uses: repair cost resetting, trim removal, curse removal, enchantment transferring, and book unsigning.
-- **Why:** Gives the smithing table meaningful utility beyond netherite upgrades — players can reset repair costs with amethyst shards, remove curses, transfer enchantments, and strip armor trims, all by throwing items onto a smithing table.
-- **Dependencies:** None
-- **Conflicts:** None known; complementary with Easy Anvils (different blocks) and Grind Enchantments (different transfer method).
 
 ## You're in Grave Danger
 - **CurseForge ID:** 544912

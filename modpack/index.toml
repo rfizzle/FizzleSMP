@@ -25,10 +25,6 @@ file = "config/craftingtweaks-common.toml"
 hash = "f96d8c4a6ef09ec7785c4da4714463a58b82cff51385abe778256703e83f075f"
 
 [[files]]
-file = "config/creeper-healing.toml"
-hash = "6578e5c172d7f25077958eaef214dfea8b69ef8b43a9ca910551024cb41dfc03"
-
-[[files]]
 file = "config/easy_mob_farm/mob_catcher.cfg"
 hash = "a5a8005873bb59c83dcec7269c230ce4dbd7c57694b2581627a4d60c1fdfa776"
 
@@ -350,11 +346,6 @@ hash = "8218d022a24d23423f7fa01b8705fd5c4c3be8084a19102433843bd203f38f1d"
 metafile = true
 
 [[files]]
-file = "mods/creeper-healing.pw.toml"
-hash = "1e9b92e953a502383fbfc161bedf057ac8fa974398dd045f03930d3e9753924e"
-metafile = true
-
-[[files]]
 file = "mods/creeper-overhaul.pw.toml"
 hash = "07a7599da1940a0023c06bc8ba04033b971f6cd99af4ef8babb12616a50952d8"
 metafile = true
@@ -562,11 +553,6 @@ metafile = true
 [[files]]
 file = "mods/gazebos.pw.toml"
 hash = "66e48cbd5a8a8e416b96adb952fe48f0fda9cc27f83f46d2072d3296096ed939"
-metafile = true
-
-[[files]]
-file = "mods/gear-tinkering.pw.toml"
-hash = "d9421c1ab0673f91ffc5587083b8d6fef8e66b6d1c937eb26b801cf4cce6ebc9"
 metafile = true
 
 [[files]]
@@ -797,11 +783,6 @@ metafile = true
 [[files]]
 file = "mods/modonomicon.pw.toml"
 hash = "efd88638560aea66271a9b3950197165c8227632b04097f990075e5f00e9b42a"
-metafile = true
-
-[[files]]
-file = "mods/monkey-utils.pw.toml"
-hash = "2c8d064511fd7301c213e62a57c6bb2812bd193d7fc81c653f9b7468f7eeeae1"
 metafile = true
 
 [[files]]

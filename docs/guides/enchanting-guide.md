@@ -92,36 +92,6 @@ Your original item comes back unenchanted, and you keep the enchantments as a bo
 
 ---
 
-## Smithing Table — Gear Tinkering
-
-The smithing table gets several new uses beyond netherite upgrades. All recipes work by **throwing (Q key) items onto the top of a placed smithing table** — do not open the smithing table GUI.
-
-### Recipes
-
-#### Repair Cost Reset
-- **Throw:** Item with repair cost + **amethyst shard**
-- **Result:** Repair cost reduced by 1
-- **Note:** The item must have been combined/repaired on an anvil at least once to have a repair cost. Each amethyst shard reduces it by 1. A white puff of smoke appears when the cost is already at 0.
-
-#### Enchantment Transfer
-- **Throw:** Enchanted item + **book**
-- **Result:** Enchantments move from the item to the book
-
-#### Trim Removal
-- **Throw:** Trimmed armor piece + **diamond**
-- **Result:** Armor trim is removed
-
-#### Curse Removal
-- **Throw:** Cursed item (Curse of Vanishing/Binding) + **echo shard**
-- **Result:** Curse is removed — but **a vex spawns**, so be ready!
-
-### Tips
-- Stand close to the smithing table and press Q to drop each item so they land on top of the block.
-- Do **not** right-click the smithing table — these recipes use dropped item entities, not the GUI.
-- Both items need to be resting on the smithing table at the same time.
-
----
-
 ## XP Storage
 
 Lets you safely bank experience points so you don't lose them on death.

@@ -211,18 +211,10 @@ Key mods: Accessories, Trinkets, Accessories Compatibility Layer, Artifacts, Thi
 - [ ] **Enchanting Infuser** — Craft an Enchanting Infuser. Select specific enchantments. Confirm it works alongside Easy Magic's vanilla table improvements.
 - [ ] **Easy Anvils** — Use an anvil with high-level enchants. Confirm "too expensive" limit is removed.
 - [ ] **Grind Enchantments** — Use a grindstone to disenchant onto a book. Confirm transfer works.
-- [ ] **Gear Tinkering repair cost reset** — Enchant and repair an item several times on an anvil until the repair cost climbs. Throw the item and an amethyst shard onto a smithing table. Confirm the repair cost decreases by 1. Repeat to verify stacking.
-- [ ] **Gear Tinkering curse removal** — Enchant an item with Curse of Vanishing or Curse of Binding (use `/enchant` or creative). Throw it onto a smithing table with the required reagent. Confirm the curse is removed.
-- [ ] **Gear Tinkering enchantment transfer** — Throw an enchanted item and a book onto a smithing table. Confirm the enchantment transfers to the book.
-- [ ] **Gear Tinkering trim removal** — Apply an armor trim to a piece of armor. Throw it onto a smithing table. Confirm the trim is removed.
-- [ ] **Gear Tinkering book unsigning** — Sign a book. Throw it onto a smithing table. Confirm the book becomes unsigned (editable again).
-- [ ] **Gear Tinkering + Grind Enchantments** — Transfer enchantments via both methods (smithing table throw and grindstone). Confirm both work independently without interfering.
-- [ ] **Gear Tinkering + Easy Anvils** — Reset an item's repair cost via Gear Tinkering, then repair it on an anvil with Easy Anvils' cap removal. Confirm both mechanisms work together.
 - [ ] **XP Storage** — Craft XP Storage block. Store and retrieve XP.
 
 ### Mobs & Entities
 - [ ] **Creeper Overhaul** — Find biome-specific creepers (desert, jungle, etc.). Confirm custom models render.
-- [ ] **Creeper Healing + Creeper Overhaul** — Let a custom creeper explode. Confirm Creeper Healing regenerates the terrain.
 - [ ] **Illager Invasion** — Find an illager structure or trigger a raid. Confirm new illager types spawn.
 - [ ] **Friends & Foes** — Find Copper Golems, Glare, etc. Confirm they spawn and function.
 - [ ] **Critters and Companions** — Find ambient critters. Confirm spawning and taming work.

@@ -4,7 +4,7 @@ Guides for players on the FizzleSMP server. These cover the non-obvious mods and
 
 | Guide | What It Covers |
 |---|---|
-| [Enchanting, Repairs & Gear Crafting](enchanting-guide.md) | Enchanting Infuser, Easy Anvils, Grind Enchantments, Gear Tinkering (smithing table recipes), XP Storage, Better Than Mending |
+| [Enchanting, Repairs & Gear Crafting](enchanting-guide.md) | Enchanting Infuser, Easy Anvils, Grind Enchantments, XP Storage, Better Than Mending |
 | [Technology & Automation](tech-guide.md) | Oritech (machines, ore processing, pipes, lasers, drones), Tech Reborn (industrial tech tree), Refined Storage (digital storage, autocrafting) |
 | [Combat & RPG](combat-rpg-guide.md) | Better Combat, Combat Roll, Simply Swords, RPG classes (Wizard, Paladin, Priest, Archer, Rogue, Warrior), Skill Trees, Artifacts, bosses, mob difficulty |
 | [Exploration & World](exploration-guide.md) | Waystones, compasses, maps, overhauled worldgen, structures, The Bumblezone, The Otherside, new creatures |
