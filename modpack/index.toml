@@ -263,6 +263,11 @@ hash = "fad01ec8fe750cdb84c278965b12132c24111ef40bd99824c00216c409f0526e"
 metafile = true
 
 [[files]]
+file = "mods/building-wands.pw.toml"
+hash = "c6e47c4a18253fc3cf5eedfecdff3c3a821eb5571a8e6619b986f29b10f048c6"
+metafile = true
+
+[[files]]
 file = "mods/bundle-api.pw.toml"
 hash = "71df6736f94cde9e7b5ab070b7a3a5cca59648c98182cb25fb2563737994bf3a"
 metafile = true

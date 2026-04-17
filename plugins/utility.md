@@ -797,3 +797,14 @@
 - **Why:** Frees up keybind space in a large modpack by allowing combos like Shift+B, Ctrl+G, etc., reducing conflicts between mod keybinds.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## Building Wands
+- **CurseForge ID:** 363392
+- **Slug:** building-wands
+- **Modrinth Slug:** building-wands
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Adds tiered wands (stone/iron/diamond/netherite) that place or destroy blocks in bulk via directional, row, fill, grid, line, circle, copy/paste, and blast modes.
+- **Why:** Speeds up large-scale building on the SMP without trivializing progression — block limits scale with wand tier, and survival mode still requires the blocks in the player's inventory (or shulker boxes).
+- **Dependencies:** Fabric API, Architectury API, Cloth Config API; Mod Menu (optional)
+- **Conflicts:** None known

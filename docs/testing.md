@@ -320,6 +320,10 @@ Key mods: Chipped, Supplementaries, Supplementaries Squared, Handcrafted, Beauti
 - [ ] **Beautify: Refabricated** — Place hanging planters, blinds, lamps, and trellis. Confirm textures render and interactions work.
 - [ ] **Every Compat wood variants** — If modded wood types are available (e.g., from Terralith or Incendium), confirm Handcrafted, Supplementaries, and Chipped blocks have matching wood variants via Every Compat.
 - [ ] **Handcrafted + Chipped coexistence** — Place furniture and decorative block variants in the same build. Confirm no visual or interaction conflicts.
+- [ ] **Building Wands — crafting & tiers** — Craft a Stone, Iron, Diamond, and Netherite wand. Confirm each reports the correct block limit (16/32/64/256) in the wand settings screen.
+- [ ] **Building Wands — modes** — Cycle through modes (tap V) and open the mode selector grid (hold V). Test Directional, Row/Col, Fill, Grid, Line, Circle, Copy/Paste, and Blast modes. Confirm the ghost-block preview renders before placement.
+- [ ] **Building Wands — survival block consumption** — In survival, place blocks with a wand while holding stacks of the target block. Confirm blocks are consumed from inventory (and from shulker boxes when inventory is empty) and that the wand refuses to place when insufficient blocks are available.
+- [ ] **Building Wands + Sodium/Iris preview** — With Iris shaders enabled, confirm the wand's ghost-block preview renders. If it doesn't, set `render_last: true` in the wand config per the mod's documentation.
 
 ## 13. Performance Stress Tests
 
