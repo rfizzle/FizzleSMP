@@ -12,13 +12,16 @@ Version numbers follow a pragmatic SemVer for modpacks:
 ## [Unreleased]
 
 ### Added
-- Building Wands — adds tiered stone/iron/diamond/netherite wands for bulk block placement/removal with directional, row, fill, grid, line, circle, copy/paste, and blast modes. Survival mode still consumes inventory blocks and respects per-tier block limits, so progression is preserved.
 
 ### Changed
 
 ### Fixed
 
 ### Removed
+
+## [1.5.0] - 2026-04-18
+### Added
+- Building Wands — adds tiered stone/iron/diamond/netherite wands for bulk block placement/removal with directional, row, fill, grid, line, circle, copy/paste, and blast modes. Survival mode still consumes inventory blocks and respects per-tier block limits, so progression is preserved.
 
 ## [1.4.0] - 2026-04-16
 ### Added
