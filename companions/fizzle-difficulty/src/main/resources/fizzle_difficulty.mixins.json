@@ -1,0 +1,12 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "com.fizzlesmp.fizzle_difficulty.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "LivingEntityExperienceMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

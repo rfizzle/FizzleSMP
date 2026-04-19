@@ -1,0 +1,10 @@
+{
+    "item.fizzle_difficulty.shatter_shard": "Shatter Shard",
+    "item.fizzle_difficulty.shatter_shard.tooltip": "Right-click to lower your difficulty level.",
+    "item.fizzle_difficulty.shatter_shard.used": "Difficulty %s \u2192 %s",
+    "item.fizzle_difficulty.shatter_shard.at_floor": "Already at minimum difficulty (level %s)",
+    "itemGroup.fizzle_difficulty.main": "Fizzle Difficulty",
+    "message.fizzle_difficulty.level_up": "Your difficulty has risen to level %s.",
+    "message.fizzle_difficulty.level_up_tier": "Your difficulty has risen to level %s (Tier %s).",
+    "message.fizzle_difficulty.level_max": "You have reached the maximum difficulty level."
+}

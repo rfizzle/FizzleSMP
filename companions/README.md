@@ -11,5 +11,6 @@ their `side` in the matching plugin file entry if/when they are added to
 
 ## Mods
 
-_No companions currently. Add a subdirectory with its own Gradle project and
-list it here._
+- **[fizzle-difficulty](fizzle-difficulty/)** — Unified, formula-driven mob
+  scaling (time + distance + height) that replaces HMIOT and RpgDifficulty.
+  Side: `both`. See [DESIGN.md](fizzle-difficulty/DESIGN.md).
