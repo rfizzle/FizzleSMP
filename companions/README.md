@@ -14,3 +14,8 @@ their `side` in the matching plugin file entry if/when they are added to
 - **[fizzle-difficulty](fizzle-difficulty/)** — Unified, formula-driven mob
   scaling (time + distance + height) that replaces HMIOT and RpgDifficulty.
   Side: `both`. See [DESIGN.md](fizzle-difficulty/DESIGN.md).
+- **[fizzle-enchanting](fizzle-enchanting/)** — Apotheosis/Zenith-style
+  stat-driven enchanting table, shelves, Enchantment Library, and anvil/tome
+  tooling for 1.21.1 Fabric. Design-only; intended to eventually replace
+  Easy Anvils, Enchanting Infuser, NeoEnchant+, BeyondEnchant, and Grind
+  Enchantments. See [DESIGN.md](fizzle-enchanting/DESIGN.md).
