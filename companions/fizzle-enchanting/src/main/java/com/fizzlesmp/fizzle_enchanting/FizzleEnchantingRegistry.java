@@ -2,6 +2,8 @@ package com.fizzlesmp.fizzle_enchanting;
 
 import com.fizzlesmp.fizzle_enchanting.anvil.PrismaticWebItem;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
+import com.fizzlesmp.fizzle_enchanting.library.BasicLibraryBlockEntity;
+import com.fizzlesmp.fizzle_enchanting.library.EnderLibraryBlockEntity;
 import com.fizzlesmp.fizzle_enchanting.shelf.FilteringShelfBlock;
 import com.fizzlesmp.fizzle_enchanting.shelf.FilteringShelfBlockEntity;
 import com.fizzlesmp.fizzle_enchanting.shelf.FizzleShelves;
@@ -16,6 +18,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -88,6 +91,24 @@ public final class FizzleEnchantingRegistry {
     public static final PrismaticWebItem PRISMATIC_WEB =
             new PrismaticWebItem(new Item.Properties());
 
+    /**
+     * Block-entity type backing the tier-1 {@link BasicLibraryBlockEntity}. Bound to
+     * {@link Blocks#BOOKSHELF} as a placeholder until the library block class lands in T-4.4.1
+     * and rebinds the type to the real {@code library} block instance — the BE construction
+     * surface is stable now so the storage-engine tier (S-4.3) can be exercised without waiting
+     * on the block + screen plumbing.
+     */
+    public static final BlockEntityType<BasicLibraryBlockEntity> BASIC_LIBRARY_BE =
+            BlockEntityType.Builder.of(BasicLibraryBlockEntity::new, Blocks.BOOKSHELF).build(null);
+
+    /**
+     * Block-entity type backing the tier-2 {@link EnderLibraryBlockEntity}. Same placeholder
+     * caveat as {@link #BASIC_LIBRARY_BE} — T-4.4.1 will rebind to the real {@code ender_library}
+     * block.
+     */
+    public static final BlockEntityType<EnderLibraryBlockEntity> ENDER_LIBRARY_BE =
+            BlockEntityType.Builder.of(EnderLibraryBlockEntity::new, Blocks.BOOKSHELF).build(null);
+
     private static boolean registered = false;
 
     private FizzleEnchantingRegistry() {
@@ -104,6 +125,8 @@ public final class FizzleEnchantingRegistry {
         registerBlock("treasure_shelf", TREASURE_SHELF, new Item.Properties());
         registerBlockEntityType("treasure_shelf", TREASURE_SHELF_BE);
         registerItem("prismatic_web", PRISMATIC_WEB);
+        registerBlockEntityType("library", BASIC_LIBRARY_BE);
+        registerBlockEntityType("ender_library", ENDER_LIBRARY_BE);
     }
 
     /**

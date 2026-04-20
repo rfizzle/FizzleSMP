@@ -936,29 +936,29 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-4.3 — Library storage engine
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-4.3.1 — Abstract `EnchantmentLibraryBlockEntity`
 
 **Resume context:** DESIGN.md § "Enchantment Library" — "Two state maps per block entity."
 
 **Acceptance:**
-- [ ] `library/EnchantmentLibraryBlockEntity.java` abstract.
-- [ ] Fields: `Object2IntMap<ResourceKey<Enchantment>> points, maxLevels; final int maxLevel, maxPoints;`
-- [ ] `depositBook(ItemStack book)`, `canExtract(key, target, curLvl)`, `extract(key, target, curLvl)` methods.
+- [x] `library/EnchantmentLibraryBlockEntity.java` abstract.
+- [x] Fields: `Object2IntMap<ResourceKey<Enchantment>> points, maxLevels; final int maxLevel, maxPoints;`
+- [x] `depositBook(ItemStack book)`, `canExtract(key, target, curLvl)`, `extract(key, target, curLvl)` methods.
 
-**Tests:** Unit test on core methods using a subclass fixture.
+**Tests:** [x] Unit test on core methods using a subclass fixture.
 
 ---
 
 ### Task T-4.3.2 — `BasicLibraryBlockEntity` + `EnderLibraryBlockEntity`
 
 **Acceptance:**
-- [ ] Basic: `maxLevel=16`, `maxPoints=32_768`.
-- [ ] Ender: `maxLevel=31`, `maxPoints=1_073_741_824`.
-- [ ] DESIGN caveat: these are **code constants**, not config. Do not expose them via config.
+- [x] Basic: `maxLevel=16`, `maxPoints=32_768`.
+- [x] Ender: `maxLevel=31`, `maxPoints=1_073_741_824`.
+- [x] DESIGN caveat: these are **code constants**, not config. Do not expose them via config.
 
-**Tests:** Construction test.
+**Tests:** [x] Construction test.
 
 ---
 
@@ -967,12 +967,12 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Enchantment Library" — `points(level) = 2^(level−1)`.
 
 **Acceptance:**
-- [ ] `static int points(int level)` — `level<=0 → 0`; else `1 << (level - 1)`.
-- [ ] `static int maxLevelAffordable(int points, int curLvl)` — returns `1 + log2(points + points(curLvl))`.
+- [x] `static int points(int level)` — `level<=0 → 0`; else `1 << (level - 1)`.
+- [x] `static int maxLevelAffordable(int points, int curLvl)` — returns `1 + log2(points + points(curLvl))`.
 
 **Tests:** Parameterized —
-- [ ] `points(1)=1, points(5)=16, points(16)=32768, points(31)=1_073_741_824`.
-- [ ] Shift-click helper matches DESIGN formula.
+- [x] `points(1)=1, points(5)=16, points(16)=32768, points(31)=1_073_741_824`.
+- [x] Shift-click helper matches DESIGN formula.
 
 ---
 
@@ -981,24 +981,24 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Enchantment Library" — "NBT schema (two sibling compound tags)".
 
 **Acceptance:**
-- [ ] `saveAdditional(CompoundTag, RegistryAccess)` writes `Points` + `Levels` compound tags keyed by `ResourceLocation.toString()`.
-- [ ] `load(CompoundTag, RegistryAccess)` lazy-resolves keys against `RegistryAccess.registryOrThrow(Registries.ENCHANTMENT)`; unresolved keys dropped with `LOGGER.warn`.
-- [ ] No schema version field in MVP.
+- [x] `saveAdditional(CompoundTag, RegistryAccess)` writes `Points` + `Levels` compound tags keyed by `ResourceLocation.toString()`.
+- [x] `load(CompoundTag, RegistryAccess)` lazy-resolves keys against `RegistryAccess.registryOrThrow(Registries.ENCHANTMENT)`; unresolved keys dropped with `LOGGER.warn`.
+- [x] No schema version field in MVP.
 
 **Tests:**
-- [ ] Round-trip save/load preserves maps.
-- [ ] NBT with an unknown key → survives load, key dropped, remainder intact.
+- [x] Round-trip save/load preserves maps.
+- [x] NBT with an unknown key → survives load, key dropped, remainder intact.
 
 ---
 
 ### Task T-4.3.5 — Client sync packet
 
 **Acceptance:**
-- [ ] `BlockEntity#getUpdatePacket` returns `ClientboundBlockEntityDataPacket.create(this)`.
-- [ ] `getUpdateTag` serializes both maps.
-- [ ] Full resend on any mutation (incremental sync deferred).
+- [x] `BlockEntity#getUpdatePacket` returns `ClientboundBlockEntityDataPacket.create(this)`.
+- [x] `getUpdateTag` serializes both maps.
+- [x] Full resend on any mutation (incremental sync deferred).
 
-**Tests:** Simulate mutation → server-side update tag contains the mutation; client-side BE reconstructed from tag equals server BE.
+**Tests:** [x] Simulate mutation → server-side update tag contains the mutation; client-side BE reconstructed from tag equals server BE.
 
 ---
 
