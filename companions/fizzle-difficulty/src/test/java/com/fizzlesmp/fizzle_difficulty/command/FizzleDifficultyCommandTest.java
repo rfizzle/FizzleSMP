@@ -53,12 +53,12 @@ class FizzleDifficultyCommandTest {
         assertEquals("off", FizzleDifficultyCommand.onOff(false));
     }
 
-    // ---- formatInfo ----
+    // ---- formatConfigSummary ----
 
     @Test
-    void formatInfo_includesAllAxesAndCaps() {
+    void formatConfigSummary_includesAllAxesAndCaps() {
         FizzleDifficultyConfig cfg = new FizzleDifficultyConfig();
-        List<String> lines = FizzleDifficultyCommand.formatInfo(cfg);
+        List<String> lines = FizzleDifficultyCommand.formatConfigSummary(cfg);
 
         String joined = String.join("\n", lines);
         assertTrue(joined.contains("Max level: 250"), "shows max level");
@@ -75,25 +75,57 @@ class FizzleDifficultyCommandTest {
     }
 
     @Test
-    void formatInfo_omitsDistanceDetailsWhenDisabled() {
+    void formatConfigSummary_omitsDistanceDetailsWhenDisabled() {
         FizzleDifficultyConfig cfg = new FizzleDifficultyConfig();
         cfg.distanceScaling.enabled = false;
-        List<String> lines = FizzleDifficultyCommand.formatInfo(cfg);
+        List<String> lines = FizzleDifficultyCommand.formatConfigSummary(cfg);
         String joined = String.join("\n", lines);
-        // Still shows the axis summary line but not the indented Distance detail line.
         assertTrue(joined.contains("distance=off"));
         assertFalse(joined.contains("  Distance:"),
                 "indented distance-detail line should be omitted when disabled");
     }
 
     @Test
-    void formatInfo_omitsHeightDetailsWhenDisabled() {
+    void formatConfigSummary_omitsHeightDetailsWhenDisabled() {
         FizzleDifficultyConfig cfg = new FizzleDifficultyConfig();
         cfg.heightScaling.enabled = false;
-        List<String> lines = FizzleDifficultyCommand.formatInfo(cfg);
+        List<String> lines = FizzleDifficultyCommand.formatConfigSummary(cfg);
         String joined = String.join("\n", lines);
         assertTrue(joined.contains("height=off"));
         assertFalse(joined.contains("  Height:"));
+    }
+
+    // ---- formatPlayerInfo ----
+
+    @Test
+    void formatPlayerInfo_showsNameLevelTierAndProgress() {
+        FizzleDifficultyConfig cfg = new FizzleDifficultyConfig();
+        List<String> lines = FizzleDifficultyCommand.formatPlayerInfo("Alice", 5, 0, cfg);
+        String joined = String.join("\n", lines);
+        assertTrue(joined.contains("Alice"), "includes player name");
+        assertTrue(joined.contains("Level: 5 / " + cfg.general.maxLevel), "shows level / max level");
+        assertTrue(joined.contains("tier "), "shows tier");
+        assertTrue(joined.contains("Progress:"), "shows progress line");
+        assertTrue(joined.contains("until next level"), "shows time remaining");
+    }
+
+    @Test
+    void formatPlayerInfo_rendersProgressAsDuration() {
+        FizzleDifficultyConfig cfg = new FizzleDifficultyConfig();
+        // Halfway through a one-hour level @ 20 tps → 30 minutes remaining.
+        int halfway = cfg.general.levelUpTicks / 2;
+        List<String> lines = FizzleDifficultyCommand.formatPlayerInfo("Bob", 10, halfway, cfg);
+        String joined = String.join("\n", lines);
+        assertTrue(joined.contains("30m"), "remaining time rendered as duration: " + joined);
+    }
+
+    @Test
+    void formatPlayerInfo_atMaxLevelOmitsProgress() {
+        FizzleDifficultyConfig cfg = new FizzleDifficultyConfig();
+        List<String> lines = FizzleDifficultyCommand.formatPlayerInfo("Carol", cfg.general.maxLevel, 0, cfg);
+        String joined = String.join("\n", lines);
+        assertTrue(joined.contains("max level reached"));
+        assertFalse(joined.contains("until next level"));
     }
 
     // ---- Variant enum ----

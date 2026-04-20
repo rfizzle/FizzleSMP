@@ -8,7 +8,6 @@ import com.fizzlesmp.fizzle_difficulty.event.MobScalingHandler;
 import com.fizzlesmp.fizzle_difficulty.event.ZombieVariantHandler;
 import com.fizzlesmp.fizzle_difficulty.scaling.BossScalingEngine;
 import com.fizzlesmp.fizzle_difficulty.scaling.ScalingEngine;
-import com.fizzlesmp.fizzle_difficulty.scaling.ScalingResult;
 import com.fizzlesmp.fizzle_difficulty.scaling.TierManager;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
@@ -43,7 +42,8 @@ import java.util.UUID;
 
 /**
  * {@code /fizzledifficulty} subcommands from DESIGN.md. Permission levels:
- * {@code level} and {@code info} are readable by anyone (0); everything else
+ * {@code info} is self-service and readable by anyone (0); {@code level
+ * <player>} is an admin lookup for other players (2); everything else also
  * requires op (2). All mutations route through {@link PlayerDifficultyState}
  * so they persist across restarts and trigger {@code setDirty()} correctly.
  */
@@ -57,6 +57,7 @@ public final class FizzleDifficultyCommand {
         dispatcher.register(
                 Commands.literal(ROOT)
                         .then(Commands.literal("level")
+                                .requires(src -> src.hasPermission(2))
                                 .then(Commands.argument("player", EntityArgument.player())
                                         .executes(FizzleDifficultyCommand::runLevel)))
                         .then(Commands.literal("set")
@@ -73,6 +74,9 @@ public final class FizzleDifficultyCommand {
                                 .executes(FizzleDifficultyCommand::runReload))
                         .then(Commands.literal("info")
                                 .executes(FizzleDifficultyCommand::runInfo))
+                        .then(Commands.literal("config")
+                                .requires(src -> src.hasPermission(2))
+                                .executes(FizzleDifficultyCommand::runConfig))
                         .then(Commands.literal("debug")
                                 .requires(src -> src.hasPermission(2))
                                 .then(Commands.argument("player", EntityArgument.player())
@@ -146,14 +150,34 @@ public final class FizzleDifficultyCommand {
         }
     }
 
-    private static int runInfo(CommandContext<CommandSourceStack> ctx) {
+    private static int runInfo(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        CommandSourceStack src = ctx.getSource();
+        ServerPlayer player = src.getPlayerOrException();
+        FizzleDifficultyConfig cfg = FizzleDifficulty.getConfig();
+        if (cfg == null) {
+            src.sendFailure(Component.literal("Fizzle Difficulty config not loaded"));
+            return 0;
+        }
+        PlayerDifficultyState state = PlayerDifficultyState.getOrCreate(src.getServer());
+        UUID uuid = player.getUUID();
+        for (String line : formatPlayerInfo(
+                player.getGameProfile().getName(),
+                state.getLevel(uuid),
+                state.getTickCounter(uuid),
+                cfg)) {
+            src.sendSuccess(() -> Component.literal(line), false);
+        }
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int runConfig(CommandContext<CommandSourceStack> ctx) {
         CommandSourceStack src = ctx.getSource();
         FizzleDifficultyConfig cfg = FizzleDifficulty.getConfig();
         if (cfg == null) {
             src.sendFailure(Component.literal("Fizzle Difficulty config not loaded"));
             return 0;
         }
-        for (String line : formatInfo(cfg)) {
+        for (String line : formatConfigSummary(cfg)) {
             src.sendSuccess(() -> Component.literal(line), false);
         }
         return Command.SINGLE_SUCCESS;
@@ -209,7 +233,13 @@ public final class FizzleDifficultyCommand {
 
     // ---- Formatting helpers (package-private for tests) ----
 
-    static List<String> formatInfo(FizzleDifficultyConfig cfg) {
+    /**
+     * Admin-facing config summary — lists every scaling axis, cap, and
+     * subsystem toggle. Kept as a pure helper so it can be unit-tested
+     * without a server. Permission-gated at the command level (runConfig
+     * requires op 2); the formatter itself has no side effects.
+     */
+    static List<String> formatConfigSummary(FizzleDifficultyConfig cfg) {
         List<String> lines = new ArrayList<>();
         int levelUpTicks = Math.max(1, cfg.general.levelUpTicks);
         lines.add("=== Fizzle Difficulty ===");
@@ -274,6 +304,31 @@ public final class FizzleDifficultyCommand {
                 "Tiers: 1≥%d, 2≥%d, 3≥%d, 4≥%d, 5≥%d",
                 cfg.tiers.tier1, cfg.tiers.tier2, cfg.tiers.tier3,
                 cfg.tiers.tier4, cfg.tiers.tier5));
+        return lines;
+    }
+
+    /**
+     * Render the caller's own difficulty info: level, tier, and progress to
+     * the next level. Inputs are primitives so this stays pure and testable
+     * without a {@link ServerPlayer} or a live {@link PlayerDifficultyState}.
+     */
+    static List<String> formatPlayerInfo(String name, int level, int tickCounter, FizzleDifficultyConfig cfg) {
+        List<String> lines = new ArrayList<>();
+        int maxLevel = Math.max(1, cfg.general.maxLevel);
+        int levelUpTicks = Math.max(1, cfg.general.levelUpTicks);
+        int tier = TierManager.getTier(level, cfg.tiers);
+        lines.add(String.format(Locale.ROOT, "=== Fizzle Difficulty: %s ===", name));
+        lines.add(String.format(Locale.ROOT,
+                "Level: %d / %d (tier %d)",
+                level, maxLevel, tier));
+        if (level >= maxLevel) {
+            lines.add("Progress: max level reached");
+        } else {
+            int remaining = Math.max(0, levelUpTicks - tickCounter);
+            lines.add(String.format(Locale.ROOT,
+                    "Progress: %d / %d ticks (%s until next level)",
+                    Math.max(0, tickCounter), levelUpTicks, formatTicksAsDuration(remaining)));
+        }
         return lines;
     }
 

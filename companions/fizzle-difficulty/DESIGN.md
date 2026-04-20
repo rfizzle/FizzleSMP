@@ -569,11 +569,12 @@ Each mob type has its own attribute scaling rates tuned to its role:
 
 | Command | Permission | Description |
 |---------|-----------|-------------|
-| `/fizzledifficulty level <player>` | 0 | Check a player's current level |
+| `/fizzledifficulty info` | 0 | Show the caller's own level, tier, and progress to the next level |
+| `/fizzledifficulty level <player>` | 2 | Admin lookup of another player's level and progress |
+| `/fizzledifficulty config` | 2 | Show the full scaling config summary (axes, caps, subsystem toggles) |
 | `/fizzledifficulty set <player> <level>` | 2 | Set a player's level |
 | `/fizzledifficulty reset <player>` | 2 | Reset a player to level 0 |
 | `/fizzledifficulty reload` | 2 | Reload config from disk |
-| `/fizzledifficulty info` | 0 | Show current scaling config summary |
 | `/fizzledifficulty debug <player>` | 2 | Show all three axis factors for a player's current position |
 | `/fizzledifficulty inspect` | 2 | Show scaling details for the mob the player is looking at (applied modifiers, tier, variant type) |
 
