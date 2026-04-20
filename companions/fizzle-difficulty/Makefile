@@ -1,26 +1,26 @@
 GRADLE := ./gradlew
-VERSION := $(shell awk -F= '/^mod_version/ {gsub(/ /,"",$$2); print $$2}' gradle.properties)
-JAR := build/libs/fizzle-difficulty-$(VERSION).jar
+BASE_VERSION := $(shell awk -F= '/^mod_version/ {gsub(/ /,"",$$2); print $$2}' gradle.properties)
 
-.PHONY: help build clean test jar run-client run-server gen-sources refresh-deps version
+.PHONY: help build clean test jar run-client run-server gen-sources refresh-deps version release
 
 help:
 	@echo "Targets:"
 	@echo "  build        Compile, test, and assemble the mod jar"
-	@echo "  jar          Print the path to the built jar"
+	@echo "  jar          Print the path to the built primary jar"
 	@echo "  test         Run JUnit tests"
 	@echo "  run-client   Launch a dev Minecraft client with the mod loaded"
 	@echo "  run-server   Launch a dev Minecraft server with the mod loaded"
 	@echo "  gen-sources  Generate Minecraft sources for IDE navigation"
 	@echo "  refresh-deps Refresh Gradle dependencies"
 	@echo "  clean        Remove build outputs"
-	@echo "  version      Print the current mod version"
+	@echo "  version      Print the base and git-derived computed version"
+	@echo "  release      Cut a release (usage: make release BUMP=patch|minor|major [NO_PUSH=1])"
 
 build:
 	$(GRADLE) build
 
 jar: build
-	@echo $(JAR)
+	@ls -1 build/libs/fizzle-difficulty-*.jar 2>/dev/null | grep -Ev -- '-(sources|dev|javadoc)\.jar$$' | head -1
 
 test:
 	$(GRADLE) test
@@ -41,4 +41,9 @@ clean:
 	$(GRADLE) clean
 
 version:
-	@echo $(VERSION)
+	@echo "base:     $(BASE_VERSION)"
+	@echo "computed: $$($(GRADLE) -q printVersion 2>/dev/null || echo '(gradle failed; falling back to base)')"
+
+release:
+	@test -n "$(BUMP)" || (echo "Usage: make release BUMP=patch|minor|major [NO_PUSH=1]" && exit 1)
+	@../../scripts/companion-release.sh fizzle-difficulty $(BUMP) $(if $(NO_PUSH),--no-push,)
