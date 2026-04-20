@@ -710,13 +710,13 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-3.3 — Utility shelves
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-3.3.1 — Sightshelf tiers
 
 **Acceptance:**
-- [ ] `sightshelf` (+1 clues), `sightshelf_t2` (+2 clues) shelves register with `maxEterna: 0`.
-- [ ] Stat JSONs confirm they don't raise Eterna cap.
+- [x] `sightshelf` (+1 clues), `sightshelf_t2` (+2 clues) shelves register with `maxEterna: 0`.
+- [x] Stat JSONs confirm they don't raise Eterna cap.
 
 **Tests:** Stacking test — two `sightshelf_t2` in range → `clues = 4` (before T-2.2.3 clamp to 3).
 
@@ -725,9 +725,9 @@ Every task's Definition of Done implicitly includes:
 ### Task T-3.3.2 — Rectifier tiers
 
 **Acceptance:**
-- [ ] `rectifier` / `rectifier_t2` / `rectifier_t3` register with `rectification: 10/15/20`.
+- [x] `rectifier` / `rectifier_t2` / `rectifier_t3` register with `rectification: 10/15/20`.
 
-**Tests:** `rectifier_t3` in range → `rectification = 20`.
+**Tests:** [x] `rectifier_t3` in range → `rectification = 20`.
 
 ---
 
