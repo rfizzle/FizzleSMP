@@ -611,42 +611,42 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-3.1 — Shelf infrastructure
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-3.1.1 — Base `EnchantingShelfBlock` class
 
 **Resume context:** DESIGN.md § "Shelf Blocks".
 
 **Acceptance:**
-- [ ] `shelf/EnchantingShelfBlock.java extends Block implements IEnchantingStatProvider`.
-- [ ] Constructor takes `BlockBehaviour.Properties` + `ParticleTheme` enum.
-- [ ] `getStats` delegates to `EnchantingStatRegistry#lookup`.
+- [x] `shelf/EnchantingShelfBlock.java extends Block implements IEnchantingStatProvider`.
+- [x] Constructor takes `BlockBehaviour.Properties` + `ParticleTheme` enum.
+- [x] `getStats` delegates to `EnchantingStatRegistry#lookup`.
 
-**Tests:** Registration round-trip; particle theme accessible.
+**Tests:** [x] Registration round-trip; particle theme accessible.
 
 ---
 
 ### Task T-3.1.2 — Particle theme enum + `animateTick` hook
 
 **Acceptance:**
-- [ ] `ParticleTheme { ENCHANT, ENCHANT_FIRE, ENCHANT_WATER, ENCHANT_END, ENCHANT_SCULK }`.
-- [ ] Client-side `animateTick` emits 1–3 particles at low probability, gated by `config.shelves.sculkParticleChance` for sculk theme.
-- [ ] Each enum resolves to its vanilla `ParticleType`.
+- [x] `ParticleTheme { ENCHANT, ENCHANT_FIRE, ENCHANT_WATER, ENCHANT_END, ENCHANT_SCULK }`.
+- [x] Client-side `animateTick` emits 1–3 particles at low probability, gated by `config.shelves.sculkParticleChance` for sculk theme.
+- [x] Each enum resolves to its vanilla `ParticleType`.
 
-**Tests:** Parameterized test — each theme → expected `ParticleType`.
+**Tests:** [x] Parameterized test — each theme → expected `ParticleType`.
 
 ---
 
 ### Task T-3.1.3 — `FizzleEnchantingRegistry` block/item registration helpers
 
 **Acceptance:**
-- [ ] Class `FizzleEnchantingRegistry.java` with:
+- [x] Class `FizzleEnchantingRegistry.java` with:
   - `public static final Map<ResourceLocation, Block> BLOCKS = new LinkedHashMap<>();`
   - `registerBlock(String name, Block block, Item.Properties itemProps)` — registers block + BlockItem via `BuiltInRegistries`.
   - `registerItem(String name, Item)`, `registerMenuType`, `registerBlockEntityType`.
-- [ ] Called from `FizzleEnchanting#onInitialize`.
+- [x] Called from `FizzleEnchanting#onInitialize`.
 
-**Tests:** Adding a dummy block via the helper → present in `BuiltInRegistries.BLOCK`.
+**Tests:** [x] Adding a dummy block via the helper → present in `BuiltInRegistries.BLOCK`.
 
 ---
 
