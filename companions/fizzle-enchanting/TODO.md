@@ -302,7 +302,7 @@ Every task's Definition of Done implicitly includes:
 
 # Epic 2 — Stat System & Table
 
-- [ ] Epic complete
+- [x] Epic complete
 
 **Goal:** Stat-driven enchanting table functional with one proof-of-concept shelf.
 **Commit at epic close:** `feat(enchanting): stat-driven enchantment table`
@@ -533,7 +533,7 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-2.5 — Menu + screen replacement
 
-- [ ] Story complete
+- [x] Story complete
 
 **As a** player, **I want** the vanilla enchanting table to open Fizzle's menu **so that** stat-driven enchanting replaces vanilla.
 
@@ -542,16 +542,16 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Table Menu Implementation".
 
 **Acceptance:**
-- [ ] `enchanting/FizzleEnchantmentMenu.java extends EnchantmentMenu`.
-- [ ] Override `slotsChanged(Container)`: call `gatherStats`, recompute `costs[]`, populate `enchantClue[]`/`levelClue[]`, fire one `StatsPayload` + three `CluesPayload`.
-- [ ] Override `clickMenuButton(Player, int id)`: validate id 0/1/2, validate XP + lapis against `costs[id]`, apply enchant via `RealEnchantmentHelper.selectEnchantment`, consume XP + lapis, refire `slotsChanged`.
-- [ ] Throw `UnsupportedOperationException` for `id == 3` (wired in Epic 5).
+- [x] `enchanting/FizzleEnchantmentMenu.java extends EnchantmentMenu`.
+- [x] Override `slotsChanged(Container)`: call `gatherStats`, recompute `costs[]`, populate `enchantClue[]`/`levelClue[]`, fire one `StatsPayload` + three `CluesPayload`.
+- [x] Override `clickMenuButton(Player, int id)`: validate id 0/1/2, validate XP + lapis against `costs[id]`, apply enchant via `RealEnchantmentHelper.selectEnchantment`, consume XP + lapis, refire `slotsChanged`.
+- [x] Throw `UnsupportedOperationException` for `id == 3` (wired in Epic 5).
 
 **Tests:**
-- [ ] Successful enchant — item gains `ItemEnchantments`, XP and lapis decremented correctly.
-- [ ] Insufficient lapis → click rejected, no mutation.
-- [ ] Insufficient XP → click rejected.
-- [ ] `id == 3` throws until Epic 5.
+- [x] Successful enchant — item gains `ItemEnchantments`, XP and lapis decremented correctly.
+- [x] Insufficient lapis → click rejected, no mutation.
+- [x] Insufficient XP → click rejected.
+- [x] `id == 3` throws until Epic 5.
 
 ---
 
@@ -560,41 +560,41 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Table Menu Implementation" — exact mixin snippet included.
 
 **Acceptance:**
-- [ ] `mixin/EnchantmentTableBlockMixin.java` with `@Inject(method = "getMenuProvider", at = @At("HEAD"), cancellable = true)`.
-- [ ] Sets return value to a `SimpleMenuProvider` producing `FizzleEnchantmentMenu`.
-- [ ] Mixin registered in `fizzle_enchanting.mixins.json`.
+- [x] `mixin/EnchantmentTableBlockMixin.java` with `@Inject(method = "getMenuProvider", at = @At("HEAD"), cancellable = true)`.
+- [x] Sets return value to a `SimpleMenuProvider` producing `FizzleEnchantmentMenu`.
+- [x] Mixin registered in `fizzle_enchanting.mixins.json`.
 
-**Tests:** Bootstrap + synthetic `BlockState` → provider returned is the fizzle one.
+**Tests:** [x] Bootstrap + synthetic `BlockState` → provider returned is the fizzle one.
 
 ---
 
 ### Task T-2.5.3 — `EnchantmentMenuAccessor`
 
 **Acceptance:**
-- [ ] `@Accessor` for `enchantSlots`, `random`, `enchantmentSeed`.
-- [ ] Method names prefixed `fizzleEnchanting$` per `/dev-companion`.
+- [x] `@Accessor` for `enchantSlots`, `random`, `enchantmentSeed`.
+- [x] Method names prefixed `fizzleEnchanting$` per `/dev-companion`.
 
-**Tests:** Accessor returns non-null on a constructed vanilla `EnchantmentMenu` (used by the menu subclass in T-2.5.1).
+**Tests:** [x] Accessor returns non-null on a constructed vanilla `EnchantmentMenu` (used by the menu subclass in T-2.5.1).
 
 ---
 
 ### Task T-2.5.4 — `FizzleEnchantmentScreen` HUD
 
 **Acceptance:**
-- [ ] `client/screen/FizzleEnchantmentScreen.java` extends `EnchantmentScreen`.
-- [ ] Renders a 1-row stat line below the three enchant slots: `E: 50  Q: 12  A: 5  R: 10  C: 2`.
-- [ ] Client-side `StatsPayload` handler stores the last received stats on the menu; screen reads those.
-- [ ] Toggle via `config.enchantingTable.showLevelIndicator`.
+- [x] `client/screen/FizzleEnchantmentScreen.java` extends `EnchantmentScreen`.
+- [x] Renders a 1-row stat line below the three enchant slots: `E: 50  Q: 12  A: 5  R: 10  C: 2`.
+- [x] Client-side `StatsPayload` handler stores the last received stats on the menu; screen reads those.
+- [x] Toggle via `config.enchantingTable.showLevelIndicator`.
 
-**Tests:** Unit test on the stat-line formatter (no GL context required).
+**Tests:** [x] Unit test on the stat-line formatter (no GL context required).
 
 ---
 
 ### Task T-2.5.5 — Register `MenuType<FizzleEnchantmentMenu>`
 
 **Acceptance:**
-- [ ] `MenuType` registered in `FizzleEnchantingRegistry` (create the class now if it doesn't exist).
-- [ ] `HandledScreens.register` wires the screen on the client entrypoint.
+- [x] `MenuType` registered in `FizzleEnchantingRegistry` (create the class now if it doesn't exist).
+- [x] `HandledScreens.register` wires the screen on the client entrypoint.
 
 **Tests:** Bootstrap assertion — menu type resolves from the registry.
 

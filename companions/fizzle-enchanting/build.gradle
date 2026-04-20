@@ -90,6 +90,10 @@ dependencies {
 
 test {
     useJUnitPlatform()
+    // Bootstrap.bootStrap() freezes BuiltInRegistries and stays latched for the JVM's lifetime,
+    // so tests that need a pre-freeze registry (T-2.5.5) can't share a JVM with tests that call
+    // bootStrap(). Forking per test class keeps each class's registry state isolated.
+    forkEvery = 1
 }
 
 processResources {

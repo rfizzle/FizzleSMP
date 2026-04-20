@@ -3,7 +3,10 @@
     "minVersion": "0.8",
     "package": "com.fizzlesmp.fizzle_enchanting.mixin",
     "compatibilityLevel": "JAVA_21",
-    "mixins": [],
+    "mixins": [
+        "EnchantmentMenuAccessor",
+        "EnchantmentTableBlockMixin"
+    ],
     "client": [],
     "injectors": {
         "defaultRequire": 1

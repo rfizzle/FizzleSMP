@@ -21,6 +21,7 @@ public class FizzleEnchanting implements ModInitializer {
         LOGGER.info("Fizzle Enchanting initialized");
         config = FizzleEnchantingConfig.load();
         EnchantingStatRegistry.bootstrap();
+        FizzleEnchantingRegistry.register();
         FizzleEnchantingNetworking.registerPayloads();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 FizzleEnchantingCommand.register(dispatcher));

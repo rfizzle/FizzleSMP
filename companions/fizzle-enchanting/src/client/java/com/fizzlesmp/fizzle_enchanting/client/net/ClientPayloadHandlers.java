@@ -1,13 +1,16 @@
 package com.fizzlesmp.fizzle_enchanting.client.net;
 
 import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
+import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
 import com.fizzlesmp.fizzle_enchanting.net.CluesPayload;
 import com.fizzlesmp.fizzle_enchanting.net.StatsPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.minecraft.client.player.LocalPlayer;
 
 /**
- * S2C receivers for the enchanting payloads. Handlers currently log receipt only — screen
- * updates land with the menu/screen replacement in S-2.5.
+ * S2C receivers for the enchanting payloads. The stats payload is forwarded to the open
+ * {@link FizzleEnchantmentMenu} so {@code FizzleEnchantmentScreen} can read live stat values from
+ * the menu instance. Clues land in the screen's per-slot tooltip cache in a later task.
  */
 public final class ClientPayloadHandlers {
 
@@ -16,10 +19,12 @@ public final class ClientPayloadHandlers {
 
     public static void register() {
         ClientPlayNetworking.registerGlobalReceiver(StatsPayload.TYPE,
-                (payload, context) -> FizzleEnchanting.LOGGER.debug(
-                        "Received stats payload (eterna={}, clues={}, blacklist={}, treasure={}, crafting={})",
-                        payload.eterna(), payload.clues(), payload.blacklist().size(),
-                        payload.treasure(), payload.craftingResult().isPresent()));
+                (payload, context) -> context.client().execute(() -> {
+                    LocalPlayer player = context.player();
+                    if (player != null && player.containerMenu instanceof FizzleEnchantmentMenu menu) {
+                        menu.applyClientStats(payload);
+                    }
+                }));
 
         ClientPlayNetworking.registerGlobalReceiver(CluesPayload.TYPE,
                 (payload, context) -> FizzleEnchanting.LOGGER.debug(
