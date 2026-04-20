@@ -23,6 +23,7 @@ public class FizzleEnchanting implements ModInitializer {
         config = FizzleEnchantingConfig.load();
         EnchantingStatRegistry.bootstrap();
         FizzleEnchantingRegistry.register();
+        FizzleEnchantingRegistry.registerApiLookups();
         FizzleAnvilHandlers.register();
         FizzleEnchantingNetworking.registerPayloads();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->

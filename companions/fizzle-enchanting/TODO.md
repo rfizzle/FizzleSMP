@@ -1061,45 +1061,45 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-4.5 — Hopper integration
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-4.5.1 — `Storage<ItemVariant>` adapter
 
 **Resume context:** DESIGN.md § "Enchantment Library" — "`Storage<ItemVariant>` adapter (hopper I/O)".
 
 **Acceptance:**
-- [ ] `ItemStorage.SIDED.registerForBlockEntity((be, side) -> be.storageAdapter)` in `FizzleEnchantingRegistry`.
-- [ ] Adapter implements `Storage<ItemVariant>`.
-- [ ] `canInsert`: accepts only `ItemVariant.of(Items.ENCHANTED_BOOK)`.
-- [ ] `insert`: calls `depositBook` per unit, void-caps at `maxPoints`; returns full input amount even when overflow occurs.
-- [ ] `extract`: returns 0 unconditionally.
+- [x] `ItemStorage.SIDED.registerForBlockEntity((be, side) -> be.storageAdapter)` in `FizzleEnchantingRegistry`.
+- [x] Adapter implements `Storage<ItemVariant>`.
+- [x] `canInsert`: accepts only `ItemVariant.of(Items.ENCHANTED_BOOK)`.
+- [x] `insert`: calls `depositBook` per unit, void-caps at `maxPoints`; returns full input amount even when overflow occurs.
+- [x] `extract`: returns 0 unconditionally.
 
 **Tests:** `LibraryStorageTest` —
-- [ ] Diamond sword insert → 0 accepted.
-- [ ] Book insert at cap → still returns full amount accepted (void overflow).
-- [ ] Extract → always 0.
+- [x] Diamond sword insert → 0 accepted.
+- [x] Book insert at cap → still returns full amount accepted (void overflow).
+- [x] Extract → always 0.
 
 ---
 
 ### Task T-4.5.2 — `SnapshotParticipant<LibrarySnapshot>`
 
 **Acceptance:**
-- [ ] Adapter extends `SnapshotParticipant<LibrarySnapshot>`.
-- [ ] `LibrarySnapshot` record: `points` map copy, `maxLevels` map copy, `dirty` flag.
-- [ ] `createSnapshot`/`readSnapshot` round-trip map state correctly.
-- [ ] `onFinalCommit` calls `setChanged()` once.
+- [x] Adapter extends `SnapshotParticipant<LibrarySnapshot>`.
+- [x] `LibrarySnapshot` record: `points` map copy, `maxLevels` map copy, `dirty` flag.
+- [x] `createSnapshot`/`readSnapshot` round-trip map state correctly.
+- [x] `onFinalCommit` calls `setChanged()` once.
 
-**Tests:** Simulate a transaction: begin → insert → abort → state equals pre-insert. Begin → insert → commit → state mutated.
+**Tests:** [x] Simulate a transaction: begin → insert → abort → state equals pre-insert. Begin → insert → commit → state mutated.
 
 ---
 
 ### Task T-4.5.3 — Rate limit
 
 **Acceptance:**
-- [ ] BE tracks `long lastInsertTick`.
-- [ ] When `config.library.ioRateLimitTicks > 0` and `level.getGameTime() - lastInsertTick < rateLimit`, insert drops.
+- [x] BE tracks `long lastInsertTick`.
+- [x] When `config.library.ioRateLimitTicks > 0` and `level.getGameTime() - lastInsertTick < rateLimit`, insert drops.
 
-**Tests:** Two rapid inserts at `rateLimit=20` → second dropped.
+**Tests:** [x] Two rapid inserts at `rateLimit=20` → second dropped.
 
 ---
 

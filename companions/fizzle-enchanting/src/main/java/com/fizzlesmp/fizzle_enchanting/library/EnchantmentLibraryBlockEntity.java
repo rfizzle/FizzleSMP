@@ -1,6 +1,7 @@
 package com.fizzlesmp.fizzle_enchanting.library;
 
 import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
+import com.fizzlesmp.fizzle_enchanting.config.FizzleEnchantingConfig;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -73,6 +74,28 @@ public abstract class EnchantmentLibraryBlockEntity extends BlockEntity {
     protected final int maxPoints;
 
     /**
+     * Shared {@code Storage<ItemVariant>} adapter handed to {@code ItemStorage.SIDED} so hoppers
+     * and pipes can push enchanted books into the pool without opening the menu. Owned by the BE
+     * so the lookup's {@code (be, side) -> be.getStorageAdapter()} binding resolves to a stable
+     * instance across queries. One per BE; the adapter itself carries no state, so recreating it
+     * would be safe but wasteful.
+     */
+    protected final LibraryStorageAdapter storageAdapter = new LibraryStorageAdapter(this);
+
+    /**
+     * World-tick at which the last {@link LibraryStorageAdapter} insert ran against this library,
+     * used by the {@code config.library.ioRateLimitTicks} throttle. {@link Long#MIN_VALUE} is the
+     * sentinel for "never inserted" so the first hopper push always goes through regardless of how
+     * far the world has ticked. Snapshotted by {@link LibraryStorageAdapter} so an aborted Fabric
+     * transaction rolls this back alongside the point pool — otherwise a rolled-back insert would
+     * still "burn" a throttle slot and block subsequent attempts.
+     *
+     * <p>Not persisted to NBT: a server restart resets the sentinel, which is the right behaviour
+     * (the throttle is meant to dampen in-session auto-farms, not survive reboots).
+     */
+    long lastInsertTick = Long.MIN_VALUE;
+
+    /**
      * Open menus listening for pool mutations. Mirrors Zenith's {@code activeContainers} pattern so
      * a screen can repaint its row list without polling — every mutation path eventually reaches
      * {@link #notifyListeners()}, which fires {@link EnchantmentLibraryMenu#onChanged()} on each
@@ -101,9 +124,26 @@ public abstract class EnchantmentLibraryBlockEntity extends BlockEntity {
      * same ceiling (DESIGN silent-void semantics).
      */
     public void depositBook(ItemStack book) {
-        if (book == null || book.isEmpty() || !book.is(Items.ENCHANTED_BOOK)) return;
+        if (depositBookSilent(book)) {
+            setChanged();
+        }
+    }
+
+    /**
+     * Adapter-facing variant of {@link #depositBook} that performs the same pool/level math but
+     * skips the trailing {@link #setChanged()} fire. Returned to the caller (the {@link
+     * LibraryStorageAdapter}'s {@code SnapshotParticipant} hook) so a single
+     * {@code setChanged()} can be deferred to {@code onFinalCommit} — calling it eagerly inside
+     * the transaction would dispatch the chunk-update packet and mark persistent state dirty
+     * before the transaction had a chance to commit, defeating the rollback contract.
+     *
+     * <p>Returns {@code true} iff the deposit mutated state; the adapter ORs these together to
+     * decide whether {@code onFinalCommit} needs to fire {@code setChanged}.
+     */
+    boolean depositBookSilent(ItemStack book) {
+        if (book == null || book.isEmpty() || !book.is(Items.ENCHANTED_BOOK)) return false;
         ItemEnchantments stored = book.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
-        if (stored.isEmpty()) return;
+        if (stored.isEmpty()) return false;
         boolean changed = false;
         for (Holder<Enchantment> holder : stored.keySet()) {
             ResourceKey<Enchantment> key = holder.unwrapKey().orElse(null);
@@ -122,9 +162,7 @@ public abstract class EnchantmentLibraryBlockEntity extends BlockEntity {
             this.maxLevels.put(key, newMax);
             changed = true;
         }
-        if (changed) {
-            setChanged();
-        }
+        return changed;
     }
 
     /**
@@ -349,5 +387,31 @@ public abstract class EnchantmentLibraryBlockEntity extends BlockEntity {
     /** Live max-level map. Menus clamp extract targets against this. */
     public Object2IntMap<ResourceKey<Enchantment>> getMaxLevels() {
         return this.maxLevels;
+    }
+
+    /** Hopper-side insert-only storage view — see {@link LibraryStorageAdapter}. */
+    public LibraryStorageAdapter getStorageAdapter() {
+        return this.storageAdapter;
+    }
+
+    /**
+     * Current world-tick used by the hopper throttle. Overridable so unit tests can drive the
+     * rate-limit clock without attaching a live {@code Level} — production returns
+     * {@code level.getGameTime()}, test fixtures without a level return {@code 0} so they can
+     * advance the clock via a subclass override.
+     */
+    protected long currentGameTime() {
+        return this.level != null ? this.level.getGameTime() : 0L;
+    }
+
+    /**
+     * Hopper-insert cooldown window in ticks — {@code 0} disables throttling entirely. Production
+     * reads {@code config.library.ioRateLimitTicks}; when the config is not yet loaded (e.g. unit
+     * tests constructing a BE before {@code onInitialize}) we return {@code 0} so the throttle is
+     * off by default. Overridable in test subclasses to inject a specific window.
+     */
+    protected int rateLimitTicks() {
+        FizzleEnchantingConfig config = FizzleEnchanting.getConfig();
+        return config != null ? config.library.ioRateLimitTicks : 0;
     }
 }

@@ -12,6 +12,7 @@ import com.fizzlesmp.fizzle_enchanting.shelf.FizzleShelves;
 import com.fizzlesmp.fizzle_enchanting.shelf.TreasureShelfBlock;
 import com.fizzlesmp.fizzle_enchanting.shelf.TreasureShelfBlockEntity;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -173,6 +174,24 @@ public final class FizzleEnchantingRegistry {
         registerBlock("ender_library", ENDER_LIBRARY, new Item.Properties());
         registerBlockEntityType("library", BASIC_LIBRARY_BE);
         registerBlockEntityType("ender_library", ENDER_LIBRARY_BE);
+    }
+
+    /**
+     * Register Fabric API lookups (hopper-facing storage etc). Held separately from
+     * {@link #register()} because {@code BlockApiLookup.registerForBlockEntity} casts
+     * {@code BlockEntityType} to a mixin-injected accessor interface, which only exists when
+     * Fabric's mixins are applied at runtime. Unit tests bootstrap the core registry without
+     * loading Fabric's mixin transformers, so this must be called only from the real
+     * {@code onInitialize} path.
+     */
+    public static void registerApiLookups() {
+        // Hopper-facing insert-only adapter. Both tiers share the lookup — the BE owns the adapter
+        // instance, so the lambda just unwraps it. Direction is ignored because the library has no
+        // per-face gating; a hopper on any side can push books in.
+        ItemStorage.SIDED.registerForBlockEntity(
+                (be, direction) -> be.getStorageAdapter(), BASIC_LIBRARY_BE);
+        ItemStorage.SIDED.registerForBlockEntity(
+                (be, direction) -> be.getStorageAdapter(), ENDER_LIBRARY_BE);
     }
 
     /**
