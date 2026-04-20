@@ -381,7 +381,7 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-2.2 — Shelf scan & aggregation
 
-- [ ] Story complete
+- [x] Story complete
 
 **As a** player, **I want** nearby shelves to boost my table's stats **so that** placement choices matter.
 
@@ -390,12 +390,12 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** `/home/rfizzle/Projects/Zenith/src/main/java/dev/shadowsoffire/apotheosis/ench/table/EnchantingStatRegistry.java` — read for logic; re-implement cleanly.
 
 **Acceptance:**
-- [ ] `EnchantingStatRegistry#gatherStats(Level, BlockPos)` iterates vanilla `EnchantmentTableBlock.BOOKSHELF_OFFSETS` (public in 1.21.1).
-- [ ] Returns a `StatCollection` record with fields: `float eterna, quanta, arcana, rectification; int clues; float maxEterna; Set<ResourceKey<Enchantment>> blacklist; boolean treasureAllowed;`.
+- [x] `EnchantingStatRegistry#gatherStats(Level, BlockPos)` iterates vanilla `EnchantmentTableBlock.BOOKSHELF_OFFSETS` (public in 1.21.1).
+- [x] Returns a `StatCollection` record with fields: `float eterna, quanta, arcana, rectification; int clues; float maxEterna; Set<ResourceKey<Enchantment>> blacklist; boolean treasureAllowed;`.
 
 **Subtasks:**
-- [ ] Define `StatCollection` record.
-- [ ] Skeleton scan; no LOS check yet.
+- [x] Define `StatCollection` record.
+- [x] Skeleton scan; no LOS check yet.
 
 **Tests:** Stub lookup returning `(1,1,0,0,0,0)` → 15 shelves placed → eterna summed to 15.
 
@@ -404,25 +404,25 @@ Every task's Definition of Done implicitly includes:
 ### Task T-2.2.2 — Transmitter line-of-sight check
 
 **Acceptance:**
-- [ ] For each offset, check the midpoint block is in `BlockTags.ENCHANTMENT_POWER_TRANSMITTER`.
-- [ ] Failure → shelf contributes zero.
+- [x] For each offset, check the midpoint block is in `BlockTags.ENCHANTMENT_POWER_TRANSMITTER`.
+- [x] Failure → shelf contributes zero.
 
-**Tests:** One bookshelf blocked by a stone midpoint → that slot contributes zero; removing the stone restores the contribution.
+**Tests:** [x] One bookshelf blocked by a stone midpoint → that slot contributes zero; removing the stone restores the contribution.
 
 ---
 
 ### Task T-2.2.3 — Stat aggregation rules
 
 **Acceptance:**
-- [ ] Sum `eterna`, `quanta`, `arcana`, `rectification`, `clues` across all contributing shelves.
-- [ ] `maxEterna = max(maxEterna_i)` across contributors.
-- [ ] Final `eterna` is clamped to `[0, maxEterna]`; other stats uncapped.
-- [ ] Clamp `clues` to `[0, 3]` (only three preview slots exist).
+- [x] Sum `eterna`, `quanta`, `arcana`, `rectification`, `clues` across all contributing shelves.
+- [x] `maxEterna = max(maxEterna_i)` across contributors.
+- [x] Final `eterna` is clamped to `[0, maxEterna]`; other stats uncapped.
+- [x] Clamp `clues` to `[0, 3]` (only three preview slots exist).
 
 **Tests:**
-- [ ] Shelves whose eterna sum exceeds `maxEterna` → clamped.
-- [ ] Mixed shelves with different `maxEterna` → result uses the highest.
-- [ ] Shelf with `clues: 5` alone still clamps to 3.
+- [x] Shelves whose eterna sum exceeds `maxEterna` → clamped.
+- [x] Mixed shelves with different `maxEterna` → result uses the highest.
+- [x] Shelf with `clues: 5` alone still clamps to 3.
 
 ---
 
@@ -431,11 +431,11 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Shelf Blocks" — filtering shelf + treasure shelf. BE classes land in Epic 3; this task reserves the scan-side integration.
 
 **Acceptance:**
-- [ ] If the scanned position has a `FilteringShelfBlockEntity`, its blacklist set is union'd into `blacklist`.
-- [ ] If a `TreasureShelfBlockEntity` exists in range, `treasureAllowed = true`.
-- [ ] No-op when the BE classes aren't registered yet (dynamic lookup, safe for pre-Epic-3 builds).
+- [x] If the scanned position has a `FilteringShelfBlockEntity`, its blacklist set is union'd into `blacklist`.
+- [x] If a `TreasureShelfBlockEntity` exists in range, `treasureAllowed = true`.
+- [x] No-op when the BE classes aren't registered yet (dynamic lookup, safe for pre-Epic-3 builds).
 
-**Tests:** Mock BE fixtures — verify the hooks are called exactly once per in-range BE.
+**Tests:** [x] Mock BE fixtures — verify the hooks are called exactly once per in-range BE.
 
 ---
 
