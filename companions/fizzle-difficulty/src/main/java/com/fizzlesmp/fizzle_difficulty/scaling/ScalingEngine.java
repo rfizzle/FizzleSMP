@@ -38,7 +38,7 @@ public final class ScalingEngine {
     public static final String ATTR_HEALTH = "health";
     public static final String ATTR_DAMAGE = "damage";
     public static final String ATTR_SPEED = "speed";
-    public static final String ATTR_FOLLOW_RANGE = "followRange";
+    public static final String ATTR_FOLLOW_RANGE = "follow_range";
     public static final String ATTR_ARMOR = "armor";
     public static final String ATTR_TOUGHNESS = "toughness";
 
