@@ -2,6 +2,7 @@ package com.fizzlesmp.fizzle_enchanting.data;
 
 import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
 import com.fizzlesmp.fizzle_enchanting.FizzleEnchantingRegistry;
+import com.fizzlesmp.fizzle_enchanting.shelf.EnchantingShelfBlock;
 import com.fizzlesmp.fizzle_enchanting.shelf.FizzleShelves;
 
 import java.lang.reflect.Field;
@@ -53,7 +54,10 @@ class FizzleModelProviderTest {
     void shelfTextures_coversEvery25Shelves() {
         Map<Block, FizzleModelProvider.ColumnTextures> map = FizzleModelProvider.shelfTextures();
         assertEquals(25, map.size(), "one cube_column entry per shelf in DESIGN");
+        // Filter to cube-column shelves only — chiseled-bookshelf-style blocks (filtering shelf,
+        // and eventually treasure shelf) own their own model shape and are intentionally absent.
         for (Block shelf : FizzleEnchantingRegistry.BLOCKS.values()) {
+            if (!(shelf instanceof EnchantingShelfBlock)) continue;
             assertTrue(map.containsKey(shelf),
                     () -> "shelf " + shelf + " is missing a model entry");
         }

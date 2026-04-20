@@ -602,7 +602,7 @@ Every task's Definition of Done implicitly includes:
 
 # Epic 3 — Shelf Family
 
-- [ ] Epic complete
+- [x] Epic complete
 
 **Goal:** All 25 Zenith shelves + utility shelves + BE-backed specials.
 **Commit at epic close:** `feat(enchanting): shelf family and stat scanner`
@@ -784,34 +784,34 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-3.5 — Filtering & treasure shelves
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-3.5.1 — `FilteringShelfBlockEntity` + block
 
 **Resume context:** DESIGN.md § "Shelf Blocks" → filtering_shelf row.
 
 **Acceptance:**
-- [ ] `shelf/FilteringShelfBlockEntity.java` stores up to 6 `ItemStack` of books.
-- [ ] On book insert, parse `ItemEnchantments`; expose `Set<ResourceKey<Enchantment>>` to the stat scanner.
-- [ ] Chiseled-bookshelf-style cursor-hit slot targeting (use vanilla `ChiseledBookShelfBlock` logic as reference).
-- [ ] Save/load via NBT; client sync via `BlockEntity#getUpdatePacket`/`getUpdateTag`.
-- [ ] Empty shelf contributes as a wood-tier base shelf (DESIGN fallback).
-- [ ] Full shelf rejects additional inserts.
+- [x] `shelf/FilteringShelfBlockEntity.java` stores up to 6 `ItemStack` of books.
+- [x] On book insert, parse `ItemEnchantments`; expose `Set<ResourceKey<Enchantment>>` to the stat scanner.
+- [x] Chiseled-bookshelf-style cursor-hit slot targeting (use vanilla `ChiseledBookShelfBlock` logic as reference).
+- [x] Save/load via NBT; client sync via `BlockEntity#getUpdatePacket`/`getUpdateTag`.
+- [x] Empty shelf contributes as a wood-tier base shelf (DESIGN fallback).
+- [x] Full shelf rejects additional inserts.
 
 **Tests:** `FilteringShelfTest` —
-- [ ] Insert enchanted book → blacklist grows.
-- [ ] Extract → blacklist shrinks.
-- [ ] NBT round-trip.
-- [ ] Slot targeting produces the correct slot index for each corner hit.
+- [x] Insert enchanted book → blacklist grows.
+- [x] Extract → blacklist shrinks.
+- [x] NBT round-trip.
+- [x] Slot targeting produces the correct slot index for each corner hit.
 
 ---
 
 ### Task T-3.5.2 — `TreasureShelfBlockEntity` + block
 
 **Acceptance:**
-- [ ] BE carries no storage; presence alone flips `treasureAllowed = true` in the stat scan.
-- [ ] Block uses a distinct texture + item.
-- [ ] Zero Eterna contribution.
+- [x] BE carries no storage; presence alone flips `treasureAllowed = true` in the stat scan.
+- [x] Block uses a distinct texture + item.
+- [x] Zero Eterna contribution.
 
 **Tests:** `TreasureShelfTest` — presence in range → `StatCollection.treasureAllowed=true`; absence → `false`.
 
@@ -820,11 +820,11 @@ Every task's Definition of Done implicitly includes:
 ### Task T-3.5.3 — Wire BE hooks into `StatCollection`
 
 **Acceptance:**
-- [ ] `T-2.2.4`'s placeholder now resolves to real BE lookups.
-- [ ] Union of blacklists across multiple filtering shelves works.
-- [ ] Treasure allowed once any in-range treasure shelf exists.
+- [x] `T-2.2.4`'s placeholder now resolves to real BE lookups.
+- [x] Union of blacklists across multiple filtering shelves works.
+- [x] Treasure allowed once any in-range treasure shelf exists.
 
-**Tests:** Two filtering shelves each holding 1 unique book → blacklist has 2 entries.
+**Tests:** [x] Two filtering shelves each holding 1 unique book → blacklist has 2 entries.
 
 ---
 

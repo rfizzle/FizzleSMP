@@ -1,7 +1,11 @@
 package com.fizzlesmp.fizzle_enchanting;
 
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
+import com.fizzlesmp.fizzle_enchanting.shelf.FilteringShelfBlock;
+import com.fizzlesmp.fizzle_enchanting.shelf.FilteringShelfBlockEntity;
 import com.fizzlesmp.fizzle_enchanting.shelf.FizzleShelves;
+import com.fizzlesmp.fizzle_enchanting.shelf.TreasureShelfBlock;
+import com.fizzlesmp.fizzle_enchanting.shelf.TreasureShelfBlockEntity;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -11,8 +15,11 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -39,6 +46,39 @@ public final class FizzleEnchantingRegistry {
     public static final MenuType<FizzleEnchantmentMenu> ENCHANTING_TABLE_MENU =
             new MenuType<>(FizzleEnchantmentMenu::new, FeatureFlags.VANILLA_SET);
 
+    /**
+     * Filtering-shelf block. Wood-tier base contribution lives in
+     * {@code data/fizzle_enchanting/enchanting_stats/filtering_shelf.json}; the entity layers
+     * the per-shelf blacklist on top via {@link FilteringShelfBlockEntity#getEnchantmentBlacklist}.
+     */
+    public static final FilteringShelfBlock FILTERING_SHELF =
+            new FilteringShelfBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.WOOD)
+                    .sound(SoundType.WOOD)
+                    .strength(0.75F));
+
+    /** Block-entity type backing {@link #FILTERING_SHELF}. Registered alongside the block. */
+    public static final BlockEntityType<FilteringShelfBlockEntity> FILTERING_SHELF_BE =
+            BlockEntityType.Builder.of(FilteringShelfBlockEntity::new, FILTERING_SHELF).build(null);
+
+    /**
+     * Treasure-shelf block. Stat-scan effect is "treasure enchantments unlocked" — surfaced
+     * through the BE's {@link com.fizzlesmp.fizzle_enchanting.enchanting.TreasureFlagSource}
+     * marker. Stone-tier physical properties matched to Zenith
+     * ({@code MapColor.COLOR_BLACK}, {@code SoundType.STONE}, {@code 1.75F}, requires correct
+     * tool) so the block feels like every other stone-tier shelf to the player.
+     */
+    public static final TreasureShelfBlock TREASURE_SHELF =
+            new TreasureShelfBlock(BlockBehaviour.Properties.of()
+                    .mapColor(MapColor.COLOR_BLACK)
+                    .sound(SoundType.STONE)
+                    .strength(1.75F)
+                    .requiresCorrectToolForDrops());
+
+    /** Block-entity type backing {@link #TREASURE_SHELF}. */
+    public static final BlockEntityType<TreasureShelfBlockEntity> TREASURE_SHELF_BE =
+            BlockEntityType.Builder.of(TreasureShelfBlockEntity::new, TREASURE_SHELF).build(null);
+
     private static boolean registered = false;
 
     private FizzleEnchantingRegistry() {
@@ -50,6 +90,10 @@ public final class FizzleEnchantingRegistry {
 
         registerMenuType("enchanting_table", ENCHANTING_TABLE_MENU);
         FizzleShelves.register();
+        registerBlock("filtering_shelf", FILTERING_SHELF, new Item.Properties());
+        registerBlockEntityType("filtering_shelf", FILTERING_SHELF_BE);
+        registerBlock("treasure_shelf", TREASURE_SHELF, new Item.Properties());
+        registerBlockEntityType("treasure_shelf", TREASURE_SHELF_BE);
     }
 
     /**
