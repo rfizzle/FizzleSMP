@@ -903,32 +903,32 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-4.2 — Iron-block anvil repair
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-4.2.1 — `IronBlockAnvilRepairHandler`
 
 **Resume context:** DESIGN.md § "Anvil tweaks (MVP)" — item #2.
 
 **Acceptance:**
-- [ ] Left = `CHIPPED_ANVIL` or `DAMAGED_ANVIL` BlockItem; right = `IRON_BLOCK`.
-- [ ] Output = one tier better (damaged→chipped, chipped→normal).
-- [ ] Preserves any `ItemEnchantments` component on the anvil stack (rare but supported).
-- [ ] Flat XP cost: 1 level.
-- [ ] Consumes 1 iron block.
+- [x] Left = `CHIPPED_ANVIL` or `DAMAGED_ANVIL` BlockItem; right = `IRON_BLOCK`.
+- [x] Output = one tier better (damaged→chipped, chipped→normal).
+- [x] Preserves any `ItemEnchantments` component on the anvil stack (rare but supported).
+- [x] Flat XP cost: 1 level.
+- [x] Consumes 1 iron block.
 
 **Tests:** `IronBlockAnvilRepairTest` —
-- [ ] Damaged → chipped.
-- [ ] Chipped → normal.
-- [ ] Normal → declines.
-- [ ] Iron **ingot** in right → declines.
-- [ ] Enchantments preserved.
+- [x] Damaged → chipped.
+- [x] Chipped → normal.
+- [x] Normal → declines.
+- [x] Iron **ingot** in right → declines.
+- [x] Enchantments preserved.
 
 ---
 
 ### Task T-4.2.2 — Config gate
 
 **Acceptance:**
-- [ ] Handler returns empty when `config.anvil.ironBlockRepairsAnvil` is `false`.
+- [x] Handler returns empty when `config.anvil.ironBlockRepairsAnvil` is `false`.
 
 **Tests:** Flag off → declines.
 
