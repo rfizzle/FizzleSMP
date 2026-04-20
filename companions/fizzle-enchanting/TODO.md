@@ -311,7 +311,7 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-2.1 — Stat data model
 
-- [ ] Story complete
+- [x] Story complete
 
 **As a** server operator, **I want** per-block stat contributions in datapack JSON **so that** rebalancing doesn't require a rebuild.
 
@@ -320,10 +320,10 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Stat System" and § "Shelf Blocks" for field list.
 
 **Acceptance:**
-- [ ] Record `EnchantingStats(float maxEterna, float eterna, float quanta, float arcana, float rectification, int clues)`.
-- [ ] `Codec<EnchantingStats>` via `RecordCodecBuilder`; every field is `optionalFieldOf(..., 0)` so missing JSON fields zero-fill.
-- [ ] `public static final EnchantingStats ZERO = new EnchantingStats(0,0,0,0,0,0);`
-- [ ] Value-class semantics — record equality works in maps.
+- [x] Record `EnchantingStats(float maxEterna, float eterna, float quanta, float arcana, float rectification, int clues)`.
+- [x] `Codec<EnchantingStats>` via `RecordCodecBuilder`; every field is `optionalFieldOf(..., 0)` so missing JSON fields zero-fill.
+- [x] `public static final EnchantingStats ZERO = new EnchantingStats(0,0,0,0,0,0);`
+- [x] Value-class semantics — record equality works in maps.
 
 **Tests:** `EnchantingStatsTest` — codec round-trips; missing fields default to zero; negative values allowed except `clues` (integer only).
 
@@ -332,11 +332,11 @@ Every task's Definition of Done implicitly includes:
 ### Task T-2.1.2 — `IEnchantingStatProvider` interface
 
 **Acceptance:**
-- [ ] `enchanting/IEnchantingStatProvider.java`: `EnchantingStats getStats(Level level, BlockPos pos, BlockState state)`.
-- [ ] Default impl delegates to `EnchantingStatRegistry#lookup(state)`.
+- [x] `enchanting/IEnchantingStatProvider.java`: `EnchantingStats getStats(Level level, BlockPos pos, BlockState state)`.
+- [x] Default impl delegates to `EnchantingStatRegistry#lookup(state)`.
 
 **Subtasks:**
-- [ ] Interface only — no implementors yet (Story S-3.1 wires `EnchantingShelfBlock`).
+- [x] Interface only — no implementors yet (Story S-3.1 wires `EnchantingShelfBlock`).
 
 **Tests:** None at this task (covered downstream in S-2.2).
 
@@ -347,24 +347,24 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Stat System" lookup order (datapack → `ENCHANTMENT_POWER_PROVIDER` tag → zero).
 
 **Acceptance:**
-- [ ] `SimpleSynchronousResourceReloadListener` registered under `PackType.SERVER_DATA` for path `enchanting_stats`.
-- [ ] JSON schema accepts **either** `block: "ns:id"` **or** `tag: "#ns:id"` — never both (rejected at parse).
-- [ ] `lookup(Level, BlockState)` order:
+- [x] `SimpleSynchronousResourceReloadListener` registered under `PackType.SERVER_DATA` for path `enchanting_stats`.
+- [x] JSON schema accepts **either** `block: "ns:id"` **or** `tag: "#ns:id"` — never both (rejected at parse).
+- [x] `lookup(Level, BlockState)` order:
   1. Direct block registration → return.
   2. Tag registration → return (first match if multiple tags match).
   3. Block in `BlockTags.ENCHANTMENT_POWER_PROVIDER` → `new EnchantingStats(15, 1, 0, 0, 0, 0)`.
   4. Else `EnchantingStats.ZERO`.
-- [ ] Reload clears prior registrations — no stale entries.
+- [x] Reload clears prior registrations — no stale entries.
 
 **Subtasks:**
-- [ ] Synchronous loader over `ResourceManager.listResources(...)`.
-- [ ] Two internal maps: `Map<Block, EnchantingStats>` and `List<Pair<TagKey<Block>, EnchantingStats>>`.
+- [x] Synchronous loader over `ResourceManager.listResources(...)`.
+- [x] Two internal maps: `Map<Block, EnchantingStats>` and `List<Pair<TagKey<Block>, EnchantingStats>>`.
 
 **Tests:** `EnchantingStatRegistryTest` —
-- [ ] Direct-block match beats tag match.
-- [ ] Tag match beats Java fallback.
-- [ ] Java fallback fires for a block tagged `ENCHANTMENT_POWER_PROVIDER` absent from both registries.
-- [ ] JSON with both `block` and `tag` fails parse with a clear message.
+- [x] Direct-block match beats tag match.
+- [x] Tag match beats Java fallback.
+- [x] Java fallback fires for a block tagged `ENCHANTMENT_POWER_PROVIDER` absent from both registries.
+- [x] JSON with both `block` and `tag` fails parse with a clear message.
 
 ---
 
@@ -373,7 +373,7 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Stat System" — "We ship a stat JSON ... so operators can retune vanilla bookshelves without a jar rebuild."
 
 **Acceptance:**
-- [ ] `src/main/resources/data/fizzle_enchanting/enchanting_stats/vanilla_provider.json` with `{ "tag": "#minecraft:enchantment_power_provider", "maxEterna": 15, "eterna": 1 }`.
+- [x] `src/main/resources/data/fizzle_enchanting/enchanting_stats/vanilla_provider.json` with `{ "tag": "#minecraft:enchantment_power_provider", "maxEterna": 15, "eterna": 1 }`.
 
 **Tests:** `EnchantingStatRegistryTest#vanillaProviderSeedApplies` — after loading this one file, a vanilla bookshelf returns `{maxEterna:15, eterna:1}`.
 

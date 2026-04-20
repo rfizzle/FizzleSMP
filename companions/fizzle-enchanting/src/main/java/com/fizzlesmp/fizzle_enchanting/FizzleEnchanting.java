@@ -2,6 +2,7 @@ package com.fizzlesmp.fizzle_enchanting;
 
 import com.fizzlesmp.fizzle_enchanting.command.FizzleEnchantingCommand;
 import com.fizzlesmp.fizzle_enchanting.config.FizzleEnchantingConfig;
+import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantingStatRegistry;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +19,7 @@ public class FizzleEnchanting implements ModInitializer {
     public void onInitialize() {
         LOGGER.info("Fizzle Enchanting initialized");
         config = FizzleEnchantingConfig.load();
+        EnchantingStatRegistry.bootstrap();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 FizzleEnchantingCommand.register(dispatcher));
     }
