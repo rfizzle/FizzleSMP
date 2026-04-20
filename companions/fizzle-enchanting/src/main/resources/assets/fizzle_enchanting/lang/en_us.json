@@ -31,5 +31,7 @@
     "block.fizzle_enchanting.rectifier_t2": "Shelf of Hellbound Rectification",
     "block.fizzle_enchanting.rectifier_t3": "Shelf of End-Fused Rectification",
     "block.fizzle_enchanting.filtering_shelf": "Filtering Shelf",
-    "block.fizzle_enchanting.treasure_shelf": "Treasure Shelf"
+    "block.fizzle_enchanting.treasure_shelf": "Treasure Shelf",
+
+    "item.fizzle_enchanting.prismatic_web": "Prismatic Web"
 }

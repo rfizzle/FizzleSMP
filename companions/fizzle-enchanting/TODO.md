@@ -839,65 +839,65 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-4.1 — Anvil dispatcher
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-4.1.1 — `AnvilMenuMixin`
 
 **Resume context:** DESIGN.md § "Anvil tweaks (MVP)" — single mixin on `AnvilMenu#createResult`.
 
 **Acceptance:**
-- [ ] `mixin/AnvilMenuMixin.java` with `@Inject(method = "createResult", at = @At("TAIL"))`.
-- [ ] Calls `AnvilDispatcher.handle(menu, slotA, slotB, accessor.getCost())`.
-- [ ] If dispatcher returns a `Result`, overwrite the output slot + cost accessor via an `@Accessor` mixin on `AnvilMenu`.
+- [x] `mixin/AnvilMenuMixin.java` with `@Inject(method = "createResult", at = @At("TAIL"))`.
+- [x] Calls `AnvilDispatcher.handle(menu, slotA, slotB, accessor.getCost())`.
+- [x] If dispatcher returns a `Result`, overwrite the output slot + cost accessor via an `@Accessor` mixin on `AnvilMenu`.
 
 **Subtasks:**
-- [ ] Add `AnvilMenuAccessor` for `cost`, `repairItemCountCost`.
-- [ ] Register mixin.
+- [x] Add `AnvilMenuAccessor` for `cost`, `repairItemCountCost`.
+- [x] Register mixin.
 
-**Tests:** Stub dispatcher returning a canned result → anvil output slot receives it.
+**Tests:** [x] Stub dispatcher returning a canned result → anvil output slot receives it.
 
 ---
 
 ### Task T-4.1.2 — `AnvilDispatcher` + handler interface
 
 **Acceptance:**
-- [ ] `anvil/AnvilDispatcher.java` holds an ordered `List<AnvilHandler>`.
-- [ ] `anvil/AnvilHandler.java` interface: `Optional<AnvilResult> handle(ItemStack left, ItemStack right, Player player)`.
-- [ ] First non-empty result wins.
-- [ ] `AnvilResult` record: `ItemStack output, int xpCost, int rightConsumed`.
+- [x] `anvil/AnvilDispatcher.java` holds an ordered `List<AnvilHandler>`.
+- [x] `anvil/AnvilHandler.java` interface: `Optional<AnvilResult> handle(ItemStack left, ItemStack right, Player player)`.
+- [x] First non-empty result wins.
+- [x] `AnvilResult` record: `ItemStack output, int xpCost, int rightConsumed`.
 
-**Tests:** Two stub handlers; first fires — second never consulted. First returns empty — second fires.
+**Tests:** [x] Two stub handlers; first fires — second never consulted. First returns empty — second fires.
 
 ---
 
 ### Task T-4.1.3 — `PrismaticWebItem` + recipe + texture
 
 **Acceptance:**
-- [ ] `anvil/PrismaticWebItem.java` (plain `Item`).
-- [ ] Registered via `FizzleEnchantingRegistry.registerItem`.
-- [ ] Texture `assets/fizzle_enchanting/textures/item/prismatic_web.png` copied from Zenith.
-- [ ] Recipe JSON hand-shipped at `data/fizzle_enchanting/recipe/prismatic_web.json` (ported from Zenith).
-- [ ] Lang key.
+- [x] `anvil/PrismaticWebItem.java` (plain `Item`).
+- [x] Registered via `FizzleEnchantingRegistry.registerItem`.
+- [x] Texture `assets/fizzle_enchanting/textures/item/prismatic_web.png` copied from Zenith.
+- [x] Recipe JSON hand-shipped at `data/fizzle_enchanting/recipe/prismatic_web.json` (ported from Zenith).
+- [x] Lang key.
 
-**Tests:** Item resolves; recipe parses.
+**Tests:** [x] Item resolves; recipe parses.
 
 ---
 
 ### Task T-4.1.4 — `PrismaticWebHandler`
 
 **Acceptance:**
-- [ ] Left = item with any `#minecraft:curse` enchant.
-- [ ] Right = `PrismaticWebItem` (count ≥ 1).
-- [ ] Output = item with all curses stripped; non-curse enchantments preserved.
-- [ ] XP cost = `config.anvil.prismaticWebLevelCost`.
-- [ ] Consumes 1 web.
-- [ ] Gate on `config.anvil.prismaticWebRemovesCurses`.
+- [x] Left = item with any `#minecraft:curse` enchant.
+- [x] Right = `PrismaticWebItem` (count ≥ 1).
+- [x] Output = item with all curses stripped; non-curse enchantments preserved.
+- [x] XP cost = `config.anvil.prismaticWebLevelCost`.
+- [x] Consumes 1 web.
+- [x] Gate on `config.anvil.prismaticWebRemovesCurses`.
 
 **Tests:** `PrismaticWebHandlerTest` —
-- [ ] Curse-of-Vanishing + Sharpness-3 → output has Sharpness 3, no curse.
-- [ ] No curses → handler declines.
-- [ ] Non-web in right → declines.
-- [ ] Config off → declines.
+- [x] Curse-of-Vanishing + Sharpness-3 → output has Sharpness 3, no curse.
+- [x] No curses → handler declines.
+- [x] Non-web in right → declines.
+- [x] Config off → declines.
 
 ---
 

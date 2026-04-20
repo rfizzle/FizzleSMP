@@ -1,5 +1,6 @@
 package com.fizzlesmp.fizzle_enchanting;
 
+import com.fizzlesmp.fizzle_enchanting.anvil.PrismaticWebItem;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
 import com.fizzlesmp.fizzle_enchanting.shelf.FilteringShelfBlock;
 import com.fizzlesmp.fizzle_enchanting.shelf.FilteringShelfBlockEntity;
@@ -79,6 +80,14 @@ public final class FizzleEnchantingRegistry {
     public static final BlockEntityType<TreasureShelfBlockEntity> TREASURE_SHELF_BE =
             BlockEntityType.Builder.of(TreasureShelfBlockEntity::new, TREASURE_SHELF).build(null);
 
+    /**
+     * Curse-stripping anvil ingredient. The {@code PrismaticWebHandler} lookup in T-4.1.4 keys
+     * off this exact {@link Item} instance, so it is exposed on the registry for handler wiring
+     * and for datagen / compat consumers to reference without re-resolving by id.
+     */
+    public static final PrismaticWebItem PRISMATIC_WEB =
+            new PrismaticWebItem(new Item.Properties());
+
     private static boolean registered = false;
 
     private FizzleEnchantingRegistry() {
@@ -94,6 +103,7 @@ public final class FizzleEnchantingRegistry {
         registerBlockEntityType("filtering_shelf", FILTERING_SHELF_BE);
         registerBlock("treasure_shelf", TREASURE_SHELF, new Item.Properties());
         registerBlockEntityType("treasure_shelf", TREASURE_SHELF_BE);
+        registerItem("prismatic_web", PRISMATIC_WEB);
     }
 
     /**

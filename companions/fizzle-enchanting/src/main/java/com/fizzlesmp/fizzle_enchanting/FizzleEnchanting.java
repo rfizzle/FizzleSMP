@@ -1,5 +1,6 @@
 package com.fizzlesmp.fizzle_enchanting;
 
+import com.fizzlesmp.fizzle_enchanting.anvil.FizzleAnvilHandlers;
 import com.fizzlesmp.fizzle_enchanting.command.FizzleEnchantingCommand;
 import com.fizzlesmp.fizzle_enchanting.config.FizzleEnchantingConfig;
 import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantingStatRegistry;
@@ -22,6 +23,7 @@ public class FizzleEnchanting implements ModInitializer {
         config = FizzleEnchantingConfig.load();
         EnchantingStatRegistry.bootstrap();
         FizzleEnchantingRegistry.register();
+        FizzleAnvilHandlers.register();
         FizzleEnchantingNetworking.registerPayloads();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
                 FizzleEnchantingCommand.register(dispatcher));

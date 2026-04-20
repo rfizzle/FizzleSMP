@@ -280,9 +280,11 @@ public class FizzleRecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_rectifier_t2", has(FizzleShelves.RECTIFIER_T2))
                 .save(exporter);
 
-        // === Prismatic Web — reserved for T-4.1.3 ===
-        // TODO(T-4.1.3): ship the Zenith prismatic_web shaped recipe once PrismaticWebItem exists.
-        // Pattern " P " / "PSP" / " P " with P=prismarine_shard, S=string.
+        // === Prismatic Web ===
+        // Recipe ships hand-written at src/main/resources/data/fizzle_enchanting/recipe/prismatic_web.json
+        // per T-4.1.3 (ported verbatim from Zenith). Not emitted here so datagen output stays scoped
+        // to shelf crafts — the prismatic_web crafting is a single static file and re-emitting it
+        // through ShapedRecipeBuilder would just add churn.
     }
 
     /**
