@@ -565,6 +565,31 @@ All 53 MVP enchantments ship as **datapack JSON** under `data/fizzle_enchanting/
 
 **Data-driven everywhere goal:** this fully delivers goal #2 from the project goals. The MVP enchantment set has a **zero-Java footprint** — rebalancing a value, disabling an enchant, or adding a new enchant is a pure datapack edit with no jar rebuild required.
 
+### Foreign enchantment support
+
+The gameplay loop depends on *every* enchantment in the pack eventually rolling at the table — that's the discovery feed that stocks the library pool, which in turn makes the library the deterministic "pay points + XP to get what you want" dispenser. Enchantments that ship with `weight: 0` or narrow `supported_items` break this loop: they exist in-game but the table will never produce them. `minecraft:mending` (treasure-only) and `yigd:soulbound` (weight 0 in YIGD) are the canonical examples on FizzleSMP, currently patched via the `EnchantingInfuser-Mending-Soulbound.zip` Paxi pack.
+
+Fizzle Enchanting ships a **bundled datapack override** inside the jar that raises weights and broadens `supported_items` on a curated foreign-enchant list. Overrides live at `src/main/resources/data/<source>/enchantment/<id>.json` — standard vanilla datapack paths. Any higher-priority datapack (world-level or Paxi) wins cleanly, so operators who want different values don't have to unbundle the jar.
+
+**Shipped overrides (MVP):**
+
+| Enchantment | Source | Why it needs an override |
+|---|---|---|
+| `minecraft:mending` | vanilla | Treasure-flagged. Override keeps the treasure flag (so a `treasure_shelf` still gates it) but raises weight enough to feed the library. |
+| `yigd:soulbound` | You're in Grave Danger | Ships `weight: 0` — never rolls. Override sets a non-zero weight and binds `supported_items` to `#yigd:soulbindable` to match the existing Paxi pack's intent. |
+
+**Config flag** (single boolean in the MVP config):
+
+```json
+"foreignEnchantments": {
+  "applyBundledOverrides": true
+}
+```
+
+Default `true`. Set `false` to disable the bundled overrides wholesale — for operators shipping their own curated pack. Per-enchant toggles are not exposed; the escape valve is a higher-priority datapack.
+
+**Expanding the list** is pure-JSON: drop another override file into `resources/data/<ns>/enchantment/<id>.json` and it's picked up at load. New mods with restricted enchants are a PR, not a code change.
+
 ## Project Structure
 
 ```
@@ -707,6 +732,9 @@ Hybrid split, driven by **copy volume vs. boilerplate volume**: ported/hand-auth
     "tendrilDropChance": 1.0,
     "tendrilLootingBonus": 0.10
   },
+  "foreignEnchantments": {
+    "applyBundledOverrides": true
+  },
   "display": {
     "showBookTooltips": true,
     "overLeveledColor": "#FF6600"
@@ -716,7 +744,7 @@ Hybrid split, driven by **copy volume vs. boilerplate volume**: ported/hand-auth
 
 **Library tier caps are NOT in config.** `BASIC_LEVEL_CAP = 16` and `ENDER_LEVEL_CAP = 31` are code constants. They drive `points(level) = 2^(level−1)` math and are baked into on-disk NBT pools; changing them mid-save would corrupt stored books. Config only exposes `ioRateLimitTicks` (a runtime throttle, safe to change anytime).
 
-**Per-iteration sections ship absent in v1.** `levelCaps`, `infuser`, and any other backlog sections are **not** added to the MVP config as disabled stubs. Each iteration introduces its own top-level section (e.g. `"infuser": {…}`, `"grindstone": {…}`, `"levelCaps": {…}`) in the release that lands it. Existing v1 configs pick the new section up automatically via `fillDefaults()`'s null-check — no operator action required. Dead stubs shipped ahead of time tend to accumulate stale field names when schemas drift between planning and landing; we pay that cost only when the iteration actually ships.
+**Per-iteration sections ship absent in v1.** `levelCaps` and any other backlog sections are **not** added to the MVP config as disabled stubs. Each iteration introduces its own top-level section (e.g. `"levelCaps": {…}`) in the release that lands it. Existing v1 configs pick the new section up automatically via `fillDefaults()`'s null-check — no operator action required. Dead stubs shipped ahead of time tend to accumulate stale field names when schemas drift between planning and landing; we pay that cost only when the iteration actually ships.
 
 Stat values per block are **not** in this file — they're in `data/fizzle_enchanting/enchanting_stats/*.json` so datapacks (and the built-in datagen) own them.
 
@@ -821,7 +849,7 @@ Summary:
 | **Easy Anvils** | ⚠️ Mostly unnecessary | Its main QoL features (cap removal, items-persist, name-tag tweaks) aren't covered by Zenith. Decide per feature whether to implement, or accept that this mod stays in the pack. |
 | **BeyondEnchant** | 🔨 Needs Iteration 1 | Raising vanilla enchantment caps is additive — not in Zenith's scope. |
 | **NeoEnchant+** | ✅ Absorbed into MVP | 49 of NeoEnchant+'s 56 JSONs ship directly in the MVP enchantment roster (7 cut, see "MVP Enchantments" above). Pulled forward from Iteration 2 because the port is pure JSON copy — no reason to defer. |
-| **Enchanting Infuser** | 🔨 Needs Iteration 2 | Deterministic-selection enchanting block has no Zenith analogue. |
+| **Enchanting Infuser** | ✅ Superseded by MVP | Library (deterministic dispense) + stat-driven table (discovery feed) cover the pick-your-enchant loop. Bundled foreign-enchant overrides handle Mending / Soulbound. |
 
 **Ordering principle:** each iteration below leaves the modpack in a shippable state. A mod only comes out of `plugins/gameplay.md` once either (a) the MVP or its iteration has been tested on the live server, or (b) it's marked superseded and the pack is confirmed to still work without it.
 
@@ -925,49 +953,26 @@ This iteration is *mostly* a datapack shipped inside the mod jar. The only Java 
 - [ ] `docs/guides/enchanting-guide.md` describes the new roster.
 - [ ] Remove NeoEnchant+ from `plugins/*.md` and `modpack/mods/`.
 
-## Iteration 2 — Absorb Enchanting Infuser
+## Superseded — Enchanting Infuser
 
-[Enchanting Infuser](https://www.curseforge.com/minecraft/mc-mods/enchanting-infuser) (CF 551151, by Fuzs) adds a separate block that lets players pick specific enchantments for a configurable XP cost — the anti-gambling alternative to vanilla enchanting.
+[Enchanting Infuser](https://www.curseforge.com/minecraft/mc-mods/enchanting-infuser) (CF 551151, Fuzs) adds a separate block for deterministic enchantment selection — pay XP, pick the enchant. The MVP's stat-driven table + Enchantment Library cover the same player need as a two-step loop:
 
-This is the biggest UX addition remaining. It effectively introduces a second enchanting block alongside our stat-driven table.
+- **Discovery** → enchant items at the stat-driven table. Every enchant in the pack eventually rolls (foreign enchants included, via the bundled overrides above). Unwanted rolls get scrapped into books that flow into the library pool.
+- **Deterministic dispense** → withdraw a specific enchantment at a specific level from the library for `points(level)` points + XP, apply to the target item at a vanilla anvil.
 
-**Design decision:** Ship it as a **new block** (`fizzle_enchanting:infusion_table`) rather than a mode toggle on our existing table, to preserve the distinct gameplay loops. The vanilla table + our shelf stats stay the "random but strong" path; the infuser stays the "deterministic but expensive" path.
+With a stocked library the loop is "spend XP + lapis at the table to keep feeding the pool; spend XP + points at the library to pull exactly what you want." The infuser compresses that to one step, but the two-step version reaches the same endpoint and rewards long-term play — the more you enchant, the richer your library. No new block type, no second enchanting UX, no parallel XP economy.
 
-**Two tiers** (matching current Infuser behavior):
-- **Infusion Table** — picks enchantments up to vanilla max levels. Moderate XP cost.
-- **Advanced Infusion Table** — picks enchantments up to the raised caps from Iteration 1 (BeyondEnchant). Higher XP cost.
-
-**Implementation:**
-- New block + block entity, own menu/screen.
-- Menu lists every enchantment legal for the item in the input slot (respecting our typed-tome tag system, BeyondEnchant-style caps, and the datapack-driven `supported_items` rules).
-- Server-side XP cost formula: a base cost per enchantment + a per-level multiplier + rarity multiplier. All three configurable.
-- Include enchantments that don't normally appear at vanilla tables (Mending, Soulbound from YIGD, etc.) — currently enabled via datapack on the live pack, should continue working.
-- Support server-side permission flag so the block can be gated (e.g. only crafting tier players can use it).
-
-**Config additions** (`"infuser"` section):
-```json
-"enabled": true,
-"basicTier": {
-  "baseXpCost": 3,
-  "perLevelCost": 5,
-  "rarityMultipliers": {"common": 1.0, "uncommon": 1.5, "rare": 2.0, "very_rare": 3.0}
-},
-"advancedTier": {
-  "baseXpCost": 10,
-  "perLevelCost": 15,
-  "rarityMultipliers": {"common": 1.5, "uncommon": 2.0, "rare": 3.0, "very_rare": 5.0}
-},
-"maxTotalCostLevels": 150
-```
+**The acquire-from-nothing case** (Mending, `yigd:soulbound`) is handled upstream by the foreign-enchantment overrides in the MVP. Once those enchants roll at the table like any other, the library pool fills naturally and the infuser's `pay XP → get a specific enchant from zero` is no longer needed.
 
 **Acceptance:**
-- [ ] Both tier blocks craftable and functional.
-- [ ] XP costs tunable per-server via config.
-- [ ] Currently-datapacked "special" enchants (Mending, Soulbound) selectable at the infuser.
-- [ ] Update `docs/guides/enchanting-guide.md` — replace the "Enchanting Infuser" section with the Fizzle equivalent.
-- [ ] Remove Enchanting Infuser from pack.
+- [ ] Once MVP ships, confirm Mending + `yigd:soulbound` appear at tables (Mending gated by `treasure_shelf`).
+- [ ] Confirm library pool accepts and dispenses both.
+- [ ] Remove the `EnchantingInfuser-Mending-Soulbound.zip` Paxi pack — the jar's bundled overrides replace it.
+- [ ] Update `docs/guides/enchanting-guide.md` — replace the "Enchanting Infuser" section with the "Table → Library" workflow.
+- [ ] Remove Enchanting Infuser from `plugins/gameplay.md` and `modpack/mods/`.
+- [ ] Drop Enchanting Infuser rows from `docs/compatibility-matrix.md`.
 
-## Iteration 3 — Absorb Easy Magic
+## Iteration 2 — Absorb Easy Magic
 
 [Easy Magic](https://www.curseforge.com/minecraft/mc-mods/easy-magic) (CF 456239, Fuzs) is the sister mod of Easy Anvils/Enchanting Infuser, currently in the pack. It keeps items in the enchanting table across GUI close and lets players re-roll enchantments without pulling items.
 
