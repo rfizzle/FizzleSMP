@@ -483,7 +483,7 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-2.4 — Enchantment selection algorithm
 
-- [ ] Story complete
+- [x] Story complete
 
 **As a** player, **I want** Eterna/Quanta/Arcana/Rectification/Clues to drive enchant rolls **so that** the system behaves like Apotheosis/Zenith.
 
@@ -492,42 +492,42 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** `/home/rfizzle/Projects/Zenith/src/main/java/dev/shadowsoffire/apotheosis/ench/table/RealEnchantmentHelper.java`. Read; re-author against 1.21.1's dynamic registry.
 
 **Acceptance:**
-- [ ] `RealEnchantmentHelper.getEnchantmentCost(RandomSource, int slot, float eterna, ItemStack)` — slot 0/1/2 returns cost derived from eterna per Zenith's formula, respecting `config.enchantingTable.maxEterna`.
-- [ ] Slot 2 cost ≥ slot 1 ≥ slot 0.
+- [x] `RealEnchantmentHelper.getEnchantmentCost(RandomSource, int slot, float eterna, ItemStack)` — slot 0/1/2 returns cost derived from eterna per Zenith's formula, respecting `config.enchantingTable.maxEterna`.
+- [x] Slot 2 cost ≥ slot 1 ≥ slot 0.
 
 **Tests:**
-- [ ] Seeded RNG → deterministic outputs.
-- [ ] Monotonic slot ordering.
-- [ ] `eterna=50` → slot-2 cost in `[25, 50]`.
+- [x] Seeded RNG → deterministic outputs.
+- [x] Monotonic slot ordering.
+- [x] `eterna=50` → slot-2 cost in `[25, 50]`.
 
 ---
 
 ### Task T-2.4.2 — `selectEnchantment` (Quanta/Arcana/Rectification)
 
 **Acceptance:**
-- [ ] `List<EnchantmentInstance> selectEnchantment(RandomSource, ItemStack, int level, float quanta, float arcana, float rectification, boolean treasureAllowed, Set<ResourceKey<Enchantment>> blacklist, RegistryAccess)`.
-- [ ] Candidate pool drawn from `registryAccess.registryOrThrow(Registries.ENCHANTMENT)` filtered by `supportedItems`, `#minecraft:in_enchanting_table`, `#minecraft:treasure` (gated by `treasureAllowed`).
-- [ ] Blacklist applied pre-selection.
-- [ ] Quanta widens the symmetric random power window around `level`.
-- [ ] Rectification subtracts from the **negative** half of the quanta window (does not reduce positive variance).
-- [ ] Arcana shifts the weight function toward rarer enchants.
+- [x] `List<EnchantmentInstance> selectEnchantment(RandomSource, ItemStack, int level, float quanta, float arcana, float rectification, boolean treasureAllowed, Set<ResourceKey<Enchantment>> blacklist, RegistryAccess)`.
+- [x] Candidate pool drawn from `registryAccess.registryOrThrow(Registries.ENCHANTMENT)` filtered by `supportedItems`, `#minecraft:in_enchanting_table`, `#minecraft:treasure` (gated by `treasureAllowed`).
+- [x] Blacklist applied pre-selection.
+- [x] Quanta widens the symmetric random power window around `level`.
+- [x] Rectification subtracts from the **negative** half of the quanta window (does not reduce positive variance).
+- [x] Arcana shifts the weight function toward rarer enchants.
 
 **Tests:**
-- [ ] Blacklist filter → blacklisted key never appears over 1000 rolls.
-- [ ] Treasure flag true/false behavior.
-- [ ] Quanta widens stdev monotonically over 1000-roll samples.
-- [ ] Rectification → infinite value makes outcomes monotonic with eterna.
+- [x] Blacklist filter → blacklisted key never appears over 1000 rolls.
+- [x] Treasure flag true/false behavior.
+- [x] Quanta widens stdev monotonically over 1000-roll samples.
+- [x] Rectification → infinite value makes outcomes monotonic with eterna.
 
 ---
 
 ### Task T-2.4.3 — `buildClueList` (Clues → per-slot preview)
 
 **Acceptance:**
-- [ ] Given the same seed that drove a slot's roll, the first clue is the **exact** enchant that slot rolls.
-- [ ] Remaining clues fill from the slot's candidate pool until exhausted.
-- [ ] Returns `exhaustedList=true` when the pool couldn't satisfy `cluesCount`.
+- [x] Given the same seed that drove a slot's roll, the first clue is the **exact** enchant that slot rolls.
+- [x] Remaining clues fill from the slot's candidate pool until exhausted.
+- [x] Returns `exhaustedList=true` when the pool couldn't satisfy `cluesCount`.
 
-**Tests:** First-clue-matches-selection property over 100 seeds.
+**Tests:** [x] First-clue-matches-selection property over 100 seeds.
 
 ---
 
