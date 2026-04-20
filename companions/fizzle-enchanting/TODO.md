@@ -652,19 +652,19 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-3.2 — Full Zenith shelf roster
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-3.2.1 — Register all 25 shelves
 
 **Resume context:** DESIGN.md tables under § "Shelf Blocks".
 
 **Acceptance:**
-- [ ] Every wood/stone/sculk/utility shelf from DESIGN registered with correct properties (sound group WOOD/STONE, correct strength).
-- [ ] IDs match Zenith 1:1.
+- [x] Every wood/stone/sculk/utility shelf from DESIGN registered with correct properties (sound group WOOD/STONE, correct strength).
+- [x] IDs match Zenith 1:1.
 
 **Subtasks:**
-- [ ] Iterate DESIGN tables; one registration per row.
-- [ ] Use `BlockBehaviour.Properties.of()` not `.copy(Blocks.BOOKSHELF)` (1.21.1 deprecation).
+- [x] Iterate DESIGN tables; one registration per row.
+- [x] Use `BlockBehaviour.Properties.of()` not `.copy(Blocks.BOOKSHELF)` (1.21.1 deprecation).
 
 **Tests:** Parameterized — for each expected id, `BuiltInRegistries.BLOCK.get(id) != null`.
 
@@ -675,14 +675,14 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** `/home/rfizzle/Projects/Zenith/src/main/resources/data/zenith/enchanting_stats/*.json`.
 
 **Acceptance:**
-- [ ] Every `.json` file in that dir copied to `src/main/resources/data/fizzle_enchanting/enchanting_stats/`.
-- [ ] Namespace rewrite: any `"zenith:..."` reference → `"fizzle_enchanting:..."`.
+- [x] Every `.json` file in that dir copied to `src/main/resources/data/fizzle_enchanting/enchanting_stats/`.
+- [x] Namespace rewrite: any `"zenith:..."` reference → `"fizzle_enchanting:..."`.
 
 **Subtasks:**
-- [ ] `ls` Zenith source dir for canonical file list.
-- [ ] Copy + sed.
+- [x] `ls` Zenith source dir for canonical file list.
+- [x] Copy + sed.
 
-**Tests:** Loader picks up every file, no parse errors.
+**Tests:** [x] Loader picks up every file, no parse errors.
 
 ---
 
@@ -691,18 +691,18 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Asset Sources (Zenith → Fizzle Enchanting)".
 
 **Acceptance:**
-- [ ] All shelf textures from `/home/rfizzle/Projects/Zenith/src/main/resources/assets/zenith/textures/blocks/*.png` → `src/main/resources/assets/fizzle_enchanting/textures/block/` (note plural→singular).
-- [ ] `.mcmeta` files preserved (animated `blazing_hellshelf`).
-- [ ] Do not copy files under `blocks/reforging/`, `blocks/augmenting/` (cut per DESIGN).
+- [x] All shelf textures from `/home/rfizzle/Projects/Zenith/src/main/resources/assets/zenith/textures/blocks/*.png` → `src/main/resources/assets/fizzle_enchanting/textures/block/` (note plural→singular).
+- [x] `.mcmeta` files preserved (animated `blazing_hellshelf`).
+- [x] Do not copy files under `blocks/reforging/`, `blocks/augmenting/` (cut per DESIGN).
 
-**Tests:** Glob check — expected filenames present; forbidden dirs absent.
+**Tests:** [x] Glob check — expected filenames present; forbidden dirs absent.
 
 ---
 
 ### Task T-3.2.4 — Lang keys for all shelves
 
 **Acceptance:**
-- [ ] `assets/fizzle_enchanting/lang/en_us.json` gets a `block.fizzle_enchanting.<id>` key per shelf (English from Zenith / invented where Zenith lacks).
+- [x] `assets/fizzle_enchanting/lang/en_us.json` gets a `block.fizzle_enchanting.<id>` key per shelf (English from Zenith / invented where Zenith lacks).
 
 **Tests:** Simple JSON parse + key-presence loop.
 

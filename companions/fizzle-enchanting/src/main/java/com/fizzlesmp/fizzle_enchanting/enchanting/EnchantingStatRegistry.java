@@ -6,7 +6,11 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.MapLike;
+import com.mojang.serialization.RecordBuilder;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -36,6 +40,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public final class EnchantingStatRegistry implements SimpleSynchronousResourceReloadListener {
 
@@ -266,10 +271,43 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
                 tag -> "#" + tag.location()
         );
 
+        /**
+         * Accepts stats in either of two shapes:
+         * <ul>
+         *   <li><b>Flat</b> — stat fields live at the top of the entry (the schema shipped in
+         *       {@code vanilla_provider.json}).</li>
+         *   <li><b>Nested</b> — stat fields are wrapped under {@code "stats"} (the Zenith schema,
+         *       used by every ported {@code enchanting_stats/*.json} file from Apotheosis/Zenith).</li>
+         * </ul>
+         * Nested wins when both are present. Encoding always writes the flat form.
+         */
+        private static final MapCodec<EnchantingStats> FLEXIBLE_STATS_MAP_CODEC = new MapCodec<>() {
+            @Override
+            public <T> DataResult<EnchantingStats> decode(DynamicOps<T> ops, MapLike<T> input) {
+                T nested = input.get("stats");
+                if (nested != null) {
+                    return EnchantingStats.CODEC.parse(ops, nested);
+                }
+                return EnchantingStats.MAP_CODEC.decode(ops, input);
+            }
+
+            @Override
+            public <T> RecordBuilder<T> encode(EnchantingStats input, DynamicOps<T> ops, RecordBuilder<T> prefix) {
+                return EnchantingStats.MAP_CODEC.encode(input, ops, prefix);
+            }
+
+            @Override
+            public <T> Stream<T> keys(DynamicOps<T> ops) {
+                return Stream.concat(
+                        EnchantingStats.MAP_CODEC.keys(ops),
+                        Stream.of(ops.createString("stats")));
+            }
+        };
+
         public static final Codec<StatEntry> CODEC = RecordCodecBuilder.<StatEntry>create(inst -> inst.group(
                         ResourceLocation.CODEC.optionalFieldOf("block").forGetter(StatEntry::block),
                         TAG_CODEC.optionalFieldOf("tag").forGetter(StatEntry::tag),
-                        EnchantingStats.MAP_CODEC.forGetter(StatEntry::stats))
+                        FLEXIBLE_STATS_MAP_CODEC.forGetter(StatEntry::stats))
                 .apply(inst, StatEntry::new))
                 .flatXmap(StatEntry::validate, StatEntry::validate);
 

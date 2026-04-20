@@ -1,6 +1,7 @@
 package com.fizzlesmp.fizzle_enchanting;
 
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
+import com.fizzlesmp.fizzle_enchanting.shelf.FizzleShelves;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -48,6 +49,7 @@ public final class FizzleEnchantingRegistry {
         registered = true;
 
         registerMenuType("enchanting_table", ENCHANTING_TABLE_MENU);
+        FizzleShelves.register();
     }
 
     /**
