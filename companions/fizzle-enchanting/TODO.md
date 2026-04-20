@@ -66,7 +66,7 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-1.1 — Buildable Gradle project
 
-- [ ] Story complete
+- [x] Story complete
 
 **As a** developer, **I want** a Loom-configured Gradle project **so that** `./gradlew build` succeeds before any feature code lands.
 
@@ -75,13 +75,13 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** `companions/fizzle-difficulty/build.gradle`, `settings.gradle`, `gradle.properties`, `gradle/`, `gradlew`, `gradlew.bat`, `Makefile`.
 
 **Acceptance:**
-- [ ] Files present at `companions/fizzle-enchanting/` with execute bits on `gradlew`.
-- [ ] `settings.gradle` references this project's name, not fizzle-difficulty's.
+- [x] Files present at `companions/fizzle-enchanting/` with execute bits on `gradlew`.
+- [x] `settings.gradle` references this project's name, not fizzle-difficulty's.
 
 **Subtasks:**
-- [ ] Copy the six files above verbatim.
-- [ ] `chmod +x gradlew`.
-- [ ] Rename any project-name references in `settings.gradle` → `fizzle-enchanting`.
+- [x] Copy the six files above verbatim.
+- [x] `chmod +x gradlew`.
+- [x] Rename any project-name references in `settings.gradle` → `fizzle-enchanting`.
 
 **Tests:** `./gradlew --version` runs without error.
 
@@ -92,15 +92,15 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** `companions/fizzle-enchanting/gradle.properties`. Mirror fizzle-difficulty's `computeModVersion()` tag convention — tag prefix becomes `fizzle-enchanting-v*`.
 
 **Acceptance:**
-- [ ] `archives_base_name=fizzle-enchanting`
-- [ ] `maven_group=com.fizzlesmp`
-- [ ] `mod_version=0.1.0`
-- [ ] `minecraft_version=1.21.1`, `loader_version=0.16.10`, `fabric_version=0.116.1+1.21.1`, `loom_version=1.9-SNAPSHOT`, `java_version=21`
-- [ ] `computeModVersion()` groovy block ported unchanged from fizzle-difficulty's `build.gradle` — tag prefix reads from `archives_base_name`.
+- [x] `archives_base_name=fizzle-enchanting`
+- [x] `maven_group=com.fizzlesmp`
+- [x] `mod_version=0.1.0`
+- [x] `minecraft_version=1.21.1`, `loader_version=0.16.10`, `fabric_version=0.116.1+1.21.1`, `loom_version=1.9-SNAPSHOT`, `java_version=21`
+- [x] `computeModVersion()` groovy block ported unchanged from fizzle-difficulty's `build.gradle` — tag prefix reads from `archives_base_name`.
 
 **Subtasks:**
-- [ ] Edit `gradle.properties`.
-- [ ] Edit `build.gradle` keeping the `computeModVersion()` / `runGitDescribe()` block byte-for-byte identical to fizzle-difficulty.
+- [x] Edit `gradle.properties`.
+- [x] Edit `build.gradle` keeping the `computeModVersion()` / `runGitDescribe()` block byte-for-byte identical to fizzle-difficulty.
 
 **Tests:** `./gradlew printVersion` emits `0.1.0` on a clean HEAD.
 
@@ -109,19 +109,19 @@ Every task's Definition of Done implicitly includes:
 ### Task T-1.1.3 — Source sets + Makefile + first green build
 
 **Acceptance:**
-- [ ] Dirs exist: `src/main/java`, `src/main/resources`, `src/client/java`, `src/client/resources`, `src/test/java`.
-- [ ] `loom { splitEnvironmentSourceSets() }` in `build.gradle`.
-- [ ] JUnit Jupiter + `fabric-loader-junit` deps added (match fizzle-difficulty versions).
-- [ ] `Makefile` at project root with targets `build`, `clean`, `test`, `runServer`, `runClient`, `runDatagen` mirroring fizzle-difficulty's.
+- [x] Dirs exist: `src/main/java`, `src/main/resources`, `src/client/java`, `src/client/resources`, `src/test/java`.
+- [x] `loom { splitEnvironmentSourceSets() }` in `build.gradle`.
+- [x] JUnit Jupiter + `fabric-loader-junit` deps added (match fizzle-difficulty versions).
+- [x] `Makefile` at project root with targets `build`, `clean`, `test`, `runServer`, `runClient`, `runDatagen` mirroring fizzle-difficulty's.
 
 **Subtasks:**
-- [ ] Create the empty dirs with `.gitkeep` placeholders.
-- [ ] Copy `Makefile` from fizzle-difficulty; rename any paths.
-- [ ] Add test deps block to `build.gradle`.
+- [x] Create the empty dirs with `.gitkeep` placeholders.
+- [x] Copy `Makefile` from fizzle-difficulty; rename any paths.
+- [x] Add test deps block to `build.gradle`.
 
 **Tests:**
-- [ ] `./gradlew build` succeeds.
-- [ ] `./gradlew test` runs (zero tests, exit 0).
+- [x] `./gradlew build` succeeds.
+- [x] `./gradlew test` runs (zero tests, exit 0).
 
 ---
 

@@ -1,0 +1,131 @@
+plugins {
+    id 'fabric-loom' version "${loom_version}"
+}
+
+version = computeModVersion()
+group = project.maven_group
+
+tasks.register('printVersion') {
+    doLast { println project.version }
+}
+
+// Derives a SemVer-compliant version from `mod_version` plus the git state:
+//   - exact tag match (e.g. HEAD == fizzle-difficulty-v0.2.0) → "0.2.0"
+//   - exact tag, dirty tree                                  → "0.2.0+dirty"
+//   - N commits past the last matching tag                   → "0.2.0+N.gSHA[.dirty]"
+//   - no matching tag yet                                    → "0.2.0+gSHA[.dirty]"
+//   - git unavailable or describe fails                      → "0.2.0"
+// The base ("0.2.0") comes from gradle.properties and is bumped via
+// scripts/companion-release.sh. Tag pattern is `<archives_base_name>-v*`.
+def computeModVersion() {
+    def base = project.mod_version
+    def tagPrefix = "${project.archives_base_name}-v"
+    def described = runGitDescribe(tagPrefix)
+    if (described == null || described.isEmpty()) {
+        return base
+    }
+    if (described == "${tagPrefix}${base}") {
+        return base
+    }
+    if (described == "${tagPrefix}${base}-dirty") {
+        return "${base}+dirty"
+    }
+    def postTag = described =~ /^\Q${tagPrefix}\E(\S+?)-(\d+)-g([0-9a-f]+)(-dirty)?$/
+    if (postTag.matches()) {
+        def commits = postTag[0][2]
+        def sha = postTag[0][3]
+        def dirty = postTag[0][4] ? '.dirty' : ''
+        return "${base}+${commits}.g${sha}${dirty}"
+    }
+    def shaOnly = described =~ /^([0-9a-f]+)(-dirty)?$/
+    if (shaOnly.matches()) {
+        def sha = shaOnly[0][1]
+        def dirty = shaOnly[0][2] ? '.dirty' : ''
+        return "${base}+g${sha}${dirty}"
+    }
+    return base
+}
+
+def runGitDescribe(String tagPrefix) {
+    try {
+        def proc = new ProcessBuilder('git', 'describe', '--tags',
+                '--match', "${tagPrefix}*", '--dirty', '--always')
+                .directory(rootDir)
+                .redirectErrorStream(true)
+                .start()
+        proc.waitFor()
+        def out = proc.inputStream.text.trim()
+        if (proc.exitValue() != 0) return null
+        return out
+    } catch (Exception ignored) {
+        return null
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+loom {
+    splitEnvironmentSourceSets()
+}
+
+dependencies {
+    // Minecraft
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+
+    // Fabric
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    // Client source set
+    "clientImplementation"("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
+
+    // Tests
+    testImplementation platform("org.junit:junit-bom:5.10.2")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+    testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+}
+
+test {
+    useJUnitPlatform()
+}
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+
+    exclude ".gitkeep"
+}
+
+processClientResources {
+    exclude ".gitkeep"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    it.options.release = 21
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
+
+    withSourcesJar()
+}
+
+jar {
+    from("LICENSE") {
+        rename { "${it}_${project.archives_base_name}" }
+    }
+    exclude ".gitkeep"
+}
+
+tasks.named('sourcesJar') {
+    exclude ".gitkeep"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
