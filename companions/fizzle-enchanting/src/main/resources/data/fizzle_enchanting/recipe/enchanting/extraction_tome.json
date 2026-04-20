@@ -1,0 +1,20 @@
+{
+    "type": "fizzle_enchanting:enchanting",
+    "input": {
+        "item": "fizzle_enchanting:improved_scrap_tome"
+    },
+    "requirements": {
+        "eterna": 30,
+        "quanta": 25,
+        "arcana": 45
+    },
+    "max_requirements": {
+        "eterna": -1,
+        "quanta": 75,
+        "arcana": -1
+    },
+    "result": {
+        "id": "fizzle_enchanting:extraction_tome",
+        "count": 4
+    }
+}

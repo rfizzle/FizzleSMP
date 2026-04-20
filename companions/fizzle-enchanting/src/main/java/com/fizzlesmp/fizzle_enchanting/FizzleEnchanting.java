@@ -4,6 +4,7 @@ import com.fizzlesmp.fizzle_enchanting.anvil.FizzleAnvilHandlers;
 import com.fizzlesmp.fizzle_enchanting.command.FizzleEnchantingCommand;
 import com.fizzlesmp.fizzle_enchanting.config.FizzleEnchantingConfig;
 import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantingStatRegistry;
+import com.fizzlesmp.fizzle_enchanting.enchanting.recipe.EnchantingRecipeRegistry;
 import com.fizzlesmp.fizzle_enchanting.net.FizzleEnchantingNetworking;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -24,6 +25,7 @@ public class FizzleEnchanting implements ModInitializer {
         EnchantingStatRegistry.bootstrap();
         FizzleEnchantingRegistry.register();
         FizzleEnchantingRegistry.registerApiLookups();
+        EnchantingRecipeRegistry.register();
         FizzleAnvilHandlers.register();
         FizzleEnchantingNetworking.registerPayloads();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->

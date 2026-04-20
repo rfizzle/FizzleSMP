@@ -1,0 +1,16 @@
+{
+    "type": "fizzle_enchanting:enchanting",
+    "input": {
+        "item": "fizzle_enchanting:hellshelf"
+    },
+    "requirements": {
+        "eterna": 22.5,
+        "quanta": 30,
+        "arcana": 0
+    },
+    "display_level": 5,
+    "result": {
+        "id": "fizzle_enchanting:infused_hellshelf",
+        "count": 1
+    }
+}

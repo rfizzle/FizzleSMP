@@ -830,7 +830,7 @@ Every task's Definition of Done implicitly includes:
 
 # Epic 4 — Anvil & Library
 
-- [ ] Epic complete
+- [x] Epic complete
 
 **Goal:** Prismatic Web, iron-block anvil repair, 2-tier library with hopper I/O, custom recipe types registered.
 **Commit at epic close:** `feat(enchanting): anvil tweaks and enchantment library`
@@ -1105,18 +1105,18 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-4.6 — Custom recipe types
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-4.6.1 — `EnchantingRecipe` type + serializer
 
 **Resume context:** DESIGN.md § "Enchantment-Table Crafting".
 
 **Acceptance:**
-- [ ] `enchanting/recipe/EnchantingRecipe.java implements Recipe<SingleRecipeInput>`.
-- [ ] Fields: `Ingredient input, StatRequirements requirements, StatRequirements maxRequirements, ItemStack result, OptionalInt displayLevel, int xpCost`.
-- [ ] `StatRequirements` record: `float eterna, quanta, arcana`.
-- [ ] MAP_CODEC + stream codec.
-- [ ] `RECIPE_TYPE` registered under `BuiltInRegistries.RECIPE_TYPE`.
+- [x] `enchanting/recipe/EnchantingRecipe.java implements Recipe<SingleRecipeInput>`.
+- [x] Fields: `Ingredient input, StatRequirements requirements, StatRequirements maxRequirements, ItemStack result, OptionalInt displayLevel, int xpCost`.
+- [x] `StatRequirements` record: `float eterna, quanta, arcana`.
+- [x] MAP_CODEC + stream codec.
+- [x] `RECIPE_TYPE` registered under `BuiltInRegistries.RECIPE_TYPE`.
 
 **Tests:** Codec round-trip; `matches(input, stats)` logic.
 
@@ -1125,8 +1125,8 @@ Every task's Definition of Done implicitly includes:
 ### Task T-4.6.2 — `KeepNbtEnchantingRecipe` type
 
 **Acceptance:**
-- [ ] `enchanting/recipe/KeepNbtEnchantingRecipe.java` extends or implements `Recipe<SingleRecipeInput>` with identical fields.
-- [ ] `assemble(input, registryAccess)` preserves `ItemEnchantments` component from input onto the result.
+- [x] `enchanting/recipe/KeepNbtEnchantingRecipe.java` extends or implements `Recipe<SingleRecipeInput>` with identical fields.
+- [x] `assemble(input, registryAccess)` preserves `ItemEnchantments` component from input onto the result.
 
 **Tests:** Input with Sharpness-5 → result also has Sharpness-5.
 
@@ -1135,9 +1135,9 @@ Every task's Definition of Done implicitly includes:
 ### Task T-4.6.3 — `EnchantingRecipeRegistry.findMatch`
 
 **Acceptance:**
-- [ ] Static `findMatch(Level, ItemStack, StatCollection)` scans both recipe types via `RecipeManager`.
-- [ ] Returns `Optional<RecipeHolder<? extends Recipe<SingleRecipeInput>>>`.
-- [ ] Matches when input fits `Ingredient` + stats are within `[requirements, maxRequirements]` per axis (`-1` = no max).
+- [x] Static `findMatch(Level, ItemStack, StatCollection)` scans both recipe types via `RecipeManager`.
+- [x] Returns `Optional<RecipeHolder<? extends Recipe<SingleRecipeInput>>>`.
+- [x] Matches when input fits `Ingredient` + stats are within `[requirements, maxRequirements]` per axis (`-1` = no max).
 
 **Tests:** Construct recipes with varying bounds → assert expected hits/misses.
 
@@ -1148,14 +1148,14 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Enchantment-Table Crafting" table — "Recipes shipped in MVP (values copied from Zenith)". Source: `/home/rfizzle/Projects/Zenith/src/main/resources/data/zenith/recipes/enchanting/*.json`.
 
 **Acceptance:** Files under `data/fizzle_enchanting/recipe/enchanting/`:
-- [ ] `infused_breath.json` (`enchanting`)
-- [ ] `infused_hellshelf.json` (`enchanting`)
-- [ ] `infused_seashelf.json` (`enchanting`)
-- [ ] `deepshelf.json` (`enchanting`)
-- [ ] `improved_scrap_tome.json` (`enchanting`)
-- [ ] `extraction_tome.json` (`enchanting`)
-- [ ] `ender_library.json` (`keep_nbt_enchanting`)
-- [ ] Values match Zenith exactly (E/Q/A bounds).
+- [x] `infused_breath.json` (`enchanting`)
+- [x] `infused_hellshelf.json` (`enchanting`)
+- [x] `infused_seashelf.json` (`enchanting`)
+- [x] `deepshelf.json` (`enchanting`)
+- [x] `improved_scrap_tome.json` (`enchanting`)
+- [x] `extraction_tome.json` (`enchanting`)
+- [x] `ender_library.json` (`keep_nbt_enchanting`)
+- [x] Values match Zenith exactly (E/Q/A bounds).
 
 **Tests:** Each file parses into the correct subtype; `findMatch` locates the right recipe for synthetic inputs.
 
