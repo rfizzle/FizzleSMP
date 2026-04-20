@@ -57,7 +57,7 @@ Every task's Definition of Done implicitly includes:
 
 # Epic 1 — Project Scaffolding
 
-- [ ] Epic complete
+- [x] Epic complete
 
 **Goal:** `./gradlew build` succeeds on an empty mod, config + command plumbing in place.
 **Commit at epic close:** `feat(enchanting): scaffold fizzle-enchanting`
@@ -254,7 +254,7 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-1.4 — `/fizzleenchanting` command skeleton
 
-- [ ] Story complete
+- [x] Story complete
 
 **As an** operator, **I want** `/fizzleenchanting reload` **so that** I can reload config live.
 
@@ -263,12 +263,12 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** `/dev-companion` § "Commands". `companions/fizzle-difficulty/src/main/java/com/fizzlesmp/fizzle_difficulty/command/FizzleDifficultyCommand.java` as template.
 
 **Acceptance:**
-- [ ] `command/FizzleEnchantingCommand.java` registers via `CommandRegistrationCallback.EVENT` in `FizzleEnchanting#onInitialize`.
-- [ ] Literal root: `fizzleenchanting`.
+- [x] `command/FizzleEnchantingCommand.java` registers via `CommandRegistrationCallback.EVENT` in `FizzleEnchanting#onInitialize`.
+- [x] Literal root: `fizzleenchanting`.
 
 **Subtasks:**
-- [ ] Register literal.
-- [ ] Wire into main initializer.
+- [x] Register literal.
+- [x] Wire into main initializer.
 
 **Tests:** Command appears in `/help` output (via a Brigadier dispatch test).
 
@@ -277,12 +277,12 @@ Every task's Definition of Done implicitly includes:
 ### Task T-1.4.2 — `reload` subcommand
 
 **Acceptance:**
-- [ ] `.requires(s -> s.hasPermissionLevel(2))`, reloads config, replies translated key `command.fizzle_enchanting.reload.ok`.
-- [ ] On reload failure, replies `command.fizzle_enchanting.reload.error` and logs the throwable.
+- [x] `.requires(s -> s.hasPermissionLevel(2))`, reloads config, replies translated key `command.fizzle_enchanting.reload.ok`.
+- [x] On reload failure, replies `command.fizzle_enchanting.reload.error` and logs the throwable.
 
 **Tests:**
-- [ ] `reload_atPerm2_succeeds` — returns `Command.SINGLE_SUCCESS`, config mutated in memory.
-- [ ] `reload_atPerm0_fails` — parse/permission error.
+- [x] `reload_atPerm2_succeeds` — returns `Command.SINGLE_SUCCESS`, config mutated in memory.
+- [x] `reload_atPerm0_fails` — parse/permission error.
 
 ---
 
@@ -291,10 +291,10 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Commands (MVP)" — surface must match, but body ships as stubs.
 
 **Acceptance:**
-- [ ] `stats <player>` at perm 0.
-- [ ] `library <player> dump` at perm 2.
-- [ ] `give-tome <player> <type>` at perm 2, `<type>` parses literal `scrap|improved_scrap|extraction`.
-- [ ] Each stub logs `"not implemented yet"` and replies with a placeholder string.
+- [x] `stats <player>` at perm 0.
+- [x] `library <player> dump` at perm 2.
+- [x] `give-tome <player> <type>` at perm 2, `<type>` parses literal `scrap|improved_scrap|extraction`.
+- [x] Each stub logs `"not implemented yet"` and replies with a placeholder string.
 
 **Tests:** Each stub parses and executes without exception — body no-ops are fine, the surface is the deliverable.
 
