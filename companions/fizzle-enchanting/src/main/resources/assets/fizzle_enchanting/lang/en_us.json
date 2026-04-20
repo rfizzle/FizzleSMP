@@ -33,5 +33,8 @@
     "block.fizzle_enchanting.filtering_shelf": "Filtering Shelf",
     "block.fizzle_enchanting.treasure_shelf": "Treasure Shelf",
 
-    "item.fizzle_enchanting.prismatic_web": "Prismatic Web"
+    "item.fizzle_enchanting.prismatic_web": "Prismatic Web",
+    "item.fizzle_enchanting.scrap_tome": "Scrap Tome",
+    "item.fizzle_enchanting.improved_scrap_tome": "Improved Scrap Tome",
+    "item.fizzle_enchanting.extraction_tome": "Extraction Tome"
 }

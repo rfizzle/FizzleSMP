@@ -11,6 +11,9 @@ import com.fizzlesmp.fizzle_enchanting.shelf.FilteringShelfBlockEntity;
 import com.fizzlesmp.fizzle_enchanting.shelf.FizzleShelves;
 import com.fizzlesmp.fizzle_enchanting.shelf.TreasureShelfBlock;
 import com.fizzlesmp.fizzle_enchanting.shelf.TreasureShelfBlockEntity;
+import com.fizzlesmp.fizzle_enchanting.tome.ExtractionTomeItem;
+import com.fizzlesmp.fizzle_enchanting.tome.ImprovedScrapTomeItem;
+import com.fizzlesmp.fizzle_enchanting.tome.ScrapTomeItem;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.core.BlockPos;
@@ -109,6 +112,33 @@ public final class FizzleEnchantingRegistry {
             new PrismaticWebItem(new Item.Properties());
 
     /**
+     * Scrap tome — consumed at the anvil to salvage one random enchantment onto a fresh
+     * enchanted book. Single-stack because the anvil interaction is one tome per use, and
+     * a higher stack cap would let players misread "how many salvages" from the slot count.
+     * No durability: the item is destroyed on use by
+     * {@code ScrapTomeHandler} (S-5.2), not ticked down per use.
+     */
+    public static final ScrapTomeItem SCRAP_TOME =
+            new ScrapTomeItem(new Item.Properties().stacksTo(1));
+
+    /**
+     * Improved Scrap tome — same hostile-to-item workflow as {@link #SCRAP_TOME} but the output
+     * book carries every enchantment. Same {@code stacksTo(1)} / no-durability contract applies
+     * for the same reasons.
+     */
+    public static final ImprovedScrapTomeItem IMPROVED_SCRAP_TOME =
+            new ImprovedScrapTomeItem(new Item.Properties().stacksTo(1));
+
+    /**
+     * Extraction tome — most expensive tier; preserves the source item (unenchanted, damaged)
+     * and produces a book with every enchantment. Single-stack, no durability: the anvil
+     * fuel-slot repair path handled in {@code ExtractionTomeFuelSlotRepairHandler} (S-5.2.4)
+     * consumes the whole tome and is handler-side, not item-data state.
+     */
+    public static final ExtractionTomeItem EXTRACTION_TOME =
+            new ExtractionTomeItem(new Item.Properties().stacksTo(1));
+
+    /**
      * Tier-1 enchantment-library block. Shares {@link EnchantmentLibraryBlock} with the ender
      * variant; the only differentiation is the {@code BlockEntitySupplier} — here bound to
      * {@link BasicLibraryBlockEntity#BasicLibraryBlockEntity(BlockPos, BlockState)}. Ender-chest-
@@ -170,6 +200,9 @@ public final class FizzleEnchantingRegistry {
         registerBlock("treasure_shelf", TREASURE_SHELF, new Item.Properties());
         registerBlockEntityType("treasure_shelf", TREASURE_SHELF_BE);
         registerItem("prismatic_web", PRISMATIC_WEB);
+        registerItem("scrap_tome", SCRAP_TOME);
+        registerItem("improved_scrap_tome", IMPROVED_SCRAP_TOME);
+        registerItem("extraction_tome", EXTRACTION_TOME);
         registerBlock("library", BASIC_LIBRARY, new Item.Properties());
         registerBlock("ender_library", ENDER_LIBRARY, new Item.Properties());
         registerBlockEntityType("library", BASIC_LIBRARY_BE);

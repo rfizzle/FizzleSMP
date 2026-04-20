@@ -1,0 +1,6 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "fizzle_enchanting:item/tome/improved_scrap_tome"
+    }
+}

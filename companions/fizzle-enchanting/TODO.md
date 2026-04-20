@@ -1172,14 +1172,14 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-5.1 — Tome items
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-5.1.1 — Three tome item classes
 
 **Acceptance:**
-- [ ] `tome/ScrapTomeItem.java`, `ImprovedScrapTomeItem.java`, `ExtractionTomeItem.java`.
-- [ ] All `stackSize=1`, no durability (Extraction's anvil-fuel-slot repair is a handler-side concern, not an item-data one).
-- [ ] Registered.
+- [x] `tome/ScrapTomeItem.java`, `ImprovedScrapTomeItem.java`, `ExtractionTomeItem.java`.
+- [x] All `stackSize=1`, no durability (Extraction's anvil-fuel-slot repair is a handler-side concern, not an item-data one).
+- [x] Registered.
 
 **Tests:** Resolution + `getMaxStackSize()==1`.
 
@@ -1190,9 +1190,9 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** `/home/rfizzle/Projects/Zenith/src/main/resources/assets/zenith/textures/items/tomes/` — **ignore** the 9 typed-tome PNGs.
 
 **Acceptance:**
-- [ ] Copy `scrap_tome.png`, `improved_scrap_tome.png`, `extraction_tome.png` to `assets/fizzle_enchanting/textures/item/tome/`.
-- [ ] Three lang keys.
-- [ ] Item model JSONs hand-shipped (generated-item-model parents).
+- [x] Copy `scrap_tome.png`, `improved_scrap_tome.png`, `extraction_tome.png` to `assets/fizzle_enchanting/textures/item/tome/`.
+- [x] Three lang keys.
+- [x] Item model JSONs hand-shipped (generated-item-model parents).
 
 **Tests:** Model files resolve to the right texture paths.
 
@@ -1203,8 +1203,8 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** `/home/rfizzle/Projects/Zenith/src/main/resources/data/zenith/recipes/scrap_tome.json`.
 
 **Acceptance:**
-- [ ] Hand-shipped at `data/fizzle_enchanting/recipe/scrap_tome.json`.
-- [ ] Improved Scrap + Extraction come from custom recipes already shipped in T-4.6.4.
+- [x] Hand-shipped at `data/fizzle_enchanting/recipe/scrap_tome.json`.
+- [x] Improved Scrap + Extraction come from custom recipes already shipped in T-4.6.4.
 
 **Tests:** Parses.
 
