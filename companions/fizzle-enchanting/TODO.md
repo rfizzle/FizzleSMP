@@ -184,7 +184,7 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-1.3 — Configuration surface
 
-- [ ] Story complete
+- [x] Story complete
 
 **As an** operator, **I want** a JSON config at `config/fizzle_enchanting.json` with validation **so that** I can tune the mod without a jar rebuild.
 
@@ -193,13 +193,13 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Configuration (MVP)" — copy the JSON shape exactly.
 
 **Acceptance:**
-- [ ] `config/FizzleEnchantingConfig.java` with nested static sections: `EnchantingTable`, `Shelves`, `Anvil`, `Library`, `Tomes`, `Warden`, `ForeignEnchantments`, `Display`.
-- [ ] Every field has the default value from the DESIGN.md JSON.
-- [ ] `int configVersion = 1;`
+- [x] `config/FizzleEnchantingConfig.java` with nested static sections: `EnchantingTable`, `Shelves`, `Anvil`, `Library`, `Tomes`, `Warden`, `ForeignEnchantments`, `Display`.
+- [x] Every field has the default value from the DESIGN.md JSON.
+- [x] `int configVersion = 1;`
 
 **Subtasks:**
-- [ ] Mirror fizzle-difficulty's `FizzleDifficultyConfig` class shape (nested statics, public fields).
-- [ ] Confirm every DESIGN field is present.
+- [x] Mirror fizzle-difficulty's `FizzleDifficultyConfig` class shape (nested statics, public fields).
+- [x] Confirm every DESIGN field is present.
 
 **Tests:** `FizzleEnchantingConfigTest#defaultConfig_hasValidValues` — every default satisfies its clamp (see T-1.3.3).
 
@@ -208,18 +208,18 @@ Every task's Definition of Done implicitly includes:
 ### Task T-1.3.2 — GSON load/save + file I/O
 
 **Acceptance:**
-- [ ] Static `load()` — reads `FabricLoader.getInstance().getConfigDir().resolve("fizzle_enchanting.json")`, writes defaults on missing file, swallow-and-log on parse failure + fall back to defaults.
-- [ ] Instance `save()` — pretty-printed GSON output.
-- [ ] Private `fillDefaults()` null-checks each section.
+- [x] Static `load()` — reads `FabricLoader.getInstance().getConfigDir().resolve("fizzle_enchanting.json")`, writes defaults on missing file, swallow-and-log on parse failure + fall back to defaults.
+- [x] Instance `save()` — pretty-printed GSON output.
+- [x] Private `fillDefaults()` null-checks each section.
 
 **Subtasks:**
-- [ ] Mirror fizzle-difficulty's serializer (bundled GSON, no extra dep).
-- [ ] Log warnings on I/O errors with the throwable attached.
+- [x] Mirror fizzle-difficulty's serializer (bundled GSON, no extra dep).
+- [x] Log warnings on I/O errors with the throwable attached.
 
 **Tests:**
-- [ ] `load_missingFile_writesDefaultsAndReturns` — temp dir, no file → file appears, defaults returned.
-- [ ] `load_partialFile_fillsDefaults` — `{"enchantingTable":{"maxEterna":42}}` → other sections default.
-- [ ] `saveAndLoad_roundTrip_preservesValues`.
+- [x] `load_missingFile_writesDefaultsAndReturns` — temp dir, no file → file appears, defaults returned.
+- [x] `load_partialFile_fillsDefaults` — `{"enchantingTable":{"maxEterna":42}}` → other sections default.
+- [x] `saveAndLoad_roundTrip_preservesValues`.
 
 ---
 
@@ -228,14 +228,14 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Validation (clamps applied on load)" — full field table.
 
 **Acceptance:**
-- [ ] Helpers `clampNonNegative`, `clampPositive`, `clampUnit` match fizzle-difficulty's signatures.
-- [ ] Every row in the DESIGN validation table is enforced on `load()`.
-- [ ] Clamps emit `LOGGER.warn("clamped {} from {} to {}", field, old, new)`.
-- [ ] `display.overLeveledColor` regex `^#[0-9A-Fa-f]{6}$`; mismatch → warn + fall back to `#FF6600`.
+- [x] Helpers `clampNonNegative`, `clampPositive`, `clampUnit` match fizzle-difficulty's signatures.
+- [x] Every row in the DESIGN validation table is enforced on `load()`.
+- [x] Clamps emit `LOGGER.warn("clamped {} from {} to {}", field, old, new)`.
+- [x] `display.overLeveledColor` regex `^#[0-9A-Fa-f]{6}$`; mismatch → warn + fall back to `#FF6600`.
 
 **Tests:**
-- [ ] `load_clampsOutOfRange` — `maxEterna:0 → 1`, `sculkShelfShriekerChance:-0.5 → 0`, `tendrilLootingBonus:2.0 → 1`.
-- [ ] `load_invalidOverLeveledColor_fallsBack` → `"#FF6600"`.
+- [x] `load_clampsOutOfRange` — `maxEterna:0 → 1`, `sculkShelfShriekerChance:-0.5 → 0`, `tendrilLootingBonus:2.0 → 1`.
+- [x] `load_invalidOverLeveledColor_fallsBack` → `"#FF6600"`.
 
 ---
 
@@ -244,9 +244,9 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Migration strategy".
 
 **Acceptance:**
-- [ ] `private static final int CURRENT_VERSION = 1;`
-- [ ] `migrate()` runs **after parse, before `fillDefaults()`**; no-op while `configVersion >= CURRENT_VERSION`.
-- [ ] Ready for future `case 1 -> migrateV1toV2();` branch without restructuring.
+- [x] `private static final int CURRENT_VERSION = 1;`
+- [x] `migrate()` runs **after parse, before `fillDefaults()`**; no-op while `configVersion >= CURRENT_VERSION`.
+- [x] Ready for future `case 1 -> migrateV1toV2();` branch without restructuring.
 
 **Tests:** `migrate_versionOne_isNoOp`.
 
