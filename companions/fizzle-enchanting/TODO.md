@@ -441,7 +441,7 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-2.3 — S2C network payloads
 
-- [ ] Story complete
+- [x] Story complete
 
 **As a** client, **I want** stat + clue data over custom payloads **so that** the enchanting screen can render live state.
 
@@ -450,10 +450,10 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Payload Shapes (S2C custom payloads, 1.21.1)" — copy the record shape exactly.
 
 **Acceptance:**
-- [ ] `net/StatsPayload.java` record per DESIGN — 5 floats, int clues, `List<ResourceKey<Enchantment>>` blacklist, boolean treasure, `Optional<CraftingResultEntry>` craftingResult.
-- [ ] `net/CraftingResultEntry.java` record of `ItemStack, int xpCost, ResourceLocation recipeId`.
-- [ ] `Type<StatsPayload> TYPE = new Type<>(FizzleEnchanting.id("stats"));`
-- [ ] `StreamCodec<RegistryFriendlyByteBuf, StatsPayload> CODEC` via `StreamCodec.composite`.
+- [x] `net/StatsPayload.java` record per DESIGN — 5 floats, int clues, `List<ResourceKey<Enchantment>>` blacklist, boolean treasure, `Optional<CraftingResultEntry>` craftingResult.
+- [x] `net/CraftingResultEntry.java` record of `ItemStack, int xpCost, ResourceLocation recipeId`.
+- [x] `Type<StatsPayload> TYPE = new Type<>(FizzleEnchanting.id("stats"));`
+- [x] `StreamCodec<RegistryFriendlyByteBuf, StatsPayload> CODEC` via `StreamCodec.composite`.
 
 **Tests:** `PayloadCodecTest#statsPayloadRoundTrip` — zero-stat, mid-stat, and saturated variants all survive a `RegistryFriendlyByteBuf` round-trip (bootstrap registries in `@BeforeAll`).
 
@@ -462,9 +462,9 @@ Every task's Definition of Done implicitly includes:
 ### Task T-2.3.2 — `CluesPayload` + `EnchantmentClue`
 
 **Acceptance:**
-- [ ] `net/CluesPayload.java` record: `int slot, List<EnchantmentClue> clues, boolean exhaustedList`.
-- [ ] `EnchantmentClue` record: `ResourceKey<Enchantment>, int level`.
-- [ ] Codec via composite.
+- [x] `net/CluesPayload.java` record: `int slot, List<EnchantmentClue> clues, boolean exhaustedList`.
+- [x] `EnchantmentClue` record: `ResourceKey<Enchantment>, int level`.
+- [x] Codec via composite.
 
 **Tests:** Empty clue list, 3-entry list, exhausted flag both round-trip.
 
@@ -473,9 +473,9 @@ Every task's Definition of Done implicitly includes:
 ### Task T-2.3.3 — Register payloads + client stubs
 
 **Acceptance:**
-- [ ] `PayloadTypeRegistry.playS2C().register(TYPE, CODEC)` in `FizzleEnchanting#onInitialize` for both payloads.
-- [ ] Client registration via `ClientPlayNetworking.registerGlobalReceiver(TYPE, handler)` in `FizzleEnchantingClient`.
-- [ ] Client handlers log receipt but defer screen updates to S-2.5.
+- [x] `PayloadTypeRegistry.playS2C().register(TYPE, CODEC)` in `FizzleEnchanting#onInitialize` for both payloads.
+- [x] Client registration via `ClientPlayNetworking.registerGlobalReceiver(TYPE, handler)` in `FizzleEnchantingClient`.
+- [x] Client handlers log receipt but defer screen updates to S-2.5.
 
 **Tests:** Registry bootstrap test — after `onInitialize`, both types resolve from the payload registry.
 
