@@ -127,7 +127,7 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-1.2 — Mod entrypoints
 
-- [ ] Story complete
+- [x] Story complete
 
 **As the** Fabric loader, **I want** valid entrypoints **so that** the mod initializes (even if it does nothing yet).
 
@@ -136,18 +136,18 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Fabric & Quilt" and § "Project Structure". `/dev-companion` § "fabric.mod.json".
 
 **Acceptance:**
-- [ ] File at `src/main/resources/fabric.mod.json`.
-- [ ] `id=fizzle_enchanting`, `version=${version}`, `environment="*"`.
-- [ ] Entrypoints:
+- [x] File at `src/main/resources/fabric.mod.json`.
+- [x] `id=fizzle_enchanting`, `version=${version}`, `environment="*"`.
+- [x] Entrypoints:
   - `main: ["com.fizzlesmp.fizzle_enchanting.FizzleEnchanting"]`
   - `client: ["com.fizzlesmp.fizzle_enchanting.client.FizzleEnchantingClient"]`
   - `fabric-datagen: ["com.fizzlesmp.fizzle_enchanting.data.FizzleEnchantingDataGenerator"]`
-- [ ] `mixins: ["fizzle_enchanting.mixins.json"]`.
-- [ ] `depends: { fabricloader: ">=0.16.10", fabric-api: "*", minecraft: "~1.21.1", java: ">=21" }`.
+- [x] `mixins: ["fizzle_enchanting.mixins.json"]`.
+- [x] `depends: { fabricloader: ">=0.16.10", fabric-api: "*", minecraft: "~1.21.1", java: ">=21" }`.
 
 **Subtasks:**
-- [ ] Write file.
-- [ ] Add `icon`/`authors`/`contact`/`license` minimal stubs.
+- [x] Write file.
+- [x] Add `icon`/`authors`/`contact`/`license` minimal stubs.
 
 **Tests:** `./gradlew runServer` (headless dry-run from Loom's generated config) boots far enough to log `"Fizzle Enchanting initialized"` once T-1.2.3 lands; until then, just assert the mod is registered in the Loader manifest.
 
@@ -156,12 +156,12 @@ Every task's Definition of Done implicitly includes:
 ### Task T-1.2.2 — Mixin config
 
 **Acceptance:**
-- [ ] File at `src/main/resources/fizzle_enchanting.mixins.json`.
-- [ ] `compatibilityLevel: "JAVA_21"`, `package: "com.fizzlesmp.fizzle_enchanting.mixin"`, empty `mixins: []` and `client: []` lists, `"refmap": "fizzle_enchanting.refmap.json"` (or let Loom auto-populate).
+- [x] File at `src/main/resources/fizzle_enchanting.mixins.json`.
+- [x] `compatibilityLevel: "JAVA_21"`, `package: "com.fizzlesmp.fizzle_enchanting.mixin"`, empty `mixins: []` and `client: []` lists, `"refmap": "fizzle_enchanting.refmap.json"` (or let Loom auto-populate).
 
 **Subtasks:**
-- [ ] Write file.
-- [ ] Create empty `mixin/` package under `src/main/java/com/fizzlesmp/fizzle_enchanting/`.
+- [x] Write file.
+- [x] Create empty `mixin/` package under `src/main/java/com/fizzlesmp/fizzle_enchanting/`.
 
 **Tests:** `./gradlew build` still green.
 
@@ -170,13 +170,13 @@ Every task's Definition of Done implicitly includes:
 ### Task T-1.2.3 — Initializer classes
 
 **Acceptance:**
-- [ ] `FizzleEnchanting.java` (main): `MOD_ID="fizzle_enchanting"`, `LOGGER=LoggerFactory.getLogger(MOD_ID)`, `onInitialize()` logs `"Fizzle Enchanting initialized"`.
-- [ ] `client/FizzleEnchantingClient.java` (client, empty `onInitializeClient()`).
-- [ ] `data/FizzleEnchantingDataGenerator.java` (empty `onInitializeDataGenerator(FabricDataGenerator)`).
+- [x] `FizzleEnchanting.java` (main): `MOD_ID="fizzle_enchanting"`, `LOGGER=LoggerFactory.getLogger(MOD_ID)`, `onInitialize()` logs `"Fizzle Enchanting initialized"`.
+- [x] `client/FizzleEnchantingClient.java` (client, empty `onInitializeClient()`).
+- [x] `data/FizzleEnchantingDataGenerator.java` (empty `onInitializeDataGenerator(FabricDataGenerator)`).
 
 **Subtasks:**
-- [ ] Write each class.
-- [ ] Add `public static Identifier id(String path) { return Identifier.of(MOD_ID, path); }` helper on main class.
+- [x] Write each class.
+- [x] Add `public static Identifier id(String path) { return Identifier.of(MOD_ID, path); }` helper on main class.
 
 **Tests:** `src/test/java/com/fizzlesmp/fizzle_enchanting/ModBootTest.java` — assert `FizzleEnchanting.MOD_ID == "fizzle_enchanting"` and `LOGGER != null`.
 
