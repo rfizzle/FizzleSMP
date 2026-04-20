@@ -733,16 +733,16 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-3.4 — Datagen providers
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-3.4.1 — `FizzleModelProvider`
 
 **Resume context:** DESIGN.md § "Datagen Strategy" → "Datagen" table row 1.
 
 **Acceptance:**
-- [ ] `data/FizzleModelProvider extends FabricModelProvider`.
-- [ ] `generateBlockStateModels` — cube_column for every shelf (some uniform, some top/bottom/side).
-- [ ] `generateItemModels` — parented block items + generated item models for `infused_breath`, `warden_tendril`, `prismatic_web`, and the 3 tomes (Epic 5 ships item classes; the generator slot goes in now).
+- [x] `data/FizzleModelProvider extends FabricModelProvider`.
+- [x] `generateBlockStateModels` — cube_column for every shelf (some uniform, some top/bottom/side).
+- [x] `generateItemModels` — parented block items + generated item models for `infused_breath`, `warden_tendril`, `prismatic_web`, and the 3 tomes (Epic 5 ships item classes; the generator slot goes in now).
 
 **Tests:** After `./gradlew runDatagen`, expected blockstates/models exist under `src/main/generated/`.
 
@@ -751,9 +751,9 @@ Every task's Definition of Done implicitly includes:
 ### Task T-3.4.2 — `FizzleBlockLootTableProvider`
 
 **Acceptance:**
-- [ ] `dropSelf(block)` for every shelf, filtering shelf, treasure shelf, library, ender library.
+- [x] `dropSelf(block)` for every shelf, filtering shelf, treasure shelf, library, ender library.
 
-**Tests:** Generated loot tables contain one pool of the block itself per file.
+**Tests:** [x] Generated loot tables contain one pool of the block itself per file.
 
 ---
 
@@ -762,23 +762,23 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** `/home/rfizzle/Projects/Zenith/src/main/resources/data/zenith/recipes/<shelf>.json` for each shelf's recipe.
 
 **Acceptance:**
-- [ ] Shaped recipes for every shelf (copied from Zenith, namespace-rewritten).
-- [ ] Prismatic Web recipe (reserve the slot; body may be added in T-4.1.3).
-- [ ] Iron-block anvil-repair recipe shape is not a crafting table recipe — **do not** include here; Epic 4 handles via anvil handler.
-- [ ] **Custom** `fizzle_enchanting:enchanting` / `keep_nbt_enchanting` recipes stay hand-shipped (Epic 4).
+- [x] Shaped recipes for every shelf (copied from Zenith, namespace-rewritten).
+- [x] Prismatic Web recipe (reserve the slot; body may be added in T-4.1.3).
+- [x] Iron-block anvil-repair recipe shape is not a crafting table recipe — **do not** include here; Epic 4 handles via anvil handler.
+- [x] **Custom** `fizzle_enchanting:enchanting` / `keep_nbt_enchanting` recipes stay hand-shipped (Epic 4).
 
-**Tests:** Generated recipe files parse and reference valid IDs.
+**Tests:** [x] Generated recipe files parse and reference valid IDs.
 
 ---
 
 ### Task T-3.4.4 — Wire providers + commit generated output
 
 **Acceptance:**
-- [ ] `FizzleEnchantingDataGenerator#onInitializeDataGenerator` registers all three providers.
-- [ ] `src/main/generated/` committed to git (Fabric default path).
-- [ ] `./gradlew runDatagen` is idempotent (no diff on second run).
+- [x] `FizzleEnchantingDataGenerator#onInitializeDataGenerator` registers all three providers.
+- [x] `src/main/generated/` committed to git (Fabric default path).
+- [x] `./gradlew runDatagen` is idempotent (no diff on second run).
 
-**Tests:** Run datagen twice; `git diff --exit-code src/main/generated/` is clean.
+**Tests:** [x] Run datagen twice; `git diff --exit-code src/main/generated/` is clean.
 
 ---
 

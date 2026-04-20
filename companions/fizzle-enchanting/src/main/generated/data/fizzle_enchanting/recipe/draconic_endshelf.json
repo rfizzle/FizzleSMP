@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "H": {
+      "item": "minecraft:dragon_head"
+    },
+    "P": {
+      "item": "minecraft:ender_pearl"
+    },
+    "S": {
+      "item": "fizzle_enchanting:endshelf"
+    }
+  },
+  "pattern": [
+    " H ",
+    "PSP",
+    "PPP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "fizzle_enchanting:draconic_endshelf"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "fizzle_enchanting:block/sculkshelf_top",
+    "side": "fizzle_enchanting:block/soul_touched_sculkshelf"
+  }
+}

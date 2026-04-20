@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_infused_seashelf": {
+      "conditions": {
+        "items": [
+          {
+            "items": "fizzle_enchanting:infused_seashelf"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "fizzle_enchanting:crystal_seashelf"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_infused_seashelf"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "fizzle_enchanting:crystal_seashelf"
+    ]
+  }
+}

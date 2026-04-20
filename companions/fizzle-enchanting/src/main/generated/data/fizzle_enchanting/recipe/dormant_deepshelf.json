@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "B": {
+      "item": "minecraft:book"
+    },
+    "E": {
+      "tag": "fizzle_enchanting:deepslate"
+    }
+  },
+  "pattern": [
+    "EEE",
+    "BBB",
+    "EEE"
+  ],
+  "result": {
+    "count": 1,
+    "id": "fizzle_enchanting:dormant_deepshelf"
+  }
+}

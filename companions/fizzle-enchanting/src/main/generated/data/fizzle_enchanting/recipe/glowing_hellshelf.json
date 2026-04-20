@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "G": {
+      "item": "minecraft:glowstone"
+    },
+    "S": {
+      "item": "fizzle_enchanting:infused_hellshelf"
+    }
+  },
+  "pattern": [
+    " G ",
+    " S ",
+    "G G"
+  ],
+  "result": {
+    "count": 1,
+    "id": "fizzle_enchanting:glowing_hellshelf"
+  }
+}
