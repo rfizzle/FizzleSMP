@@ -3,12 +3,16 @@ package com.fizzlesmp.fizzle_enchanting;
 import com.fizzlesmp.fizzle_enchanting.anvil.PrismaticWebItem;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
 import com.fizzlesmp.fizzle_enchanting.library.BasicLibraryBlockEntity;
+import com.fizzlesmp.fizzle_enchanting.library.EnchantmentLibraryBlock;
+import com.fizzlesmp.fizzle_enchanting.library.EnchantmentLibraryMenu;
 import com.fizzlesmp.fizzle_enchanting.library.EnderLibraryBlockEntity;
 import com.fizzlesmp.fizzle_enchanting.shelf.FilteringShelfBlock;
 import com.fizzlesmp.fizzle_enchanting.shelf.FilteringShelfBlockEntity;
 import com.fizzlesmp.fizzle_enchanting.shelf.FizzleShelves;
 import com.fizzlesmp.fizzle_enchanting.shelf.TreasureShelfBlock;
 import com.fizzlesmp.fizzle_enchanting.shelf.TreasureShelfBlockEntity;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +22,6 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -49,6 +52,19 @@ public final class FizzleEnchantingRegistry {
 
     public static final MenuType<FizzleEnchantmentMenu> ENCHANTING_TABLE_MENU =
             new MenuType<>(FizzleEnchantmentMenu::new, FeatureFlags.VANILLA_SET);
+
+    /**
+     * Both library tiers share this {@link MenuType}. Differentiation is in the BE that
+     * {@link EnchantmentLibraryMenu} reads/writes — the menu chrome, slot layout, and click
+     * encoding are identical across Basic and Ender, so a single registered type avoids
+     * duplicating the open-screen plumbing twice.
+     *
+     * <p>Backed by Fabric's {@link ExtendedScreenHandlerType} so the {@link BlockPos} the player
+     * right-clicked syncs to the client constructor — vanilla {@link MenuType} can only carry the
+     * sync ID + inventory.
+     */
+    public static final ExtendedScreenHandlerType<EnchantmentLibraryMenu, BlockPos> LIBRARY_MENU =
+            new ExtendedScreenHandlerType<>(EnchantmentLibraryMenu::new, BlockPos.STREAM_CODEC);
 
     /**
      * Filtering-shelf block. Wood-tier base contribution lives in
@@ -92,22 +108,49 @@ public final class FizzleEnchantingRegistry {
             new PrismaticWebItem(new Item.Properties());
 
     /**
-     * Block-entity type backing the tier-1 {@link BasicLibraryBlockEntity}. Bound to
-     * {@link Blocks#BOOKSHELF} as a placeholder until the library block class lands in T-4.4.1
-     * and rebinds the type to the real {@code library} block instance — the BE construction
-     * surface is stable now so the storage-engine tier (S-4.3) can be exercised without waiting
-     * on the block + screen plumbing.
+     * Tier-1 enchantment-library block. Shares {@link EnchantmentLibraryBlock} with the ender
+     * variant; the only differentiation is the {@code BlockEntitySupplier} — here bound to
+     * {@link BasicLibraryBlockEntity#BasicLibraryBlockEntity(BlockPos, BlockState)}. Ender-chest-
+     * tier physical properties ({@code COLOR_RED}, strength {@code 5.0F} / resistance {@code
+     * 1200.0F}) mirror Zenith so the block feels consistent with the storage it caps.
      */
-    public static final BlockEntityType<BasicLibraryBlockEntity> BASIC_LIBRARY_BE =
-            BlockEntityType.Builder.of(BasicLibraryBlockEntity::new, Blocks.BOOKSHELF).build(null);
+    public static final EnchantmentLibraryBlock BASIC_LIBRARY =
+            new EnchantmentLibraryBlock(
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.COLOR_RED)
+                            .strength(5.0F, 1200.0F)
+                            .requiresCorrectToolForDrops(),
+                    BasicLibraryBlockEntity::new);
 
     /**
-     * Block-entity type backing the tier-2 {@link EnderLibraryBlockEntity}. Same placeholder
-     * caveat as {@link #BASIC_LIBRARY_BE} — T-4.4.1 will rebind to the real {@code ender_library}
-     * block.
+     * Tier-2 enchantment-library block. Unreachable through a vanilla-shape recipe — the upgrade
+     * path is the {@code fizzle_enchanting:keep_nbt_enchanting} table-crafting recipe that
+     * preserves {@code Points}/{@code Levels} NBT from the consumed Basic Library (DESIGN §
+     * Enchantment-Table Crafting). Physical properties match the Basic tier so operators cannot
+     * tell the tiers apart by pick time / blast resistance.
+     */
+    public static final EnchantmentLibraryBlock ENDER_LIBRARY =
+            new EnchantmentLibraryBlock(
+                    BlockBehaviour.Properties.of()
+                            .mapColor(MapColor.COLOR_RED)
+                            .strength(5.0F, 1200.0F)
+                            .requiresCorrectToolForDrops(),
+                    EnderLibraryBlockEntity::new);
+
+    /**
+     * Block-entity type backing the tier-1 {@link BasicLibraryBlockEntity}. Bound to
+     * {@link #BASIC_LIBRARY} so vanilla's {@code validateBlockState} check at chunk-load doesn't
+     * warn on a type/block mismatch.
+     */
+    public static final BlockEntityType<BasicLibraryBlockEntity> BASIC_LIBRARY_BE =
+            BlockEntityType.Builder.of(BasicLibraryBlockEntity::new, BASIC_LIBRARY).build(null);
+
+    /**
+     * Block-entity type backing the tier-2 {@link EnderLibraryBlockEntity}. Same binding contract
+     * as {@link #BASIC_LIBRARY_BE} — paired with {@link #ENDER_LIBRARY}.
      */
     public static final BlockEntityType<EnderLibraryBlockEntity> ENDER_LIBRARY_BE =
-            BlockEntityType.Builder.of(EnderLibraryBlockEntity::new, Blocks.BOOKSHELF).build(null);
+            BlockEntityType.Builder.of(EnderLibraryBlockEntity::new, ENDER_LIBRARY).build(null);
 
     private static boolean registered = false;
 
@@ -119,12 +162,15 @@ public final class FizzleEnchantingRegistry {
         registered = true;
 
         registerMenuType("enchanting_table", ENCHANTING_TABLE_MENU);
+        registerMenuType("library", LIBRARY_MENU);
         FizzleShelves.register();
         registerBlock("filtering_shelf", FILTERING_SHELF, new Item.Properties());
         registerBlockEntityType("filtering_shelf", FILTERING_SHELF_BE);
         registerBlock("treasure_shelf", TREASURE_SHELF, new Item.Properties());
         registerBlockEntityType("treasure_shelf", TREASURE_SHELF_BE);
         registerItem("prismatic_web", PRISMATIC_WEB);
+        registerBlock("library", BASIC_LIBRARY, new Item.Properties());
+        registerBlock("ender_library", ENDER_LIBRARY, new Item.Properties());
         registerBlockEntityType("library", BASIC_LIBRARY_BE);
         registerBlockEntityType("ender_library", ENDER_LIBRARY_BE);
     }

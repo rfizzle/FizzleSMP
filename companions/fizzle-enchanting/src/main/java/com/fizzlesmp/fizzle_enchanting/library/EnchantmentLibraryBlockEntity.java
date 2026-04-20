@@ -24,6 +24,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Shared storage engine for the Basic and Ender library block entities. Ports Zenith's
  * {@code EnchLibraryTile} point-pool model onto 1.21.1's {@code ResourceKey<Enchantment>}-keyed
@@ -68,6 +71,18 @@ public abstract class EnchantmentLibraryBlockEntity extends BlockEntity {
 
     /** {@code points(maxLevel)} = per-enchant point ceiling (32 768 Basic, 2^30 Ender). */
     protected final int maxPoints;
+
+    /**
+     * Open menus listening for pool mutations. Mirrors Zenith's {@code activeContainers} pattern so
+     * a screen can repaint its row list without polling — every mutation path eventually reaches
+     * {@link #notifyListeners()}, which fires {@link EnchantmentLibraryMenu#onChanged()} on each
+     * registered menu. Server-side hits the set on {@link #setChanged()} (debit/deposit paths);
+     * client-side hits it on {@link #loadAdditional} when the chunk-update packet lands.
+     *
+     * <p>Identity-keyed via {@link HashSet} (menus do not override equals/hashCode), so the same
+     * menu cannot register twice and {@link #removeListener} is O(1).
+     */
+    private final Set<EnchantmentLibraryMenu> activeContainers = new HashSet<>();
 
     protected EnchantmentLibraryBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, int maxLevel) {
         super(type, pos, state);
@@ -184,6 +199,10 @@ public abstract class EnchantmentLibraryBlockEntity extends BlockEntity {
         HolderLookup.RegistryLookup<Enchantment> lookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
         readResolvedMap(tag.getCompound(TAG_POINTS), lookup, this.points);
         readResolvedMap(tag.getCompound(TAG_LEVELS), lookup, this.maxLevels);
+        // Client-side packet receipt path lands here via the default onDataPacket → loadAdditional
+        // dispatch. Server-side world load also lands here, but the listener set is empty before
+        // any menu opens, so the notify is a cheap no-op then.
+        notifyListeners();
     }
 
     /**
@@ -245,10 +264,50 @@ public abstract class EnchantmentLibraryBlockEntity extends BlockEntity {
     @Override
     public void setChanged() {
         super.setChanged();
+        notifyListeners();
         if (this.level != null && !this.level.isClientSide()) {
             BlockState state = this.getBlockState();
             this.level.sendBlockUpdated(this.worldPosition, state, state, Block.UPDATE_CLIENTS);
         }
+    }
+
+    /**
+     * Register {@code menu} as a listener — its {@link EnchantmentLibraryMenu#onChanged()} will be
+     * invoked on every subsequent pool mutation. Idempotent (the underlying {@link HashSet} drops
+     * the duplicate). Called from the menu's constructor; pairs with {@link #removeListener}.
+     */
+    public void addListener(EnchantmentLibraryMenu menu) {
+        this.activeContainers.add(menu);
+    }
+
+    /**
+     * Drop {@code menu} from the listener set. Called from {@link EnchantmentLibraryMenu#removed}
+     * so closed screens stop receiving callbacks even if the BE outlives the menu (which it
+     * always does on a long-lived block).
+     */
+    public void removeListener(EnchantmentLibraryMenu menu) {
+        this.activeContainers.remove(menu);
+    }
+
+    /**
+     * Fire {@link EnchantmentLibraryMenu#onChanged()} on every registered listener. Called from
+     * {@link #setChanged()} (covers server-side {@link #depositBook} / {@link #extract} paths) and
+     * from {@link #loadAdditional} (covers the client-side packet receipt path — the BE's update
+     * tag flows through {@code loadAdditional} on the receiving side).
+     *
+     * <p>Tolerates an empty set without iteration overhead; safe to call from server-load before
+     * any menu is open.
+     */
+    protected void notifyListeners() {
+        if (this.activeContainers.isEmpty()) return;
+        for (EnchantmentLibraryMenu menu : this.activeContainers) {
+            menu.onChanged();
+        }
+    }
+
+    /** Test-only view of the listener set so the unit test can assert add/remove without leaks. */
+    Set<EnchantmentLibraryMenu> activeContainersForTest() {
+        return this.activeContainers;
     }
 
     /** {@code 2^(level - 1)}; non-positive levels map to zero. */

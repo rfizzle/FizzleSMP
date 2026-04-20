@@ -1004,15 +1004,15 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-4.4 — Library block + UI
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-4.4.1 — `EnchantmentLibraryBlock` (both tiers)
 
 **Acceptance:**
-- [ ] `library/EnchantmentLibraryBlock.java extends BaseEntityBlock`.
-- [ ] Two block instances (basic + ender) each tying to their BE subclass.
-- [ ] Registered in `FizzleEnchantingRegistry.BLOCKS`.
-- [ ] Vanilla-shape recipe for basic library hand-shipped under `data/fizzle_enchanting/recipe/library.json` (copy from Zenith).
+- [x] `library/EnchantmentLibraryBlock.java extends BaseEntityBlock`.
+- [x] Two block instances (basic + ender) each tying to their BE subclass.
+- [x] Registered in `FizzleEnchantingRegistry.BLOCKS`.
+- [x] Vanilla-shape recipe for basic library hand-shipped under `data/fizzle_enchanting/recipe/library.json` (copy from Zenith).
 
 **Tests:** Registration round-trip for both blocks.
 
@@ -1023,26 +1023,26 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Enchantment Library" — "GUI — three slots".
 
 **Acceptance:**
-- [ ] `library/EnchantmentLibraryMenu.java extends AbstractContainerMenu`.
-- [ ] Three IO slots: 0 deposit (auto-absorb on change), 1 extract target, 2 scratch; plus player inventory.
-- [ ] `clickMenuButton(Player, int id)` — `id = (shift << 31) | enchantIndex` per DESIGN.
-- [ ] Server-side handles deposit → `depositBook`; extract → `extract`; shift-click uses `maxLevelAffordable`.
+- [x] `library/EnchantmentLibraryMenu.java extends AbstractContainerMenu`.
+- [x] Three IO slots: 0 deposit (auto-absorb on change), 1 extract target, 2 scratch; plus player inventory.
+- [x] `clickMenuButton(Player, int id)` — `id = (shift << 31) | enchantIndex` per DESIGN.
+- [x] Server-side handles deposit → `depositBook`; extract → `extract`; shift-click uses `maxLevelAffordable`.
 
 **Tests:** `EnchantmentLibraryMenuTest` —
-- [ ] Deposit: book put in slot 0 absorbs on `setChanged`; slot cleared; `points` updated.
-- [ ] Extract at maxLevels=1 but sufficient points → denied.
-- [ ] Extract with matching maxLevels + sufficient points → slot 1 gets the upgraded book.
-- [ ] Shift extract solves the max-affordable formula.
+- [x] Deposit: book put in slot 0 absorbs on `setChanged`; slot cleared; `points` updated.
+- [x] Extract at maxLevels=1 but sufficient points → denied.
+- [x] Extract with matching maxLevels + sufficient points → slot 1 gets the upgraded book.
+- [x] Shift extract solves the max-affordable formula.
 
 ---
 
 ### Task T-4.4.3 — `EnchantmentLibraryScreen`
 
 **Acceptance:**
-- [ ] Client screen lists every enchant with `points > 0`.
-- [ ] Per-enchant row: enchant name, current `maxLevels[e]` badge, total `points[e]`.
-- [ ] Button-click sends packed `id` per DESIGN.
-- [ ] Scrolls via vanilla `ScrollableContainer` pattern.
+- [x] Client screen lists every enchant with `points > 0`.
+- [x] Per-enchant row: enchant name, current `maxLevels[e]` badge, total `points[e]`.
+- [x] Button-click sends packed `id` per DESIGN.
+- [x] Scrolls via vanilla `ScrollableContainer` pattern.
 
 **Tests:** Unit-testable slice — the row formatter produces the expected string for `{Sharpness, maxLevels=5, points=6144}`.
 
@@ -1051,9 +1051,9 @@ Every task's Definition of Done implicitly includes:
 ### Task T-4.4.4 — Listener set on BE
 
 **Acceptance:**
-- [ ] BE holds `Set<EnchantmentLibraryMenu>` of open screens.
-- [ ] Mutations call `onChanged()` on each listener.
-- [ ] Menu `removed()` de-registers.
+- [x] BE holds `Set<EnchantmentLibraryMenu>` of open screens.
+- [x] Mutations call `onChanged()` on each listener.
+- [x] Menu `removed()` de-registers.
 
 **Tests:** Open menu, mutate BE externally, close menu → listener list goes from [menu] → [] without leaks.
 
