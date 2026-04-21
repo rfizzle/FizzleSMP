@@ -1,3 +1,4 @@
+// Tier: 1 (pure JUnit)
 package com.fizzlesmp.fizzle_difficulty.event;
 
 import com.fizzlesmp.fizzle_difficulty.config.FizzleDifficultyConfig.SpecialZombies;

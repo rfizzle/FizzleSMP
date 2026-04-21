@@ -1,3 +1,4 @@
+// Tier: 1 (pure JUnit)
 package com.fizzlesmp.fizzle_difficulty.data;
 
 import org.junit.jupiter.api.Test;

@@ -1,3 +1,4 @@
+// Tier: 1 (pure JUnit)
 package com.fizzlesmp.fizzle_difficulty.command;
 
 import com.fizzlesmp.fizzle_difficulty.config.FizzleDifficultyConfig;
