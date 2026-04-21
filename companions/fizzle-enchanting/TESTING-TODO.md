@@ -1,33 +1,53 @@
 # Fizzle Enchanting — Testing Plan
 
-Companion to `TODO.md`. Mirrors its epic/story/task structure 1:1 — every implementation task `T-X.Y.Z` maps to a testing task `TEST-X.Y.Z` (or is explicitly folded into a parent test with a **Dependencies** pointer). Each test row is a self-contained proposal: tier, assertion, acceptance checkboxes, shared setup.
+Companion to `TODO.md`. Mirrors its epic/story/task structure. Each story has its coverage planned across the three tiers from `.claude/skills/fabric-testing/SKILL.md`:
 
-Do **not** re-read this top-to-bottom when picking up work — jump to the first `- [ ]` test under the current story and work it in isolation.
+- **Tier 1** — pure JUnit, no `net.minecraft.*` / `net.fabricmc.*` references, or MC types used purely as POJOs (no registry reads). Fast, no Bootstrap.
+- **Tier 2** — `fabric-loader-junit` + explicit `@BeforeAll Bootstrap.bootStrap()`. Vanilla registries, enchantments, attributes, codecs, mixin/AW wiring. Cannot register mod content.
+- **Tier 3** — Fabric Gametest under `./gradlew runGametest`. Real `ServerLevel`, mod-registered content, block entities, menus, tick loop, loot tables.
 
-## Status legend
+The existing test suite predates the skill. It uses a prohibited bootstrap-plus-reflection pattern that registers mod items into frozen vanilla registries. This file is therefore both a **coverage plan** (what tests should exist) and a **migration plan** (how the 60 existing tests map onto the three tiers).
 
-- `- [x]` — test already written; see the referenced file under `src/test/`.
-- `- [ ]` — gap: either the code isn't built yet, or the coverage is missing.
-- **Tier** (from `.claude/skills/fabric-testing/SKILL.md`):
-  - **1** — pure JUnit, zero `net.minecraft.*` / `net.fabricmc.*` imports.
-  - **2** — `fabric-loader-junit`; `@BeforeAll Bootstrap.bootStrap()`; vanilla registries readable, mod-registered content is **not** (onInitialize doesn't fire).
-  - **3** — Fabric Gametest; real `ServerLevel`, mod content available, world tick available. Runs under `./gradlew runGametest`.
-- **Dependencies** — names other TEST-IDs whose fixtures/setup this test shares. Read as "co-locate in the same test class" or "reuse the same harness," not "run strictly after."
+## Test-state legend
+
+Per test row, the leading checkbox carries the *coverage* state; the trailing `STATE:` tag carries the *migration* state.
+
+- `[x]` coverage exists; `[ ]` coverage missing.
+- `STATE: T1-pure` — pure JUnit, no MC imports. Leave alone.
+- `STATE: T1-pseudo` — MC types used as POJOs (`ResourceLocation`, `Component`, Brigadier trees, ASM bytecode introspection). The skill explicitly allows this — document, leave alone.
+- `STATE: T2-migrate-clean` — existing legacy test already uses `Bootstrap.bootStrap()` without unfreeze or register. Drop `forkEvery=1`, add `fabric-loader-junit` dep, keep assertions byte-identical.
+- `STATE: T2-migrate-unfreeze` — existing legacy test builds a synthetic enchantment registry via reflection to supply fake enchants. Rewrite to read real vanilla enchants via `BuiltInRegistries.ENCHANTMENT.getHolder(Enchantments.SHARPNESS).orElseThrow()` after bootstrap. No unfreeze reflection.
+- `STATE: T3-rewrite` — existing legacy test calls `FizzleEnchantingRegistry.register()` post-bootstrap (prohibited). Rewrite as a Fabric Gametest under `src/gametest/`. Sibling Tier 2 coverage may exist alongside.
+- `STATE: T3-new` — no existing coverage at any tier for this behavior; write fresh as Gametest.
+- `STATE: T2-new` — same, write fresh at Tier 2.
+- `STATE: T1-new` — same, fresh Tier 1.
+
+## Migration arithmetic (existing 60 tests)
+
+| Category | Count | Target |
+|---|---:|---|
+| Pure Tier 1 — keep | 11 | T1-pure |
+| Pseudo Tier 1 — keep | 10 | T1-pseudo |
+| Clean Bootstrap — migrate | 12 | T2-migrate-clean |
+| Bootstrap + unfreeze, no register — migrate | 9 | T2-migrate-unfreeze |
+| Bootstrap + unfreeze + register — rewrite | 18 | T3-rewrite |
+| **Total** | **60** | |
+
+Keep-as-is (21) + migrate (21) + rewrite (18). The rewrites drop out of `src/test/` and reappear under `src/gametest/` — fixture SNBT templates go under `src/main/resources/data/fizzle_enchanting/gametest/structure/`.
 
 ## How to use this file
 
-1. Read the paragraph at the top of each section — that's the **what** and the **risk model** (what silently breaks if untested).
-2. Pick the first `- [ ]` test under the story the impl work just landed in.
-3. Tick the sub-checkboxes inside acceptance as each assertion lands.
-4. When all sub-boxes are ticked, flip the test row's `- [ ]` to `- [x]`.
-5. When every test under a story is ticked, add a one-line backfill to the story's paragraph if the risk model shifted.
-
-See **Ordering** at the bottom for the recommended first-to-last sequence.
+1. Complete **Story S-0** first. Without `fabric-loader-junit` on the classpath and a gametest source set wired, no Tier 2 or Tier 3 migration can start.
+2. Pick a story whose impl is `- [x]` in `TODO.md` but whose tests here still show any `STATE: T2-migrate-*` or `STATE: T3-rewrite` row.
+3. Do the whole story at once — do not leave a story half-migrated.
+4. After each story's migration, run `./gradlew :companions:fizzle-enchanting:test` (and `runGametest` once any Tier 3 lands) before the commit. Each migrating commit: `refactor(test): migrate <story-id> to fabric-loader-junit / gametest`.
+5. Per-story coverage-gap rows (`[ ] STATE: T*-new`) can land in the same commit as the migration if they share fixtures, or in a follow-up `test(<scope>): ...` commit.
 
 ---
 
 ## Table of contents
 
+- [Story S-0 — Test Infrastructure (prerequisite)](#story-s-0--test-infrastructure-prerequisite)
 - [Epic 1 — Project Scaffolding](#epic-1--project-scaffolding)
 - [Epic 2 — Stat System & Table](#epic-2--stat-system--table)
 - [Epic 3 — Shelf Family](#epic-3--shelf-family)
@@ -41,75 +61,147 @@ See **Ordering** at the bottom for the recommended first-to-last sequence.
 
 ---
 
+# Story S-0 — Test Infrastructure (prerequisite)
+
+Sets up the two missing tier surfaces. Until this lands, every Tier-2/3 row below is unreachable. Risk if skipped: half-migrated suite where some files bootstrap via `forkEvery=1` reflection and others expect Knot — under one JVM those two modes interact badly and the whole suite goes flaky.
+
+**Commit at story close:** `refactor(test): wire fabric-loader-junit and gametest source set`
+
+## Task S-0.1 — fabric-loader-junit dependency
+
+- [ ] **TEST-0.1-T2** — Tier 2 harness boots; a throwaway vanilla-read smoke test passes.
+  - **Tier:** 2.
+  - **State:** new.
+  - **Acceptance:**
+    - [ ] `testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"` in `build.gradle` (read version from `gradle.properties`).
+    - [ ] `configurations.testRuntimeClasspath { exclude group: 'net.fabricmc.fabric-api', module: 'fabric-api' }` present — the loom-remapped `*-common` variants stay on the classpath.
+    - [ ] `forkEvery = 1` removed from the `test {}` block.
+    - [ ] `./gradlew :companions:fizzle-enchanting:dependencies --configuration testRuntimeClasspath | grep fabric-loader-junit` shows the dep.
+    - [ ] A smoke test class (`com.fizzlesmp.fizzle_enchanting.SmokeBootstrapTest`, `// Tier: 2`) with `@BeforeAll Bootstrap.bootStrap()` and one assertion that `Items.DIAMOND_SWORD != null` passes on its own JVM session.
+
+## Task S-0.2 — Gametest source set and run config
+
+- [ ] **TEST-0.2-T3** — `runGametest` task exists and a placeholder gametest passes.
+  - **Tier:** 3.
+  - **State:** new.
+  - **Acceptance:**
+    - [ ] `sourceSets { gametest { ... } }` added in the order the skill specifies (source set *before* `loom { runs { gametest { source sourceSets.gametest } } }`).
+    - [ ] `configurations { gametestImplementation.extendsFrom implementation; gametestRuntimeOnly.extendsFrom runtimeOnly }`.
+    - [ ] `loom.runs.gametest` block with `vmArg "-Dfabric-api.gametest"` and junit report path.
+    - [ ] `src/main/resources/fabric.mod.json` gets a `fabric-gametest` entrypoint pointing at the placeholder class.
+    - [ ] `src/main/resources/data/fizzle_enchanting/gametest/structure/empty_3x3.snbt` template shipped (DataVersion 3955, 3×3×3 stone floor + air above).
+    - [ ] Placeholder `com.fizzlesmp.fizzle_enchanting.gametest.PlaceholderGameTest` (`// Tier: 3`) with a single `helper.succeed()` test passes on `./gradlew :companions:fizzle-enchanting:runGametest`.
+
+## Task S-0.3 — CI wiring
+
+- [ ] **TEST-0.3** — CI runs `test` and `runGametest` on every PR touching this mod.
+  - **Tier:** n/a (CI config).
+  - **State:** new.
+  - **Acceptance:**
+    - [ ] GitHub Actions (or local `Makefile` target) invokes both.
+    - [ ] `junit-gametest.xml` reports land under `build/` and are uploaded as a workflow artifact.
+
+---
+
 # Epic 1 — Project Scaffolding
 
 Gradle/Loom wiring, entrypoints, JSON config, and the `/fizzleenchanting` command skeleton. If any of this silently regresses, the mod either (a) fails to build, (b) boots with default config every time because `load()` silently swallowed a parse error, (c) clamps are removed and operators ship servers with invalid values, or (d) `/fizzleenchanting reload` runs at perm 0 and lets non-ops mutate live config. The build failure is loud; the other three are silent.
 
 ## Story S-1.1 — Buildable Gradle project
 
-Pure build plumbing. No assertions at this level — `./gradlew build` exit code is the oracle. Nothing to propose.
+Pure build plumbing. `./gradlew build` is the oracle. No test rows at any tier.
 
 ## Story S-1.2 — Mod entrypoints
 
-Trivial — covered by ModBootTest for the main initializer constants; datagen and client initializers have no assertions worth running in isolation (they either exist and fire, or the mod doesn't boot).
+Trivial surface. Covered by `ModBootTest` for the constants; mod-actually-loads is covered implicitly by any Tier 3 test passing.
 
-- [x] **TEST-1.2.3** — `FizzleEnchanting.MOD_ID` and `LOGGER` are non-null, and `id("foo")` emits `fizzle_enchanting:foo`.
-  - **Tier:** 1. No Minecraft classes in the assertion surface beyond `Identifier`, but the existing test pulls it in — leave as-is.
+### Tier 1
+
+- [x] **TEST-1.2-T1** — `MOD_ID`, `LOGGER`, `id()` helper constants correct.
+  - **Tier:** 1.
+  - **State:** T1-pure.
   - **Acceptance:**
     - [x] `MOD_ID == "fizzle_enchanting"`.
     - [x] `LOGGER != null`.
     - [x] `id("foo").toString() == "fizzle_enchanting:foo"`.
-  - **Covered by:** `src/test/java/.../ModBootTest.java`.
+  - **File:** `src/test/java/.../ModBootTest.java`.
+
+### Tier 3
+
+- [ ] **TEST-1.2-T3** — Client and data-generator entrypoints classload in a gametest run.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] Under `runGametest`, `Class.forName("com.fizzlesmp.fizzle_enchanting.client.FizzleEnchantingClient")` resolves on client-side gametest runs.
+    - [ ] Asserts the mod's `onInitialize` has fired exactly once (logger sentinel or a static `boolean initialized` flag).
+  - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-1.3 — Configuration surface
 
-Silent-drift risk: a changed default, a missing clamp row, or a broken migration all ship without a loud failure. Config is the operator's only runtime lever; if it drifts from DESIGN.md the operator is flying blind.
+Operator-facing JSON config. No registry reads required — all pure math + filesystem. Tier 2/3 not needed.
 
-- [x] **TEST-1.3.1** — Defaults class instantiates with every DESIGN field present and clamp-valid.
+### Tier 1
+
+- [x] **TEST-1.3-T1a** — Defaults class instantiates with every DESIGN field + clamp-valid.
   - **Tier:** 1.
+  - **State:** T1-pure.
   - **Acceptance:**
     - [x] Every nested section (`EnchantingTable`, `Shelves`, `Anvil`, `Library`, `Tomes`, `Warden`, `ForeignEnchantments`, `Display`) has its DESIGN default.
     - [x] `configVersion == 1`.
-  - **Covered by:** `src/test/java/.../config/FizzleEnchantingConfigTest.java`.
+  - **File:** `src/test/java/.../config/FizzleEnchantingConfigTest.java`.
 
-- [x] **TEST-1.3.2** — GSON load/save round-trip + missing-file + partial-file handling.
-  - **Tier:** 1. Temp dir via JUnit `@TempDir`.
+- [x] **TEST-1.3-T1b** — GSON load/save + missing-file + partial-file handling.
+  - **Tier:** 1.
+  - **State:** T1-pure.
   - **Acceptance:**
     - [x] Missing file → defaults written + returned.
     - [x] Partial JSON → missing sections filled from defaults.
     - [x] Round-trip preserves values.
-    - [x] Malformed JSON → warn + defaults returned, not a crash.
-  - **Covered by:** `src/test/java/.../config/FizzleEnchantingConfigTest.java`.
-  - **Dependencies:** TEST-1.3.1 (same harness).
+    - [x] Malformed JSON → warn + defaults returned.
+  - **File:** same as above.
 
-- [x] **TEST-1.3.3** — Out-of-range values clamp; `display.overLeveledColor` regex falls back on mismatch.
+- [x] **TEST-1.3-T1c** — Clamp rows + color regex fallback.
   - **Tier:** 1.
+  - **State:** T1-pure.
   - **Acceptance:**
-    - [x] `maxEterna: 0 → 1`, `sculkShelfShriekerChance: -0.5 → 0`, `tendrilLootingBonus: 2.0 → 1`.
-    - [x] `overLeveledColor: "not-a-hex" → "#FF6600"`.
-    - [x] Every clamp emits the expected `warn` log line (assert via a captured logger or skip if fragile — structure of the message is documented in T-1.3.3).
-  - **Covered by:** `src/test/java/.../config/FizzleEnchantingConfigTest.java`.
-  - **Dependencies:** TEST-1.3.1.
+    - [x] Every DESIGN clamp row enforced (`maxEterna:0→1`, `sculkShelfShriekerChance:-0.5→0`, `tendrilLootingBonus:2.0→1`, …).
+    - [x] `overLeveledColor: "not-a-hex" → "#FF6600"` fallback.
+    - [x] Every clamp emits a warn log line.
+  - **File:** same as above.
 
-- [x] **TEST-1.3.4** — `migrate()` is a no-op at `configVersion >= CURRENT_VERSION`.
+- [x] **TEST-1.3-T1d** — Migration hook is a no-op at `configVersion >= CURRENT_VERSION`.
   - **Tier:** 1.
+  - **State:** T1-pure.
   - **Acceptance:**
-    - [x] Config with `configVersion: 1` → `migrate()` is no-op.
-    - [x] Config with `configVersion: 2` (future-dated) → migrate doesn't crash, doesn't downgrade.
-  - **Covered by:** `src/test/java/.../config/FizzleEnchantingConfigTest.java`.
+    - [x] `configVersion: 1` → no-op.
+    - [x] `configVersion: 2` (future-dated) → no downgrade, no throw.
+  - **File:** same as above.
 
 ## Story S-1.4 — `/fizzleenchanting` command skeleton
 
-Silent-drift risk: perm-level check removed by a refactor — non-ops reload live config on the SMP server. Message-key drift leaves operators looking at placeholder-untranslated strings at runtime.
+Brigadier tree walks don't need a real server — pseudo-T1 covers the whole story. A Tier-3 end-to-end reload is a stretch goal once the gametest harness lives.
 
-- [x] **TEST-1.4.1/2/3** — Brigadier dispatch for `reload`, `stats`, `library`, `give-tome`; permission gates enforced.
-  - **Tier:** 2 — Brigadier itself is vanilla code and needs the dispatcher classloaded via Knot.
+### Tier 1
+
+- [x] **TEST-1.4-T1** — Brigadier dispatch for `reload`, `stats`, `library`, `give-tome`; permission gates enforced; translation keys emit.
+  - **Tier:** 1 (pseudo — uses `CommandDispatcher`, `Component`, `CommandSourceStack` as POJOs).
+  - **State:** T1-pseudo.
   - **Acceptance:**
-    - [x] `fizzleenchanting reload` at perm 2 returns `Command.SINGLE_SUCCESS` and re-reads config from disk.
+    - [x] `fizzleenchanting reload` at perm 2 returns `Command.SINGLE_SUCCESS` and re-reads config.
     - [x] `fizzleenchanting reload` at perm 0 rejects before execution.
-    - [x] Every stub subcommand (`stats`, `library dump`, `give-tome <type>`) parses without exception at its declared perm level.
-    - [x] `give-tome <player> scrap|improved_scrap|extraction` parses the literal `<type>` argument; unknown literals reject.
-  - **Covered by:** `src/test/java/.../command/FizzleEnchantingCommandTest.java`.
+    - [x] Each stub subcommand parses at its declared perm level.
+    - [x] `give-tome <player> scrap|improved_scrap|extraction` parses literal argument; unknown literals reject.
+  - **File:** `src/test/java/.../command/FizzleEnchantingCommandTest.java`.
+
+### Tier 3
+
+- [ ] **TEST-1.4-T3** — `reload` on a live `GameTestServer` actually re-reads the config file from disk.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] Start gametest, mutate `config/fizzle_enchanting.json` on disk, dispatch `/fizzleenchanting reload` → observe in-memory config reflects the disk change.
+    - [ ] Reload failure (malformed JSON) → command replies with the error key, logs throwable, config left at prior state.
+  - **Dependencies:** TEST-0.2-T3.
 
 ---
 
@@ -119,932 +211,1338 @@ The Eterna/Quanta/Arcana/Rectification/Clues stack that replaces vanilla's singl
 
 ## Story S-2.1 — Stat data model
 
-Codec drift = silent data loss on datapack reload. The `ZERO` constant is a hot path — any shelf outside the registry falls back to it, and if it's accidentally mutated the whole mod leaks state across reloads.
+### Tier 1
 
-- [x] **TEST-2.1.1** — `EnchantingStats` codec round-trips; missing JSON fields zero-fill; `ZERO` is immutable.
-  - **Tier:** 2 — `Codec` needs the DFU registry populated.
+- [x] **TEST-2.1-T1a** — `EnchantingStats` record value semantics + codec round-trip via DFU only.
+  - **Tier:** 1.
+  - **State:** T1-pure.
   - **Acceptance:**
     - [x] Full JSON → record → JSON preserves every field.
     - [x] `{}` decodes to `ZERO`-equal record.
-    - [x] Negative floats accepted; `clues` must be an integer (decimal literal rejected).
-    - [x] `ZERO == ZERO` is reference-equal (no per-call construction).
-  - **Covered by:** `src/test/java/.../enchanting/EnchantingStatsTest.java`.
+    - [x] Negative floats accepted; `clues` must be an integer.
+    - [x] `ZERO` is reference-equal across calls.
+  - **File:** `src/test/java/.../enchanting/EnchantingStatsTest.java`.
 
-- [x] **TEST-2.1.3/4** — `EnchantingStatRegistry.lookup` precedence (direct block > tag > Java fallback > `ZERO`); `vanilla_provider.json` seeds the vanilla bookshelf.
-  - **Tier:** 2.
+- [x] **TEST-2.1-T1b** — `EnchantingStatRegistry.lookup` precedence on a synthetic registry (direct > tag > `ENCHANTMENT_POWER_PROVIDER` > `ZERO`), with JSON-shape enforcement (either `block` or `tag`, never both).
+  - **Tier:** 1 (pseudo — uses `ResourceLocation`, `TagKey`, `BlockTags` as POJOs; no `BuiltInRegistries` access).
+  - **State:** T1-pseudo.
   - **Acceptance:**
     - [x] Direct-block reg beats tag reg.
-    - [x] Tag reg beats `ENCHANTMENT_POWER_PROVIDER` Java fallback.
-    - [x] `ENCHANTMENT_POWER_PROVIDER` tag → `(15,1,0,0,0,0)` fallback fires for an unregistered block.
+    - [x] Tag reg beats Java fallback.
+    - [x] `ENCHANTMENT_POWER_PROVIDER` fallback fires on bare blocks.
     - [x] Absent everything → `ZERO`.
-    - [x] JSON carrying both `block` and `tag` fails parse with a clear message.
-    - [x] Loading `vanilla_provider.json` only → a vanilla bookshelf returns `maxEterna:15, eterna:1`.
-  - **Covered by:** `src/test/java/.../enchanting/EnchantingStatRegistryTest.java`.
+    - [x] JSON with both `block` and `tag` fails parse with a clear message.
+    - [x] Loading `vanilla_provider.json` only → vanilla bookshelf returns `maxEterna:15, eterna:1`.
+  - **File:** `src/test/java/.../enchanting/EnchantingStatRegistryTest.java`.
+
+### Tier 2
+
+- [ ] **TEST-2.1-T2** — Stat JSON files on the classpath parse via `EnchantingStats.CODEC` under a bootstrapped registry (guards against a future codec change silently corrupting existing files).
+  - **Tier:** 2.
+  - **State:** T2-new.
+  - **Acceptance:**
+    - [ ] Every file under `src/main/resources/data/fizzle_enchanting/enchanting_stats/*.json` parses.
+    - [ ] Any `tag:` references resolve to a loadable `TagKey<Block>` (format-check only at Tier 2; real membership is Tier 3).
+
+### Tier 3
+
+- [ ] **TEST-2.1-T3** — Datapack reload under a real server populates `EnchantingStatRegistry` with every shipped stat JSON.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] On gametest startup, `EnchantingStatRegistry.lookup(vanilla bookshelf state)` returns `maxEterna:15, eterna:1`.
+    - [ ] Every registered shelf block has a non-ZERO lookup result.
+  - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-2.2 — Shelf scan & aggregation
 
-Off-by-one risk on `BOOKSHELF_OFFSETS`, clamp drift (`clues` to 3), and — most dangerously — LOS check inversion. If the transmitter check regresses to pass-through, a single stone wall around the table becomes a silent Eterna boost. If LOS is too strict, shelves never contribute.
+Silent-break model: LOS inversion (transmitter check passes-through through walls), offset-list drift on 1.21.1 bumps, clues-clamp regression.
 
-- [x] **TEST-2.2.1/2/3** — Scan iterates the vanilla offset list, respects LOS, and applies per-stat aggregation rules.
-  - **Tier:** 2 for the pure aggregation surface; Tier 3 wrapper pushed to S-2.5 for the real-level variant.
+### Tier 1
+
+- [x] **TEST-2.2-T1** — Pure aggregation (sum across contributors, max of maxEterna, `clues` clamp, eterna clamp against maxEterna).
+  - **Tier:** 1 (pseudo — uses `BlockPos` as a POJO).
+  - **State:** T1-pseudo.
   - **Acceptance:**
-    - [x] 15 shelves placed → eterna sums cleanly to 15 with a `(1,1,0,0,0,0)` stub lookup.
-    - [x] Inserting a stone at the midpoint of one offset → that offset contributes 0 until stone is removed.
-    - [x] Shelves whose eterna sum exceeds `maxEterna` → clamped to `max(maxEterna_i)`.
-    - [x] A single shelf with `clues: 5` clamps to 3.
-    - [x] Mixed `maxEterna` values → scan uses the highest seen.
-  - **Covered by:** `src/test/java/.../enchanting/EnchantingStatRegistryGatherTest.java`.
+    - [x] 15 contributors each `(1,1,0,0,0,0)` → eterna sums to 15 pre-clamp.
+    - [x] A shelf with `clues:5` alone clamps to 3.
+    - [x] Mixed maxEterna → result uses the highest seen.
+    - [x] Blocked midpoint (stone) → that offset's contribution is zero; unblock restores it.
+  - **File:** `src/test/java/.../enchanting/EnchantingStatRegistryGatherTest.java`.
 
-- [x] **TEST-2.2.4** — Filtering/treasure BE hooks invoked exactly once per in-range BE, no-op when classes absent.
+### Tier 2
+
+- [ ] **TEST-2.2-T2** — Scan driven from a synthetic `BlockGetter` uses vanilla `EnchantmentTableBlock.BOOKSHELF_OFFSETS` (guards against the offset list silently changing on a vanilla bump).
   - **Tier:** 2.
+  - **State:** T2-new.
   - **Acceptance:**
-    - [x] Mock BE fixture: one filtering BE in range → blacklist union observed once.
-    - [x] One treasure BE in range → `treasureAllowed == true`.
-    - [x] No BEs → both default (empty blacklist, false).
-    - [x] BE class absent (dynamic lookup path) → no throw.
-  - **Covered by:** `src/test/java/.../enchanting/FilteringTreasureIntegrationTest.java`.
-  - **Dependencies:** TEST-2.2.1/2/3.
+    - [ ] After bootstrap, iterate `EnchantmentTableBlock.BOOKSHELF_OFFSETS` directly and assert size + every offset's LOS-midpoint.
+    - [ ] Scan covers every offset once (no duplicates, no missing).
+
+### Tier 3
+
+- [ ] **TEST-2.2-T3a** — Place vanilla bookshelves around a real enchanting table; Eterna sums to expected.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] Template seeds an enchanting table + 15 bookshelves.
+    - [ ] Open table → `StatCollection.eterna == 15`.
+    - [ ] Block a single offset with stone → Eterna drops by 1.
+  - **Dependencies:** TEST-0.2-T3.
+
+- [ ] **TEST-2.2-T3b** — Filtering/treasure BE hooks invoked exactly once per in-range BE under real-level scan.
+  - **Tier:** 3 — replaces the legacy unit test `FilteringTreasureIntegrationTest` for the register side; Tier 2 fixture-style coverage is redundant once Tier 3 runs.
+  - **State:** T3-rewrite (replaces `FilteringTreasureIntegrationTest`).
+  - **Acceptance:**
+    - [ ] Two filtering shelves with unique books → blacklist size 2 at the table.
+    - [ ] Treasure shelf present → `treasureAllowed == true`.
+    - [ ] Removing the treasure shelf → `treasureAllowed == false`.
+  - **Dependencies:** TEST-3.5-T3 (shares BE fixtures).
 
 ## Story S-2.3 — S2C network payloads
 
-Codec drift here corrupts the screen silently — the wrong floats render in the HUD, or the crafting-row ghost-vanishes. `ResourceKey<Enchantment>` uses a `RegistryFriendlyByteBuf`-only codec; if it swaps to `FriendlyByteBuf` at some point the test has to catch it.
+### Tier 2
 
-- [x] **TEST-2.3.1** — `StatsPayload` + `CraftingResultEntry` round-trip over `RegistryFriendlyByteBuf`.
-  - **Tier:** 2 — requires a bootstrapped registry access.
-  - **Acceptance:**
-    - [x] All-zero, mid-load, and saturated variants survive round-trip byte-identical.
-    - [x] `craftingResult` Optional preserved in both present and empty shapes.
-    - [x] `blacklist` ordering irrelevant (Set semantics) but cardinality matches.
-  - **Covered by:** `src/test/java/.../net/PayloadCodecTest.java`.
-
-- [x] **TEST-2.3.2** — `CluesPayload` round-trip including `exhaustedList` flag.
+- [x] **TEST-2.3-T2a** — `StatsPayload` + `CraftingResultEntry` round-trip over `RegistryFriendlyByteBuf`.
   - **Tier:** 2.
+  - **State:** T2-migrate-clean.
+  - **Acceptance:**
+    - [x] All-zero / mid-load / saturated variants survive round-trip byte-identical.
+    - [x] `craftingResult` Optional preserved in present and empty shapes.
+    - [x] `blacklist` cardinality matches post-round-trip.
+  - **File:** `src/test/java/.../net/PayloadCodecTest.java`.
+
+- [x] **TEST-2.3-T2b** — `CluesPayload` round-trip including `exhaustedList` flag.
+  - **Tier:** 2.
+  - **State:** T2-migrate-clean.
   - **Acceptance:**
     - [x] Empty clue list round-trips.
-    - [x] 3-entry list round-trips with per-entry `level` preserved.
+    - [x] 3-entry list round-trips.
     - [x] `exhaustedList=true` round-trips.
-  - **Covered by:** `src/test/java/.../net/PayloadCodecTest.java`.
+  - **File:** same as above.
 
-- [x] **TEST-2.3.3** — Both payload types registered in the S2C registry after `onInitialize`.
-  - **Tier:** 2. Can't fire `onInitialize` from Knot, so the test re-runs the registration manually and checks the registry state.
+- [x] **TEST-2.3-T2c** — Registered in the S2C registry.
+  - **Tier:** 2.
+  - **State:** T2-migrate-clean.
   - **Acceptance:**
-    - [x] `PayloadTypeRegistry.playS2C().get(StatsPayload.TYPE) != null`.
-    - [x] `PayloadTypeRegistry.playS2C().get(CluesPayload.TYPE) != null`.
-  - **Covered by:** `src/test/java/.../net/NetworkingRegistryTest.java`.
+    - [x] After manual `registerPayloads()` call, both `TYPE` lookups succeed.
+  - **File:** `src/test/java/.../net/NetworkingRegistryTest.java`.
 
 ## Story S-2.4 — Enchantment selection algorithm
 
-The highest-risk zone in the mod. Monotonicity bugs in `getEnchantmentCost`, weight-function drift in `selectEnchantment`, or a pool-filter regression mean the mod **still works** — it just rolls the wrong things at the wrong eterna levels, indistinguishable from player bad luck until someone compares against Zenith. Seed determinism tests are the only safety net.
+Highest-risk zone in the mod. Monotonicity bugs and weight-drift are silent and player-visible only as "bad luck."
 
-- [x] **TEST-2.4.1** — `getEnchantmentCost` monotonic across slots; seeded RNG reproducible; eterna=50 lands slot-2 in `[25, 50]`.
-  - **Tier:** 1 for the math surface; spot-check values come from Zenith's fixture.
+### Tier 1
+
+- [ ] **TEST-2.4-T1** — Pure-math slice of `getEnchantmentCost` monotonicity extracted from the current T2 test.
+  - **Tier:** 1.
+  - **State:** T1-new (splits a deterministic fraction out of `RealEnchantmentHelperTest`).
   - **Acceptance:**
-    - [x] Seeded RNG → byte-identical cost outputs across runs.
-    - [x] `cost(slot=2) >= cost(slot=1) >= cost(slot=0)` over 1000 seeded rolls.
-    - [x] At `eterna=50`, slot-2 cost ∈ `[25, 50]`.
-    - [x] Honors `config.enchantingTable.maxEterna` as a clamp.
-  - **Covered by:** `src/test/java/.../enchanting/RealEnchantmentHelperTest.java`.
+    - [ ] Seeded RNG → byte-identical cost outputs across runs (no `Items` lookup).
+    - [ ] `cost(slot=2) >= cost(slot=1) >= cost(slot=0)` over 1000 seeded rolls using a pure `RandomSource.create(seed)`.
 
-- [x] **TEST-2.4.2** — `selectEnchantment` blacklist honored, treasure-gate toggles, quanta widens stdev, rectification skews the negative half.
-  - **Tier:** 2 — reads `BuiltInRegistries.ENCHANTMENT`.
-  - **Acceptance:**
-    - [x] Over 1000 rolls, blacklisted key never appears.
-    - [x] `treasureAllowed=false` → zero treasure-tagged enchants in output.
-    - [x] `treasureAllowed=true` → treasure-tagged enchants appear at non-zero rate.
-    - [x] Stdev of levels rolled at `quanta=50` exceeds stdev at `quanta=10` over equal sample sizes.
-    - [x] `rectification=∞` → outcomes strictly monotonic with eterna.
-  - **Covered by:** `src/test/java/.../enchanting/SelectEnchantmentTest.java`.
+### Tier 2
 
-- [x] **TEST-2.4.3** — `buildClueList` first clue equals the actual rolled enchant under same seed; exhausted pools flag correctly.
+- [x] **TEST-2.4-T2a** — `getEnchantmentCost` end-to-end against a real `ItemStack`.
   - **Tier:** 2.
+  - **State:** T2-migrate-clean.
   - **Acceptance:**
-    - [x] Over 100 seeds, first clue == selected enchant.
+    - [x] Seeded RNG reproducible at `eterna=50` → slot-2 cost ∈ `[25, 50]`.
+    - [x] Honors `config.enchantingTable.maxEterna` clamp.
+  - **File:** `src/test/java/.../enchanting/RealEnchantmentHelperTest.java`.
+
+- [x] **TEST-2.4-T2b** — `selectEnchantment` blacklist + treasure gate + quanta stdev + rectification.
+  - **Tier:** 2.
+  - **State:** T2-migrate-clean.
+  - **Acceptance:**
+    - [x] 1000 rolls: blacklisted key never appears.
+    - [x] `treasureAllowed=false` → zero treasure-tagged enchants.
+    - [x] `treasureAllowed=true` → treasure-tagged enchants appear.
+    - [x] Stdev at `quanta=50` > stdev at `quanta=10`.
+    - [x] `rectification=∞` → outcomes monotonic with eterna.
+  - **File:** `src/test/java/.../enchanting/SelectEnchantmentTest.java`.
+
+- [x] **TEST-2.4-T2c** — `buildClueList` first-clue == selected enchant under same seed; exhausted flag correct.
+  - **Tier:** 2.
+  - **State:** T2-migrate-clean.
+  - **Acceptance:**
+    - [x] Over 100 seeds, first clue equals the rolled selection.
     - [x] Pool smaller than `cluesCount` → `exhaustedList == true`.
-    - [x] Pool equal to `cluesCount` → list full, `exhaustedList == false`.
-  - **Covered by:** `src/test/java/.../enchanting/BuildClueListTest.java`.
+  - **File:** `src/test/java/.../enchanting/BuildClueListTest.java`.
+
+### Tier 3
+
+- [ ] **TEST-2.4-T3** — End-to-end: player opens a real table with seeded RNG → enchants applied equal the slot's advertised clue.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] Spawn player, seed table's RNG deterministically, open menu, click slot 0 → applied enchant matches the clue payload's first entry.
+  - **Dependencies:** TEST-2.5-T3, TEST-0.2-T3.
 
 ## Story S-2.5 — Menu + screen replacement
 
-Three integration surfaces at once: the mixin that swaps the menu provider, the subclass that drives state, and the screen that reads it. Silent-break modes: (a) clicking slot 3 before Epic 5 no-ops instead of throwing (loses the Epic 5 wiring signal); (b) XP/lapis validation order drifts and lets players enchant without lapis; (c) screen formatter truncates labels so `E:` values render wrong.
+Three integration surfaces: mixin swap, menu subclass, screen reader.
 
-- [x] **TEST-2.5.1** — Menu click flow: successful enchant mutates item + decrements XP/lapis; lapis-insufficient and XP-insufficient paths decline without mutation.
-  - **Tier:** 3 preferred (the menu depends on `FizzleEnchantingRegistry` having registered `MenuType`). Current coverage is at Tier 2 by exercising the `FizzleEnchantmentLogic` helper in isolation — acceptable while Tier 3 wiring isn't live.
-  - **Acceptance:**
-    - [x] Successful enchant → `ItemEnchantments` grows, XP decremented, lapis count decremented.
-    - [x] Lapis missing → output rejected, no state mutation.
-    - [x] XP insufficient → rejected, no state mutation.
-    - [x] `id == 3` throws `UnsupportedOperationException` until Epic 5 wires it (now overridden by S-5.3 — see TEST-5.3.3).
-  - **Covered by:** `src/test/java/.../enchanting/FizzleEnchantmentLogicTest.java`.
+### Tier 1
 
-- [x] **TEST-2.5.2** — `EnchantmentTableBlockMixin` returns the fizzle menu provider at HEAD.
-  - **Tier:** 2. Synthetic `BlockState` construction works once Knot loads the mixin.
-  - **Acceptance:**
-    - [x] `getMenuProvider` called on vanilla table state → returns `SimpleMenuProvider` whose factory yields `FizzleEnchantmentMenu`.
-  - **Covered by:** `src/test/java/.../mixin/EnchantmentTableBlockMixinTest.java`.
-
-- [x] **TEST-2.5.3** — `EnchantmentMenuAccessor` exposes `enchantSlots`, `random`, `enchantmentSeed`.
-  - **Tier:** 2.
-  - **Acceptance:**
-    - [x] Each `@Accessor` method returns a non-null reference on a constructed vanilla `EnchantmentMenu`.
-    - [x] Accessor name uses the `fizzleEnchanting$` prefix (compile-time, but assert presence).
-  - **Covered by:** `src/test/java/.../mixin/EnchantmentMenuAccessorTest.java`.
-
-- [x] **TEST-2.5.4** — Stat-line formatter renders `E: Q: A: R: C:` in display order with the right separators.
+- [x] **TEST-2.5-T1** — Stat-line formatter in display order with exact spacing.
   - **Tier:** 1.
+  - **State:** T1-pure.
   - **Acceptance:**
-    - [x] `(50, 12, 5, 10, 2)` → `"E: 50  Q: 12  A: 5  R: 10  C: 2"` (exact spacing matches DESIGN).
-    - [x] Fractional eterna floors/rounds as documented.
-    - [x] `config.enchantingTable.showLevelIndicator=false` → formatter returns empty string.
-  - **Covered by:** `src/test/java/.../enchanting/StatLineFormatterTest.java`.
+    - [x] `(50, 12, 5, 10, 2)` → `"E: 50  Q: 12  A: 5  R: 10  C: 2"`.
+    - [x] Fractional eterna floored/rounded per DESIGN.
+    - [x] `showLevelIndicator=false` → empty string.
+  - **File:** `src/test/java/.../enchanting/StatLineFormatterTest.java`.
 
-- [ ] **TEST-2.5.5** — Menu registration resolves through `MenuType` lookup.
-  - **Tier:** 3 — `FizzleEnchantingRegistry.registerMenuType` is post-freeze-registered mod content; can't cleanly verify at Tier 2.
+- [x] **TEST-2.5-T1b** — Mixin injection target is correctly declared (ASM bytecode introspection — no Bootstrap needed).
+  - **Tier:** 1 (pseudo — ASM `ClassReader` on the compiled mixin).
+  - **State:** T1-pseudo.
   - **Acceptance:**
-    - [ ] Under `runGametest`, `BuiltInRegistries.MENU.get(FizzleEnchanting.id("enchantment"))` is non-null and type-correct.
-    - [ ] `HandledScreens` lookup at client-sided gametest returns the fizzle screen factory (or document as unreachable in gametest and defer to manual smoke).
+    - [x] `EnchantmentTableBlockMixin#getMenuProvider` carries `@Inject(method="getMenuProvider", at=@At("HEAD"), cancellable=true)`.
+    - [x] The `CallbackInfoReturnable<MenuProvider>` is the declared return type.
+  - **File:** `src/test/java/.../mixin/EnchantmentTableBlockMixinTest.java`.
+
+- [x] **TEST-2.5-T1c** — `EnchantmentMenuAccessor` has the three expected `@Accessor` methods with `fizzleEnchanting$` prefix.
+  - **Tier:** 1 (pseudo — reflection on the accessor interface).
+  - **State:** T1-pseudo.
+  - **Acceptance:**
+    - [x] Methods for `enchantSlots`, `random`, `enchantmentSeed` declared.
+    - [x] Prefix present.
+  - **File:** `src/test/java/.../mixin/EnchantmentMenuAccessorTest.java`.
+
+### Tier 2
+
+- [x] **TEST-2.5-T2** — Menu logic helper: XP/lapis validation, click success/failure paths, id=3 throw pre-Epic 5.
+  - **Tier:** 2.
+  - **State:** T2-migrate-clean.
+  - **Acceptance:**
+    - [x] Successful enchant → `ItemEnchantments` grows, XP + lapis decremented.
+    - [x] Lapis missing → rejected, no mutation.
+    - [x] XP insufficient → rejected, no mutation.
+    - [x] Pre-Epic-5 id=3 throws `UnsupportedOperationException`; post-Epic-5 path lives in TEST-5.3-*.
+  - **File:** `src/test/java/.../enchanting/FizzleEnchantmentLogicTest.java`.
+
+### Tier 3
+
+- [ ] **TEST-2.5-T3** — End-to-end menu flow: place table, open menu, click slot → enchant applied on a real `ItemStack` in a real inventory.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] Template: enchanting table + 15 bookshelves.
+    - [ ] Mock `ServerPlayer` teleported adjacent, `useBlock` → `player.containerMenu instanceof FizzleEnchantmentMenu`.
+    - [ ] `clickMenuButton(player, 0)` applies an enchant and decrements XP + lapis.
+    - [ ] Menu-type + screen registration implicitly verified (menu opens).
+  - **Dependencies:** TEST-0.2-T3.
 
 ---
 
 # Epic 3 — Shelf Family
 
-25 Zenith shelves + utility shelves + BE-backed specials. Silent regressions here are loud at the player level (missing textures, wrong recipe), except for the three insidious ones: (a) a shelf registers but its stat JSON is namespaced to `zenith:` after a bad port, so its contribution silently stays at `ENCHANTMENT_POWER_PROVIDER` defaults; (b) a particle theme resolves to the wrong `ParticleType` and the shelf renders sculk particles; (c) the filtering-shelf slot targeting math mis-targets and inserts books into the wrong slot.
+25 Zenith shelves + utility shelves + BE-backed specials. Silent regressions: namespace-miss on stat JSON (zenith: survives), particle theme wrong `ParticleType`, filtering-shelf slot-targeting mis-targets.
 
 ## Story S-3.1 — Shelf infrastructure
 
-- [x] **TEST-3.1.1** — Base `EnchantingShelfBlock` delegates `getStats` to the registry; particle theme preserved through construction.
+### Tier 1
+
+- [ ] **TEST-3.1-T1a** — Particle-theme enum coverage (parameterized) — one row per enum value so adding a new theme forces a test extension.
+  - **Tier:** 1.
+  - **State:** T1-new (cleanup — current `ParticleThemeTest` is Tier 2 after migration but doesn't strictly need MC beyond the enum itself).
+  - **Acceptance:**
+    - [ ] Parameterized over all enum values; each maps to the declared `ParticleType` constant.
+    - [ ] Accepts new enum additions with a failing test row (no silent skip).
+
+### Tier 2
+
+- [x] **TEST-3.1-T2a** — Base `EnchantingShelfBlock` delegates `getStats` to the registry; theme preserved.
   - **Tier:** 2.
+  - **State:** T2-migrate-unfreeze — drop the synthetic block-registry reflection; construct `EnchantingShelfBlock` locally (no registry side-effects) and assert delegation against a spy `EnchantingStatRegistry`.
   - **Acceptance:**
     - [x] Construction with `ParticleTheme.ENCHANT_SCULK` → `theme()` returns same enum.
-    - [x] `getStats(level, pos, state)` calls `EnchantingStatRegistry#lookup` (observable via a spy/stub registry).
-  - **Covered by:** `src/test/java/.../shelf/EnchantingShelfBlockTest.java`.
+    - [x] `getStats` delegates to `EnchantingStatRegistry#lookup` (observed via spy).
+  - **File:** `src/test/java/.../shelf/EnchantingShelfBlockTest.java`.
 
-- [x] **TEST-3.1.2** — Each `ParticleTheme` enum value maps to the right vanilla `ParticleType`.
-  - **Tier:** 2 (reads `ParticleTypes` static).
+- [x] **TEST-3.1-T2b** — Particle theme → `ParticleType` mapping with bootstrap.
+  - **Tier:** 2.
+  - **State:** T2-migrate-clean.
   - **Acceptance:**
-    - [x] `ENCHANT → ParticleTypes.ENCHANT`.
-    - [x] `ENCHANT_FIRE → FLAME` (or whatever DESIGN pins; cross-reference DESIGN).
-    - [x] `ENCHANT_WATER`, `ENCHANT_END`, `ENCHANT_SCULK` similarly pinned.
-    - [x] Parameterized over the full enum — adding a new theme forces the test author to extend coverage.
-  - **Covered by:** `src/test/java/.../shelf/ParticleThemeTest.java`.
+    - [x] Each enum value resolves to the declared `ParticleType` constant (`ParticleTypes.ENCHANT`, etc.).
+  - **File:** `src/test/java/.../shelf/ParticleThemeTest.java`.
 
-- [x] **TEST-3.1.3** — `FizzleEnchantingRegistry` helpers register blocks + BlockItems into `BuiltInRegistries` once.
-  - **Tier:** 3 — the helper mutates vanilla registries; Tier 2 can only validate structure, not post-boot state.
+### Tier 3
+
+- [ ] **TEST-3.1-T3** — Registry helpers: every id registered once, ids resolve in `BuiltInRegistries.BLOCK` + `.ITEM`, idempotent across `register()` invocations.
+  - **Tier:** 3.
+  - **State:** T3-rewrite (replaces `FizzleEnchantingRegistryTest`).
   - **Acceptance:**
-    - [x] Under `runGametest`, every shelf id in DESIGN resolves in `BuiltInRegistries.BLOCK`.
-    - [x] Same for `BuiltInRegistries.ITEM` (BlockItem).
-    - [x] Registrations are idempotent across re-calls (safeguard against `onInitialize` running twice in test harnesses).
-  - **Covered by:** `src/test/java/.../FizzleEnchantingRegistryTest.java`.
+    - [ ] Under `runGametest`, every shelf id resolves.
+    - [ ] Double-invocation of the register helper does not duplicate entries (assert registry size pre vs. post).
+  - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-3.2 — Full Zenith shelf roster
 
-- [x] **TEST-3.2.1** — Every expected shelf id from DESIGN resolves in `BuiltInRegistries.BLOCK`.
-  - **Tier:** 3.
-  - **Acceptance:**
-    - [x] Parameterized list from DESIGN: each id → `BuiltInRegistries.BLOCK.get(id) != null`.
-    - [x] Sound group matches DESIGN (WOOD vs. STONE) — checked via `SoundType` on the block's properties.
-    - [x] Strength matches DESIGN per row.
-  - **Covered by:** `src/test/java/.../shelf/FizzleShelvesTest.java`.
+### Tier 1
 
-- [x] **TEST-3.2.2** — Every ported stat JSON parses and namespace-rewrites to `fizzle_enchanting:`.
-  - **Tier:** 2.
-  - **Acceptance:**
-    - [x] `listResources("enchanting_stats")` returns the expected file list.
-    - [x] Every file parses via `EnchantingStats.CODEC`.
-    - [x] No file's JSON body contains the literal `"zenith:"`.
-    - [x] Datapack-loader round-trip leaves every registration keyed by its `fizzle_enchanting:` id.
-  - **Covered by:** `src/test/java/.../enchanting/PortedEnchantingStatsTest.java`.
-
-- [x] **TEST-3.2.3** — Shelf texture bundle present + animated `.mcmeta` preserved; reforging/augmenting dirs not copied.
-  - **Tier:** 1 — pure filesystem assertion.
+- [x] **TEST-3.2-T1a** — Texture bundle present; animated `.mcmeta` preserved; forbidden `reforging/` / `augmenting/` dirs absent.
+  - **Tier:** 1.
+  - **State:** T1-pure.
   - **Acceptance:**
     - [x] Glob `assets/fizzle_enchanting/textures/block/*.png` contains every expected shelf.
     - [x] `blazing_hellshelf.png.mcmeta` exists.
-    - [x] No files under a `reforging/` or `augmenting/` path exist (forbidden copy).
-  - **Covered by:** `src/test/java/.../shelf/ShelfTextureBundleTest.java`.
+    - [x] No files under `reforging/` or `augmenting/`.
+  - **File:** `src/test/java/.../shelf/ShelfTextureBundleTest.java`.
 
-- [x] **TEST-3.2.4** — Every registered shelf has a `block.fizzle_enchanting.<id>` lang key.
+- [x] **TEST-3.2-T1b** — `block.fizzle_enchanting.<id>` lang key per shelf.
   - **Tier:** 1.
+  - **State:** T1-pure.
   - **Acceptance:**
     - [x] `en_us.json` parses.
-    - [x] For each id in the shelf roster, the matching key exists with a non-empty value.
-    - [x] No dangling keys reference cut shelves.
-  - **Covered by:** `src/test/java/.../shelf/ShelfLangKeysTest.java`.
+    - [x] One non-empty key per id in the shelf roster.
+    - [x] No dangling keys for cut shelves.
+  - **File:** `src/test/java/.../shelf/ShelfLangKeysTest.java`.
+
+- [x] **TEST-3.2-T1c** — Every ported stat JSON free of `zenith:` literal, namespaced to `fizzle_enchanting:`.
+  - **Tier:** 1 (pseudo — filesystem + JSON parse; uses `ResourceLocation` as a POJO).
+  - **State:** T1-pseudo.
+  - **Acceptance:**
+    - [x] No file contains `"zenith:"`.
+    - [x] Every `ResourceLocation`-shaped string resolves.
+  - **File:** `src/test/java/.../enchanting/PortedEnchantingStatsTest.java`.
+
+### Tier 2
+
+- [ ] **TEST-3.2-T2** — Every ported stat JSON parses via `EnchantingStats.CODEC` post-bootstrap.
+  - **Tier:** 2.
+  - **State:** T2-new.
+  - **Acceptance:**
+    - [ ] `listResources("enchanting_stats")` returns the expected file count.
+    - [ ] Each parses without warning.
+  - **Dependencies:** TEST-2.1-T2 (shares the codec harness).
+
+### Tier 3
+
+- [ ] **TEST-3.2-T3** — Every expected shelf id registered; sound group + strength match DESIGN.
+  - **Tier:** 3.
+  - **State:** T3-rewrite (replaces `FizzleShelvesTest`).
+  - **Acceptance:**
+    - [ ] Parameterized: each id → `BuiltInRegistries.BLOCK.get(id) != null`.
+    - [ ] `SoundType` matches DESIGN (WOOD vs STONE).
+    - [ ] `destroySpeed` / `explosionResistance` match DESIGN.
+  - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-3.3 — Utility shelves
 
-- [x] **TEST-3.3.1** — Sightshelf tiers contribute clues pre-clamp; `maxEterna: 0` confirmed.
-  - **Tier:** 2. Works on the registry directly, no real shelf placement needed.
+### Tier 1
+
+- [x] **TEST-3.3-T1a** — Sightshelf stat JSONs: `maxEterna: 0`, correct clue count.
+  - **Tier:** 1 (pseudo — JSON parse via DFU only).
+  - **State:** T1-pseudo.
   - **Acceptance:**
     - [x] `sightshelf.json` → `clues: 1, maxEterna: 0`.
     - [x] `sightshelf_t2.json` → `clues: 2, maxEterna: 0`.
-    - [x] Stacked unclamped result before T-2.2.3 clamp == 4.
-  - **Covered by:** `src/test/java/.../enchanting/SightshelfStatsTest.java`.
+    - [x] Stacked unclamped result before scan clamp == 4.
+  - **File:** `src/test/java/.../enchanting/SightshelfStatsTest.java`.
 
-- [x] **TEST-3.3.2** — Rectifier tiers map to `rectification: 10/15/20`.
-  - **Tier:** 2.
+- [x] **TEST-3.3-T1b** — Rectifier tiers map to `10/15/20`.
+  - **Tier:** 1 (pseudo).
+  - **State:** T1-pseudo.
   - **Acceptance:**
-    - [x] `rectifier.json → 10`, `rectifier_t2.json → 15`, `rectifier_t3.json → 20`.
-  - **Covered by:** `src/test/java/.../enchanting/RectifierStatsTest.java`.
+    - [x] `rectifier → 10`, `rectifier_t2 → 15`, `rectifier_t3 → 20`.
+  - **File:** `src/test/java/.../enchanting/RectifierStatsTest.java`.
+
+### Tier 3
+
+- [ ] **TEST-3.3-T3** — Stacking in real level respects clue clamp (3) and unbounded rectification.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] Template: two `sightshelf_t2` around a table → observed `clues == 3` (clamped from 4).
+    - [ ] `rectifier_t3` in range → `rectification == 20` via the live stat payload.
+  - **Dependencies:** TEST-2.2-T3a.
 
 ## Story S-3.4 — Datagen providers
 
-Silent regression risk: one provider silently starts emitting stale output because its generator wasn't wired; missed at commit time because `runDatagen` is idempotent — but only if everyone re-runs it. Idempotency assertion is the key safety net.
+Datagen tests have historically been hard to isolate — they depend on mod content being registered. The pragmatic answer: move correctness to `./gradlew runDatagen` + `git diff --exit-code src/main/generated/` rather than unit tests. The existing T3-rewrite candidates should be **deleted**, not rewritten, with the CI check replacing them.
 
-- [x] **TEST-3.4.1** — Model provider output covers every registered shelf + the hand-shipped items.
+### Tier 1
+
+- [ ] **TEST-3.4-T1a** — Post-`runDatagen` filesystem sweep: every expected blockstate/model/loot-table/recipe file present.
   - **Tier:** 1.
+  - **State:** T1-new (replaces `FizzleModelProviderTest`, `FizzleBlockLootTableProviderTest`, `FizzleRecipeProviderTest` — delete all three).
   - **Acceptance:**
-    - [x] Post-datagen, `src/main/generated/assets/fizzle_enchanting/models/block/<id>.json` exists per shelf.
-    - [x] Item model generator slot populated for `infused_breath`, `warden_tendril`, `prismatic_web`, 3 tomes.
-  - **Covered by:** `src/test/java/.../data/FizzleModelProviderTest.java`.
+    - [ ] For each shelf id, `src/main/generated/assets/fizzle_enchanting/blockstates/<id>.json` exists.
+    - [ ] For each shelf/library/filtering-shelf/treasure-shelf id, `src/main/generated/data/fizzle_enchanting/loot_table/blocks/<id>.json` exists and has one `minecraft:alternatives` + `minecraft:item` pool.
+    - [ ] For each shelf id, a shaped recipe exists under `src/main/generated/data/fizzle_enchanting/recipe/` (or its advancement sibling).
+    - [ ] No custom `enchanting` / `keep_nbt_enchanting` recipe files under `src/main/generated/` (must stay hand-shipped).
 
-- [x] **TEST-3.4.2** — Loot table `dropSelf` output per block.
-  - **Tier:** 1.
+- [ ] **TEST-3.4-T1b** — `runDatagen` is idempotent.
+  - **Tier:** 1 (shell-invocation harness).
+  - **State:** T1-new.
   - **Acceptance:**
-    - [x] Every shelf / filtering shelf / treasure shelf / library / ender library → one-pool-one-entry-drop-self.
-  - **Covered by:** `src/test/java/.../data/FizzleBlockLootTableProviderTest.java`.
-
-- [x] **TEST-3.4.3** — Recipe provider emits every expected shaped recipe; no iron-block anvil-repair recipe (that's anvil-handler territory).
-  - **Tier:** 1.
-  - **Acceptance:**
-    - [x] Every shelf has a generated shaped recipe.
-    - [x] Prismatic Web recipe present.
-    - [x] Custom `enchanting` / `keep_nbt_enchanting` files are NOT in the generated set (must stay hand-shipped).
-  - **Covered by:** `src/test/java/.../data/FizzleRecipeProviderTest.java`.
-
-- [ ] **TEST-3.4.4** — Running datagen twice is a no-op (diff clean).
-  - **Tier:** 1 — runs `./gradlew runDatagen` twice via `ProcessBuilder`, then `git diff --exit-code`.
-  - **Rationale:** worth wiring if datagen drift becomes a recurring PR-review pain point; skip if manual re-run is disciplined.
-  - **Acceptance:**
-    - [ ] Second run leaves working tree clean under `src/main/generated/`.
+    - [ ] Run datagen twice → `git diff --exit-code src/main/generated/` clean.
+    - [ ] Wire into CI as a non-blocking check initially; promote to blocking once stable.
 
 ## Story S-3.5 — Filtering & treasure shelves
 
-BE-backed shelves are the highest-risk shelf variant: NBT save/load round-trips, client sync via update packet, and slot-targeting math all have to line up. Silent breaks: (a) NBT load silently loses enchantments so the blacklist shrinks after a server restart; (b) `getUpdatePacket` forgets a field so the client renders an empty slot while the server thinks it's full.
+### Tier 1
 
-- [x] **TEST-3.5.1** — `FilteringShelfBlockEntity` insert/extract round-trip; NBT round-trip; slot hit-target math.
-  - **Tier:** 2 for NBT + blacklist math; Tier 3 advised for real-level cursor-hit targeting.
+- [ ] **TEST-3.5-T1** — Slot-targeting math (cursor hit → slot index).
+  - **Tier:** 1.
+  - **State:** T1-new (extract from the legacy `FilteringShelfTest` — pure coordinate math with no registry access).
   - **Acceptance:**
-    - [x] Insert enchanted book → blacklist grows by that enchant.
-    - [x] Extract that book → blacklist shrinks by exactly that enchant.
-    - [x] `saveAdditional` + `load(CompoundTag, RegistryAccess)` restores the full book list.
-    - [x] Slot targeting for each of the four corner hits maps to the right slot index.
-    - [x] Full shelf rejects additional inserts.
-    - [x] Empty shelf contributes as a wood-tier base shelf (DESIGN fallback path).
-  - **Covered by:** `src/test/java/.../shelf/FilteringShelfTest.java`.
+    - [ ] For each of the four corners + center, hit coord maps to the expected 0–5 slot index.
+    - [ ] Off-face hit → `-1` (no slot).
 
-- [x] **TEST-3.5.2** — `TreasureShelfBlockEntity` presence flips `treasureAllowed`; zero Eterna contribution.
+### Tier 2
+
+- [ ] **TEST-3.5-T2** — BE NBT round-trip using real vanilla enchantment keys (no synthetic registry).
   - **Tier:** 2.
+  - **State:** T2-new (splits NBT math out of the register-heavy legacy test).
   - **Acceptance:**
-    - [x] One treasure BE in range → `StatCollection.treasureAllowed == true`.
-    - [x] None in range → `false`.
-    - [x] Its `getStats` returns `EnchantingStats.ZERO`.
-  - **Covered by:** `src/test/java/.../enchanting/TreasureShelfTest.java`.
+    - [ ] Insert an enchanted book carrying real `Enchantments.SHARPNESS` + `Enchantments.MENDING` → blacklist set contains both keys.
+    - [ ] `saveAdditional` + `load(CompoundTag, RegistryAccess)` round-trip preserves the set.
+    - [ ] Unknown enchant key in loaded NBT → dropped with warn, remainder intact.
 
-- [x] **TEST-3.5.3** — BE hooks wire into `StatCollection` aggregation; union across multiple filtering shelves works.
-  - **Tier:** 2.
+### Tier 3
+
+- [ ] **TEST-3.5-T3a** — `FilteringShelfBlockEntity` end-to-end: place, insert, verify blacklist flows into adjacent table.
+  - **Tier:** 3.
+  - **State:** T3-rewrite (replaces `FilteringShelfTest`).
   - **Acceptance:**
-    - [x] Two filtering shelves each holding a unique enchanted book → blacklist size 2.
-    - [x] Overlapping blacklists dedupe.
-    - [x] Treasure flag latches true on first treasure BE found.
-  - **Covered by:** `src/test/java/.../enchanting/FilteringTreasureIntegrationTest.java`.
+    - [ ] Place filtering shelf, open via `useBlock`, insert book → BE state matches.
+    - [ ] Open adjacent table → blacklist propagates to `StatsPayload`.
+    - [ ] Extract book → blacklist shrinks.
+    - [ ] Full shelf rejects additional inserts.
+    - [ ] Empty shelf contributes as a wood-tier base shelf.
+  - **Dependencies:** TEST-0.2-T3.
+
+- [ ] **TEST-3.5-T3b** — `TreasureShelfBlockEntity` presence flips `treasureAllowed`.
+  - **Tier:** 3.
+  - **State:** T3-rewrite (replaces `TreasureShelfTest`).
+  - **Acceptance:**
+    - [ ] Treasure shelf in range → `StatCollection.treasureAllowed == true` at the table.
+    - [ ] Remove shelf → `false`.
+    - [ ] Zero Eterna contribution.
+  - **Dependencies:** TEST-3.5-T3a (shares template).
 
 ---
 
 # Epic 4 — Anvil & Library
 
-Prismatic Web, iron-block anvil-repair, two library tiers with hopper I/O, custom recipe types. The library has the largest persisted state of any block in the mod — NBT-format drift here silently loses enchantment points that players spent hours banking. The anvil dispatcher handler-order is also load-bearing: adding a new handler at the wrong position silently voids prior behavior.
+Prismatic Web, iron-block anvil repair, two library tiers with hopper I/O, custom recipe types. The library has the largest persisted state of any block in the mod — NBT-format drift here silently loses enchantment points that players spent hours banking.
 
 ## Story S-4.1 — Anvil dispatcher
 
-- [x] **TEST-4.1.1** — `AnvilMenuMixin` calls dispatcher at TAIL and overwrites output + cost when a result is returned.
-  - **Tier:** 2.
-  - **Acceptance:**
-    - [x] Stub dispatcher returning canned result → anvil output slot receives it.
-    - [x] Dispatcher returning empty → vanilla output preserved.
-    - [x] `AnvilMenuAccessor` exposes `cost` / `repairItemCountCost` mutators.
-  - **Covered by:** `src/test/java/.../mixin/AnvilMenuMixinTest.java`, `src/test/java/.../mixin/AnvilMenuAccessorTest.java`.
+### Tier 1
 
-- [x] **TEST-4.1.2** — Dispatcher iterates handlers in order; first non-empty wins.
+- [x] **TEST-4.1-T1a** — Dispatcher iterates handlers in order; first non-empty wins.
   - **Tier:** 1.
+  - **State:** T1-pure.
   - **Acceptance:**
-    - [x] Two stub handlers — first returns non-empty → second never consulted.
-    - [x] First returns empty → second consulted; if second returns non-empty, that's the result.
-    - [x] Handler insertion order preserved across resets.
-  - **Covered by:** `src/test/java/.../anvil/AnvilDispatcherTest.java`.
+    - [x] Two stubs: first non-empty → second never consulted.
+    - [x] First empty → second consulted.
+    - [x] Handler order preserved.
+  - **File:** `src/test/java/.../anvil/AnvilDispatcherTest.java`.
 
-- [x] **TEST-4.1.3** — `PrismaticWebItem` resolves and recipe JSON parses.
-  - **Tier:** 2.
+- [x] **TEST-4.1-T1b** — `AnvilMenuMixin` injection target declared correctly (bytecode introspection).
+  - **Tier:** 1 (pseudo).
+  - **State:** T1-pseudo.
   - **Acceptance:**
-    - [x] `BuiltInRegistries.ITEM.getKey(FizzleEnchantingRegistry.PRISMATIC_WEB).toString() == "fizzle_enchanting:prismatic_web"`.
-    - [x] Recipe JSON resolves via `RecipeManager` in a server-test context.
-  - **Covered by:** `src/test/java/.../anvil/PrismaticWebItemTest.java`.
+    - [x] `@Inject(method="createResult", at=@At("TAIL"))` present.
+    - [x] Target method signature matches vanilla 1.21.1.
+  - **File:** `src/test/java/.../mixin/AnvilMenuMixinTest.java`.
 
-- [x] **TEST-4.1.4** — `PrismaticWebHandler` strips curses; preserves non-curse enchants; declines on empty/curse-less input; config-gated.
-  - **Tier:** 2.
+- [x] **TEST-4.1-T1c** — `AnvilMenuAccessor` has the expected `@Accessor` methods.
+  - **Tier:** 1 (pseudo).
+  - **State:** T1-pseudo.
   - **Acceptance:**
-    - [x] Curse-of-Vanishing + Sharpness-3 → output has Sharpness 3, no curse.
-    - [x] Non-cursed input → handler declines.
-    - [x] Right-hand non-web → declines.
-    - [x] `config.anvil.prismaticWebRemovesCurses=false` → declines.
-    - [x] XP cost == `config.anvil.prismaticWebLevelCost`; consumes 1 web.
-  - **Covered by:** `src/test/java/.../anvil/PrismaticWebHandlerTest.java`.
+    - [x] `cost` / `repairItemCountCost` accessors declared.
+  - **File:** `src/test/java/.../mixin/AnvilMenuAccessorTest.java`.
+
+### Tier 2
+
+- [ ] **TEST-4.1-T2** — `PrismaticWebHandler` strips curses against real vanilla enchantments (no mod registration).
+  - **Tier:** 2.
+  - **State:** T2-new (splits handler logic from register-heavy legacy).
+  - **Acceptance:**
+    - [ ] Curse-of-Vanishing + Sharpness-3 left item → handler returns output with Sharpness-3 only.
+    - [ ] Non-cursed input → handler declines.
+    - [ ] XP cost == `config.anvil.prismaticWebLevelCost`.
+    - [ ] `config.anvil.prismaticWebRemovesCurses=false` → declines.
+
+### Tier 3
+
+- [ ] **TEST-4.1-T3** — End-to-end: player at anvil with cursed sword + prismatic web → output slot holds uncursed sword, web consumed on take.
+  - **Tier:** 3.
+  - **State:** T3-rewrite (replaces `PrismaticWebItemTest` + `PrismaticWebHandlerTest`).
+  - **Acceptance:**
+    - [ ] Place anvil, teleport mock player, seed slots, `useBlock` opens `AnvilMenu`.
+    - [ ] Menu output slot contains uncursed sword.
+    - [ ] Take output → web stack decremented by 1.
+  - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-4.2 — Iron-block anvil repair
 
-- [x] **TEST-4.2.1/2** — Tier ladder, iron-ingot rejection, enchant preservation, config gate.
+### Tier 2
+
+- [x] **TEST-4.2-T2** — Tier ladder, iron-ingot rejection, enchantment preservation, config gate.
   - **Tier:** 2.
+  - **State:** T2-migrate-clean.
   - **Acceptance:**
     - [x] Damaged → chipped; chipped → normal.
-    - [x] Normal anvil → declines.
+    - [x] Normal → declines.
     - [x] Iron ingot (wrong material) → declines.
-    - [x] Anvil with `ItemEnchantments` component → enchantments preserved on upgrade.
-    - [x] `config.anvil.ironBlockRepairsAnvil=false` → declines even on valid inputs.
+    - [x] Anvil with `ItemEnchantments` → preserved on upgrade.
+    - [x] `ironBlockRepairsAnvil=false` → declines.
     - [x] XP cost flat 1 level; consumes 1 iron block.
-  - **Covered by:** `src/test/java/.../anvil/IronBlockAnvilRepairTest.java`.
+  - **File:** `src/test/java/.../anvil/IronBlockAnvilRepairTest.java`.
+
+### Tier 3
+
+- [ ] **TEST-4.2-T3** — Full anvil click flow upgrades damaged anvil to chipped in a real level.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] Template seeds damaged-anvil block + iron-block ItemStack in slot 1.
+    - [ ] Click output → damaged-anvil BlockItem in player inv → place → chipped-anvil block in world.
+  - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-4.3 — Library storage engine
 
-Persisted-state risk: point math sign-bit overflow (`int` at 31 levels), map keys drifting format (`toString()` → `tryParse` round-trip must be lossless), and `load` dropping a key without a loud log line. The ender library bounds exist precisely because `int` overflows at level 32.
+### Tier 1
 
-- [x] **TEST-4.3.1** — Abstract `EnchantmentLibraryBlockEntity` deposit/extract/canExtract behavior.
-  - **Tier:** 2.
-  - **Acceptance:**
-    - [x] Deposit single-enchant book updates `points` and `maxLevels`.
-    - [x] `canExtract` rejects when `maxLevels[key] < target`.
-    - [x] `canExtract` rejects when `points[key] < points(target) - points(curLvl)`.
-    - [x] `extract` mutates state only when `canExtract` passes.
-  - **Covered by:** `src/test/java/.../library/EnchantmentLibraryBlockEntityTest.java`.
-
-- [x] **TEST-4.3.2** — `BasicLibraryBlockEntity` and `EnderLibraryBlockEntity` carry correct constants.
-  - **Tier:** 2.
-  - **Acceptance:**
-    - [x] Basic: `maxLevel == 16`, `maxPoints == 32_768`.
-    - [x] Ender: `maxLevel == 31`, `maxPoints == 1_073_741_824`.
-    - [x] No config knob exposes these constants.
-  - **Covered by:** `src/test/java/.../library/LibraryTierBlockEntityTest.java`.
-
-- [x] **TEST-4.3.3** — `points(level) = 2^(level-1)`, `maxLevelAffordable` matches DESIGN.
+- [x] **TEST-4.3-T1** — Point math: `points(level) = 2^(level-1)`, `maxLevelAffordable`.
   - **Tier:** 1.
+  - **State:** T1-pure.
   - **Acceptance:**
     - [x] `points(1)=1, points(5)=16, points(16)=32_768, points(31)=1_073_741_824`.
-    - [x] `points(0)=0` or as DESIGN specifies for `level<=0`.
-    - [x] `maxLevelAffordable(points, curLvl) == 1 + log2(points + points(curLvl))` matches the shift-click DESIGN formula over a parameterized table.
-  - **Covered by:** `src/test/java/.../library/PointMathTest.java`.
+    - [x] `points(0)=0` per DESIGN fallback.
+    - [x] `maxLevelAffordable` matches DESIGN formula parameterized.
+  - **File:** `src/test/java/.../library/PointMathTest.java`.
 
-- [x] **TEST-4.3.4** — NBT round-trip preserves both maps; unknown keys dropped with warn.
-  - **Tier:** 2.
-  - **Acceptance:**
-    - [x] Save then load → both maps equal pre-save.
-    - [x] Inject an unknown enchant id into the NBT → load succeeds, key dropped, remainder intact, warn observable.
-    - [x] No schema version field in MVP (assert absence to catch accidental adds).
-  - **Covered by:** `src/test/java/.../library/LibraryNbtTest.java`.
+### Tier 2
 
-- [x] **TEST-4.3.5** — Client sync packet: server state equals client reconstruction.
+- [x] **TEST-4.3-T2a** — Abstract `EnchantmentLibraryBlockEntity` deposit/extract/canExtract using real vanilla enchants.
   - **Tier:** 2.
+  - **State:** T2-migrate-unfreeze — replace the synthetic-enchant setup with `Enchantments.SHARPNESS` / `Enchantments.MENDING` lookups post-bootstrap.
   - **Acceptance:**
-    - [x] Mutate server BE → `getUpdateTag` emits tag containing mutation.
-    - [x] Client BE reconstructed from tag `.equals()` server BE (by map contents).
-    - [x] Any mutation triggers a full resend (assert via packet count over 3 sequential mutations).
-  - **Covered by:** `src/test/java/.../library/LibraryClientSyncTest.java`.
+    - [x] Deposit single-enchant book → `points` + `maxLevels` updated.
+    - [x] `canExtract` rejects when `maxLevels[key] < target`.
+    - [x] `canExtract` rejects when insufficient points.
+    - [x] `extract` mutates state only when `canExtract` passes.
+  - **File:** `src/test/java/.../library/EnchantmentLibraryBlockEntityTest.java`.
+
+- [x] **TEST-4.3-T2b** — Basic + Ender constants.
+  - **Tier:** 2.
+  - **State:** T2-migrate-unfreeze.
+  - **Acceptance:**
+    - [x] Basic `maxLevel=16, maxPoints=32_768`.
+    - [x] Ender `maxLevel=31, maxPoints=1_073_741_824`.
+    - [x] No config knob exposes these.
+  - **File:** `src/test/java/.../library/LibraryTierBlockEntityTest.java`.
+
+- [x] **TEST-4.3-T2c** — NBT round-trip using real vanilla enchant keys; unknown keys dropped.
+  - **Tier:** 2.
+  - **State:** T2-migrate-unfreeze.
+  - **Acceptance:**
+    - [x] Save/load preserves both maps.
+    - [x] Injected unknown id → dropped with warn, remainder intact.
+    - [x] No schema version field (guard).
+  - **File:** `src/test/java/.../library/LibraryNbtTest.java`.
+
+- [x] **TEST-4.3-T2d** — Client sync packet reconstructs server state.
+  - **Tier:** 2.
+  - **State:** T2-migrate-unfreeze.
+  - **Acceptance:**
+    - [x] Mutate server BE → `getUpdateTag` includes mutation.
+    - [x] Client BE from tag equals server BE by map contents.
+    - [x] 3 sequential mutations → 3 full resends.
+  - **File:** `src/test/java/.../library/LibraryClientSyncTest.java`.
+
+### Tier 3
+
+- [ ] **TEST-4.3-T3** — Real library BE in world: deposit → server restart → state preserved.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] Place basic library, deposit via hopper, assert `points` mutated.
+    - [ ] Save chunk, reload, re-assert state.
+  - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-4.4 — Library block + UI
 
-- [x] **TEST-4.4.1** — Both library blocks register and resolve; basic recipe parses.
-  - **Tier:** 2.
-  - **Acceptance:**
-    - [x] Basic + Ender library blocks each in `BuiltInRegistries.BLOCK`.
-    - [x] `library.json` recipe parses.
-  - **Covered by:** `src/test/java/.../library/EnchantmentLibraryBlockTest.java`.
+### Tier 1
 
-- [x] **TEST-4.4.2** — Menu deposit/extract flow including shift-click formula and maxLevels gating.
-  - **Tier:** 2.
-  - **Acceptance:**
-    - [x] Book in slot 0 → absorbed on `setChanged`; slot cleared; `points` updated.
-    - [x] Extract at `maxLevels=1` with sufficient points → denied.
-    - [x] Extract with matching `maxLevels` + sufficient points → slot 1 gets upgraded book.
-    - [x] Shift-click → `maxLevelAffordable` formula hit, correct level emitted.
-  - **Covered by:** `src/test/java/.../library/EnchantmentLibraryMenuTest.java`.
-
-- [x] **TEST-4.4.3** — Library row formatter renders `{name, maxLevel badge, total points}` cleanly.
+- [x] **TEST-4.4-T1** — Library row formatter pure string output.
   - **Tier:** 1.
+  - **State:** T1-pure (currently Tier 2 via clean Bootstrap but the formatter is actually pure — migrate down).
   - **Acceptance:**
-    - [x] `{Sharpness, maxLevels=5, points=6144}` → expected formatted string.
-    - [x] Long enchant names truncated (or not) per DESIGN.
-  - **Covered by:** `src/test/java/.../library/LibraryRowFormatterTest.java`.
+    - [x] `{Sharpness, maxLevels=5, points=6144}` → expected string.
+    - [x] Long names truncated per DESIGN.
+  - **File:** `src/test/java/.../library/LibraryRowFormatterTest.java`.
 
-- [x] **TEST-4.4.4** — Listener set grows on open, shrinks on close; no GC leak after 1000 cycles.
-  - **Tier:** 2.
+### Tier 3
+
+- [ ] **TEST-4.4-T3a** — Both library blocks register; basic recipe resolves.
+  - **Tier:** 3.
+  - **State:** T3-rewrite (replaces `EnchantmentLibraryBlockTest`).
   - **Acceptance:**
-    - [x] Open menu → listener set size 1.
-    - [x] External mutation → listener's `onChanged` fires once.
-    - [x] `removed()` → listener set empty.
-    - [x] 1000 open/close cycles → listener set still empty at the end.
-  - **Covered by:** `src/test/java/.../library/EnchantmentLibraryMenuTest.java` (leak check inline).
+    - [ ] Basic + Ender library blocks in `BuiltInRegistries.BLOCK`.
+    - [ ] `library.json` recipe parses and is craftable in gametest.
+  - **Dependencies:** TEST-0.2-T3.
+
+- [ ] **TEST-4.4-T3b** — Menu deposit/extract/shift-click at a real library block.
+  - **Tier:** 3.
+  - **State:** T3-rewrite (replaces `EnchantmentLibraryMenuTest`).
+  - **Acceptance:**
+    - [ ] Book in slot 0 → absorbed on `setChanged`; slot cleared.
+    - [ ] Extract at `maxLevels=1` with sufficient points → denied.
+    - [ ] Shift-click uses `maxLevelAffordable` formula.
+    - [ ] Listener de-registration on close (leak check: 1000 open/close cycles → empty listener set).
 
 ## Story S-4.5 — Hopper integration
 
-Transaction-model risk: `SnapshotParticipant` abort/commit semantics are non-obvious. A broken abort leaks stale state across transactions; a broken commit no-ops silently.
+### Tier 2
 
-- [x] **TEST-4.5.1** — `Storage<ItemVariant>` adapter: inserts only books, rejects everything else, voids overflow.
+- [x] **TEST-4.5-T2** — `Storage<ItemVariant>` adapter + `SnapshotParticipant` abort/commit; rate limit.
   - **Tier:** 2.
+  - **State:** T2-migrate-unfreeze.
   - **Acceptance:**
-    - [x] Diamond sword insert → 0 accepted.
-    - [x] Enchanted book insert at cap → returns full input amount (void overflow).
-    - [x] `extract` returns 0 unconditionally.
-  - **Covered by:** `src/test/java/.../library/LibraryStorageTest.java`.
+    - [x] Diamond sword → 0 accepted; enchanted book at cap → returns full amount (void overflow); extract → 0.
+    - [x] Begin → insert → abort → state unchanged.
+    - [x] Begin → insert → commit → state mutated; `setChanged` exactly once.
+    - [x] Two rapid inserts under `ioRateLimitTicks` → second dropped.
+  - **File:** `src/test/java/.../library/LibraryStorageTest.java`.
 
-- [x] **TEST-4.5.2** — `SnapshotParticipant` abort restores pre-insert state; commit persists + fires `setChanged` once.
-  - **Tier:** 2.
-  - **Acceptance:**
-    - [x] Begin → insert → abort → state == pre-insert.
-    - [x] Begin → insert → commit → state mutated; `setChanged` invoked exactly once.
-  - **Covered by:** `src/test/java/.../library/LibraryStorageTest.java`.
-  - **Dependencies:** TEST-4.5.1.
+### Tier 3
 
-- [x] **TEST-4.5.3** — Rate limit drops subsequent inserts within `ioRateLimitTicks`.
-  - **Tier:** 2.
+- [ ] **TEST-4.5-T3** — Real hopper adjacent to library BE actually transfers books.
+  - **Tier:** 3.
+  - **State:** T3-new.
   - **Acceptance:**
-    - [x] Two inserts within rate-limit window → second dropped.
-    - [x] `ioRateLimitTicks = 0` → no rate limit.
-  - **Covered by:** `src/test/java/.../library/LibraryStorageTest.java`.
-  - **Dependencies:** TEST-4.5.1.
+    - [ ] Template: hopper above library with 1 enchanted book in hopper inventory.
+    - [ ] Tick 2 seconds → book transferred, library `points` incremented.
+    - [ ] Non-book in hopper → stays in hopper.
+  - **Dependencies:** TEST-4.3-T3.
 
 ## Story S-4.6 — Custom recipe types
 
-Datapack schema is the contract with every shipped recipe file. Codec drift silently breaks the 7 hand-shipped recipes.
+### Tier 1
 
-- [x] **TEST-4.6.1** — `EnchantingRecipe` codec + `StatRequirements` record semantics.
-  - **Tier:** 2.
+- [x] **TEST-4.6-T1** — `StatRequirements` record semantics.
+  - **Tier:** 1.
+  - **State:** T1-pure.
   - **Acceptance:**
-    - [x] `StatRequirements(e,q,a)` round-trips; `-1` maxes encoded.
-    - [x] `EnchantingRecipe` MAP_CODEC round-trips.
-    - [x] `matches(input, stats)` true when stats ≥ `requirements` and ≤ `maxRequirements`; false otherwise.
-    - [x] `RECIPE_TYPE` registered under `BuiltInRegistries.RECIPE_TYPE` post-bootstrap.
-  - **Covered by:** `src/test/java/.../enchanting/recipe/EnchantingRecipeTest.java`, `src/test/java/.../enchanting/recipe/StatRequirementsTest.java`.
+    - [x] `(e,q,a)` equality; `-1` as no-max sentinel.
+    - [x] `matches(stats)` boundary cases.
+  - **File:** `src/test/java/.../enchanting/recipe/StatRequirementsTest.java`.
 
-- [x] **TEST-4.6.2** — `KeepNbtEnchantingRecipe.assemble` preserves `ItemEnchantments`.
+### Tier 2
+
+- [x] **TEST-4.6-T2a** — `EnchantingRecipe` codec round-trip + `matches(input, stats)`.
   - **Tier:** 2.
+  - **State:** T2-migrate-unfreeze — swap synthetic enchant registry for vanilla enchants where the codec needs to resolve a `HolderLookup`.
+  - **Acceptance:**
+    - [x] MAP_CODEC round-trips.
+    - [x] `matches` true when stats ∈ `[requirements, maxRequirements]`.
+    - [x] `RECIPE_TYPE` registered in `BuiltInRegistries.RECIPE_TYPE`.
+  - **File:** `src/test/java/.../enchanting/recipe/EnchantingRecipeTest.java`.
+
+- [x] **TEST-4.6-T2b** — `KeepNbtEnchantingRecipe.assemble` preserves `ItemEnchantments`.
+  - **Tier:** 2.
+  - **State:** T2-migrate-unfreeze.
   - **Acceptance:**
     - [x] Input with Sharpness-5 → result carries Sharpness-5.
     - [x] Codec round-trip for the new type.
-  - **Covered by:** `src/test/java/.../enchanting/recipe/EnchantingRecipeTest.java` (second variant) OR a new file — note if missing.
+  - **File:** same as above.
 
-- [x] **TEST-4.6.3** — `EnchantingRecipeRegistry.findMatch` returns the right recipe across both subtypes.
+- [x] **TEST-4.6-T2c** — `EnchantingRecipeRegistry.findMatch` over both subtypes.
   - **Tier:** 2.
+  - **State:** T2-migrate-unfreeze.
   - **Acceptance:**
-    - [x] Recipes with varying `(requirements, maxRequirements)` → hit/miss as expected.
-    - [x] Mixed `enchanting` + `keep_nbt_enchanting` in the recipe set → findMatch picks the correct subtype.
-  - **Covered by:** `src/test/java/.../enchanting/recipe/EnchantingRecipeRegistryTest.java`.
+    - [x] Varying `(requirements, maxRequirements)` → hit/miss as expected.
+    - [x] Mixed subtype recipe set → correct subtype picked.
+  - **File:** `src/test/java/.../enchanting/recipe/EnchantingRecipeRegistryTest.java`.
 
-- [x] **TEST-4.6.4** — All 7 shipped recipe JSONs parse and resolve to the declared subtype + bounds match Zenith.
+- [x] **TEST-4.6-T2d** — All 7 shipped recipe JSONs parse into the declared subtype + bounds match Zenith.
   - **Tier:** 2.
+  - **State:** T2-migrate-unfreeze.
   - **Acceptance:**
-    - [x] Each of the 7 files loads via `RecipeManager` in a server-test context.
-    - [x] Each parses into the expected subtype (6× `enchanting`, 1× `keep_nbt_enchanting`).
-    - [x] `(e, q, a)` requirement tuples match DESIGN's Zenith-copied values.
-  - **Covered by:** `src/test/java/.../enchanting/recipe/EnchantingRecipeRegistryTest.java`.
-  - **Dependencies:** TEST-4.6.3.
+    - [x] Each file loads via `RecipeManager`.
+    - [x] 6× `enchanting`, 1× `keep_nbt_enchanting`.
+    - [x] `(e,q,a)` tuples match DESIGN.
+  - **File:** same as above.
+
+### Tier 3
+
+- [ ] **TEST-4.6-T3** — Datapack reload populates `RecipeManager` under running server; `findMatch` returns correctly on real `ServerLevel`.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] On gametest boot, all 7 shipped recipes load.
+    - [ ] `EnchantingRecipeRegistry.findMatch(level, <library book>, matchingStats)` returns the ender-library keep-nbt recipe.
+  - **Dependencies:** TEST-0.2-T3.
 
 ---
 
 # Epic 5 — Tomes & Table Crafting UX
 
-Tomes move player-persistent XP value between items; a broken handler either destroys items it shouldn't (silent) or double-counts enchantments (loud). The crafting-result row wires the table menu to a whole second recipe type — id=3 before Epic 5 was a sentinel that threw; after Epic 5 it's the hot path.
+Tomes move player-persistent XP value between items; a broken handler either destroys items it shouldn't (silent) or double-counts enchantments (loud). The crafting-result row wires the table menu to a whole second recipe type.
 
 ## Story S-5.1 — Tome items
 
-- [x] **TEST-5.1.1** — Three tome items register with `stackSize=1`, no durability.
-  - **Tier:** 2.
-  - **Acceptance:**
-    - [x] Each tome resolves in `BuiltInRegistries.ITEM`.
-    - [x] `getMaxStackSize() == 1` for all three.
-    - [x] No durability component attached.
-  - **Covered by:** `src/test/java/.../tome/TomeItemsTest.java`.
+### Tier 1
 
-- [x] **TEST-5.1.2** — Textures present at `item/tome/`, lang keys present, model JSONs reference the right textures.
+- [x] **TEST-5.1-T1a** — Tome asset + lang + model JSON presence; no typed-tome textures.
   - **Tier:** 1.
+  - **State:** T1-pure.
   - **Acceptance:**
-    - [x] 3 tome `.png` files in `assets/fizzle_enchanting/textures/item/tome/`.
+    - [x] 3 tome PNGs under `item/tome/`.
     - [x] 3 lang keys present.
-    - [x] Each item model JSON has `"textures": {"layer0": "fizzle_enchanting:item/tome/<tome>"}`.
-    - [x] No typed-tome textures (9 cut Zenith tomes) present.
-  - **Covered by:** `src/test/java/.../tome/TomeAssetsTest.java`.
+    - [x] Each item model has the right `layer0` texture path.
+    - [x] None of the 9 cut typed-tome textures present.
+  - **File:** `src/test/java/.../tome/TomeAssetsTest.java`.
 
-- [x] **TEST-5.1.3** — Scrap tome vanilla-shape recipe parses.
-  - **Tier:** 2.
+- [x] **TEST-5.1-T1b** — Scrap tome vanilla-shape recipe parses.
+  - **Tier:** 1 (pseudo — GSON parse only, no registry resolution).
+  - **State:** T1-pseudo.
   - **Acceptance:**
-    - [x] `scrap_tome.json` loads via `RecipeManager`.
-    - [x] Inputs match DESIGN (ported from Zenith).
-  - **Covered by:** `src/test/java/.../tome/ScrapTomeRecipeTest.java`.
+    - [x] `scrap_tome.json` parses to expected shape.
+    - [x] Ingredient references documented in DESIGN present.
+  - **File:** `src/test/java/.../tome/ScrapTomeRecipeTest.java`.
+
+### Tier 2
+
+- [ ] **TEST-5.1-T2** — Scrap tome recipe resolves via `RecipeManager` post-bootstrap (guards against JSON parsing past but recipe-type mismatching).
+  - **Tier:** 2.
+  - **State:** T2-new.
+  - **Acceptance:**
+    - [ ] On bootstrap with recipe loader wired, `scrap_tome` resolves to a shaped recipe producing the tome item (tome `Item` instance is the only registration blocker; test skips the output check and asserts only the recipe-type + ingredient shape at Tier 2).
+
+### Tier 3
+
+- [ ] **TEST-5.1-T3** — All three tomes register; `stackSize=1`; no durability component; obtainable via shipped recipes.
+  - **Tier:** 3.
+  - **State:** T3-rewrite (replaces `TomeItemsTest`).
+  - **Acceptance:**
+    - [ ] All three tome items in `BuiltInRegistries.ITEM`.
+    - [ ] `getMaxStackSize() == 1`.
+    - [ ] No durability component.
+    - [ ] Craft scrap tome in gametest → resolves.
+  - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-5.2 — Tome anvil handlers
 
-- [x] **TEST-5.2.1** — `ScrapTomeHandler` seeded RNG → deterministic single-enchant output; unenchanted input declines.
-  - **Tier:** 2.
-  - **Acceptance:**
-    - [x] Seeded world random → output enchant equals expected.
-    - [x] Left item destroyed, tome consumed.
-    - [x] Unenchanted left → handler declines (returns empty).
-    - [x] XP cost == `config.tomes.scrapTomeXpCost`.
-  - **Covered by:** `src/test/java/.../anvil/ScrapTomeHandlerTest.java`.
+### Tier 1
 
-- [x] **TEST-5.2.2** — `ImprovedScrapTomeHandler` copies all enchants to the output book.
-  - **Tier:** 2.
+- [ ] **TEST-5.2-T1** — Damage-clamp arithmetic for `ExtractionTomeHandler` (pure math over `int` durability values).
+  - **Tier:** 1.
+  - **State:** T1-new (extracts the clamp logic from the legacy handler tests).
   - **Acceptance:**
-    - [x] 3-enchant input → output book carries all 3 at same levels.
-    - [x] Left item destroyed, tome consumed.
-    - [x] XP cost == `config.tomes.improvedScrapTomeXpCost`.
-  - **Covered by:** `src/test/java/.../anvil/ImprovedScrapTomeHandlerTest.java`.
+    - [ ] `damage(max=1000, curDmg=0, percent=0.2f)` → 200 damage applied.
+    - [ ] `damage(max=2, curDmg=1, percent=0.5f)` → stops at `max-1` (durability ≥ 1 clamp).
+    - [ ] Negative percent → rejected by upstream validation (config clamp covered by TEST-1.3-T1c).
 
-- [x] **TEST-5.2.3** — `ExtractionTomeHandler` preserves item (damaged), emits full-book output; durability clamp honored.
-  - **Tier:** 2.
-  - **Acceptance:**
-    - [x] 3 enchants → output book has 3, left item survives unenchanted, damage == `config.tomes.extractionTomeItemDamage`.
-    - [x] Left durability 1 → stays at 1 after handler (clamped).
-    - [x] XP cost == `config.tomes.extractionTomeXpCost`.
-  - **Covered by:** `src/test/java/.../anvil/ExtractionTomeHandlerTest.java`.
+### Tier 2
 
-- [x] **TEST-5.2.4** — Extraction Tome in anvil fuel slot repairs the left item by `repairPercent * maxDurability`.
+- [ ] **TEST-5.2-T2a** — `ScrapTomeHandler` seeded RNG deterministic single-enchant output using real vanilla enchants.
   - **Tier:** 2.
+  - **State:** T2-new (splits handler math from the register-heavy legacy test).
   - **Acceptance:**
-    - [x] Damaged sword + tome in fuel slot (no right-hand item) → sword's damage reduced by `repairPercent * maxDurability`.
-    - [x] Tome consumed.
-    - [x] XP cost identical to standard Extraction.
-  - **Covered by:** `src/test/java/.../anvil/ExtractionTomeFuelSlotRepairHandlerTest.java`.
+    - [ ] Seeded `RandomSource` → output enchant key reproducible.
+    - [ ] Unenchanted left → handler declines.
+    - [ ] XP cost == config value.
+
+- [ ] **TEST-5.2-T2b** — `ImprovedScrapTomeHandler` copies all enchants.
+  - **Tier:** 2.
+  - **State:** T2-new.
+  - **Acceptance:**
+    - [ ] 3-enchant input → 3-enchant output book.
+    - [ ] Left item destroyed, tome consumed.
+
+- [ ] **TEST-5.2-T2c** — `ExtractionTomeHandler` preserves item (damaged), outputs all-enchants book.
+  - **Tier:** 2.
+  - **State:** T2-new.
+  - **Acceptance:**
+    - [ ] 3 enchants → output book has 3.
+    - [ ] Left item survives unenchanted with damage == config percent.
+    - [ ] Durability ≥ 1 clamp honored (ref TEST-5.2-T1).
+
+### Tier 3
+
+- [ ] **TEST-5.2-T3a** — `ScrapTomeHandler` end-to-end in anvil menu.
+  - **Tier:** 3.
+  - **State:** T3-rewrite (replaces `ScrapTomeHandlerTest`).
+  - **Acceptance:**
+    - [ ] Place anvil, seed slots with enchanted sword + scrap tome, open menu, take output → book has one of the sword's enchants.
+  - **Dependencies:** TEST-0.2-T3.
+
+- [ ] **TEST-5.2-T3b** — `ImprovedScrapTomeHandler` end-to-end.
+  - **Tier:** 3.
+  - **State:** T3-rewrite (replaces `ImprovedScrapTomeHandlerTest`).
+  - **Acceptance:**
+    - [ ] All enchants transferred.
+  - **Dependencies:** TEST-5.2-T3a (shares template).
+
+- [ ] **TEST-5.2-T3c** — `ExtractionTomeHandler` end-to-end with durability change.
+  - **Tier:** 3.
+  - **State:** T3-rewrite (replaces `ExtractionTomeHandlerTest`).
+  - **Acceptance:**
+    - [ ] Sword returned unenchanted with new damage value.
+  - **Dependencies:** TEST-5.2-T3a.
+
+- [ ] **TEST-5.2-T3d** — Fuel-slot repair path: extraction tome in anvil material slot repairs left sword.
+  - **Tier:** 3.
+  - **State:** T3-rewrite (replaces `ExtractionTomeFuelSlotRepairHandlerTest`).
+  - **Acceptance:**
+    - [ ] Damaged sword + tome in fuel slot (no right-hand item) → sword damage reduced by `repairPercent * maxDurability`.
+    - [ ] Tome consumed.
+    - [ ] Enchanted sword in this path → `ExtractionTomeHandler` claims it instead (handler ordering).
+  - **Dependencies:** TEST-5.2-T3a.
 
 ## Story S-5.3 — Table crafting-result row
 
-- [x] **TEST-5.3.1** — `slotsChanged` triggers `findMatch` and stores the result on the menu.
+### Tier 1
+
+- [x] **TEST-5.3-T1** — Client row formatter pure output.
+  - **Tier:** 1.
+  - **State:** T1-pure (currently T2-migrate-clean; formatter is pure — migrate down).
+  - **Acceptance:**
+    - [x] `(ItemStack(ender_library), 20, recipeId)` → `"Ender Library — 20 levels"`.
+    - [x] Singular/plural handling per DESIGN.
+  - **File:** `src/test/java/.../enchanting/CraftingRowFormatterTest.java`.
+
+### Tier 2
+
+- [x] **TEST-5.3-T2a** — `findMatch` hook into `slotsChanged` stores recipe on menu.
   - **Tier:** 2.
+  - **State:** T2-migrate-unfreeze.
   - **Acceptance:**
     - [x] Scripted stats + library input → `currentRecipe.isPresent()`.
-    - [x] Stats outside bounds → `currentRecipe.isEmpty()`.
-  - **Covered by:** `src/test/java/.../enchanting/TableCraftingLookupTest.java`.
+    - [x] Out-of-bounds stats → `currentRecipe.isEmpty()`.
+  - **File:** `src/test/java/.../enchanting/TableCraftingLookupTest.java`.
 
-- [x] **TEST-5.3.2** — `CraftingResultEntry` correctly projected onto outgoing `StatsPayload`.
+- [x] **TEST-5.3-T2b** — `CraftingResultEntry` projection onto outgoing `StatsPayload`.
   - **Tier:** 2.
+  - **State:** T2-migrate-clean.
   - **Acceptance:**
-    - [x] Recipe present → payload's `craftingResult` is `Optional.of(CraftingResultEntry(stack, xpCost, recipeId))`.
-    - [x] Recipe absent → `Optional.empty()`.
+    - [x] Recipe present → payload's `craftingResult` is `Optional.of(...)`.
+    - [x] Absent → `Optional.empty()`.
     - [x] Round-trip byte-identical.
-  - **Covered by:** `src/test/java/.../enchanting/CraftingResultProjectionTest.java`.
-  - **Dependencies:** TEST-2.3.1.
+  - **File:** `src/test/java/.../enchanting/CraftingResultProjectionTest.java`.
 
-- [x] **TEST-5.3.3** — Server handler for `buttonId=3`: both recipe types, XP validation, no-op on no recipe.
-  - **Tier:** 2 at the handler boundary; a Tier 3 gametest for the full menu click-to-output flow is a stretch goal.
+- [x] **TEST-5.3-T2c** — Server handler for `buttonId=3`: recipe subtypes, XP validation, no-op on no recipe.
+  - **Tier:** 2.
+  - **State:** T2-migrate-clean.
   - **Acceptance:**
-    - [x] `keep_nbt_enchanting` path: input's `ItemEnchantments` preserved onto output (basic library book → ender library book).
-    - [x] `enchanting` path: input stack decremented, result inserted.
+    - [x] `keep_nbt_enchanting` preserves `ItemEnchantments`.
+    - [x] `enchanting` decrements input + inserts result.
     - [x] Insufficient XP → no-op.
-    - [x] No recipe matched → no-op (safe id==3).
-    - [x] Successful path consumes XP and refires `slotsChanged`.
-  - **Covered by:** `src/test/java/.../enchanting/CraftingResultFlowTest.java`.
+    - [x] No recipe matched → no-op.
+  - **File:** `src/test/java/.../enchanting/CraftingResultFlowTest.java`.
 
-- [x] **TEST-5.3.4** — Client row formatter produces `"<Item> — <X> levels"` + recipe-id hint.
-  - **Tier:** 1.
+### Tier 3
+
+- [ ] **TEST-5.3-T3** — Click button id=3 on a real `FizzleEnchantmentMenu` → recipe output materializes in player inventory.
+  - **Tier:** 3.
+  - **State:** T3-new.
   - **Acceptance:**
-    - [x] `(ItemStack(ender_library), 20, recipeId)` → label reads `"Ender Library — 20 levels"`.
-    - [x] Plural/singular handling for levels (if DESIGN specifies).
-  - **Covered by:** `src/test/java/.../enchanting/CraftingRowFormatterTest.java`.
+    - [ ] Place table + matching shelves, seed input slot, open menu → `craftingResult` payload present on client.
+    - [ ] `clickMenuButton(player, 3)` → output in player inv, XP decremented, input consumed.
+    - [ ] `keep_nbt_enchanting` path: input's `ItemEnchantments` preserved on output book.
+  - **Dependencies:** TEST-2.5-T3.
 
 ## Story S-5.4 — Specialty materials
 
-The only story in this epic with partially-written tests. `warden_tendril` item + the Warden loot modifier are the next test slots.
+### Tier 1
 
-- [x] **TEST-5.4.1** — `InfusedBreathItem` registered; `infused_breath` recipe resolves.
-  - **Tier:** 2.
+- [ ] **TEST-5.4-T1** — `warden_tendril` + `infused_breath` lang key presence; `infused_breath.mcmeta` present for animation.
+  - **Tier:** 1.
+  - **State:** T1-new.
   - **Acceptance:**
-    - [x] `BuiltInRegistries.ITEM.get(fizzle_enchanting:infused_breath) != null`.
-    - [x] `fizzle_enchanting:enchanting/infused_breath` recipe loads.
-    - [x] Lang key + texture present; `.mcmeta` animated metadata preserved.
-  - **Covered by:** `src/test/java/.../item/InfusedBreathItemTest.java`.
+    - [ ] Lang keys `item.fizzle_enchanting.infused_breath` + `item.fizzle_enchanting.warden_tendril` present and non-empty.
+    - [ ] `infused_breath.png.mcmeta` present.
+    - [ ] Item models reference the right texture paths.
 
-- [ ] **TEST-5.4.2** — `WardenTendrilItem` registered + assets present.
-  - **Tier:** 2.
-  - **Acceptance:**
-    - [ ] `BuiltInRegistries.ITEM.get(fizzle_enchanting:warden_tendril) != null`.
-    - [ ] Texture at `assets/fizzle_enchanting/textures/item/warden_tendril.png` present.
-    - [ ] Lang key `item.fizzle_enchanting.warden_tendril` present and non-empty.
-    - [ ] Item model JSON resolves to the tendril texture.
-  - **Dependencies:** follow TEST-5.4.1 harness.
+### Tier 3
 
-- [ ] **TEST-5.4.3** — `WardenLootHandler` modifies the warden table with two pools; drop-rate and looting-bonus semantics observable.
-  - **Tier:** 3 for the actual loot table execution (needs a `ServerLevel` + `LootContext`); a Tier 2 slice can cover pool shape.
+- [ ] **TEST-5.4-T3a** — `InfusedBreathItem` registered; `enchanting:infused_breath` recipe resolves under real `RecipeManager`.
+  - **Tier:** 3.
+  - **State:** T3-rewrite (replaces `InfusedBreathItemTest`).
   - **Acceptance:**
-    - [ ] After handler runs, `entities/warden` loot table has exactly 2 pools referencing `warden_tendril` (Tier 2 assertion on the pool list, via `LootTableEvents.MODIFY` capture).
-    - [ ] Tier 3: `dropChance=1.0, looting=0` → kill mock warden over 100 sims → observed tendril count ≥ 100.
-    - [ ] Tier 3: `dropChance=0.0, looting=3` → observed count bounded in `[0, 200]` over 1000 sims (pool B still gated by the looting-chance roll).
-    - [ ] Tier 3: `dropChance=0.0, looting=0` → zero tendrils over 100 sims.
-  - **Dependencies:** shares gametest template with TEST-3.1.3.
+    - [ ] Item registered in `BuiltInRegistries.ITEM`.
+    - [ ] Recipe loadable and producing the item under gametest.
+  - **Dependencies:** TEST-0.2-T3.
 
-- [ ] **TEST-5.4.4** — `/fizzleenchanting reload` re-reads warden drop values at roll time.
-  - **Tier:** 3 — needs a real loot roll.
+- [ ] **TEST-5.4-T3b** — `WardenTendrilItem` registered + assets present.
+  - **Tier:** 3.
+  - **State:** T3-new.
   - **Acceptance:**
-    - [ ] Boot with `dropChance=0.0` → simulate 100 kills → 0 tendrils.
-    - [ ] Mutate config in-memory to `dropChance=1.0`, call reload path, simulate 100 kills → ≥100 tendrils.
-    - [ ] Assert the handler reads config **at roll time** (inject a mutation mid-batch and observe the change take effect).
-  - **Dependencies:** TEST-5.4.3.
+    - [ ] Item registered.
+    - [ ] Texture + model + lang assets present.
+  - **Dependencies:** TEST-5.4-T3a.
+
+- [ ] **TEST-5.4-T3c** — `WardenLootHandler` modifies the warden loot table with two pools; drop-rate and looting-bonus semantics.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] After mod init, `entities/warden` loot table has exactly 2 pools referencing `warden_tendril`.
+    - [ ] `dropChance=1.0, looting=0` → kill-simulation yields ≥100 tendrils over 100 kills.
+    - [ ] `dropChance=0.0, looting=3` → observed count bounded in `[0, 200]` over 1000 kills.
+    - [ ] `dropChance=0.0, looting=0` → zero tendrils.
+  - **Dependencies:** TEST-5.4-T3b.
+
+- [ ] **TEST-5.4-T3d** — `/fizzleenchanting reload` re-reads warden drop values at roll time.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] Boot with `dropChance=0.0` → 0 tendrils over 100 kills.
+    - [ ] Mutate config in-memory to `dropChance=1.0`, invoke reload → next 100 kills yield ≥100 tendrils.
+    - [ ] Handler reads config at roll time (not cached at registration).
+  - **Dependencies:** TEST-5.4-T3c, TEST-1.4-T3.
 
 ---
 
 # Epic 6 — Enchantment Roster
 
-51 enchantments — 49 NeoEnchant+ ports + 2 authored. Silent-break model: the namespace rewrite missed a single file, or a tag entry references a cut enchant, and a subset of enchants either "exist but do nothing" or "drop from the pool" at roll time. The roster is data-only, so parse-failure at server boot is the loud failure mode — but silent downstream effects (missing tag membership, missing lang key, wrong weight) are where the tests earn their keep.
+51 enchantments — 49 NeoEnchant+ ports + 2 authored. Data-only. Parse-failure is loud at server boot; silent drift is tag membership, lang key, or wrong weight.
 
 ## Story S-6.1 — NeoEnchant+ port (49 files)
 
-- [ ] **TEST-6.1.1** — NeoEnchant+ v5.14.0 extraction manifest matches expected file list (56 JSONs at source).
-  - **Tier:** 1 — scratch-dir assertion before the copy-and-rewrite runs.
-  - **Acceptance:**
-    - [ ] Expected 56 `.json` files present under `data/enchantplus/enchantment/**`.
-    - [ ] Directory names match the slot sub-structure DESIGN expects.
+### Tier 1
 
-- [ ] **TEST-6.1.2** — Post-port: exactly 49 files present, none contain `enchantplus:`, each parses via `Enchantment.CODEC`, none of the 7 cut file names exist.
-  - **Tier:** 2 — `Enchantment.CODEC` requires bootstrap.
-  - **Acceptance:**
-    - [ ] 49 `.json` files under `src/main/resources/data/fizzle_enchanting/enchantment/`.
-    - [ ] `grep -r "enchantplus:"` on the port dir returns nothing.
-    - [ ] Each file parses via `Enchantment.CODEC` without warnings.
-    - [ ] The 7 cut IDs (`axe/timber`, `pickaxe/bedrock_breaker`, `pickaxe/spawner_touch`, `tools/auto_smelt`, `helmet/auto_feed`, `chestplate/magnet`, `sword/runic_despair`) are absent.
-
-- [ ] **TEST-6.1.3** — Every `exclusive_set` tag entry resolves to a present enchant key; no orphaned entries from the cut list.
-  - **Tier:** 2.
-  - **Acceptance:**
-    - [ ] Tag files under `data/fizzle_enchanting/tags/enchantment/exclusive_set/` parse.
-    - [ ] Every entry's `ResourceLocation` corresponds to a loaded enchant.
-    - [ ] No entry references any of the 7 cut enchants.
-
-- [ ] **TEST-6.1.4** — Lang file has one `enchantment.fizzle_enchanting.<id>` key per ported enchant; no leftover `enchantment.enchantplus.*` keys.
+- [ ] **TEST-6.1-T1a** — Pre-port NeoEnchant+ v5.14.0 manifest (56 JSONs at source).
   - **Tier:** 1.
+  - **State:** T1-new.
+  - **Acceptance:**
+    - [ ] Expected 56 `.json` files present under the extracted scratch dir.
+    - [ ] Dir name matches DESIGN slot sub-structure.
+
+- [ ] **TEST-6.1-T1b** — Post-port filesystem sweep: exactly 49 files, no `enchantplus:` literals, no cut-enchant filenames.
+  - **Tier:** 1.
+  - **State:** T1-new.
+  - **Acceptance:**
+    - [ ] 49 `.json` under `data/fizzle_enchanting/enchantment/`.
+    - [ ] `grep -r "enchantplus:"` returns nothing.
+    - [ ] The 7 cut file names are absent.
+
+- [ ] **TEST-6.1-T1c** — Lang file merge: one key per ported enchant, no leftover `enchantplus.*`, no cut-enchant keys.
+  - **Tier:** 1.
+  - **State:** T1-new.
   - **Acceptance:**
     - [ ] `en_us.json` parses.
-    - [ ] For each of the 49 ported enchant ids, the matching key exists non-empty.
+    - [ ] For each of 49 ported ids, matching key non-empty.
     - [ ] No key still namespaced to `enchantplus`.
-    - [ ] Keys for the 7 cut enchants absent.
+    - [ ] Keys for 7 cut enchants absent.
+
+### Tier 2
+
+- [ ] **TEST-6.1-T2** — Every ported enchant JSON parses via `Enchantment.CODEC` post-bootstrap.
+  - **Tier:** 2.
+  - **State:** T2-new.
+  - **Acceptance:**
+    - [ ] Each file parses without warnings.
+    - [ ] `supported_items` tag references resolve (format only; Tier 3 verifies registry membership).
+
+- [ ] **TEST-6.1-T2b** — `exclusive_set` tag entries resolve to present enchant keys.
+  - **Tier:** 2.
+  - **State:** T2-new.
+  - **Acceptance:**
+    - [ ] Every entry in `data/fizzle_enchanting/tags/enchantment/exclusive_set/*.json` parses.
+    - [ ] No entry references any of the 7 cut enchants.
+
+### Tier 3
+
+- [ ] **TEST-6.1-T3** — Post-boot, all 49 ids appear in `BuiltInRegistries.ENCHANTMENT`.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] Parameterized over the 49 ids; each resolves via `registryAccess.registryOrThrow(Registries.ENCHANTMENT).get(id)`.
+  - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-6.2 — Authored enchants
 
-- [ ] **TEST-6.2.1** — `icy_thorns.json` parses, targets chest armor, applies slowness via `minecraft:post_attack`.
+### Tier 1
+
+- [ ] **TEST-6.2-T1** — Weapon-tag expansion JSON shape + lang keys.
+  - **Tier:** 1.
+  - **State:** T1-new.
+  - **Acceptance:**
+    - [ ] `data/minecraft/tags/item/enchantable/weapon.json` has `replace: false` and includes `minecraft:shield`.
+    - [ ] Lang keys `enchantment.fizzle_enchanting.icy_thorns` + `shield_bash` present.
+
+### Tier 2
+
+- [ ] **TEST-6.2-T2a** — `icy_thorns.json` parses with chest-armor target + post_attack slowness.
   - **Tier:** 2.
+  - **State:** T2-new.
   - **Acceptance:**
     - [ ] Parses via `Enchantment.CODEC`.
     - [ ] `supported_items` resolves to `#minecraft:enchantable/chest_armor`.
-    - [ ] Effect carries `minecraft:post_attack` with `affected: "attacker"`, `enchanted: "victim"`.
+    - [ ] `minecraft:post_attack` present with `affected: "attacker"`, `enchanted: "victim"`.
     - [ ] Applied effect is `minecraft:apply_mob_effect` with Slowness.
-    - [ ] Lang key present.
 
-- [ ] **TEST-6.2.2** — `shield_bash.json` + weapon-tag expansion: tag includes `minecraft:shield`, enchant parses with damage + durability-cost effects.
+- [ ] **TEST-6.2-T2b** — `shield_bash.json` parses; weapon tag includes shield.
   - **Tier:** 2.
+  - **State:** T2-new.
   - **Acceptance:**
-    - [ ] `data/minecraft/tags/item/enchantable/weapon.json` has `replace: false` and includes `minecraft:shield`.
-    - [ ] `shield_bash.json` parses; `supported_items` resolves.
-    - [ ] Carries both `minecraft:damage` and `minecraft:post_attack`-driven `minecraft:damage_item`.
-    - [ ] Lang key present.
-    - [ ] In a bootstrap test, `Items.SHIELD` satisfies the resolved `supported_items`.
+    - [ ] Parses.
+    - [ ] After boot, `Items.SHIELD` satisfies `#minecraft:enchantable/weapon`.
+    - [ ] Carries both `minecraft:damage` and `minecraft:post_attack → minecraft:damage_item`.
+
+### Tier 3
+
+- [ ] **TEST-6.2-T3** — Enchantment effect fires in-world: apply `icy_thorns` to chest armor, take damage → slowness applied to attacker.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] Template seeds two entities; one wears enchanted chest armor.
+    - [ ] Script attack → `MobEffects.MOVEMENT_SLOWDOWN` observed on attacker.
+  - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-6.3 — Foreign enchant overrides
 
-Silent-break risk: bundled override loads but a later datapack silently stomps it; or the `applyBundledOverrides=false` path fails open and always ships overrides.
+### Tier 1
 
-- [ ] **TEST-6.3.1** — `mending.json` override loads with non-vanilla weight; treasure tag membership preserved.
-  - **Tier:** 3 — need a full server boot to see the merged enchant registry.
+- [ ] **TEST-6.3-T1** — Override JSON files present at expected paths.
+  - **Tier:** 1.
+  - **State:** T1-new.
   - **Acceptance:**
-    - [ ] After boot, `BuiltInRegistries.ENCHANTMENT.get(minecraft:mending)` has the bundled weight.
-    - [ ] `#minecraft:treasure` tag still contains `minecraft:mending`.
-    - [ ] Treasure shelf still gates it (assert via a selection-pool check at `treasureAllowed=false`).
+    - [ ] `data/minecraft/enchantment/mending.json` exists.
+    - [ ] `data/yigd/enchantment/soulbound.json` exists.
+    - [ ] Both parse as JSON.
 
-- [ ] **TEST-6.3.2** — `soulbound.json` override is valid JSON even when yigd is absent; when present, overrides.
-  - **Tier:** 2 for JSON validity; Tier 3 branch for yigd-present case (environment-dependent, may be skipped in CI).
+### Tier 2
+
+- [ ] **TEST-6.3-T2** — Override JSONs parse via `Enchantment.CODEC` (Soulbound may warn on missing yigd tag but not fail).
+  - **Tier:** 2.
+  - **State:** T2-new.
   - **Acceptance:**
-    - [ ] JSON parses.
-    - [ ] `supported_items` parse-tolerates an unresolved tag (or documented fallback) when yigd is absent.
-    - [ ] Conditional assert: yigd installed → registry reflects override weight.
+    - [ ] Mending override parses cleanly with raised weight.
+    - [ ] Soulbound override parses when yigd is absent (documented tolerance for unresolved tag).
 
-- [ ] **TEST-6.3.3** — `applyBundledOverrides` flag toggles override vs. upstream.
+### Tier 3
+
+- [ ] **TEST-6.3-T3a** — Mending override: post-boot registry has bundled weight; `#minecraft:treasure` membership preserved.
   - **Tier:** 3.
+  - **State:** T3-new.
   - **Acceptance:**
-    - [ ] Boot with flag `true` → overrides present.
-    - [ ] Boot with flag `false` → upstream values restored (via higher-priority resource-pack source OR via skipping the copy path — whichever approach T-6.3.3 lands with).
-    - [ ] Switching the flag and reloading resources flips behavior without a restart (if the chosen approach supports it; otherwise document).
+    - [ ] `BuiltInRegistries.ENCHANTMENT.get(minecraft:mending).value().weight()` == bundled value.
+    - [ ] `minecraft:mending` still in `#minecraft:treasure`.
+    - [ ] Selection pool with `treasureAllowed=false` still excludes Mending.
+  - **Dependencies:** TEST-0.2-T3.
+
+- [ ] **TEST-6.3-T3b** — `applyBundledOverrides` flag toggles override vs upstream.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] Boot with `true` → override present.
+    - [ ] Boot with `false` → upstream restored (resource pack source approach).
+  - **Dependencies:** TEST-6.3-T3a.
 
 ---
 
 # Epic 7 — Integrations
 
-EMI / REI / JEI / Jade adapters. Failure mode is near-silent: the adapter classes never run in-proc if their host mod isn't installed, so integration-only regressions don't show up in `./gradlew test`. Unit-testable portion is the shared `TableCraftingDisplay` extractor.
+Adapter plugins for EMI, REI, JEI, Jade. Failure mode is near-silent: adapter classes don't run if the host mod isn't installed, so unit coverage focuses on the shared `TableCraftingDisplay` extractor + classload smoke.
 
 ## Story S-7.1 — EMI adapter
 
-- [ ] **TEST-7.1.1** — Build succeeds with and without EMI in the dev runtime.
-  - **Tier:** 1 — CI matrix or two separate gradle runs.
+### Tier 1
+
+- [ ] **TEST-7.1-T1a** — Build matrix: gradle build succeeds with and without EMI in dev runtime.
+  - **Tier:** 1 (shell).
+  - **State:** T1-new.
   - **Acceptance:**
-    - [ ] `./gradlew build` green with EMI `modRuntimeOnly` active.
-    - [ ] `./gradlew build` green with EMI excluded.
+    - [ ] `./gradlew build` green with `modRuntimeOnly dev.emi:emi-fabric:...` active.
+    - [ ] Green with EMI excluded.
     - [ ] `fabric.mod.json` entry `"emi": [...]` present.
 
-- [ ] **TEST-7.1.2** — `TableCraftingDisplay` extractor returns the expected number of entries for both recipe subtypes.
-  - **Tier:** 2 — reads `RecipeManager`.
+- [ ] **TEST-7.1-T1b** — EMI plugin class resolves via `Class.forName` when EMI is on classpath.
+  - **Tier:** 1.
+  - **State:** T1-new.
   - **Acceptance:**
-    - [ ] Extractor output includes every shipped `enchanting` + `keep_nbt_enchanting` recipe.
-    - [ ] Each display carries input ingredient, result stack, stat requirements, XP cost.
-    - [ ] No EMI runtime needed for this slice.
-  - **Dependencies:** TEST-4.6.4.
+    - [ ] Classload succeeds with EMI present.
+    - [ ] Classload throws `ClassNotFoundException` with EMI absent (expected — entrypoint gated).
 
-- [ ] **TEST-7.1.3** — EMI recipe render (manual smoke, not automated).
-  - **Tier:** n/a — document the smoke checklist in the story PR.
+### Tier 2
+
+- [ ] **TEST-7.1-T2** — Shared `TableCraftingDisplay` extractor returns expected entries from `RecipeManager`.
+  - **Tier:** 2.
+  - **State:** T2-new.
   - **Acceptance:**
-    - [ ] With EMI installed in dev runtime, categories "Shelves" and "Tomes" appear in the panel.
-    - [ ] Each recipe displays input/output/requirements/XP correctly.
+    - [ ] Output includes every shipped `enchanting` + `keep_nbt_enchanting` recipe.
+    - [ ] Each display carries input, output, stat requirements, XP cost.
+  - **Dependencies:** TEST-4.6-T2d.
+
+### Tier 3
+
+- [ ] **TEST-7.1-T3** — Manual EMI smoke (documented, not automated).
+  - **Tier:** n/a.
+  - **State:** manual.
+  - **Acceptance:**
+    - [ ] With EMI in dev runtime, categories "Shelves" and "Tomes" appear.
+    - [ ] Each recipe renders input/output/requirements/XP correctly.
 
 ## Story S-7.2 — REI adapter
 
-- [ ] **TEST-7.2.1** — Build succeeds with and without REI; plugin entry present.
-  - **Tier:** 1.
-  - **Acceptance:** Same shape as TEST-7.1.1.
+### Tier 1
 
-- [ ] **TEST-7.2.2** — Shared `TableCraftingDisplay` adapts to REI's display type without loss.
+- [ ] **TEST-7.2-T1** — Build matrix + classload smoke, same shape as S-7.1.
+  - **Tier:** 1.
+  - **State:** T1-new.
+
+### Tier 2
+
+- [ ] **TEST-7.2-T2** — REI plugin adapts shared `TableCraftingDisplay` without loss.
   - **Tier:** 2.
+  - **State:** T2-new.
   - **Acceptance:**
-    - [ ] One-test exercise over the shared extractor; assert the REI adapter preserves every field.
-  - **Dependencies:** TEST-7.1.2.
+    - [ ] Adapter preserves every field.
+    - [ ] Extractor is shared with EMI — covered once.
+  - **Dependencies:** TEST-7.1-T2.
 
 ## Story S-7.3 — JEI adapter
 
-- [ ] **TEST-7.3.1** — JEI plugin class loads at classloader level; manual smoke documented.
-  - **Tier:** 1 for the classload smoke; manual for the UI.
-  - **Acceptance:**
-    - [ ] `Class.forName("com.fizzlesmp.fizzle_enchanting.compat.jei.JeiEnchantingPlugin")` succeeds when JEI is on classpath.
-    - [ ] Manual smoke checklist documented.
+### Tier 1
+
+- [ ] **TEST-7.3-T1** — Plugin classload smoke + `fabric.mod.json` entry.
+  - **Tier:** 1.
+  - **State:** T1-new.
+
+### Tier 3
+
+- [ ] **TEST-7.3-T3** — Manual JEI UI smoke.
+  - **Tier:** n/a.
+  - **State:** manual.
 
 ## Story S-7.4 — Jade probe tooltips
 
-- [ ] **TEST-7.4.1** — Jade tooltip string builders return expected labels.
+### Tier 1
+
+- [ ] **TEST-7.4-T1** — Jade tooltip string builders.
   - **Tier:** 1.
+  - **State:** T1-new.
   - **Acceptance:**
-    - [ ] Enchanting table probe string has all 5 stats in `E/Q/A/R/C` order.
-    - [ ] Library probe string reads `"Basic Library — N enchants stored"` with the right `N`.
-    - [ ] Probe does NOT expose per-enchant points when outside the library UI.
+    - [ ] Table probe string carries all 5 stats in `E/Q/A/R/C` order.
+    - [ ] Library probe reads `"Basic Library — N enchants stored"`.
+    - [ ] Per-enchant points not exposed outside library UI.
 
 ---
 
 # Epic 8 — Polish & Release
 
-Content finalization: advancements, tooltips, docs, release prep. Silent-break model: advancement triggers reference an enchant that was cut; tooltip recolor ignores a config hex fallback that T-1.3.3 already enforces. Most of this epic is manual-review territory.
+Content finalization. Silent breaks are mostly about advancement triggers referencing cut enchants and tooltip recolor ignoring the config hex fallback.
 
 ## Story S-8.1 — Advancement tree
 
-- [ ] **TEST-8.1.1** — All 10 advancement JSONs parse via `Advancement.CODEC`; every `requirements` references present shelves/items.
-  - **Tier:** 2.
-  - **Acceptance:**
-    - [ ] All 10 JSONs in `data/fizzle_enchanting/advancement/` parse.
-    - [ ] Every item/tag reference resolves after bootstrap.
-    - [ ] `apotheosis` advancement uses a valid trigger (custom or repurposed `minecraft:enchanted_item`).
+### Tier 1
 
-- [ ] **TEST-8.1.2** — Every advancement has a title + description lang key.
+- [ ] **TEST-8.1-T1** — Advancement lang-key sweep.
   - **Tier:** 1.
+  - **State:** T1-new.
   - **Acceptance:**
-    - [ ] For each advancement id, both `advancement.fizzle_enchanting.<id>.title` and `advancement.fizzle_enchanting.<id>.description` present and non-empty.
+    - [ ] Each of the 10 advancement ids has both `advancement.fizzle_enchanting.<id>.title` and `.description`.
+
+### Tier 2
+
+- [ ] **TEST-8.1-T2** — All 10 advancement JSONs parse via `Advancement.CODEC` and their item/tag references resolve.
+  - **Tier:** 2.
+  - **State:** T2-new.
+  - **Acceptance:**
+    - [ ] All parse.
+    - [ ] Every item/tag reference resolves post-bootstrap.
+    - [ ] `apotheosis` advancement uses a valid trigger.
+
+### Tier 3
+
+- [ ] **TEST-8.1-T3** — `apotheosis` advancement trigger fires at Eterna 50 in a real level.
+  - **Tier:** 3.
+  - **State:** T3-new.
+  - **Acceptance:**
+    - [ ] Template: table + 15 bookshelves + utility shelves sufficient for Eterna 50.
+    - [ ] Open menu → advancement earned on player.
+  - **Dependencies:** TEST-2.5-T3.
 
 ## Story S-8.2 — Tooltips + overleveled coloring
 
-- [ ] **TEST-8.2.1** — Tooltip formatter recolors over-leveled enchants; vanilla-cap map populated; fallback color honored.
-  - **Tier:** 1.
-  - **Acceptance:**
-    - [ ] Sharpness 7 → recolored with `config.display.overLeveledColor`.
-    - [ ] Sharpness 5 → vanilla color.
-    - [ ] Invalid config hex → fallback `#FF6600` per TEST-1.3.3.
-    - [ ] Vanilla-cap map has one entry per shipped enchant (hard-coded MVP).
+### Tier 1
 
-- [ ] **TEST-8.2.2** — Stored-book per-level tooltip lines suppressed when `config.display.showBookTooltips=false`.
+- [ ] **TEST-8.2-T1a** — Tooltip formatter: over-leveled enchants recolored; vanilla caps map populated; config fallback honored.
   - **Tier:** 1.
+  - **State:** T1-new.
   - **Acceptance:**
-    - [ ] Flag true → lines present.
-    - [ ] Flag false → empty list.
+    - [ ] Sharpness 7 → recolored with `overLeveledColor`.
+    - [ ] Sharpness 5 → vanilla color.
+    - [ ] Invalid hex → fallback `#FF6600` (via TEST-1.3-T1c).
+    - [ ] Cap map has one entry per shipped enchant.
+
+- [ ] **TEST-8.2-T1b** — Book tooltip toggle suppresses per-level lines.
+  - **Tier:** 1.
+  - **State:** T1-new.
+  - **Acceptance:**
+    - [ ] `showBookTooltips=true` → lines present.
+    - [ ] `false` → empty list.
 
 ## Story S-8.3 — Operator docs
 
-Documentation. No test rows — manual review only.
+No test rows. Manual review.
 
 ## Story S-8.4 — Release prep
 
-- [ ] **TEST-8.4.1** — Full test + build sweep green: `./gradlew runDatagen && ./gradlew clean build test` is the release gate.
-  - **Tier:** 1 (CI orchestration).
-  - **Acceptance:**
-    - [ ] All three gradle tasks exit zero.
-    - [ ] No new warnings beyond the known baseline.
+### Tier 1
 
-- [ ] **TEST-8.4.2** — CHANGELOG and plugin-list entries lint-valid (format matches CLAUDE.md rules).
-  - **Tier:** 1 — content check only.
+- [ ] **TEST-8.4-T1a** — Full test + build sweep: `./gradlew runDatagen && ./gradlew clean build test runGametest` all green.
+  - **Tier:** 1 (CI).
+  - **State:** T1-new.
   - **Acceptance:**
-    - [ ] `companions/fizzle-enchanting/CHANGELOG.md` has a `[0.1.0]` heading with epic highlights.
-    - [ ] Root `CHANGELOG.md` `[Unreleased] → Added` has the Fizzle Enchanting line.
-    - [ ] `plugins/gameplay.md` has a `## Fizzle Enchanting` entry with every required field.
+    - [ ] All four exit zero.
+    - [ ] No new warnings beyond baseline.
 
-- [ ] **TEST-8.4.3** — Conflict audit artifact: `/check-conflicts` output recorded, meaningful findings landed in `docs/compatibility-matrix.md`.
-  - **Tier:** n/a — documentation / audit step.
+- [ ] **TEST-8.4-T1b** — CHANGELOG + plugin-list lint.
+  - **Tier:** 1.
+  - **State:** T1-new.
   - **Acceptance:**
-    - [ ] Audit output committed alongside the release PR.
-    - [ ] Every non-trivial conflict has a matrix row.
+    - [ ] `companions/fizzle-enchanting/CHANGELOG.md` has `[0.1.0]` with epic highlights.
+    - [ ] Root CHANGELOG `[Unreleased] → Added` line present.
+    - [ ] `plugins/gameplay.md` `## Fizzle Enchanting` entry with every required field.
 
 ---
 
 # Epic 9 — Post-MVP Iteration Backlog
 
-Each story below only gets a testing plan when the iteration is scheduled. Placeholder rows so the `TEST-9.x` IDs are reserved and won't collide with MVP IDs.
+Only tested when the iteration is scheduled. Placeholders so IDs don't collide.
 
 ## Story S-9.1 — Absorb BeyondEnchant
 
-- [ ] **TEST-9.1.1** — 16 override JSONs at `data/minecraft/enchantment/*.json` parse and carry the expected caps; `levelCaps.perEnchantment` overrides bundled defaults.
+### Tier 2
+
+- [ ] **TEST-9.1-T2** — 16 override JSONs parse with expected caps.
+  - **Tier:** 2.
+  - **State:** T2-new.
+
+### Tier 3
+
+- [ ] **TEST-9.1-T3** — Runtime cap lookup uses `config.levelCaps.perEnchantment` when `enabled=true`; Spectrum Paxi fix still applies.
   - **Tier:** 3.
-  - **Acceptance:**
-    - [ ] All 16 overrides parse.
-    - [ ] Runtime cap lookup uses `config.levelCaps.perEnchantment` when `enabled=true`.
-    - [ ] Spectrum-BeyondEnchant-LevelCap-Fix Paxi pack still applies cleanly.
+  - **State:** T3-new.
 
 ## Story S-9.2 — Absorb Easy Magic (item persistence)
 
-- [ ] **TEST-9.2.1** — Table BE persists slot contents across GUI close + logout/login + pre-existing vanilla table migration.
+### Tier 3
+
+- [ ] **TEST-9.2-T3** — Table BE persists slot contents across GUI close + logout/login + pre-existing vanilla table migration.
   - **Tier:** 3.
-  - **Acceptance:**
-    - [ ] Place item, close GUI, reopen → item present.
-    - [ ] Place item, logout/login → item present.
-    - [ ] Migrate a vanilla table chunk → BE attaches idempotently.
-    - [ ] Re-roll feature confirmed absent (negative test).
+  - **State:** T3-new.
 
 ## Story S-9.3 — Easy Anvils `tooExpensiveCap`
 
-- [ ] **TEST-9.3.1** — Cap values 40, -1, 0 behave per DESIGN (only if story green-lit).
+### Tier 3
+
+- [ ] **TEST-9.3-T3** — Cap values 40, -1, 0 behave per DESIGN (if story green-lit).
   - **Tier:** 3.
-  - **Acceptance:**
-    - [ ] `cap=40` → "too expensive" triggers at the configured level.
-    - [ ] `cap=-1` → never triggers.
-    - [ ] `cap=0` → vanilla behavior preserved.
+  - **State:** T3-new.
 
 ## Story S-9.4 — Per-iteration bookkeeping checklist
 
-No test rows — this is a process checklist that runs once per iteration landing.
+No test rows — process checklist.
 
 ---
 
 # Ordering
 
-Work tests in the order below. Two guiding principles: **within a section**, Tier 1 → Tier 2 → Tier 3; **across sections**, user-facing hot paths before defensive edges. Existing `- [x]` rows can be skipped unless they regress.
+Run the work in this sequence. Within a section, the skill's tier ordering (T1 → T2 → T3) applies; across sections, hot user-facing paths precede defensive edges.
 
-## Phase 0 — Existing coverage regression check (already `[x]`)
+## Phase 0 — Infrastructure (S-0)
 
-Before picking up new work, run `./gradlew test` once. Every `- [x]` row corresponds to a real file under `src/test/`; if any fail, fix before adding rows below. Do this as a **single sanity step**, not a test-by-test walk.
+**Blocking — nothing downstream can start until this lands.**
 
-## Phase 1 — Highest-risk gaps still unchecked (MVP-blocking)
+1. **TEST-0.1-T2** — Wire `fabric-loader-junit`, drop `forkEvery`, smoke test passes.
+2. **TEST-0.2-T3** — Wire gametest source set, template, entrypoint; placeholder test passes.
+3. **TEST-0.3** — CI runs both.
 
-These sit on hot user-facing paths. Silent breaks here ship bugs to live SMP.
+## Phase 1 — Tier 2 migrations of clean-Bootstrap tests
 
-1. **TEST-5.4.2** — `WardenTendrilItem` registration + assets (Tier 2). Gate for everything else in S-5.4.
-2. **TEST-5.4.3** — `WardenLootHandler` pool shape + drop-rate (Tier 2 slice first, then Tier 3). The only way players obtain tendrils — if this silently no-ops the two sculkshelves become uncraftable.
-3. **TEST-5.4.4** — Config-reload re-reads drop chances at roll time (Tier 3). Depends on 5.4.3.
+Cheapest wins — the tests already pass under the legacy harness, just move them onto the modern one. Expect diffs to be almost entirely deletions.
 
-## Phase 2 — Epic 6 data layer (MVP-blocking)
+4. S-2.3 payload codecs (TEST-2.3-T2a/b/c).
+5. S-2.4 selection (TEST-2.4-T2a/b/c).
+6. S-4.2 iron-block repair (TEST-4.2-T2).
+7. S-4.4 library row formatter **demoted to Tier 1** (TEST-4.4-T1).
+8. S-5.3 crafting-row flow + projection (TEST-5.3-T2b/c).
+9. S-3.1 particle theme (TEST-3.1-T2b).
+10. S-2.5 menu logic helper (TEST-2.5-T2).
 
-The whole epic is data files + a few Java surfaces; tests are fast, failure modes are silent. Run 6.1 before 6.2 before 6.3 — the file inventory gates everything downstream.
+## Phase 2 — Tier 2 migrations of unfreeze-without-register tests
 
-4. **TEST-6.1.1** — NeoEnchant+ manifest check (Tier 1). Pre-port sanity.
-5. **TEST-6.1.2** — Port completeness + CODEC parse (Tier 2). Biggest regression surface in Epic 6.
-6. **TEST-6.1.3** — Exclusive-set tag entries resolve (Tier 2). Depends on 6.1.2.
-7. **TEST-6.1.4** — Lang key merge (Tier 1). Independent of 6.1.2/3 but conceptually paired.
-8. **TEST-6.2.1** — Icy Thorns parse + effect shape (Tier 2).
-9. **TEST-6.2.2** — Shield Bash + weapon tag expansion (Tier 2).
-10. **TEST-6.3.1** — Mending override + treasure gate preserved (Tier 3). Hot path — Mending is the highest-value enchant in the game.
-11. **TEST-6.3.2** — Soulbound override parse (Tier 2 / conditional Tier 3).
-12. **TEST-6.3.3** — `applyBundledOverrides` flag (Tier 3).
+These need the bigger rewrite — swap the synthetic enchant registry for real vanilla enchant lookups per the skill's recipe. Library NBT + codec tests dominate.
 
-## Phase 3 — Datagen idempotency (deferred defensive)
+11. S-4.3 library engine (TEST-4.3-T2a/b/c/d).
+12. S-4.5 hopper storage (TEST-4.5-T2).
+13. S-4.6 custom recipes (TEST-4.6-T2a/b/c/d).
+14. S-5.3 crafting lookup (TEST-5.3-T2a).
+15. S-3.1 shelf block (TEST-3.1-T2a).
 
-13. **TEST-3.4.4** — Datagen re-run is a no-op. Low urgency unless datagen drift becomes a recurring review pain; easy to wire when it does.
+## Phase 3 — Tier 3 rewrites for register-heavy legacy tests
 
-## Phase 4 — Tier 3 gametest stretch for S-2.5.5
+Biggest cost. Each rewrite owns its SNBT template (or shares via deps), its gametest entrypoint wiring, and the usual teleport-and-`succeedWhen` orchestration.
 
-14. **TEST-2.5.5** — `MenuType<FizzleEnchantmentMenu>` post-boot resolution. Currently deferred because mod-registered content is a Tier 3 problem; land it once the Tier 3 harness exists for Epic 6's overrides.
+16. S-3.1 registry helper (TEST-3.1-T3).
+17. S-3.2 full shelf roster (TEST-3.2-T3).
+18. S-3.5 filtering + treasure shelves (TEST-3.5-T3a/b).
+19. S-2.2 shelf scan real-level (TEST-2.2-T3a/b).
+20. S-2.5 menu end-to-end (TEST-2.5-T3).
+21. S-4.1 prismatic web end-to-end (TEST-4.1-T3).
+22. S-4.4 library block + menu (TEST-4.4-T3a/b).
+23. S-5.1 tome items register (TEST-5.1-T3).
+24. S-5.2 tome anvil handlers (TEST-5.2-T3a/b/c/d).
+25. S-5.3 crafting button id=3 (TEST-5.3-T3).
+26. S-5.4 specialty materials (TEST-5.4-T3a/b/c/d).
 
-## Phase 5 — Epic 7 integrations
+## Phase 4 — Datagen cleanup
 
-Run after MVP data layer is green. Shared extractor test gives two integrations for the price of one.
+27. **Delete** the three register-heavy datagen provider tests and replace with `runDatagen` + filesystem sweep (TEST-3.4-T1a/b).
 
-15. **TEST-7.1.2** — EMI extractor (Tier 2). Pull 7.1.1 and 7.1.3 alongside as cheap additions.
-16. **TEST-7.2.2** — REI adapts the shared extractor. Cheapest win after 7.1.2.
-17. **TEST-7.1.1** / **TEST-7.2.1** — Build matrices with/without host mods.
-18. **TEST-7.3.1** — JEI plugin classload.
-19. **TEST-7.4.1** — Jade label builders.
+## Phase 5 — Coverage-gap fills (new tests, not migrations)
 
-## Phase 6 — Epic 8 release gates
+Extract pure-math slices and add missing Tier 2/3 coverage where legacy had none.
 
-20. **TEST-8.1.1** — Advancement parse + reference resolution (Tier 2). Data only; catches cut-enchant drift.
-21. **TEST-8.1.2** — Advancement lang keys (Tier 1).
-22. **TEST-8.2.1** / **TEST-8.2.2** — Tooltip formatter + suppression (Tier 1).
-23. **TEST-8.4.1** — Full gradle sweep. Release gate.
-24. **TEST-8.4.2** — CHANGELOG + plugin-list lint.
-25. **TEST-8.4.3** — Conflict audit capture.
+28. TEST-2.4-T1 (pure cost math slice).
+29. TEST-3.5-T1 (slot-targeting math).
+30. TEST-5.2-T1 (damage clamp math).
+31. TEST-3.1-T1a (particle enum parameterization).
+32. TEST-2.1-T2 (stat JSON codec sweep).
+33. TEST-2.2-T2 (offset list size guard).
+34. TEST-3.5-T2 (BE NBT round-trip Tier 2 slice).
+35. TEST-4.1-T2 (Prismatic Web handler logic Tier 2).
+36. TEST-5.1-T2 (scrap tome recipe via RecipeManager).
+37. TEST-5.2-T2a/b/c (tome handler logic at Tier 2).
+38. TEST-2.1-T3 / TEST-4.2-T3 / TEST-4.3-T3 / TEST-4.5-T3 (real-level assertions beyond what the rewrites cover).
+39. TEST-1.2-T3 (mod loads sentinel).
+40. TEST-1.4-T3 (reload end-to-end).
 
-## Phase 7 — Epic 9 (post-MVP, only when scheduled)
+## Phase 6 — Epic 6 (roster) — MVP blocker
 
-26. **TEST-9.1.1** — BeyondEnchant overrides.
-27. **TEST-9.2.1** — Easy Magic persistence (Tier 3, the most involved Tier 3 in the mod).
-28. **TEST-9.3.1** — Too-expensive cap (conditional).
+41. TEST-6.1-T1a/b/c (filesystem sweeps).
+42. TEST-6.1-T2/T2b (codec + tag parse).
+43. TEST-6.1-T3 (registry membership).
+44. TEST-6.2-T1/T2a/T2b/T3 (authored enchants + tag expansion).
+45. TEST-6.3-T1/T2/T3a/T3b (foreign overrides).
+
+## Phase 7 — Epic 7 (integrations)
+
+46. TEST-7.1-T2 (shared extractor) — pull TEST-7.1-T1a/b + TEST-7.1-T3 alongside.
+47. TEST-7.2-T2 / TEST-7.2-T1 (REI adapts shared extractor).
+48. TEST-7.3-T1 / TEST-7.3-T3 (JEI classload + manual).
+49. TEST-7.4-T1 (Jade label builders).
+
+## Phase 8 — Epic 8 (release)
+
+50. TEST-8.1-T1/T2/T3 (advancements).
+51. TEST-8.2-T1a/b (tooltips).
+52. TEST-8.4-T1a/b (release gate).
+
+## Phase 9 — Post-MVP (Epic 9, scheduled on demand)
+
+53. TEST-9.1-T2/T3.
+54. TEST-9.2-T3.
+55. TEST-9.3-T3.
