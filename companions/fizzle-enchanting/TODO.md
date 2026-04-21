@@ -1212,7 +1212,7 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-5.2 — Tome anvil handlers
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-5.2.1 — `ScrapTomeHandler`
 
@@ -1256,10 +1256,10 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Tome items" — "The Extraction Tome also exposes an item-repair side-path using the anvil fuel slot (Zenith behavior preserved)."
 
 **Acceptance:**
-- [ ] When an Extraction Tome is in the anvil fuel slot (materials-B slot) and a damaged item is in slot A (no right-hand item), consuming the tome restores `config.tomes.extractionTomeRepairPercent * maxDurability` durability.
-- [ ] XP cost identical to standard Extraction.
+- [x] When an Extraction Tome is in the anvil fuel slot (materials-B slot) and a damaged item is in slot A (no right-hand item), consuming the tome restores `config.tomes.extractionTomeRepairPercent * maxDurability` durability.
+- [x] XP cost identical to standard Extraction.
 
-**Tests:** Damaged sword + tome → durability increases by `repairPercent * maxDurability`; tome consumed.
+**Tests:** [x] Damaged sword + tome → durability increases by `repairPercent * maxDurability`; tome consumed.
 
 ---
 
