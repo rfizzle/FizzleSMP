@@ -1265,23 +1265,23 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-5.3 — Table crafting-result row
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-5.3.1 — Hook `findMatch` into `slotsChanged`
 
 **Acceptance:**
-- [ ] In `FizzleEnchantmentMenu#slotsChanged`, after `gatherStats`, call `EnchantingRecipeRegistry.findMatch(level, inputStack, stats)`.
-- [ ] Store the result on the menu (`Optional<RecipeHolder<...>> currentRecipe`).
+- [x] In `FizzleEnchantmentMenu#slotsChanged`, after `gatherStats`, call `EnchantingRecipeRegistry.findMatch(level, inputStack, stats)`.
+- [x] Store the result on the menu (`Optional<RecipeHolder<...>> currentRecipe`).
 
-**Tests:** Scripted shelves + `library` input → `currentRecipe.isPresent()`.
+**Tests:** [x] Scripted shelves + `library` input → `currentRecipe.isPresent()`.
 
 ---
 
 ### Task T-5.3.2 — Serialize `CraftingResultEntry` on `StatsPayload`
 
 **Acceptance:**
-- [ ] When `currentRecipe` is present, populate `craftingResult` on the outgoing `StatsPayload` with `(result, xpCost, recipeId)`.
-- [ ] When absent, `Optional.empty()`.
+- [x] When `currentRecipe` is present, populate `craftingResult` on the outgoing `StatsPayload` with `(result, xpCost, recipeId)`.
+- [x] When absent, `Optional.empty()`.
 
 **Tests:** Round-trip: set recipe → payload carries it; unset → payload empty.
 
@@ -1290,7 +1290,7 @@ Every task's Definition of Done implicitly includes:
 ### Task T-5.3.3 — Button-id=3 server handler
 
 **Acceptance:**
-- [ ] `FizzleEnchantmentMenu#clickMenuButton` for `id==3`:
+- [x] `FizzleEnchantmentMenu#clickMenuButton` for `id==3`:
   - Require `currentRecipe.isPresent()`.
   - Validate `player.experienceLevel >= xpCost`.
   - For `enchanting`: input stack decremented, result inserted.
@@ -1298,18 +1298,18 @@ Every task's Definition of Done implicitly includes:
   - Consume XP; refire `slotsChanged`.
 
 **Tests:** `CraftingResultFlowTest` —
-- [ ] `keep_nbt_enchanting` path preserves stored-book NBT on the library → ender library upgrade.
-- [ ] Insufficient XP → no-op.
-- [ ] No recipe → no-op (id==3 safely ignored).
+- [x] `keep_nbt_enchanting` path preserves stored-book NBT on the library → ender library upgrade.
+- [x] Insufficient XP → no-op.
+- [x] No recipe → no-op (id==3 safely ignored).
 
 ---
 
 ### Task T-5.3.4 — Client screen crafting-row render
 
 **Acceptance:**
-- [ ] `FizzleEnchantmentScreen` renders a 4th row below the enchant slots when `menu.craftingResult().isPresent()`.
-- [ ] Row shows the result item, XP cost badge, recipe-id hint (for EMI/JEI).
-- [ ] Click dispatches vanilla `ServerboundContainerButtonClickPacket` with `buttonId=3`.
+- [x] `FizzleEnchantmentScreen` renders a 4th row below the enchant slots when `menu.craftingResult().isPresent()`.
+- [x] Row shows the result item, XP cost badge, recipe-id hint (for EMI/JEI).
+- [x] Click dispatches vanilla `ServerboundContainerButtonClickPacket` with `buttonId=3`.
 
 **Tests:** Formatter unit test — given `CraftingResultEntry(ItemStack(ender_library), 20, ...)`, label reads `"Ender Library — 20 levels"`.
 

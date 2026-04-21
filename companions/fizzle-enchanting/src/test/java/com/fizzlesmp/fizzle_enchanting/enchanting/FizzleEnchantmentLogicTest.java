@@ -38,7 +38,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FizzleEnchantmentLogicTest {
@@ -54,33 +53,6 @@ class FizzleEnchantmentLogicTest {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
         registry = buildTestRegistry();
-    }
-
-    // ---- assertNotCraftingButton (T-2.5.1: id == 3 throws until Epic 5) -----
-
-    @Test
-    void assertNotCraftingButton_throwsForCraftingId() {
-        UnsupportedOperationException ex = assertThrows(
-                UnsupportedOperationException.class,
-                () -> FizzleEnchantmentLogic.assertNotCraftingButton(FizzleEnchantmentLogic.CRAFTING_BUTTON_ID));
-        assertTrue(ex.getMessage().contains("Epic 5"),
-                "error message must point callers at Epic 5 so a stray click has a trail");
-    }
-
-    @Test
-    void assertNotCraftingButton_doesNotThrowForPreviewSlots() {
-        // Every real preview-slot id must be silently accepted — vanilla button ids 0/1/2.
-        for (int id = 0; id < FizzleEnchantmentLogic.PREVIEW_SLOTS; id++) {
-            int idFinal = id;
-            assertFalse(() -> {
-                try {
-                    FizzleEnchantmentLogic.assertNotCraftingButton(idFinal);
-                    return false;
-                } catch (Throwable t) {
-                    return true;
-                }
-            }, "button id " + id + " must not throw");
-        }
     }
 
     // ---- validateClick ------------------------------------------------------

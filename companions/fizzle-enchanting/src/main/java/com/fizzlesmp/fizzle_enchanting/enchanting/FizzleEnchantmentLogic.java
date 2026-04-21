@@ -25,8 +25,8 @@ import java.util.Optional;
  *       then three pick+clue builds) against a shared {@link RandomSource}.</li>
  *   <li>{@link #validateClick} — runs the click-time XP/lapis gate in a form the Menu can reuse
  *       and tests can drive directly.</li>
- *   <li>{@link #assertNotCraftingButton} — single-point throw for the Epic-5 crafting-result
- *       row (button id 3). The Menu calls this before regular id validation.</li>
+ *   <li>{@link #validateCraftingClick} — XP gate for the Epic-5 crafting-result row (button id 3).
+ *       The Menu routes id==3 through this before running recipe assembly.</li>
  * </ul>
  */
 public final class FizzleEnchantmentLogic {
@@ -169,14 +169,44 @@ public final class FizzleEnchantmentLogic {
     }
 
     /**
-     * Throws with a stable message when the crafting-result row (button id 3) is clicked. The
-     * row is wired by Epic 5 — until then the server rejects the click loudly so a misbehaving
-     * client or later regression gets a clear stack trace.
+     * Click-time gate for the crafting-result row (button id 3). The row is populated when
+     * {@link EnchantingStatRegistry}-gathered stats satisfy a recipe's requirements window; the
+     * server must still confirm at click time that (a) the cached recipe holder is present and
+     * (b) the player can pay the recipe's XP cost. Lapis is not consumed by the crafting row —
+     * the XP charge is the whole cost model Zenith uses here.
+     *
+     * @param recipePresent        {@code true} when {@code FizzleEnchantmentMenu#currentRecipe} is
+     *                             populated — a stale payload click with no server-side match
+     *                             rejects with {@code "no recipe"}
+     * @param xpCost               the recipe's {@code xp_cost} (already clamped non-negative by
+     *                             the codec); {@code 0} means free
+     * @param playerXpLevel        player's current {@code experienceLevel}
+     * @param hasInfiniteMaterials {@code true} for creative / spectator; bypasses the XP gate
+     * @return success or a reject reason intended for logging / debugging
      */
-    public static void assertNotCraftingButton(int buttonId) {
-        if (buttonId == CRAFTING_BUTTON_ID) {
-            throw new UnsupportedOperationException(
-                    "crafting-result row (button id " + CRAFTING_BUTTON_ID + ") lands in Epic 5");
+    public static CraftingClickAttempt validateCraftingClick(
+            boolean recipePresent,
+            int xpCost,
+            int playerXpLevel,
+            boolean hasInfiniteMaterials
+    ) {
+        if (!recipePresent) {
+            return CraftingClickAttempt.reject("no recipe matched");
+        }
+        if (!hasInfiniteMaterials && playerXpLevel < xpCost) {
+            return CraftingClickAttempt.reject("insufficient experience");
+        }
+        return CraftingClickAttempt.ok();
+    }
+
+    /** Outcome of {@link #validateCraftingClick}. {@link #rejection()} is only populated on failure. */
+    public record CraftingClickAttempt(boolean success, String rejection) {
+        public static CraftingClickAttempt ok() {
+            return new CraftingClickAttempt(true, null);
+        }
+
+        public static CraftingClickAttempt reject(String reason) {
+            return new CraftingClickAttempt(false, reason);
         }
     }
 

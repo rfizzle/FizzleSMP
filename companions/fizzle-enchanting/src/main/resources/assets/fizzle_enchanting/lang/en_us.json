@@ -36,5 +36,8 @@
     "item.fizzle_enchanting.prismatic_web": "Prismatic Web",
     "item.fizzle_enchanting.scrap_tome": "Scrap Tome",
     "item.fizzle_enchanting.improved_scrap_tome": "Improved Scrap Tome",
-    "item.fizzle_enchanting.extraction_tome": "Extraction Tome"
+    "item.fizzle_enchanting.extraction_tome": "Extraction Tome",
+
+    "info.fizzle_enchanting.crafting_row.xp_cost": "Costs %s experience levels",
+    "info.fizzle_enchanting.crafting_row.recipe_id": "Recipe: %s"
 }
