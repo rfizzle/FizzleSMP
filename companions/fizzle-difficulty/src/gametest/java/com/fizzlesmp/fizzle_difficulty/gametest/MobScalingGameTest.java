@@ -43,23 +43,52 @@ public class MobScalingGameTest implements FabricGameTest {
                 "zombie missing " + MobScalingHandler.PROCESSED_TAG + " tag after spawn"));
     }
 
-    /**
-     * Full closed loop: seat a ServerPlayer at difficulty level 250 within
-     * {@code mobDetectionRange}, spawn a zombie, and assert the resulting
-     * max HP matches DESIGN.md's level-250 target (20 base × (1 + 2.5) = 70).
-     *
-     * <p>Exercises every layer: {@code PlayerDifficultyState} persistence,
-     * {@code MobScalingHandler#resolveNearestPlayerLevel} instanceof gating,
-     * {@code ScalingEngine.applyModifiers} on a real {@code AttributeMap},
-     * and the {@code setHealth(maxHealth)} top-off after registration.
-     *
-     * <p>Isolates from distance/height scaling and special-zombie variants so
-     * the assertion reflects the time axis alone. Gametests run in a world
-     * spawned far from (0,0,0) and below Y=0, which otherwise adds cap-hitting
-     * distance+height factors and makes the final HP position-dependent.
-     */
+    // DESIGN.md zombie health breakpoints: rate=0.01, cap=2.5 → timeFactor = min(level*0.01, 2.5).
+    // Final maxHealth = 20 * (1 + timeFactor). Each tier below locks in one row of that table
+    // end-to-end: PlayerDifficultyState → resolveNearestPlayerLevel → ScalingEngine.applyModifiers
+    // → AttributeMap.getValue() → setHealth(getMaxHealth()).
+
+    @GameTest(template = "fizzle_difficulty:empty_3x3")
+    public void zombieSpawn_atPlayerLevel50_reaches30Hp(GameTestHelper helper) {
+        assertTimeAxisHp(helper, 50, 30.0f);
+    }
+
+    @GameTest(template = "fizzle_difficulty:empty_3x3")
+    public void zombieSpawn_atPlayerLevel100_reaches40Hp(GameTestHelper helper) {
+        assertTimeAxisHp(helper, 100, 40.0f);
+    }
+
+    @GameTest(template = "fizzle_difficulty:empty_3x3")
+    public void zombieSpawn_atPlayerLevel150_reaches50Hp(GameTestHelper helper) {
+        assertTimeAxisHp(helper, 150, 50.0f);
+    }
+
+    @GameTest(template = "fizzle_difficulty:empty_3x3")
+    public void zombieSpawn_atPlayerLevel200_reaches60Hp(GameTestHelper helper) {
+        assertTimeAxisHp(helper, 200, 60.0f);
+    }
+
     @GameTest(template = "fizzle_difficulty:empty_3x3")
     public void zombieSpawn_atPlayerLevel250_reachesDesignMaxHp(GameTestHelper helper) {
+        assertTimeAxisHp(helper, 250, 70.0f);
+    }
+
+    /**
+     * Shared recipe for a time-axis-only scaling gametest. Seats a ServerPlayer at
+     * {@code playerLevel}, spawns a zombie within {@code mobDetectionRange}, and
+     * asserts the zombie's max HP lands on the expected DESIGN.md breakpoint.
+     *
+     * <p>Isolates from distance/height scaling and special-zombie variants so the
+     * assertion reflects the time axis alone. Gametests run in a world spawned far
+     * from (0,0,0) and below Y=0, which would otherwise contribute cap-hitting
+     * distance+height factors and a random variant bonus on top of the time axis,
+     * making the final HP position-dependent.
+     *
+     * <p>Safe against concurrent gametests: Minecraft's GameTestServer runs tests
+     * on the main server thread, so the enable/spawn/restore sequence is atomic
+     * with respect to any other test's spawn call.
+     */
+    private void assertTimeAxisHp(GameTestHelper helper, int playerLevel, float expectedMaxHp) {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         // makeMockServerPlayerInLevel places the player near (0,0,0) of the level.
         // Each gametest runs at a randomized far-out position, so we must teleport
@@ -73,7 +102,7 @@ public class MobScalingGameTest implements FabricGameTest {
         PlayerDifficultyState state = PlayerDifficultyState.getOrCreate(server);
         FizzleDifficultyConfig cfg = FizzleDifficulty.getConfig();
 
-        state.setLevel(player.getUUID(), 250, cfg.general.maxLevel);
+        state.setLevel(player.getUUID(), playerLevel, cfg.general.maxLevel);
 
         boolean savedDist = cfg.distanceScaling.enabled;
         boolean savedHeight = cfg.heightScaling.enabled;
@@ -97,8 +126,9 @@ public class MobScalingGameTest implements FabricGameTest {
         Zombie z = zombie;
         helper.succeedWhen(() -> {
             helper.assertTrue(z.getTags().contains(MobScalingHandler.PROCESSED_TAG),
-                    "precondition: scaling handler must have tagged the zombie");
-            helper.assertValueEqual(z.getMaxHealth(), 70.0f, "maxHealth @ level 250");
+                    "scaling handler must have tagged the zombie");
+            helper.assertValueEqual(z.getMaxHealth(), expectedMaxHp,
+                    "maxHealth @ level " + playerLevel);
         });
     }
 }
