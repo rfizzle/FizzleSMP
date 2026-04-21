@@ -73,11 +73,11 @@ Sets up the two missing tier surfaces. Until this lands, every Tier-2/3 row belo
   - **Tier:** 2.
   - **State:** new.
   - **Acceptance:**
-    - [ ] `testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"` in `build.gradle` (read version from `gradle.properties`).
-    - [ ] `configurations.testRuntimeClasspath { exclude group: 'net.fabricmc.fabric-api', module: 'fabric-api' }` present — the loom-remapped `*-common` variants stay on the classpath.
-    - [ ] `forkEvery = 1` removed from the `test {}` block.
+    - [x] `testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"` in `build.gradle` (read version from `gradle.properties`).
+    - [x] `configurations.testRuntimeClasspath { exclude group: 'net.fabricmc.fabric-api', module: 'fabric-api' }` present — the loom-remapped `*-common` variants stay on the classpath.
+    - [ ] `forkEvery = 1` removed from the `test {}` block. *(Deferred — 29 legacy tests still reflectively unfreeze `BuiltInRegistries` and register mod content; without per-class forking they collide in a shared JVM. Remove once Phase 3's Tier-3 rewrites land.)*
     - [ ] `./gradlew :companions:fizzle-enchanting:dependencies --configuration testRuntimeClasspath | grep fabric-loader-junit` shows the dep.
-    - [ ] A smoke test class (`com.fizzlesmp.fizzle_enchanting.SmokeBootstrapTest`, `// Tier: 2`) with `@BeforeAll Bootstrap.bootStrap()` and one assertion that `Items.DIAMOND_SWORD != null` passes on its own JVM session.
+    - [x] A smoke test class (`com.fizzlesmp.fizzle_enchanting.SmokeBootstrapTest`, `// Tier: 2`) with `@BeforeAll Bootstrap.bootStrap()` and one assertion that `Items.DIAMOND_SWORD != null` passes on its own JVM session.
 
 ## Task S-0.2 — Gametest source set and run config
 
@@ -85,11 +85,11 @@ Sets up the two missing tier surfaces. Until this lands, every Tier-2/3 row belo
   - **Tier:** 3.
   - **State:** new.
   - **Acceptance:**
-    - [ ] `sourceSets { gametest { ... } }` added in the order the skill specifies (source set *before* `loom { runs { gametest { source sourceSets.gametest } } }`).
-    - [ ] `configurations { gametestImplementation.extendsFrom implementation; gametestRuntimeOnly.extendsFrom runtimeOnly }`.
-    - [ ] `loom.runs.gametest` block with `vmArg "-Dfabric-api.gametest"` and junit report path.
-    - [ ] `src/main/resources/fabric.mod.json` gets a `fabric-gametest` entrypoint pointing at the placeholder class.
-    - [ ] `src/main/resources/data/fizzle_enchanting/gametest/structure/empty_3x3.snbt` template shipped (DataVersion 3955, 3×3×3 stone floor + air above).
+    - [x] `sourceSets { gametest { ... } }` added in the order the skill specifies (source set *before* `loom { runs { gametest { source sourceSets.gametest } } }`).
+    - [x] `configurations { gametestImplementation.extendsFrom implementation; gametestRuntimeOnly.extendsFrom runtimeOnly }`.
+    - [x] `loom.runs.gametest` block with `vmArg "-Dfabric-api.gametest"` and junit report path.
+    - [x] `src/main/resources/fabric.mod.json` gets a `fabric-gametest` entrypoint pointing at the placeholder class.
+    - [x] `src/main/resources/data/fizzle_enchanting/gametest/structure/empty_3x3.snbt` template shipped (DataVersion 3955, 3×3×3 stone floor + air above).
     - [ ] Placeholder `com.fizzlesmp.fizzle_enchanting.gametest.PlaceholderGameTest` (`// Tier: 3`) with a single `helper.succeed()` test passes on `./gradlew :companions:fizzle-enchanting:runGametest`.
 
 ## Task S-0.3 — CI wiring
@@ -98,8 +98,8 @@ Sets up the two missing tier surfaces. Until this lands, every Tier-2/3 row belo
   - **Tier:** n/a (CI config).
   - **State:** new.
   - **Acceptance:**
-    - [ ] GitHub Actions (or local `Makefile` target) invokes both.
-    - [ ] `junit-gametest.xml` reports land under `build/` and are uploaded as a workflow artifact.
+    - [x] GitHub Actions (or local `Makefile` target) invokes both.
+    - [x] `junit-gametest.xml` reports land under `build/` and are uploaded as a workflow artifact.
 
 ---
 

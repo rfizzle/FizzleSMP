@@ -1,4 +1,4 @@
-package com.fizzlesmp.fizzle_enchanting.mixin;
+package com.fizzlesmp.fizzle_enchanting.mixin_test;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -133,8 +133,9 @@ class EnchantmentTableBlockMixinTest {
     // --- ASM helpers ---
 
     private static ClassNode readMixinClass() throws Exception {
-        String path = EnchantmentTableBlockMixin.class.getName().replace('.', '/') + ".class";
-        try (InputStream in = EnchantmentTableBlockMixin.class.getClassLoader().getResourceAsStream(path)) {
+        // String path — a class literal on a mixin-package class trips Knot's IllegalClassLoadError.
+        String path = "com/fizzlesmp/fizzle_enchanting/mixin/EnchantmentTableBlockMixin.class";
+        try (InputStream in = EnchantmentTableBlockMixinTest.class.getClassLoader().getResourceAsStream(path)) {
             assertNotNull(in, "mixin class file must be loadable from the classpath");
             ClassReader reader = new ClassReader(in);
             ClassNode node = new ClassNode();

@@ -12,7 +12,8 @@
     "entrypoints": {
         "main": ["com.fizzlesmp.fizzle_enchanting.FizzleEnchanting"],
         "client": ["com.fizzlesmp.fizzle_enchanting.client.FizzleEnchantingClient"],
-        "fabric-datagen": ["com.fizzlesmp.fizzle_enchanting.data.FizzleEnchantingDataGenerator"]
+        "fabric-datagen": ["com.fizzlesmp.fizzle_enchanting.data.FizzleEnchantingDataGenerator"],
+        "fabric-gametest": ["com.fizzlesmp.fizzle_enchanting.gametest.PlaceholderGameTest"]
     },
     "mixins": [
         "fizzle_enchanting.mixins.json"

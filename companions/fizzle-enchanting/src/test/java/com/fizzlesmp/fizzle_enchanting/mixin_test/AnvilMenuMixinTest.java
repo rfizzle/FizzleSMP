@@ -1,4 +1,4 @@
-package com.fizzlesmp.fizzle_enchanting.mixin;
+package com.fizzlesmp.fizzle_enchanting.mixin_test;
 
 import com.fizzlesmp.fizzle_enchanting.anvil.AnvilDispatcher;
 import com.google.gson.JsonObject;
@@ -224,8 +224,9 @@ class AnvilMenuMixinTest {
     }
 
     private static ClassNode readMixinClass() throws Exception {
-        String path = AnvilMenuMixin.class.getName().replace('.', '/') + ".class";
-        try (InputStream in = AnvilMenuMixin.class.getClassLoader().getResourceAsStream(path)) {
+        // String path — a class literal on a mixin-package class trips Knot's IllegalClassLoadError.
+        String path = "com/fizzlesmp/fizzle_enchanting/mixin/AnvilMenuMixin.class";
+        try (InputStream in = AnvilMenuMixinTest.class.getClassLoader().getResourceAsStream(path)) {
             assertNotNull(in, "mixin class file must be loadable from the classpath");
             ClassReader reader = new ClassReader(in);
             ClassNode node = new ClassNode();

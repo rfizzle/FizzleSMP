@@ -68,7 +68,26 @@ repositories {
 
 loom {
     splitEnvironmentSourceSets()
+}
 
+sourceSets {
+    main {
+        resources {
+            srcDirs += [ "src/main/generated" ]
+        }
+    }
+    gametest {
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
+configurations {
+    gametestImplementation.extendsFrom implementation
+    gametestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+loom {
     runs {
         datagen {
             inherit server
@@ -78,13 +97,13 @@ loom {
             vmArg "-Dfabric-api.datagen.modid=fizzle_enchanting"
             runDir "build/datagen"
         }
-    }
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDirs += [ "src/main/generated" ]
+        gametest {
+            server()
+            name "Game Test"
+            source sourceSets.gametest
+            vmArg "-Dfabric-api.gametest"
+            vmArg "-Dfabric-api.gametest.report-file=${layout.buildDirectory.file('junit-gametest.xml').get().asFile}"
+            runDir "build/gametest"
         }
     }
 }
@@ -105,13 +124,26 @@ dependencies {
     testImplementation platform("org.junit:junit-bom:5.10.2")
     testImplementation "org.junit.jupiter:junit-jupiter"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+    // Knot-based classloader that boots Fabric before tests run — applies mixins/AWs so
+    // Tier 2 tests can read BuiltInRegistries after an explicit Bootstrap.bootStrap().
+    testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+}
+
+// With splitEnvironmentSourceSets, loom remaps fabric-api to *-common variants for the main
+// runtime classpath but leaves the unmapped fabric-api sibling on testRuntimeClasspath. That
+// sibling carries an intermediary-namespace accesswidener, which fabric-loader-junit rejects
+// against the runtime named namespace. Dropping it keeps the remapped artifacts and lets the
+// junit launcher boot.
+configurations.testRuntimeClasspath {
+    exclude group: 'net.fabricmc.fabric-api', module: 'fabric-api'
 }
 
 test {
     useJUnitPlatform()
-    // Bootstrap.bootStrap() freezes BuiltInRegistries and stays latched for the JVM's lifetime,
-    // so tests that need a pre-freeze registry (T-2.5.5) can't share a JVM with tests that call
-    // bootStrap(). Forking per test class keeps each class's registry state isolated.
+    // Legacy tests reflectively unfreeze BuiltInRegistries and register mod items/menus,
+    // which latches the registry for the JVM's lifetime. Per-class forking keeps each one
+    // isolated. Remove this line once the Phase 3 Tier-3 rewrites have removed every test
+    // that calls unfreeze/register (see TESTING-TODO.md, Task S-0.1 acceptance).
     forkEvery = 1
 }
 
