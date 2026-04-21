@@ -2,6 +2,9 @@ package com.fizzlesmp.fizzle_enchanting;
 
 import com.fizzlesmp.fizzle_enchanting.anvil.PrismaticWebItem;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
+import com.fizzlesmp.fizzle_enchanting.event.WardenPoolCondition;
+import com.fizzlesmp.fizzle_enchanting.item.InfusedBreathItem;
+import com.fizzlesmp.fizzle_enchanting.item.WardenTendrilItem;
 import com.fizzlesmp.fizzle_enchanting.library.BasicLibraryBlockEntity;
 import com.fizzlesmp.fizzle_enchanting.library.EnchantmentLibraryBlock;
 import com.fizzlesmp.fizzle_enchanting.library.EnchantmentLibraryMenu;
@@ -25,12 +28,14 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -112,6 +117,26 @@ public final class FizzleEnchantingRegistry {
             new PrismaticWebItem(new Item.Properties());
 
     /**
+     * Specialty material gated behind the {@code fizzle_enchanting:enchanting} table-crafting
+     * recipe on {@code minecraft:dragon_breath}. Tier-3 themed shelves and the Basic Library
+     * all consume this item in their vanilla-shape crafts, so progression funnels players back
+     * to the stat-driven table once they need an endgame shelf. {@link Rarity#EPIC} matches
+     * Zenith's presentation — the purple name distinguishes it at a glance in inventories.
+     */
+    public static final InfusedBreathItem INFUSED_BREATH =
+            new InfusedBreathItem(new Item.Properties().rarity(Rarity.EPIC));
+
+    /**
+     * Warden-drop specialty material. Required to craft the two tier-3 sculk shelves
+     * ({@code echoing_sculkshelf}, {@code soul_touched_sculkshelf}). Rarity is left at the
+     * default — tendrils are a routine Warden reward, not an epic find, so the inventory name
+     * colouring matches other bulk crafting ingredients. Drop distribution is wired by
+     * {@code WardenLootHandler} (T-5.4.3), not by item-side state.
+     */
+    public static final WardenTendrilItem WARDEN_TENDRIL =
+            new WardenTendrilItem(new Item.Properties());
+
+    /**
      * Scrap tome — consumed at the anvil to salvage one random enchantment onto a fresh
      * enchanted book. Single-stack because the anvil interaction is one tome per use, and
      * a higher stack cap would let players misread "how many salvages" from the slot count.
@@ -183,6 +208,14 @@ public final class FizzleEnchantingRegistry {
     public static final BlockEntityType<EnderLibraryBlockEntity> ENDER_LIBRARY_BE =
             BlockEntityType.Builder.of(EnderLibraryBlockEntity::new, ENDER_LIBRARY).build(null);
 
+    /**
+     * Config-driven loot condition used by the Warden tendril pools. Exposed as a field so the
+     * registration helper can thread it through the same {@code register<X>} pattern as every
+     * other entry — and so a reflective "is this type registered?" smoke test can pin the
+     * reference without going through the class initializer of {@link WardenPoolCondition}.
+     */
+    public static final LootItemConditionType WARDEN_POOL_CONDITION = WardenPoolCondition.TYPE;
+
     private static boolean registered = false;
 
     private FizzleEnchantingRegistry() {
@@ -200,6 +233,8 @@ public final class FizzleEnchantingRegistry {
         registerBlock("treasure_shelf", TREASURE_SHELF, new Item.Properties());
         registerBlockEntityType("treasure_shelf", TREASURE_SHELF_BE);
         registerItem("prismatic_web", PRISMATIC_WEB);
+        registerItem("infused_breath", INFUSED_BREATH);
+        registerItem("warden_tendril", WARDEN_TENDRIL);
         registerItem("scrap_tome", SCRAP_TOME);
         registerItem("improved_scrap_tome", IMPROVED_SCRAP_TOME);
         registerItem("extraction_tome", EXTRACTION_TOME);
@@ -207,6 +242,7 @@ public final class FizzleEnchantingRegistry {
         registerBlock("ender_library", ENDER_LIBRARY, new Item.Properties());
         registerBlockEntityType("library", BASIC_LIBRARY_BE);
         registerBlockEntityType("ender_library", ENDER_LIBRARY_BE);
+        registerLootConditionType("warden_pool", WARDEN_POOL_CONDITION);
     }
 
     /**
@@ -259,6 +295,12 @@ public final class FizzleEnchantingRegistry {
     /** Registers a block-entity type under {@code fizzle_enchanting:<name>}. */
     public static <T extends BlockEntity> BlockEntityType<T> registerBlockEntityType(String name, BlockEntityType<T> type) {
         Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, FizzleEnchanting.id(name), type);
+        return type;
+    }
+
+    /** Registers a loot-item condition type under {@code fizzle_enchanting:<name>}. */
+    public static LootItemConditionType registerLootConditionType(String name, LootItemConditionType type) {
+        Registry.register(BuiltInRegistries.LOOT_CONDITION_TYPE, FizzleEnchanting.id(name), type);
         return type;
     }
 }

@@ -1163,7 +1163,7 @@ Every task's Definition of Done implicitly includes:
 
 # Epic 5 — Tomes & Table Crafting UX
 
-- [ ] Epic complete
+- [x] Epic complete
 
 **Goal:** 3 tome items wired through the anvil, crafting-result row live on the table, Warden loot modifier shipping tendrils.
 **Commit at epic close:** `feat(enchanting): tomes and table crafting`
@@ -1317,28 +1317,28 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-5.4 — Specialty materials
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-5.4.1 — `infused_breath` item + recipe
 
 **Acceptance:**
-- [ ] Item registered.
-- [ ] Texture from Zenith (animated — preserve `.mcmeta`).
-- [ ] Lang key.
-- [ ] Obtainable only via the `fizzle_enchanting:enchanting` recipe already shipped in T-4.6.4.
+- [x] Item registered.
+- [x] Texture from Zenith (animated — preserve `.mcmeta`).
+- [x] Lang key.
+- [x] Obtainable only via the `fizzle_enchanting:enchanting` recipe already shipped in T-4.6.4.
 
-**Tests:** Item registered; recipe resolved.
+**Tests:** [x] Item registered; recipe resolved.
 
 ---
 
 ### Task T-5.4.2 — `warden_tendril` item
 
 **Acceptance:**
-- [ ] Item registered.
-- [ ] Texture from Zenith.
-- [ ] Lang key.
+- [x] Item registered.
+- [x] Texture from Zenith.
+- [x] Lang key.
 
-**Tests:** Registered.
+**Tests:** [x] Registered.
 
 ---
 
@@ -1347,26 +1347,26 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** `/dev-companion` § "Events" — `LootTableEvents.MODIFY`.
 
 **Acceptance:**
-- [ ] `event/WardenLootHandler.java` subscribes to `LootTableEvents.MODIFY` for id `entities/warden`.
-- [ ] Adds:
+- [x] `event/WardenLootHandler.java` subscribes to `LootTableEvents.MODIFY` for id `entities/warden`.
+- [x] Adds:
   - Pool A: 1 guaranteed `warden_tendril` (weight 1, `UniformGenerator.between(1,1)`), gated by `LootItemRandomChanceCondition(config.warden.tendrilDropChance)`.
   - Pool B: 1 extra `warden_tendril` gated by `LootItemRandomChanceWithLootingCondition(0.0, config.warden.tendrilLootingBonus)`.
-- [ ] Registered in `FizzleEnchanting#onInitialize`.
+- [x] Registered in `FizzleEnchanting#onInitialize`.
 
 **Tests:** `WardenLootHandlerTest` —
-- [ ] After modification the table has 2 pools referencing `warden_tendril`.
-- [ ] `dropChance=1.0, looting=0` → both pools roll, expect 2 tendrils.
-- [ ] `dropChance=0.0, looting=3` → expected count bounded in `[0, 2]` over 1000 sims.
+- [x] After modification the table has 2 pools referencing `warden_tendril`.
+- [x] `dropChance=1.0, looting=0` → both pools roll, expect 2 tendrils.
+- [x] `dropChance=0.0, looting=3` → expected count bounded in `[0, 2]` over 1000 sims.
 
 ---
 
 ### Task T-5.4.4 — Config reload re-reads drop chances
 
 **Acceptance:**
-- [ ] Handler reads `config.warden.*` at **roll time**, not cached at registration.
-- [ ] `/fizzleenchanting reload` after mutating config → subsequent kills reflect the new values.
+- [x] Handler reads `config.warden.*` at **roll time**, not cached at registration.
+- [x] `/fizzleenchanting reload` after mutating config → subsequent kills reflect the new values.
 
-**Tests:** Mutate config in-memory → re-simulate roll → expectations shift accordingly.
+**Tests:** [x] Mutate config in-memory → re-simulate roll → expectations shift accordingly.
 
 ---
 
