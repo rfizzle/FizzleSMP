@@ -1219,11 +1219,11 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Tome items".
 
 **Acceptance:**
-- [ ] Left = enchanted item, right = scrap tome.
-- [ ] Output = enchanted book with **one random** enchantment (seeded by world random for determinism).
-- [ ] Left item destroyed, tome consumed.
-- [ ] XP cost = `config.tomes.scrapTomeXpCost`.
-- [ ] Declines on unenchanted left.
+- [x] Left = enchanted item, right = scrap tome.
+- [x] Output = enchanted book with **one random** enchantment (seeded by world random for determinism).
+- [x] Left item destroyed, tome consumed.
+- [x] XP cost = `config.tomes.scrapTomeXpCost`.
+- [x] Declines on unenchanted left.
 
 **Tests:** `ScrapTomeHandlerTest` — seeded RNG picks expected enchant; unenchanted input declines.
 
@@ -1232,22 +1232,22 @@ Every task's Definition of Done implicitly includes:
 ### Task T-5.2.2 — `ImprovedScrapTomeHandler`
 
 **Acceptance:**
-- [ ] Same as scrap, but output book carries **all** enchantments.
-- [ ] XP cost = `config.tomes.improvedScrapTomeXpCost`.
+- [x] Same as scrap, but output book carries **all** enchantments.
+- [x] XP cost = `config.tomes.improvedScrapTomeXpCost`.
 
-**Tests:** 3-enchant input → output book has all 3.
+**Tests:** [x] 3-enchant input → output book has all 3.
 
 ---
 
 ### Task T-5.2.3 — `ExtractionTomeHandler`
 
 **Acceptance:**
-- [ ] Output book = all enchants; left item preserved, unenchanted, damaged by `config.tomes.extractionTomeItemDamage` (clamped so durability remains ≥ 1).
-- [ ] XP cost = `config.tomes.extractionTomeXpCost`.
+- [x] Output book = all enchants; left item preserved, unenchanted, damaged by `config.tomes.extractionTomeItemDamage` (clamped so durability remains ≥ 1).
+- [x] XP cost = `config.tomes.extractionTomeXpCost`.
 
 **Tests:** `ExtractionTomeHandlerTest` —
-- [ ] 3 enchants → output book has 3; sword survives unenchanted with damage applied.
-- [ ] Durability clamped — sword with 1 durability stays at 1 after handler.
+- [x] 3 enchants → output book has 3; sword survives unenchanted with damage applied.
+- [x] Durability clamped — sword with 1 durability stays at 1 after handler.
 
 ---
 

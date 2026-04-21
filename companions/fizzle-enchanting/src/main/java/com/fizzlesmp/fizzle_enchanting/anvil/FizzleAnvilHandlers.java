@@ -23,5 +23,8 @@ public final class FizzleAnvilHandlers {
         registered = true;
         AnvilDispatcher.register(new PrismaticWebHandler());
         AnvilDispatcher.register(new IronBlockAnvilRepairHandler());
+        AnvilDispatcher.register(new ScrapTomeHandler());
+        AnvilDispatcher.register(new ImprovedScrapTomeHandler());
+        AnvilDispatcher.register(new ExtractionTomeHandler());
     }
 }

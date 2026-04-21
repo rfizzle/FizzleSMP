@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * T-4.1.1 — structural verification for {@code AnvilMenuMixin}. Mirrors
+ * T-4.1.1 / T-5.2.3 — structural verification for {@code AnvilMenuMixin}. Mirrors
  * {@link EnchantmentTableBlockMixinTest}: fabric-loader-junit is not on the test classpath, so the
  * Mixin transformer does not run at test time. We inspect annotations + bytecode via ASM to pin
  * down the behaviors the runtime transformer would otherwise catch —
@@ -37,10 +37,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * <ul>
  *   <li>Drift in {@code AnvilMenu#createResult}'s signature.
  *   <li>A missing/widened {@code @Mixin} target.
- *   <li>The {@code @Inject} missing the TAIL target.
- *   <li>The injector body failing to (a) call {@link AnvilDispatcher#handle} or (b) forward the
- *       result into {@code resultSlots.setItem}/{@code cost.set} — i.e. the "stub dispatcher
- *       returning a canned result → anvil output slot receives it" contract.
+ *   <li>The {@code createResult} {@code @Inject} missing the TAIL target.
+ *   <li>The createResult injector body failing to (a) call {@link AnvilDispatcher#handle} or
+ *       (b) forward the result into {@code resultSlots.setItem}/{@code cost.set} — i.e. the
+ *       "stub dispatcher returning a canned result → anvil output slot receives it" contract.
+ *   <li>The {@code onTake} {@code @Inject} missing the TAIL target (T-5.2.3: Extraction Tome
+ *       preserves the source item via {@code leftReplacement}, which the take-tail writes back
+ *       into slot 0 after vanilla clears it).
  *   <li>The mixin config forgetting to list the mixin.
  * </ul>
  */
@@ -78,8 +81,8 @@ class AnvilMenuMixinTest {
     @Test
     void injectMethod_hasTailOnCreateResult() throws Exception {
         ClassNode node = readMixinClass();
-        MethodNode hook = findInjectHook(node);
-        assertNotNull(hook, "mixin must contain exactly one @Inject hook");
+        MethodNode hook = findInjectForTargetMethod(node, "createResult");
+        assertNotNull(hook, "mixin must contain an @Inject hook targeting createResult");
 
         AnnotationNode inject = findAnnotation(hook.invisibleAnnotations, INJECT_DESC);
         if (inject == null) inject = findAnnotation(hook.visibleAnnotations, INJECT_DESC);
@@ -103,9 +106,35 @@ class AnvilMenuMixinTest {
     }
 
     @Test
+    void injectMethod_hasTailOnOnTake() throws Exception {
+        // T-5.2.3: ExtractionTome leaves a leftReplacement on the AnvilResult that must survive
+        // past vanilla's onTake — which unconditionally clears slot 0. A TAIL inject on onTake
+        // reinstates the replacement. If this inject ever drifts to HEAD or disappears, the
+        // Extraction Tome silently stops preserving the source item at runtime.
+        ClassNode node = readMixinClass();
+        MethodNode hook = findInjectForTargetMethod(node, "onTake");
+        assertNotNull(hook, "mixin must contain an @Inject hook targeting onTake — otherwise "
+                + "vanilla's slot-0 clear strips the Extraction Tome's leftReplacement");
+
+        AnnotationNode inject = findAnnotation(hook.invisibleAnnotations, INJECT_DESC);
+        if (inject == null) inject = findAnnotation(hook.visibleAnnotations, INJECT_DESC);
+        assertNotNull(inject);
+
+        List<String> methods = extractArrayValue(inject, "method");
+        assertEquals(List.of("onTake"), methods, "@Inject must target onTake exactly");
+
+        List<AnnotationNode> ats = extractArrayValue(inject, "at");
+        assertNotNull(ats);
+        assertEquals(1, ats.size());
+        assertEquals("TAIL", extractValue(ats.get(0), "value"),
+                "@At TAIL — vanilla's onTake empties slot 0 before returning, so we MUST "
+                        + "reinstate the leftReplacement after its body runs, never before");
+    }
+
+    @Test
     void injectorBody_callsDispatcherAndForwardsResult() throws Exception {
         ClassNode node = readMixinClass();
-        MethodNode hook = findInjectHook(node);
+        MethodNode hook = findInjectForTargetMethod(node, "createResult");
         assertNotNull(hook);
 
         boolean callsDispatcher = false;
@@ -170,18 +199,28 @@ class AnvilMenuMixinTest {
 
     // --- ASM helpers ---
 
-    private static MethodNode findInjectHook(ClassNode node) {
-        MethodNode hook = null;
-        int injectCount = 0;
+    /**
+     * Finds the unique {@code @Inject}-annotated method on the mixin whose {@code method}
+     * attribute targets {@code targetMethod}. Returns {@code null} when no such inject exists.
+     * Fails the test if two hooks both target the same vanilla method — that would be a
+     * mixin-author error and would deserve a loud failure.
+     */
+    private static MethodNode findInjectForTargetMethod(ClassNode node, String targetMethod) {
+        MethodNode match = null;
         for (MethodNode m : node.methods) {
-            if (findAnnotation(m.invisibleAnnotations, INJECT_DESC) != null
-                    || findAnnotation(m.visibleAnnotations, INJECT_DESC) != null) {
-                hook = m;
-                injectCount++;
+            AnnotationNode inject = findAnnotation(m.invisibleAnnotations, INJECT_DESC);
+            if (inject == null) inject = findAnnotation(m.visibleAnnotations, INJECT_DESC);
+            if (inject == null) continue;
+            List<String> methods = extractArrayValue(inject, "method");
+            if (methods == null) continue;
+            if (!methods.contains(targetMethod)) continue;
+            if (match != null) {
+                throw new AssertionError("two @Inject hooks target " + targetMethod
+                        + " — collapse or rename before this helper can disambiguate");
             }
+            match = m;
         }
-        assertEquals(1, injectCount, "exactly one @Inject hook in MVP — more would widen the mixin footprint");
-        return hook;
+        return match;
     }
 
     private static ClassNode readMixinClass() throws Exception {
