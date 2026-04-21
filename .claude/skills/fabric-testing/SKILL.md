@@ -264,6 +264,91 @@ public class AnvilFlowGameTest implements FabricGameTest {
 
 Import `net.minecraft.gametest.framework.GameTest` (vanilla) for the annotation; the Fabric package provides `FabricGameTest` (interface) and support classes, but the `@GameTest` method annotation itself is vanilla-sourced in 1.21.1.
 
+### Runtime patterns you'll hit
+
+These aren't obvious from the API surface — working them out cost multiple failing runs during the fizzle-difficulty rollout.
+
+**1. Mock player positioning.** `helper.makeMockServerPlayerInLevel()` places the player near the level's (0,0,0), not inside the test region. Each gametest runs at a randomized far-out position, so any test that relies on a `ServerPlayer` being in range — `level.getNearestPlayer(mob, range)`, `level.players().stream().filter(...)`, player-triggered block interactions — has to teleport the player into the test region first:
+
+```java
+ServerPlayer player = helper.makeMockServerPlayerInLevel();
+BlockPos playerAbs = helper.absolutePos(new BlockPos(0, 2, 1));
+player.teleportTo(playerAbs.getX() + 0.5, playerAbs.getY(), playerAbs.getZ() + 0.5);
+```
+
+The `+0.5` centers the player on the block; matters for some detection paths that use exact coordinates, harmless for those that don't.
+
+**2. Deterministic assertions over non-deterministic world state.** The gametest world's shared-spawn and Y-level are not (0,0,0)/62, so any position-based scaling or terrain-dependent check in the code under test kicks in with non-obvious values. RNG-gated paths (variant rolls, drop chances, random damage) add more noise. When the goal is to assert one specific axis, save the relevant config flags, disable the noisy paths, spawn the entity, and restore in a `finally`:
+
+```java
+boolean savedDist = cfg.distanceScaling.enabled;
+boolean savedSpecial = cfg.specialZombies.enabled;
+cfg.distanceScaling.enabled = false;
+cfg.specialZombies.enabled = false;
+
+Zombie zombie;
+try {
+    // ENTITY_LOAD fires synchronously inside spawnWithNoFreeWill, so the mod's
+    // handler runs and modifiers are frozen on the returned entity before this
+    // call returns.
+    zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 2, 1));
+} finally {
+    cfg.distanceScaling.enabled = savedDist;
+    cfg.specialZombies.enabled = savedSpecial;
+}
+```
+
+Safe across tests: Minecraft's `GameTestServer` runs the whole batch on the main server thread, so `finally` always runs before any other test's spawn call. No concurrent-mutation risk even with config being a shared singleton.
+
+**3. `helper.assertValueEqual` is exact equality.** It uses `.equals()`, so `assertValueEqual(zombie.getMaxHealth(), 70.0f, "...")` fails on `70.000001f`. Unlike JUnit's `assertEquals(expected, actual, delta)`, there is no tolerance parameter. For fractional/derived values, either compute the expected number exactly or fall back to `helper.assertTrue(Math.abs(actual - expected) < 1e-4, "...")`.
+
+**4. Synchronous vs deferred assertions.** `helper.succeedWhen(() -> { ... })` polls the lambda every tick until it passes or the test times out; assertions *inside* the lambda run at tick boundaries. Assertions *outside* `succeedWhen` run immediately on the calling thread. For state that's ready before `spawn*` returns (like `ENTITY_LOAD`-applied attributes), either works. For state that needs a tick — AI pathing, projectile flight, block entity logic — put the assertion inside `succeedWhen`.
+
+### Menu-flow sketch (fizzle-enchanting's shape)
+
+> **Unverified recipe.** I haven't run this against fizzle-enchanting's actual menu — the outline reflects the public API for 1.21.1 Fabric menus, but expect to adapt slot indices and the use-block call to the specific mod.
+
+For tests that need to exercise a block-backed menu end-to-end (anvil flow, enchanting table, beacon UI), the shape is:
+
+```java
+@GameTest(template = "fizzle_enchanting:empty_3x3")
+public void anvilFlow_inputAndMaterial_producesExpectedResult(GameTestHelper helper) {
+    // 1. Place the block and teleport a player next to it.
+    BlockPos blockLocal = new BlockPos(1, 1, 1);
+    helper.setBlock(blockLocal, Blocks.ANVIL);
+    ServerPlayer player = helper.makeMockServerPlayerInLevel();
+    BlockPos playerAbs = helper.absolutePos(new BlockPos(1, 1, 2));
+    player.teleportTo(playerAbs.getX() + 0.5, playerAbs.getY(), playerAbs.getZ() + 0.5);
+
+    // 2. Right-click the block to open its menu. useBlock goes through the normal
+    //    interaction path, so mod-registered screen handlers open the way they do in-game.
+    helper.useBlock(blockLocal, player);
+    AbstractContainerMenu menu = player.containerMenu;
+    helper.assertTrue(menu instanceof AnvilMenu, "expected anvil menu to open");
+
+    // 3. Place items into input slots. Slot indices are menu-specific: for AnvilMenu
+    //    slot 0 = input, slot 1 = material, slot 2 = output. For mod menus, look at
+    //    the constructor's addSlot(...) order.
+    menu.getSlot(0).set(new ItemStack(Items.DIAMOND_SWORD));
+    menu.getSlot(1).set(new ItemStack(Items.ENCHANTED_BOOK));
+
+    // 4. slotsChanged() ran on each set() call; read the computed output.
+    ItemStack result = menu.getSlot(2).getItem();
+    helper.assertTrue(!result.isEmpty(), "expected anvil to produce an output");
+    helper.succeed();
+}
+```
+
+If the menu reads a block entity's state (repair cost, stored XP, enchantment table shelf count), seed that via the helper's block-entity API before calling `useBlock`:
+
+```java
+helper.getBlockEntity(blockLocal) instanceof SomeBlockEntity be;
+// mutate be's fields, then:
+be.setChanged();
+```
+
+Run the single test first with `./gradlew :companions:<mod>:runGametest --tests 'fizzle_enchanting:empty_3x3'` (Fabric gametest filters by template ID, not class name) and iterate on slot indices until the assertions pass.
+
 ### Template location
 
 Structure templates go under `src/main/resources/data/<modid>/gametest/structure/<name>.snbt` — **two subdirectories, singular "structure"**. This is the path the Fabric gametest API's `StructureTemplateManagerMixin` resolves (via `FabricGameTestHelper.GAMETEST_STRUCTURE_FINDER`). Do not be fooled by the vanilla error message `"Missing test structure: <id>"` — the token `"gameteststructures"` appears in vanilla `StructureUtils` but is only used in the error line, not as the actual resource path.
@@ -296,6 +381,17 @@ A minimal 3×3×3 empty-air-over-stone template (a single file covers almost eve
 ```
 
 On success you'll see `All N required tests passed :)` in the log. The `junit-gametest.xml` report lands in `build/` and can be wired into CI. On failure, Minecraft writes a crash report under `build/gametest/crash-reports/`.
+
+### Working reference in this repo
+
+`companions/fizzle-difficulty/src/gametest/` has a working Tier 3 suite exercising every piece discussed above:
+
+- Build wiring: `companions/fizzle-difficulty/build.gradle` (sourceSet, configurations, loom run, evaluation order).
+- Entrypoint: `companions/fizzle-difficulty/src/main/resources/fabric.mod.json`.
+- Template: `companions/fizzle-difficulty/src/main/resources/data/fizzle_difficulty/gametest/structure/empty_3x3.snbt`.
+- Tests: `companions/fizzle-difficulty/src/gametest/java/com/fizzlesmp/fizzle_difficulty/gametest/MobScalingGameTest.java` — includes the mock-player teleport, the config-isolation try/finally, and a parametrized helper invoked by 5 breakpoint tests.
+
+Copy the build.gradle wiring from there when setting up a new mod's Tier 3.
 
 ### Do not use gametest for
 
