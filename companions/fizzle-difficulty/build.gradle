@@ -70,6 +70,31 @@ loom {
     splitEnvironmentSourceSets()
 }
 
+sourceSets {
+    gametest {
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
+configurations {
+    gametestImplementation.extendsFrom implementation
+    gametestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+loom {
+    runs {
+        gametest {
+            server()
+            name "Game Test"
+            source sourceSets.gametest
+            vmArg "-Dfabric-api.gametest"
+            vmArg "-Dfabric-api.gametest.report-file=${layout.buildDirectory.file('junit-gametest.xml').get().asFile}"
+            runDir "build/gametest"
+        }
+    }
+}
+
 dependencies {
     // Minecraft
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
@@ -86,6 +111,18 @@ dependencies {
     testImplementation platform("org.junit:junit-bom:5.10.2")
     testImplementation "org.junit.jupiter:junit-jupiter"
     testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+    // Knot-based classloader that boots Fabric before tests run — registries,
+    // item registrations, and onInitialize are available without Bootstrap.bootStrap().
+    testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
+}
+
+// With splitEnvironmentSourceSets, loom remaps fabric-api to *-common variants for the main
+// runtime classpath but leaves the unmapped fabric-api sibling on testRuntimeClasspath.
+// fabric-loader-junit then reads both the remapped (named) AW and the unmapped (intermediary)
+// AW and aborts on namespace mismatch. Dropping the unmapped sibling keeps the remapped
+// artifacts in place and lets the junit launcher boot.
+configurations.testRuntimeClasspath {
+    exclude group: 'net.fabricmc.fabric-api', module: 'fabric-api'
 }
 
 test {

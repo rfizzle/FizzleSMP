@@ -12,7 +12,9 @@ The companion mods shipped with two incompatible test bootstrapping patterns:
 - **fizzle-difficulty** — pure JUnit 5 tests, no Minecraft classes referenced. Works fine.
 - **fizzle-enchanting** — uses `Bootstrap.bootStrap()` plus reflection to unfreeze `BuiltInRegistries` (`MappedRegistry.frozen` / `unregisteredIntrusiveHolders`), plus `forkEvery = 1` to avoid cross-test contamination. This is brittle and slow.
 
-The target is **`fabric-loader-junit`** for anything that needs a registry, item, component, mixin, or entrypoint, and **Fabric Gametest** for anything that needs a real `Level`. The bootstrap+reflection pattern must not be used in new code.
+The target is **`fabric-loader-junit`** for anything that needs a vanilla registry, mixin, or AW (with an explicit `Bootstrap.bootStrap()` in `@BeforeAll` — see below), and **Fabric Gametest** for anything that needs a real `Level` or the mod's own registered content. The `unfreeze`-reflection pattern must not be used in new code.
+
+> **Correction (from real run, 2026-04):** fabric-loader-junit's `FabricLoaderLauncherSessionListener` only initializes Knot's classloader. It does **not** call `Bootstrap.bootStrap()`, and it does **not** invoke the `main` / `ModInitializer` entrypoint. Tests that touch `BuiltInRegistries` still need `@BeforeAll Bootstrap.bootStrap()`. The mod's `onInitialize` does *not* fire, so any test that depends on the mod's own items / blocks / menus being registered can't be done cleanly at Tier 2 without the prohibited unfreeze dance — push those to Tier 3 instead.
 
 ## Decision tree — pick one tier per test
 
@@ -24,7 +26,9 @@ Ask these in order and stop at the first "yes":
 2. **Does the test need a real `ServerLevel`, tick loop, entity behavior, block placement, or redstone?**
    Yes → **Tier 3: Gametest**. Use `@GameTest` with a `GameTestHelper`. Runs on `./gradlew runGametest`.
 
-3. **Everything else** (registries, items, components, enchantments, menus, payload codecs, mixin accessors) → **Tier 2: `fabric-loader-junit`**. Normal JUnit syntax, but Knot boots Fabric so registries come up the normal way. No `Bootstrap.bootStrap()`, no unfreeze reflection, no `forkEvery`.
+3. **Everything else** (vanilla registries, enchantments, payload codecs, mixin accessors, AW-widened members) → **Tier 2: `fabric-loader-junit`** + explicit `@BeforeAll Bootstrap.bootStrap()`. Knot applies mixins/AWs; bootstrap populates the vanilla registries; you don't need the unfreeze reflection or `forkEvery` (the latter was only there because the old pattern latched state for the JVM's lifetime — with Knot + bootstrap, read-only tests are safe to share a JVM).
+
+If the test needs to see the **mod's own registered content** (e.g. `FizzleEnchantingRegistry.EXTRACTION_TOME` in `BuiltInRegistries.ITEM`), there is no clean Tier 2 path — fabric-loader-junit does not run `onInitialize`, `Bootstrap.bootStrap()` freezes the registries, and registering post-freeze is the prohibited pattern. Push that test to Tier 3.
 
 Write the tier into a `// Tier: N` comment at the top of every new test file — readers should not have to infer it.
 
@@ -53,17 +57,35 @@ Add to `companions/<mod>/build.gradle` under `dependencies {}`:
 testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
 ```
 
-`loader_version` is already in `gradle.properties` — do not hardcode it. Verify the dependency resolves with `./gradlew :companions:<mod>:dependencies --configuration testRuntimeClasspath | grep fabric-loader-junit`.
+`loader_version` is already in `gradle.properties` — do not hardcode it.
 
-Then **delete** from the `test {}` block:
+**Required exclusion (with `loom.splitEnvironmentSourceSets()`):** Loom remaps the fabric-api artifacts to `*-common` variants for the main runtime classpath but leaves the raw `net.fabricmc.fabric-api:fabric-api:<ver>` sibling on `testRuntimeClasspath`. The unmapped jar carries accesswideners in the `intermediary` namespace and fabric-loader-junit aborts at session open with `AccessWidenerFormatException: line 1: Namespace (intermediary) does not match current runtime namespace (named)`. Drop the unmapped sibling:
 
 ```gradle
-// REMOVE — fabric-loader-junit handles classloader isolation. forkEvery = 1 was a
-// workaround for Bootstrap.bootStrap() latching BuiltInRegistries for the JVM's lifetime.
+configurations.testRuntimeClasspath {
+    exclude group: 'net.fabricmc.fabric-api', module: 'fabric-api'
+}
+```
+
+The loom-remapped `*-common` variants remain on the classpath, so fabric-api code compiles and runs normally under test.
+
+Then **delete** from the `test {}` block if present:
+
+```gradle
+// REMOVE — Knot gives each session a fresh classloader, and Bootstrap.bootStrap() is a
+// no-op on subsequent calls (the `isBootstrapped` latch short-circuits). forkEvery = 1
+// was only needed because the old pattern reflectively unfroze registries.
 forkEvery = 1
 ```
 
 Leave `useJUnitPlatform()` in place.
+
+Verify with:
+
+```bash
+./gradlew :companions:<mod>:dependencies --configuration testRuntimeClasspath | grep fabric-loader-junit
+./gradlew :companions:<mod>:test                       # should still pass before you add a Tier 2 test
+```
 
 ### Test template
 
@@ -71,44 +93,67 @@ Leave `useJUnitPlatform()` in place.
 // Tier: 2 (fabric-loader-junit)
 package com.fizzlesmp.<modid>.<area>;
 
+import net.minecraft.SharedConstants;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.server.Bootstrap;
 import net.minecraft.world.item.Items;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class ExampleTest {
+    @BeforeAll
+    static void bootstrapVanillaRegistries() {
+        // Knot (fabric-loader-junit's session listener) sets up mixins/AWs but does not
+        // call Bootstrap.bootStrap() or invoke mod entrypoints. Any read of BuiltInRegistries
+        // still needs an explicit bootstrap. Safe to call from every Tier 2 test class — the
+        // isBootstrapped latch inside bootStrap() short-circuits subsequent calls.
+        SharedConstants.tryDetectVersion();
+        Bootstrap.bootStrap();
+    }
+
     @Test
     void vanillaRegistriesAreAvailable() {
-        // No @BeforeAll, no Bootstrap.bootStrap(), no unfreeze. Knot already booted
-        // Fabric before the test class loaded.
         assertNotNull(Items.DIAMOND_SWORD);
-        assertTrue(BuiltInRegistries.ITEM.containsKey(Items.DIAMOND_SWORD.arch$registryName()));
+        assertTrue(BuiltInRegistries.ITEM.containsKey(BuiltInRegistries.ITEM.getKey(Items.DIAMOND_SWORD)));
     }
 }
 ```
 
-For tests that need the mod's own registered content (items, blocks, menus): `FabricLoader` will have called `onInitialize` on the mod before tests run — `FizzleEnchantingRegistry.EXTRACTION_TOME` is already in the registry. No manual `register()` call required.
+### What Tier 2 actually gives you
+
+✅ **Does** — Knot classloader applies your mixins and AWs; `Bootstrap.bootStrap()` populates `Attributes`, `Items`, `BuiltInRegistries`, etc.; `Zombie.createAttributes().build()` and other entity supplier calls work; you can add `AttributeModifier`s to a real `AttributeMap` and observe the resulting `getValue()`.
+
+❌ **Does not** — run the mod's `onInitialize`. The mod's own items / blocks / menus are **not** in `BuiltInRegistries`. Registering them after `Bootstrap.bootStrap()` requires reflective unfreeze (prohibited). If your test needs mod-registered content, it belongs in Tier 3.
+
+### Real example: math-to-AttributeMap bridge
+
+`ScalingEngineAttributeBridgeTest` (in fizzle-difficulty) proves the pure-math `ScalingEngine.computeAttributeFactor` result actually lands as the expected `getMaxHealth()` when applied to a real vanilla `AttributeMap`. That's the Tier 2 sweet spot: integration between computed values and vanilla attribute math, without booting a world.
 
 ### Migration recipe (for each `fizzle-enchanting` test file)
 
 Work file-by-file, but commit **per mod** not per file (see "scope" rule below).
 
-For each test file with `Bootstrap.bootStrap()`:
+**First classify the test:**
+- Does it only *read* vanilla content (items, enchantments, attributes)? → Migrate to Tier 2 + `Bootstrap.bootStrap()`. The unfreeze helpers and `register()` call go away.
+- Does it *register* mod content via `FizzleEnchantingRegistry.register()` or similar? → Can't migrate cleanly; leave on the old pattern and revisit as a Tier 3 gametest.
 
-1. **Delete the `@BeforeAll bootstrap()` method** entirely.
-2. **Delete `unfreeze` / `unfreezeIntrusive` helpers** — private static helpers, only called from the bootstrap method.
-3. **Delete any explicit `FizzleEnchantingRegistry.register()` call** — the mod's `onInitialize` runs automatically.
-4. **Delete the `Field`, `IdentityHashMap` imports** if no longer used.
-5. **Delete any `@BeforeAll` that builds a synthetic enchantment registry via reflection** — the real `BuiltInRegistries.ENCHANTMENT` is available via the loaded data pack. If a test needs a specific enchantment, use `holderLookup.lookup(Registries.ENCHANTMENT).orElseThrow().getOrThrow(Enchantments.SHARPNESS)`.
-6. **Leave the `@Test` bodies unchanged.** Assertion semantics stay identical — only the setup is changing.
-7. **Run `./gradlew :companions:<mod>:test --tests '<fully.qualified.TestName>'`** after each file. If it passes, move to the next. If it fails, stop and diagnose before converting more files.
+For readable-by-Tier-2 test files:
 
-Do **not** combine migration with test logic changes. A migration commit should only change setup boilerplate; reviewers must be able to trust that no assertion was softened.
+1. **Keep `@BeforeAll` — but simplify it** to just `SharedConstants.tryDetectVersion(); Bootstrap.bootStrap();`. Everything else goes.
+2. **Delete `unfreeze` / `unfreezeIntrusive` helpers** — only needed to register mod content, which Tier 2 can't support.
+3. **Delete any explicit `FizzleEnchantingRegistry.register()` call** — if a test needed it, that test belongs in Tier 3, not Tier 2.
+4. **Delete the `Field`, `IdentityHashMap` imports** that came with the reflection.
+5. **Delete any `@BeforeAll` that builds a synthetic enchantment registry via reflection** — the real `BuiltInRegistries.ENCHANTMENT` is populated by `Bootstrap.bootStrap()` (vanilla enchantments) or the loaded data pack (datapack ones). For a specific enchantment use `BuiltInRegistries.ENCHANTMENT.getHolder(Enchantments.SHARPNESS).orElseThrow()`.
+6. **Leave the `@Test` bodies unchanged.** Only setup is changing; assertion semantics must be byte-identical.
+7. **Run `./gradlew :companions:<mod>:test --tests '<fully.qualified.TestName>'`** after each file. If it passes, move to the next. If it fails, stop and diagnose.
+
+Do **not** combine migration with test logic changes. A migration commit should only change setup boilerplate; reviewers must trust that no assertion was softened.
 
 ### Before/after (real example)
 
-Before (`ExtractionTomeFuelSlotRepairHandlerTest.java`, lines 59–77):
+Before (`ExtractionTomeFuelSlotRepairHandlerTest.java`, lines 59–77 — registers mod items, so *cannot* migrate cleanly to Tier 2):
 
 ```java
 @BeforeAll
@@ -128,51 +173,85 @@ static void bootstrap() throws Exception {
 }
 ```
 
-After:
+Correct target: **Tier 3**. Spin up a gametest that exercises the full anvil-fuel-slot repair flow with a real `ServerLevel` — that's what the original test was simulating.
+
+For a test that only reads vanilla enchantments (the cleanly-migratable case), the after looks like:
 
 ```java
-// Knot/Fabric initializes registries and calls onInitialize before tests run.
-// No bootstrap method needed.
+@BeforeAll
+static void bootstrapVanillaRegistries() {
+    SharedConstants.tryDetectVersion();
+    Bootstrap.bootStrap();
+}
 ```
 
-Everything from `@BeforeAll` through the private `unfreeze*` / `buildEnchantmentRegistry` / `synthetic()` helpers is deleted. The enchantment registry is the real one from the loaded data pack.
+Everything after those two lines in the original `@BeforeAll`, plus all the private `unfreeze*` / `buildEnchantmentRegistry` / `synthetic()` helpers, can be deleted.
 
 ## Tier 3: Fabric Gametest
 
-Use when a test must drive a real `Level` — anvil menu end-to-end, block entity ticking, library-block neighbor updates, player interaction flows.
+Use when a test must drive a real `Level` — anvil menu end-to-end, block entity ticking, library-block neighbor updates, player interaction flows, or any case where the mod's own registered content has to be present.
 
-### Gradle setup
+### Gradle setup — full pattern
+
+Three pieces have to be wired, and **order in `build.gradle` matters** (the `loom { runs { gametest { source sourceSets.gametest } } }` block is evaluated eagerly, so the `sourceSets` definition has to come first):
 
 ```gradle
 loom {
+    splitEnvironmentSourceSets()
+}
+
+sourceSets {
+    gametest {
+        compileClasspath += sourceSets.main.compileClasspath + sourceSets.main.output
+        runtimeClasspath += sourceSets.main.runtimeClasspath + sourceSets.main.output
+    }
+}
+
+configurations {
+    gametestImplementation.extendsFrom implementation
+    gametestRuntimeOnly.extendsFrom runtimeOnly
+}
+
+loom {
     runs {
         gametest {
-            inherit server
+            server()
             name "Game Test"
+            source sourceSets.gametest
             vmArg "-Dfabric-api.gametest"
-            vmArg "-Dfabric-api.gametest.report-file=${project.buildDir}/junit.xml"
+            vmArg "-Dfabric-api.gametest.report-file=${layout.buildDirectory.file('junit-gametest.xml').get().asFile}"
             runDir "build/gametest"
         }
     }
 }
+```
 
-test {
-    useJUnitPlatform()
-    dependsOn 'runGametest'  // optional — run gametests as part of `test`
+A dedicated `gametest` source set keeps test Java out of the production jar. The SNBT template **has to live in `src/main/resources`** (see "Template location" below), but that's fine — templates are small inert data files.
+
+Register the gametest class via a `fabric-gametest` entrypoint in `src/main/resources/fabric.mod.json`:
+
+```json
+"entrypoints": {
+    "main": ["com.fizzlesmp.<modid>.<Mod>"],
+    "fabric-gametest": ["com.fizzlesmp.<modid>.gametest.<SomeGameTest>"]
 }
 ```
+
+The entrypoint only fires under `-Dfabric-api.gametest`, so declaring it in production is harmless — FabricLoader lazy-loads the class and never resolves it outside gametest runs.
 
 ### Test template
 
 ```java
+// Tier: 3 (Fabric Gametest)
 package com.fizzlesmp.<modid>.gametest;
 
-import net.fabricmc.fabric.api.gametest.v1.GameTest;
+import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import net.minecraft.core.BlockPos;
+import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.core.BlockPos;
 
-public class AnvilFlowGameTest {
+public class AnvilFlowGameTest implements FabricGameTest {
     @GameTest(template = "fizzle_enchanting:empty_3x3")
     public void placeAndBreakAnvil(GameTestHelper helper) {
         BlockPos pos = new BlockPos(1, 2, 1);
@@ -183,9 +262,40 @@ public class AnvilFlowGameTest {
 }
 ```
 
-Templates live under `src/main/resources/data/<modid>/gametest/structure/*.snbt`. A single `empty_<N>x<N>` template covers most cases.
+Import `net.minecraft.gametest.framework.GameTest` (vanilla) for the annotation; the Fabric package provides `FabricGameTest` (interface) and support classes, but the `@GameTest` method annotation itself is vanilla-sourced in 1.21.1.
 
-Run with `./gradlew :companions:<mod>:runGametest`. Gametest failures show up in `build/junit.xml` and in the game log.
+### Template location
+
+Structure templates go under `src/main/resources/data/<modid>/gametest/structure/<name>.snbt` — **two subdirectories, singular "structure"**. This is the path the Fabric gametest API's `StructureTemplateManagerMixin` resolves (via `FabricGameTestHelper.GAMETEST_STRUCTURE_FINDER`). Do not be fooled by the vanilla error message `"Missing test structure: <id>"` — the token `"gameteststructures"` appears in vanilla `StructureUtils` but is only used in the error line, not as the actual resource path.
+
+Templates **must** be in `src/main/resources` (the main mod's data pack), not in `src/gametest/resources`. The gametest source set's resources are not loaded as part of the `<modid>` data pack at runtime, so a template there is invisible to the structure manager.
+
+A minimal 3×3×3 empty-air-over-stone template (a single file covers almost every test):
+
+```snbt
+{
+  DataVersion: 3955,
+  size: [3, 3, 3],
+  entities: [],
+  blocks: [
+    {pos: [0, 0, 0], state: 1}, {pos: [1, 0, 0], state: 1}, {pos: [2, 0, 0], state: 1},
+    {pos: [0, 0, 1], state: 1}, {pos: [1, 0, 1], state: 1}, {pos: [2, 0, 1], state: 1},
+    {pos: [0, 0, 2], state: 1}, {pos: [1, 0, 2], state: 1}, {pos: [2, 0, 2], state: 1}
+  ],
+  palette: [
+    {Name: "minecraft:air"},
+    {Name: "minecraft:stone"}
+  ]
+}
+```
+
+### Running
+
+```bash
+./gradlew :companions:<mod>:runGametest
+```
+
+On success you'll see `All N required tests passed :)` in the log. The `junit-gametest.xml` report lands in `build/` and can be wired into CI. On failure, Minecraft writes a crash report under `build/gametest/crash-reports/`.
 
 ### Do not use gametest for
 
@@ -213,12 +323,13 @@ Report the test count before and after. It must not decrease — if a test was d
 
 ## Guardrails — what NOT to do
 
-- **Do not** keep `Bootstrap.bootStrap()` "just in case." If the test is Tier 2, the bootstrap call is harmful: it can double-initialize state that Knot already set up.
-- **Do not** leave `forkEvery = 1` in `build.gradle` after migration. It silently makes the whole test suite ~20× slower.
-- **Do not** add `@BeforeAll` setup unless it is truly shared across all `@Test` methods in the file. Per-test setup is simpler and easier to reason about.
+- **Do not** skip `Bootstrap.bootStrap()` in a Tier 2 test that touches `BuiltInRegistries`. Knot does not call it for you; skipping produces `IllegalArgumentException: Not bootstrapped` at first registry access.
+- **Do not** leave `forkEvery = 1` in `build.gradle` after migration. It silently makes the whole test suite ~20× slower. `Bootstrap.bootStrap()` is idempotent (the `isBootstrapped` latch short-circuits), so forking is unnecessary overhead.
+- **Do not** try to register the mod's own items / menus / block entities in a Tier 2 `@BeforeAll`. After `Bootstrap.bootStrap()` the registries are frozen, and reflectively unfreezing them is the prohibited pattern. Route those tests to Tier 3.
 - **Do not** use reflection on `MappedRegistry` in new code. If a test seems to need it, the test is reaching for something that belongs in Tier 3.
 - **Do not** change assertion messages or expected values during migration. If an assertion is wrong, fix it in a separate commit.
-- **Do not** assume a test needs Tier 2 just because it imports a Minecraft class. A class that is a pure POJO (e.g. `BlockPos`, `Component.literal`) does not require Fabric boot — try Tier 1 first.
+- **Do not** assume a test needs Tier 2 just because it imports a Minecraft class. A class that is a pure POJO (e.g. `BlockPos`, `Component.literal`, `RandomSource` as an interface) does not require Fabric boot — try Tier 1 first.
+- **Do not** widen production method access (e.g. flipping a `static void` to `public static void`) to make a gametest reach it. Either move the gametest into the same package, use public surface area, or test the observable behavior instead.
 
 ## When asked to convert a single file
 

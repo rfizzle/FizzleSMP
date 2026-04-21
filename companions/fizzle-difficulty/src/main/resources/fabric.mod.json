@@ -10,7 +10,8 @@
     "icon": "",
     "environment": "*",
     "entrypoints": {
-        "main": ["com.fizzlesmp.fizzle_difficulty.FizzleDifficulty"]
+        "main": ["com.fizzlesmp.fizzle_difficulty.FizzleDifficulty"],
+        "fabric-gametest": ["com.fizzlesmp.fizzle_difficulty.gametest.MobScalingGameTest"]
     },
     "mixins": [
         "fizzle_difficulty.mixins.json"
