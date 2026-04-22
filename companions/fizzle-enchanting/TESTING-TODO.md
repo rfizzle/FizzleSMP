@@ -15,6 +15,7 @@ Per test row, the leading checkbox carries the *coverage* state; the trailing `S
 - `[x]` coverage exists; `[ ]` coverage missing.
 - `STATE: T1-pure` — pure JUnit, no MC imports. Leave alone.
 - `STATE: T1-pseudo` — MC types used as POJOs (`ResourceLocation`, `Component`, Brigadier trees, ASM bytecode introspection). The skill explicitly allows this — document, leave alone.
+- `STATE: T2` / `STATE: T3` — migration complete; test lives on fabric-loader-junit (Tier 2) or the gametest source set (Tier 3). Terminal states, same as `T1-pure`.
 - `STATE: T2-migrate-clean` — existing legacy test already uses `Bootstrap.bootStrap()` without unfreeze or register. Drop `forkEvery=1`, add `fabric-loader-junit` dep, keep assertions byte-identical.
 - `STATE: T2-migrate-unfreeze` — existing legacy test builds a synthetic enchantment registry via reflection to supply fake enchants. Rewrite to read real vanilla enchants via `BuiltInRegistries.ENCHANTMENT.getHolder(Enchantments.SHARPNESS).orElseThrow()` after bootstrap. No unfreeze reflection.
 - `STATE: T3-rewrite` — existing legacy test calls `FizzleEnchantingRegistry.register()` post-bootstrap (prohibited). Rewrite as a Fabric Gametest under `src/gametest/`. Sibling Tier 2 coverage may exist alongside.
@@ -305,7 +306,7 @@ Silent-break model: LOS inversion (transmitter check passes-through through wall
 
 - [x] **TEST-2.3-T2a** — `StatsPayload` + `CraftingResultEntry` round-trip over `RegistryFriendlyByteBuf`.
   - **Tier:** 2.
-  - **State:** T2-migrate-clean.
+  - **State:** T2.
   - **Acceptance:**
     - [x] All-zero / mid-load / saturated variants survive round-trip byte-identical.
     - [x] `craftingResult` Optional preserved in present and empty shapes.
@@ -314,7 +315,7 @@ Silent-break model: LOS inversion (transmitter check passes-through through wall
 
 - [x] **TEST-2.3-T2b** — `CluesPayload` round-trip including `exhaustedList` flag.
   - **Tier:** 2.
-  - **State:** T2-migrate-clean.
+  - **State:** T2.
   - **Acceptance:**
     - [x] Empty clue list round-trips.
     - [x] 3-entry list round-trips.
@@ -323,7 +324,7 @@ Silent-break model: LOS inversion (transmitter check passes-through through wall
 
 - [x] **TEST-2.3-T2c** — Registered in the S2C registry.
   - **Tier:** 2.
-  - **State:** T2-migrate-clean.
+  - **State:** T2.
   - **Acceptance:**
     - [x] After manual `registerPayloads()` call, both `TYPE` lookups succeed.
   - **File:** `src/test/java/.../net/NetworkingRegistryTest.java`.

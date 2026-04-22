@@ -1,3 +1,4 @@
+// Tier: 2 (fabric-loader-junit)
 package com.fizzlesmp.fizzle_enchanting.net;
 
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
