@@ -346,7 +346,7 @@ Highest-risk zone in the mod. Monotonicity bugs and weight-drift are silent and 
 
 - [x] **TEST-2.4-T2a** — `getEnchantmentCost` end-to-end against a real `ItemStack`.
   - **Tier:** 2.
-  - **State:** T2-migrate-clean.
+  - **State:** T2.
   - **Acceptance:**
     - [x] Seeded RNG reproducible at `eterna=50` → slot-2 cost ∈ `[25, 50]`.
     - [x] Honors `config.enchantingTable.maxEterna` clamp.
@@ -354,7 +354,7 @@ Highest-risk zone in the mod. Monotonicity bugs and weight-drift are silent and 
 
 - [x] **TEST-2.4-T2b** — `selectEnchantment` blacklist + treasure gate + quanta stdev + rectification.
   - **Tier:** 2.
-  - **State:** T2-migrate-clean.
+  - **State:** T2.
   - **Acceptance:**
     - [x] 1000 rolls: blacklisted key never appears.
     - [x] `treasureAllowed=false` → zero treasure-tagged enchants.
@@ -365,7 +365,7 @@ Highest-risk zone in the mod. Monotonicity bugs and weight-drift are silent and 
 
 - [x] **TEST-2.4-T2c** — `buildClueList` first-clue == selected enchant under same seed; exhausted flag correct.
   - **Tier:** 2.
-  - **State:** T2-migrate-clean.
+  - **State:** T2.
   - **Acceptance:**
     - [x] Over 100 seeds, first clue equals the rolled selection.
     - [x] Pool smaller than `cluesCount` → `exhaustedList == true`.
