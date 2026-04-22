@@ -87,6 +87,13 @@ repositories {
             includeGroup 'dev.architectury'
         }
     }
+    maven {
+        name = 'BlameJared'
+        url = 'https://maven.blamejared.com/'
+        content {
+            includeGroup 'mezz.jei'
+        }
+    }
 }
 
 loom {
@@ -157,6 +164,12 @@ dependencies {
     modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}"
     modLocalRuntime "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
     modLocalRuntime "dev.architectury:architectury-fabric:${project.architectury_version}"
+
+    // JEI 19.x — Compile-only against the api split so the production jar only links
+    // against @Internal-safe JEI API types; the full mod is only pulled into the local
+    // dev runtime (modLocalRuntime) so the in-dev client can actually show JEI panels.
+    modCompileOnly "mezz.jei:jei-1.21.1-fabric-api:${project.jei_version}"
+    modLocalRuntime "mezz.jei:jei-1.21.1-fabric:${project.jei_version}"
 
     // Tests
     testImplementation platform("org.junit:junit-bom:5.10.2")

@@ -1571,7 +1571,7 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-7.3 — JEI adapter
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-7.3.1 — JEI plugin
 
