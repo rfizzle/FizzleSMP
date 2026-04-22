@@ -471,12 +471,13 @@ Three integration surfaces: mixin swap, menu subclass, screen reader.
 
 ### Tier 3
 
-- [ ] **TEST-3.1-T3** — Registry helpers: every id registered once, ids resolve in `BuiltInRegistries.BLOCK` + `.ITEM`, idempotent across `register()` invocations.
+- [x] **TEST-3.1-T3** — Registry helpers: every id registered once, ids resolve in `BuiltInRegistries.BLOCK` + `.ITEM`, idempotent across `register()` invocations.
   - **Tier:** 3.
-  - **State:** T3-rewrite (replaces `FizzleEnchantingRegistryTest`).
+  - **State:** T3.
   - **Acceptance:**
-    - [ ] Under `runGametest`, every shelf id resolves.
-    - [ ] Double-invocation of the register helper does not duplicate entries (assert registry size pre vs. post).
+    - [x] Under `runGametest`, every shelf id resolves.
+    - [x] Double-invocation of the register helper does not duplicate entries (assert registry size pre vs. post).
+  - **File:** `src/gametest/java/.../gametest/RegistryGameTest.java`.
   - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-3.2 — Full Zenith shelf roster

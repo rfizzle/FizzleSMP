@@ -13,7 +13,10 @@
         "main": ["com.fizzlesmp.fizzle_enchanting.FizzleEnchanting"],
         "client": ["com.fizzlesmp.fizzle_enchanting.client.FizzleEnchantingClient"],
         "fabric-datagen": ["com.fizzlesmp.fizzle_enchanting.data.FizzleEnchantingDataGenerator"],
-        "fabric-gametest": ["com.fizzlesmp.fizzle_enchanting.gametest.PlaceholderGameTest"],
+        "fabric-gametest": [
+            "com.fizzlesmp.fizzle_enchanting.gametest.PlaceholderGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.RegistryGameTest"
+        ],
         "emi": ["com.fizzlesmp.fizzle_enchanting.compat.emi.EmiEnchantingPlugin"],
         "rei_client": ["com.fizzlesmp.fizzle_enchanting.compat.rei.ReiEnchantingPlugin"],
         "jei_mod_plugin": ["com.fizzlesmp.fizzle_enchanting.compat.jei.JeiEnchantingPlugin"],
