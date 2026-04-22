@@ -1,0 +1,33 @@
+{
+    "parent": "fizzle_enchanting:root",
+    "criteria": {
+        "has_scrap_tome": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "fizzle_enchanting:scrap_tome"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.fizzle_enchanting.tome_apprentice.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "fizzle_enchanting:scrap_tome"
+        },
+        "title": {
+            "translate": "advancements.fizzle_enchanting.tome_apprentice.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_scrap_tome"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

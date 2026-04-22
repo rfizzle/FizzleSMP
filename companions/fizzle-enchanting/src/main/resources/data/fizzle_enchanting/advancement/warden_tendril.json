@@ -1,0 +1,34 @@
+{
+    "parent": "fizzle_enchanting:root",
+    "criteria": {
+        "has_warden_tendril": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "fizzle_enchanting:warden_tendril"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.fizzle_enchanting.warden_tendril.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "count": 1,
+            "id": "fizzle_enchanting:warden_tendril"
+        },
+        "title": {
+            "translate": "advancements.fizzle_enchanting.warden_tendril.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_warden_tendril"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

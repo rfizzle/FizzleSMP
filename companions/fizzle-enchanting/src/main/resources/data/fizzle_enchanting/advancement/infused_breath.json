@@ -1,0 +1,34 @@
+{
+    "parent": "fizzle_enchanting:root",
+    "criteria": {
+        "has_infused_breath": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "fizzle_enchanting:infused_breath"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.fizzle_enchanting.infused_breath.description"
+        },
+        "frame": "goal",
+        "icon": {
+            "count": 1,
+            "id": "fizzle_enchanting:infused_breath"
+        },
+        "title": {
+            "translate": "advancements.fizzle_enchanting.infused_breath.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_infused_breath"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

@@ -1608,21 +1608,21 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-8.1 — Advancement tree
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-8.1.1 — Hand-shipped advancement JSONs
 
 **Acceptance:** Files under `data/fizzle_enchanting/advancement/`:
-- [ ] `root` — inventory any fizzle shelf.
-- [ ] `stone_tier` — craft a `hellshelf`/`seashelf`/`dormant_deepshelf`.
-- [ ] `tier_three` — craft an `infused_hellshelf`/`infused_seashelf`/`deepshelf`.
-- [ ] `library` — craft a `library`.
-- [ ] `ender_library` — upgrade to `ender_library`.
-- [ ] `tome_apprentice` — craft a `scrap_tome`.
-- [ ] `tome_master` — craft an `extraction_tome`.
-- [ ] `warden_tendril` — obtain one.
-- [ ] `infused_breath` — obtain one.
-- [ ] `apotheosis` — hit Eterna 50 at a single table (custom trigger or repurposed `minecraft:enchanted_item`).
+- [x] `root` — inventory any fizzle shelf.
+- [x] `stone_tier` — craft a `hellshelf`/`seashelf`/`dormant_deepshelf`.
+- [x] `tier_three` — craft an `infused_hellshelf`/`infused_seashelf`/`deepshelf`.
+- [x] `library` — craft a `library`.
+- [x] `ender_library` — upgrade to `ender_library`.
+- [x] `tome_apprentice` — craft a `scrap_tome`.
+- [x] `tome_master` — craft an `extraction_tome`.
+- [x] `warden_tendril` — obtain one.
+- [x] `infused_breath` — obtain one.
+- [x] `apotheosis` — hit Eterna 50 at a single table (custom trigger or repurposed `minecraft:enchanted_item`).
 
 **Tests:** Each file parses via `Advancement.CODEC` in a bootstrapped test.
 

@@ -1,0 +1,35 @@
+{
+    "parent": "fizzle_enchanting:tier_three",
+    "criteria": {
+        "max_slot_enchant": {
+            "conditions": {
+                "levels": {
+                    "min": 3
+                }
+            },
+            "trigger": "minecraft:enchanted_item"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.fizzle_enchanting.apotheosis.description"
+        },
+        "frame": "challenge",
+        "icon": {
+            "count": 1,
+            "id": "fizzle_enchanting:draconic_endshelf"
+        },
+        "title": {
+            "translate": "advancements.fizzle_enchanting.apotheosis.title"
+        }
+    },
+    "requirements": [
+        [
+            "max_slot_enchant"
+        ]
+    ],
+    "rewards": {
+        "experience": 500
+    },
+    "sends_telemetry_event": false
+}
