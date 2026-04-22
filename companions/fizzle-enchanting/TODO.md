@@ -1660,12 +1660,12 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-8.3 — Operator docs
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-8.3.1 — `README.md`
 
 **Acceptance:**
-- [ ] `companions/fizzle-enchanting/README.md` — 1-pager: features, config path, DESIGN.md link, credits (Apotheosis/Shadows_of_Fire, Zenith/bageldotjpg, NeoEnchant+/Hardel).
+- [x] `companions/fizzle-enchanting/README.md` — 1-pager: features, config path, DESIGN.md link, credits (Apotheosis/Shadows_of_Fire, Zenith/bageldotjpg, NeoEnchant+/Hardel).
 
 **Tests:** n/a (docs).
 
