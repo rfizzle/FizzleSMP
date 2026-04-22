@@ -4,6 +4,7 @@ import com.fizzlesmp.fizzle_enchanting.anvil.FizzleAnvilHandlers;
 import com.fizzlesmp.fizzle_enchanting.command.FizzleEnchantingCommand;
 import com.fizzlesmp.fizzle_enchanting.config.FizzleEnchantingConfig;
 import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantingStatRegistry;
+import com.fizzlesmp.fizzle_enchanting.enchanting.ForeignEnchantmentOverrides;
 import com.fizzlesmp.fizzle_enchanting.enchanting.recipe.EnchantingRecipeRegistry;
 import com.fizzlesmp.fizzle_enchanting.event.WardenLootHandler;
 import com.fizzlesmp.fizzle_enchanting.net.FizzleEnchantingNetworking;
@@ -23,6 +24,7 @@ public class FizzleEnchanting implements ModInitializer {
     public void onInitialize() {
         LOGGER.info("Fizzle Enchanting initialized");
         config = FizzleEnchantingConfig.load();
+        ForeignEnchantmentOverrides.register();
         EnchantingStatRegistry.bootstrap();
         FizzleEnchantingRegistry.register();
         FizzleEnchantingRegistry.registerApiLookups();

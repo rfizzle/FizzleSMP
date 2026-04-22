@@ -1372,7 +1372,7 @@ Every task's Definition of Done implicitly includes:
 
 # Epic 6 — Enchantment Roster
 
-- [ ] Epic complete
+- [x] Epic complete
 
 **Goal:** 51 enchantments (49 NeoEnchant+ ports + 2 authored), exclusive-set tags, foreign-enchant overrides.
 **Commit at epic close:** `feat(enchanting): MVP enchantment roster`
@@ -1470,15 +1470,15 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-6.3 — Foreign enchant overrides
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-6.3.1 — `mending.json` override
 
 **Resume context:** DESIGN.md § "Foreign enchantment support".
 
 **Acceptance:**
-- [ ] `src/main/resources/data/minecraft/enchantment/mending.json` — identical to vanilla plus raised weight (pick e.g. `weight: 2`).
-- [ ] `#minecraft:treasure` tag membership unchanged (so `treasure_shelf` still gates it).
+- [x] `src/main/resources/data/minecraft/enchantment/mending.json` — identical to vanilla plus raised weight (pick e.g. `weight: 2`).
+- [x] `#minecraft:treasure` tag membership unchanged (so `treasure_shelf` still gates it).
 
 **Tests:** Parses; after server boot, `BuiltInRegistries.ENCHANTMENT` `minecraft:mending` entry has the bundled weight.
 
@@ -1487,8 +1487,8 @@ Every task's Definition of Done implicitly includes:
 ### Task T-6.3.2 — `soulbound.json` override
 
 **Acceptance:**
-- [ ] `src/main/resources/data/yigd/enchantment/soulbound.json` — non-zero weight, `supported_items: "#yigd:soulbindable"`.
-- [ ] File is syntactically valid even if `yigd` isn't in the test classpath.
+- [x] `src/main/resources/data/yigd/enchantment/soulbound.json` — non-zero weight, `supported_items: "#yigd:soulbindable"`.
+- [x] File is syntactically valid even if `yigd` isn't in the test classpath.
 
 **Tests:** JSON parses; when yigd is present, registry reflects the override.
 
@@ -1497,8 +1497,8 @@ Every task's Definition of Done implicitly includes:
 ### Task T-6.3.3 — Config-gated repository source
 
 **Acceptance:**
-- [ ] `config.foreignEnchantments.applyBundledOverrides` wired: when `true`, override files load normally (they're just resources in the jar).
-- [ ] When `false`, register a higher-priority resource-pack source that restores upstream values (or alternatively skip copying — pick the cleaner approach; document in `companions/fizzle-enchanting/docs/FOREIGN_ENCHANT_OVERRIDES.md`).
+- [x] `config.foreignEnchantments.applyBundledOverrides` wired: when `true`, override files load normally (they're just resources in the jar).
+- [x] When `false`, register a higher-priority resource-pack source that restores upstream values (or alternatively skip copying — pick the cleaner approach; document in `companions/fizzle-enchanting/docs/FOREIGN_ENCHANT_OVERRIDES.md`).
 
 **Tests:** Flag true/false → registry-weight observation matches expected.
 

@@ -13,6 +13,16 @@
 Minecraft/
 build/
 
+# Companion mods ship vanilla-namespace overrides under data/minecraft/.
+# core.ignoreCase makes the Minecraft/ line above match this lowercase path —
+# unignore it explicitly so override JSONs (e.g. mending.json) can be tracked.
+!companions/*/src/main/resources/data/minecraft/
+!companions/*/src/main/resources/data/minecraft/**
+!companions/*/src/main/resources/resourcepacks/*/data/minecraft/
+!companions/*/src/main/resources/resourcepacks/*/data/minecraft/**
+!companions/*/src/test/resources/data/minecraft/
+!companions/*/src/test/resources/data/minecraft/**
+
 # Local Minecraft log output from testing
 latest.log
 *.log
