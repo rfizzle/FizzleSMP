@@ -32,6 +32,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -213,6 +214,16 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
 
     int tagEntryCount() {
         return byTag.size();
+    }
+
+    /**
+     * Read-only view of the block-keyed stat entries. Recipe-viewer integrations (EMI/REI/JEI)
+     * iterate this to surface per-shelf stat info panels — each entry becomes one hover card
+     * in the viewer. Returned map reflects the current registration state; a subsequent
+     * resource reload mutates it. Callers that need a snapshot should copy.
+     */
+    public Map<ResourceLocation, EnchantingStats> blockEntries() {
+        return Collections.unmodifiableMap(byBlock);
     }
 
     @Override

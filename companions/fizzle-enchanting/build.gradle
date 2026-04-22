@@ -64,6 +64,13 @@ def runGitDescribe(String tagPrefix) {
 
 repositories {
     mavenCentral()
+    maven {
+        name = 'TerraformersMC'
+        url = 'https://maven.terraformersmc.com/'
+        content {
+            includeGroup 'dev.emi'
+        }
+    }
 }
 
 loom {
@@ -119,6 +126,13 @@ dependencies {
 
     // Client source set
     "clientImplementation"("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
+
+    // Integrations — compile against the api classifier so we never link the full mod into
+    // the production jar; the full artifact is loaded only into the local dev runtime so the
+    // in-dev client can actually use EMI when launched. End users get the integration only
+    // when they install EMI themselves.
+    modCompileOnly "dev.emi:emi-fabric:${project.emi_version}:api"
+    modLocalRuntime "dev.emi:emi-fabric:${project.emi_version}"
 
     // Tests
     testImplementation platform("org.junit:junit-bom:5.10.2")

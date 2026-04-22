@@ -1515,35 +1515,35 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-7.1 — EMI adapter
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-7.1.1 — EMI dependency wiring
 
 **Acceptance:**
-- [ ] `modCompileOnly "dev.emi:emi-fabric:<matched-version>"` in `build.gradle`.
-- [ ] `modRuntimeOnly` only for local dev (via a runClient-scoped configuration).
-- [ ] `fabric.mod.json` entry `"emi": ["com.fizzlesmp.fizzle_enchanting.compat.emi.EmiEnchantingPlugin"]`.
+- [x] `modCompileOnly "dev.emi:emi-fabric:<matched-version>"` in `build.gradle`.
+- [x] `modRuntimeOnly` only for local dev (via a runClient-scoped configuration).
+- [x] `fabric.mod.json` entry `"emi": ["com.fizzlesmp.fizzle_enchanting.compat.emi.EmiEnchantingPlugin"]`.
 
-**Tests:** `./gradlew build` succeeds with and without EMI in the dev runtime.
+**Tests:** [x] `./gradlew build` succeeds with and without EMI in the dev runtime.
 
 ---
 
 ### Task T-7.1.2 — Plugin skeleton + display extractor
 
 **Acceptance:**
-- [ ] `compat/emi/EmiEnchantingPlugin.java implements EmiPlugin`.
-- [ ] Registers categories "Fizzle Enchanting — Shelves", "Fizzle Enchanting — Tomes".
-- [ ] Extractor: `List<TableCraftingDisplay>` from the registered `fizzle_enchanting:enchanting` + `keep_nbt_enchanting` recipes.
+- [x] `compat/emi/EmiEnchantingPlugin.java implements EmiPlugin`.
+- [x] Registers categories "Fizzle Enchanting — Shelves", "Fizzle Enchanting — Tomes".
+- [x] Extractor: `List<TableCraftingDisplay>` from the registered `fizzle_enchanting:enchanting` + `keep_nbt_enchanting` recipes.
 
-**Tests:** Unit test the extractor (no EMI runtime needed).
+**Tests:** [x] Unit test the extractor (no EMI runtime needed).
 
 ---
 
 ### Task T-7.1.3 — Recipe rendering
 
 **Acceptance:**
-- [ ] Each recipe shows input, output, stat requirements, XP cost.
-- [ ] Shelf info panel shows the block's stat contribution.
+- [x] Each recipe shows input, output, stat requirements, XP cost.
+- [x] Shelf info panel shows the block's stat contribution.
 
 **Tests:** Manual smoke test documented in story PR.
 
