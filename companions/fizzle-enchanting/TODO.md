@@ -1506,7 +1506,7 @@ Every task's Definition of Done implicitly includes:
 
 # Epic 7 — Integrations
 
-- [ ] Epic complete
+- [x] Epic complete
 
 **Goal:** EMI, REI, JEI, Jade adapters — optional dependencies, entry-point gated.
 **Commit at epic close:** `feat(enchanting): EMI/REI/JEI/Jade integrations`
@@ -1583,17 +1583,17 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-7.4 — Jade probe tooltips
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-7.4.1 — Jade plugin
 
 **Acceptance:**
-- [ ] `compat/jade/JadeEnchantingPlugin.java implements IWailaPlugin`.
-- [ ] Providers:
+- [x] `compat/jade/JadeEnchantingPlugin.java implements IWailaPlugin`.
+- [x] Providers:
   - Enchanting table: reports 5 stats computed via `EnchantingStatRegistry.gatherStats`.
   - Library BE: shows "Basic Library — N enchants stored"; detailed per-enchant points only inside the library UI (not in world).
 
-**Tests:** Unit-test the string builders.
+**Tests:** [x] Unit-test the string builders.
 
 ---
 

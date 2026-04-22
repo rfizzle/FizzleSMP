@@ -16,7 +16,8 @@
         "fabric-gametest": ["com.fizzlesmp.fizzle_enchanting.gametest.PlaceholderGameTest"],
         "emi": ["com.fizzlesmp.fizzle_enchanting.compat.emi.EmiEnchantingPlugin"],
         "rei_client": ["com.fizzlesmp.fizzle_enchanting.compat.rei.ReiEnchantingPlugin"],
-        "jei_mod_plugin": ["com.fizzlesmp.fizzle_enchanting.compat.jei.JeiEnchantingPlugin"]
+        "jei_mod_plugin": ["com.fizzlesmp.fizzle_enchanting.compat.jei.JeiEnchantingPlugin"],
+        "jade": ["com.fizzlesmp.fizzle_enchanting.compat.jade.JadeEnchantingPlugin"]
     },
     "mixins": [
         "fizzle_enchanting.mixins.json"

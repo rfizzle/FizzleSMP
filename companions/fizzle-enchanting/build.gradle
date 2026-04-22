@@ -94,6 +94,13 @@ repositories {
             includeGroup 'mezz.jei'
         }
     }
+    maven {
+        name = 'Modrinth'
+        url = 'https://api.modrinth.com/maven'
+        content {
+            includeGroup 'maven.modrinth'
+        }
+    }
 }
 
 loom {
@@ -170,6 +177,13 @@ dependencies {
     // dev runtime (modLocalRuntime) so the in-dev client can actually show JEI panels.
     modCompileOnly "mezz.jei:jei-1.21.1-fabric-api:${project.jei_version}"
     modLocalRuntime "mezz.jei:jei-1.21.1-fabric:${project.jei_version}"
+
+    // Jade 15.x — Jade does not publish a split api jar, so compile-only links the full mod
+    // but only against the `snownee.jade.api` surface our plugin touches; end users still get
+    // the integration only when they install Jade themselves. modLocalRuntime pulls the same
+    // artifact into the dev client so the tooltip renders in-game during development.
+    modCompileOnly "maven.modrinth:jade:${project.jade_version}"
+    modLocalRuntime "maven.modrinth:jade:${project.jade_version}"
 
     // Tests
     testImplementation platform("org.junit:junit-bom:5.10.2")
