@@ -1638,13 +1638,13 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-8.2 — Tooltips + overleveled coloring
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-8.2.1 — `ItemTooltipCallback` listener
 
 **Acceptance:**
-- [ ] Client-side listener recolors enchant lines where `level > vanillaMax(enchantment)` using `config.display.overLeveledColor`.
-- [ ] Vanilla caps hardcoded for MVP (`Map<ResourceKey<Enchantment>, Integer>`) — Iteration 1 feeds this from config.
+- [x] Client-side listener recolors enchant lines where `level > vanillaMax(enchantment)` using `config.display.overLeveledColor`.
+- [x] Vanilla caps hardcoded for MVP (`Map<ResourceKey<Enchantment>, Integer>`) — Iteration 1 feeds this from config.
 
 **Tests:** `TooltipFormatterTest` — Sharpness 7 is recolored; Sharpness 5 is vanilla; invalid config hex → fallback `#FF6600` already enforced by T-1.3.3.
 
