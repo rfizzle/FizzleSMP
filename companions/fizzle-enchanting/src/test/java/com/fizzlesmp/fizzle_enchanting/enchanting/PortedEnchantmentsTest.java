@@ -49,6 +49,16 @@ class PortedEnchantmentsTest {
             "chestplate/magnet.json",
             "sword/runic_despair.json");
 
+    /**
+     * Files authored in-house under {@code data/fizzle_enchanting/enchantment/} that are
+     * <em>not</em> NeoEnchant+ ports. Excluded from the NeoEnchant+ port-count and schema
+     * assertions so authored enchants (S-6.2) can coexist in the same resource tree without
+     * inflating the port manifest.
+     */
+    private static final List<String> AUTHORED_NAMES = List.of(
+            "icy_thorns.json",
+            "shield_bash.json");
+
     private static final int EXPECTED_PORT_COUNT = 50;
 
     /** Top-level fields the vanilla Enchantment codec requires. */
@@ -77,9 +87,16 @@ class PortedEnchantmentsTest {
         }
     }
 
+    private static List<Path> portedFiles() throws Exception {
+        Path root = resourceDir();
+        return allJsonFiles().stream()
+                .filter(p -> !AUTHORED_NAMES.contains(root.relativize(p).toString().replace('\\', '/')))
+                .toList();
+    }
+
     @Test
     void portedFileCount_matchesManifest() throws Exception {
-        assertEquals(EXPECTED_PORT_COUNT, allJsonFiles().size(),
+        assertEquals(EXPECTED_PORT_COUNT, portedFiles().size(),
                 "expected exactly " + EXPECTED_PORT_COUNT + " ported NeoEnchant+ enchant files");
     }
 
@@ -108,7 +125,7 @@ class PortedEnchantmentsTest {
     @TestFactory
     Stream<DynamicTest> everyPortedFile_matchesEnchantmentSchema() throws Exception {
         Path root = resourceDir();
-        return allJsonFiles().stream()
+        return portedFiles().stream()
                 .map(file -> DynamicTest.dynamicTest(
                         root.relativize(file).toString().replace('\\', '/'),
                         () -> assertValidEnchantmentShape(file)));

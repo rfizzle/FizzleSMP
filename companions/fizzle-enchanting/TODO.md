@@ -1437,18 +1437,18 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-6.2 — Authored enchants
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-6.2.1 — `icy_thorns.json`
 
 **Resume context:** DESIGN.md § "MVP Enchantments (51)" → "From Zenith" row 1. Reference Zenith Java for balance: `/home/rfizzle/Projects/Zenith/src/main/java/dev/shadowsoffire/apotheosis/ench/enchantments/`.
 
 **Acceptance:**
-- [ ] `src/main/resources/data/fizzle_enchanting/enchantment/icy_thorns.json`.
-- [ ] Level range, weight, cost: mirror Zenith's values.
-- [ ] `supported_items`: `#minecraft:enchantable/chest_armor`.
-- [ ] Effect: `minecraft:post_attack` with `affected: "attacker"`, `enchanted: "victim"`, applying Slowness via `minecraft:apply_mob_effect`.
-- [ ] Lang key added.
+- [x] `src/main/resources/data/fizzle_enchanting/enchantment/icy_thorns.json`.
+- [x] Level range, weight, cost: mirror Zenith's values.
+- [x] `supported_items`: `#minecraft:enchantable/chest_armor`.
+- [x] Effect: `minecraft:post_attack` with `affected: "attacker"`, `enchanted: "victim"`, applying Slowness via `minecraft:apply_mob_effect`.
+- [x] Lang key added.
 
 **Tests:** Parses via `Enchantment.CODEC`; targets chest armor only.
 
@@ -1457,12 +1457,12 @@ Every task's Definition of Done implicitly includes:
 ### Task T-6.2.2 — `shield_bash.json` + tag expansion
 
 **Acceptance:**
-- [ ] Tag file `data/minecraft/tags/item/enchantable/weapon.json` with `replace: false` and values `["minecraft:shield"]` — this adds shields to the vanilla weapon tag.
-- [ ] Enchant JSON at `data/fizzle_enchanting/enchantment/shield_bash.json`:
+- [x] Tag file `data/minecraft/tags/item/enchantable/weapon.json` with `replace: false` and values `["minecraft:shield"]` — this adds shields to the vanilla weapon tag.
+- [x] Enchant JSON at `data/fizzle_enchanting/enchantment/shield_bash.json`:
   - `supported_items: "#minecraft:enchantable/weapon"`.
   - `minecraft:damage` effect (additive damage boost).
   - `minecraft:post_attack` applying `minecraft:damage_item` for durability cost.
-- [ ] Lang key added.
+- [x] Lang key added.
 
 **Tests:** Parses; tag expansion includes `minecraft:shield`.
 

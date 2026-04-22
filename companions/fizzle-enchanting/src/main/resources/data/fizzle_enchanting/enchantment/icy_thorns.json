@@ -1,0 +1,51 @@
+{
+	"description": {
+		"translate": "enchantment.fizzle_enchanting.icy_thorns",
+		"fallback": "Icy Thorns"
+	},
+	"supported_items": "#minecraft:enchantable/chest_armor",
+	"weight": 2,
+	"max_level": 3,
+	"min_cost": {
+		"base": 35,
+		"per_level_above_first": 20
+	},
+	"max_cost": {
+		"base": 200,
+		"per_level_above_first": 0
+	},
+	"anvil_cost": 4,
+	"slots": ["chest"],
+	"effects": {
+		"minecraft:post_attack": [
+			{
+				"affected": "attacker",
+				"enchanted": "victim",
+				"effect": {
+					"type": "minecraft:apply_mob_effect",
+					"to_apply": "minecraft:slowness",
+					"min_duration": {
+						"type": "minecraft:linear",
+						"base": 5.0,
+						"per_level_above_first": 5.0
+					},
+					"max_duration": {
+						"type": "minecraft:linear",
+						"base": 10.0,
+						"per_level_above_first": 10.0
+					},
+					"min_amplifier": {
+						"type": "minecraft:linear",
+						"base": 1.0,
+						"per_level_above_first": 1.0
+					},
+					"max_amplifier": {
+						"type": "minecraft:linear",
+						"base": 1.0,
+						"per_level_above_first": 1.0
+					}
+				}
+			}
+		]
+	}
+}
