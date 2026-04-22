@@ -1381,18 +1381,18 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-6.1 — NeoEnchant+ port (49 files)
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-6.1.1 — Acquire NeoEnchant+ v5.14.0 JSONs
 
 **Resume context:** DESIGN.md § "Enchantment Implementation — 1.21.1 approach". License note in DESIGN.md § "Build & Ship" (CC BY-NC-SA).
 
 **Acceptance:**
-- [ ] NeoEnchant+ v5.14.0 jar acquired (CurseForge id 1135663).
-- [ ] `data/enchantplus/enchantment/**` extracted to a scratch dir.
-- [ ] If the jar can't be accessed in the current environment, **stop**, document the blocker, and do not fabricate JSONs.
+- [x] NeoEnchant+ v5.14.0 jar acquired (CurseForge id 1135663).
+- [x] `data/enchantplus/enchantment/**` extracted to a scratch dir.
+- [x] If the jar can't be accessed in the current environment, **stop**, document the blocker, and do not fabricate JSONs.
 
-**Tests:** File list matches the expected NeoEnchant+ v5.14.0 manifest (56 enchant JSONs).
+**Tests:** [x] File list matches the expected NeoEnchant+ v5.14.0 manifest (56 enchant JSONs).
 
 ---
 
@@ -1401,37 +1401,37 @@ Every task's Definition of Done implicitly includes:
 **Resume context:** DESIGN.md § "Explicitly cut from NeoEnchant+" — 7 files.
 
 **Acceptance:**
-- [ ] Copy all except these 7: `axe/timber`, `pickaxe/bedrock_breaker`, `pickaxe/spawner_touch`, `tools/auto_smelt`, `helmet/auto_feed`, `chestplate/magnet`, `sword/runic_despair`.
-- [ ] Copied files land under `src/main/resources/data/fizzle_enchanting/enchantment/` preserving slot subdirs.
-- [ ] Sed across each file: `"enchantplus:` → `"fizzle_enchanting:` and `#enchantplus:` → `#fizzle_enchanting:`.
+- [x] Copy all except these 7: `axe/timber`, `pickaxe/bedrock_breaker`, `pickaxe/spawner_touch`, `tools/auto_smelt`, `helmet/auto_feed`, `chestplate/magnet`, `sword/runic_despair`.
+- [x] Copied files land under `src/main/resources/data/fizzle_enchanting/enchantment/` preserving slot subdirs.
+- [x] Sed across each file: `"enchantplus:` → `"fizzle_enchanting:` and `#enchantplus:` → `#fizzle_enchanting:`.
 
 **Tests:** `PortedEnchantmentsTest` —
-- [ ] Exactly 49 `.json` files present under the target root.
-- [ ] No file contains the literal `enchantplus:`.
-- [ ] Each file parses via `Enchantment.CODEC` in a bootstrapped test.
-- [ ] None of the 7 cut file names are present.
+- [x] Exactly 49 `.json` files present under the target root.
+- [x] No file contains the literal `enchantplus:`.
+- [x] Each file parses via `Enchantment.CODEC` in a bootstrapped test.
+- [x] None of the 7 cut file names are present.
 
 ---
 
 ### Task T-6.1.3 — Exclusive-set tag port
 
 **Acceptance:**
-- [ ] Copy `data/enchantplus/tags/enchantment/exclusive_set/*.json` → `data/fizzle_enchanting/tags/enchantment/exclusive_set/` with same namespace rewrite.
-- [ ] Entries referencing the 7 cut enchants are removed (not orphaned).
+- [x] Copy `data/enchantplus/tags/enchantment/exclusive_set/*.json` → `data/fizzle_enchanting/tags/enchantment/exclusive_set/` with same namespace rewrite.
+- [x] Entries referencing the 7 cut enchants are removed (not orphaned).
 
-**Tests:** Every tag entry resolves to a present enchant key.
+**Tests:** [x] Every tag entry resolves to a present enchant key.
 
 ---
 
 ### Task T-6.1.4 — Lang key merge
 
 **Acceptance:**
-- [ ] Extract `enchantment.enchantplus.*` from NeoEnchant+'s `assets/minecraft/lang/en_us.json`.
-- [ ] Rename to `enchantment.fizzle_enchanting.*`, merge into `assets/fizzle_enchanting/lang/en_us.json`.
-- [ ] Drop keys for the 7 cut enchants.
-- [ ] Port note added to `companions/fizzle-enchanting/docs/NEOENCHANT_PORT.md` (1-para attribution + cuts list + license pointer).
+- [x] Extract `enchantment.enchantplus.*` from NeoEnchant+'s `assets/minecraft/lang/en_us.json`.
+- [x] Rename to `enchantment.fizzle_enchanting.*`, merge into `assets/fizzle_enchanting/lang/en_us.json`.
+- [x] Drop keys for the 7 cut enchants.
+- [x] Port note added to `companions/fizzle-enchanting/docs/NEOENCHANT_PORT.md` (1-para attribution + cuts list + license pointer).
 
-**Tests:** Lang file parses; every present enchant JSON has a matching lang key.
+**Tests:** [x] Lang file parses; every present enchant JSON has a matching lang key.
 
 ---
 

@@ -1,0 +1,7 @@
+{
+    "replace": false,
+    "values": [
+        "minecraft:channeling",
+        "fizzle_enchanting:trident/gungnir_breath"
+    ]
+}

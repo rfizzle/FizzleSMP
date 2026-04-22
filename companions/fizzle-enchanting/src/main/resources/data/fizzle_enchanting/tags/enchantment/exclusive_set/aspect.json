@@ -1,0 +1,7 @@
+{
+    "values": [
+        "minecraft:fire_aspect",
+        "fizzle_enchanting:sword/poison_aspect"
+    ],
+    "replace": false
+}

@@ -1,0 +1,20 @@
+{
+	"description": {
+		"translate": "enchantment.fizzle_enchanting.bright_vision",
+		"fallback": "Bright Vision"
+	},
+	"supported_items": "#minecraft:enchantable/head_armor",
+	"weight": 2,
+	"max_level": 1,
+	"min_cost": {
+		"base": 12,
+		"per_level_above_first": 0
+	},
+	"max_cost": {
+		"base": 42,
+		"per_level_above_first": 0
+	},
+	"anvil_cost": 2,
+	"slots": ["head"],
+	"effects": {}
+}
