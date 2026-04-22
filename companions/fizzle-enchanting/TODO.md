@@ -1551,7 +1551,7 @@ Every task's Definition of Done implicitly includes:
 
 ## Story S-7.2 — REI adapter
 
-- [ ] Story complete
+- [x] Story complete
 
 ### Task T-7.2.1 — REI dependency + entry point
 
@@ -1562,8 +1562,8 @@ Every task's Definition of Done implicitly includes:
 ### Task T-7.2.2 — Mirror EMI extractor through a shared source of truth
 
 **Acceptance:**
-- [ ] Shared `compat/common/TableCraftingDisplay.java` record.
-- [ ] REI plugin adapts `TableCraftingDisplay` → REI's display type.
+- [x] Shared `compat/common/TableCraftingDisplay.java` record.
+- [x] REI plugin adapts `TableCraftingDisplay` → REI's display type.
 
 **Tests:** Extractor shared with EMI — test it once, both integrations benefit.
 

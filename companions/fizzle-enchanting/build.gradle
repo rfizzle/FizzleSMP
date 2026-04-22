@@ -71,6 +71,22 @@ repositories {
             includeGroup 'dev.emi'
         }
     }
+    maven {
+        name = 'Shedaniel'
+        url = 'https://maven.shedaniel.me/'
+        content {
+            includeGroup 'me.shedaniel'
+            includeGroup 'me.shedaniel.cloth'
+            includeGroup 'dev.architectury'
+        }
+    }
+    maven {
+        name = 'Architectury'
+        url = 'https://maven.architectury.dev/'
+        content {
+            includeGroup 'dev.architectury'
+        }
+    }
 }
 
 loom {
@@ -133,6 +149,14 @@ dependencies {
     // when they install EMI themselves.
     modCompileOnly "dev.emi:emi-fabric:${project.emi_version}:api"
     modLocalRuntime "dev.emi:emi-fabric:${project.emi_version}"
+
+    // REI 16.x — MC 1.21 coordinates; runs unchanged on 1.21.1. Compile-only against the api
+    // split; only the full mod + architectury-fabric are pulled into the local dev runtime
+    // so players who do not install REI still get a working jar.
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
+    modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}"
+    modLocalRuntime "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
+    modLocalRuntime "dev.architectury:architectury-fabric:${project.architectury_version}"
 
     // Tests
     testImplementation platform("org.junit:junit-bom:5.10.2")
