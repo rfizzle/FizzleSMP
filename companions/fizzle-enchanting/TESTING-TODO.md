@@ -415,7 +415,7 @@ Three integration surfaces: mixin swap, menu subclass, screen reader.
 
 - [x] **TEST-2.5-T2** — Menu logic helper: XP/lapis validation, click success/failure paths, id=3 throw pre-Epic 5.
   - **Tier:** 2.
-  - **State:** T2-migrate-clean.
+  - **State:** T2.
   - **Acceptance:**
     - [x] Successful enchant → `ItemEnchantments` grows, XP + lapis decremented.
     - [x] Lapis missing → rejected, no mutation.
