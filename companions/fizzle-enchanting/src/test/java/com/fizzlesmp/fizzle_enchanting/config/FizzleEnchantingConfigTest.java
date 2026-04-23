@@ -67,7 +67,7 @@ class FizzleEnchantingConfigTest {
         FizzleEnchantingConfig cfg = new FizzleEnchantingConfig();
 
         assertEquals(false, cfg.enchantingTable.allowTreasureWithoutShelf);
-        assertEquals(50, cfg.enchantingTable.maxEterna);
+        assertEquals(100, cfg.enchantingTable.maxEterna);
         assertEquals(true, cfg.enchantingTable.showLevelIndicator);
 
         assertEquals(0.02, cfg.shelves.sculkShelfShriekerChance);
@@ -100,7 +100,7 @@ class FizzleEnchantingConfigTest {
         FizzleEnchantingConfig loaded = FizzleEnchantingConfig.load(path);
 
         assertTrue(Files.exists(path), "load() should have created the missing file");
-        assertEquals(50, loaded.enchantingTable.maxEterna);
+        assertEquals(100, loaded.enchantingTable.maxEterna);
         assertEquals(0.02, loaded.shelves.sculkShelfShriekerChance);
         assertEquals(30, loaded.anvil.prismaticWebLevelCost);
         assertEquals(0, loaded.library.ioRateLimitTicks);

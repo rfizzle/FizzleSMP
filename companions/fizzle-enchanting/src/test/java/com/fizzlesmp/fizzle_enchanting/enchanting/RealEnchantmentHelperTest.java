@@ -98,7 +98,7 @@ class RealEnchantmentHelperTest {
 
     @Test
     void getEnchantmentCost_eternaBeyondConfigCap_clampsToCap() {
-        // Default config cap is 50 (null config falls back to RealEnchantmentHelper.DEFAULT_MAX_ETERNA).
+        // Default config cap is 100 (null config falls back to RealEnchantmentHelper.DEFAULT_MAX_ETERNA).
         assertEquals(RealEnchantmentHelper.DEFAULT_MAX_ETERNA,
                 RealEnchantmentHelper.getEnchantmentCost(seeded(0L), 2, 200F, ItemStack.EMPTY));
     }

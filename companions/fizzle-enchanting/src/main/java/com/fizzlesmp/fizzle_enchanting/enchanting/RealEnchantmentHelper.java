@@ -34,7 +34,7 @@ import java.util.Set;
 public final class RealEnchantmentHelper {
 
     /** Fallback when called before {@link FizzleEnchanting#onInitialize} has populated the config. */
-    static final int DEFAULT_MAX_ETERNA = 50;
+    static final int DEFAULT_MAX_ETERNA = 100;
 
     private RealEnchantmentHelper() {
     }

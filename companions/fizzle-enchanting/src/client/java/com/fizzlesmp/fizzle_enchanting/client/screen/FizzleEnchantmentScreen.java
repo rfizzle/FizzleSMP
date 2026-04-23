@@ -5,19 +5,25 @@ import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentLogic;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
 import com.fizzlesmp.fizzle_enchanting.enchanting.StatCollection;
 import com.fizzlesmp.fizzle_enchanting.net.CraftingResultEntry;
+import com.fizzlesmp.fizzle_enchanting.net.EnchantmentClue;
 import com.google.common.collect.Lists;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
 import net.minecraft.client.gui.screens.inventory.EnchantmentScreen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.EnchantmentMenu;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +33,7 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
     private static final ResourceLocation TEXTURE =
             ResourceLocation.fromNamespaceAndPath("fizzle_enchanting", "textures/gui/enchanting_table.png");
 
-    private static final float ABSOLUTE_MAX_ETERNA = 50.0F;
+    private static final float ABSOLUTE_MAX_ETERNA = 100.0F;
 
     private static final int CRAFTING_ROW_X = 60;
     private static final int CRAFTING_ROW_Y = 103;
@@ -170,6 +176,10 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
         super.render(gfx, mouseX, mouseY, partialTicks);
 
         if (fizzleMenu != null) {
+            renderSlotClueTooltips(gfx, mouseX, mouseY);
+        }
+
+        if (fizzleMenu != null) {
             StatCollection stats = fizzleMenu.getLastStats();
             if (isHovering(60, 76, 110, 5, mouseX, mouseY) && stats.eterna() > 0) {
                 List<Component> lines = Lists.newArrayList(
@@ -236,6 +246,30 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    private void renderSlotClueTooltips(GuiGraphics gfx, int mouseX, int mouseY) {
+        for (int slot = 0; slot < 3; slot++) {
+            if (!isHovering(60, 14 + 19 * slot, 108, 19, mouseX, mouseY)) continue;
+            if (this.menu.costs[slot] == 0) continue;
+
+            List<EnchantmentClue> clues = fizzleMenu.getClientClues(slot);
+            if (clues.isEmpty()) continue;
+
+            Registry<Enchantment> registry = this.minecraft.level.registryAccess()
+                    .registryOrThrow(Registries.ENCHANTMENT);
+            List<Component> lines = Lists.newArrayList();
+            for (EnchantmentClue clue : clues) {
+                Optional<Holder.Reference<Enchantment>> holder = registry.getHolder(clue.enchantment());
+                if (holder.isPresent()) {
+                    lines.add(Enchantment.getFullname(holder.get(), clue.level()));
+                }
+            }
+            if (!lines.isEmpty()) {
+                gfx.renderComponentTooltip(this.font, lines, mouseX, mouseY);
+            }
+            break;
+        }
     }
 
     private Optional<CraftingResultEntry> craftingResult() {

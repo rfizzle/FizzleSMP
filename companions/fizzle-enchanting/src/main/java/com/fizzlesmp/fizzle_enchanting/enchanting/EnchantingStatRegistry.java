@@ -81,10 +81,10 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
      * {@link BlockTags#ENCHANTMENT_POWER_TRANSMITTER} contribute zero, matching vanilla's
      * {@link EnchantingTableBlock#isValidBookShelf} line-of-sight rule.
      *
-     * <p>Aggregation rules (T-2.2.3): {@code eterna} is clamped to {@code [0, maxEterna]}
-     * where {@code maxEterna} is the max across contributors; {@code clues} is clamped to
-     * {@code [0, }{@link StatCollection#MAX_CLUES}{@code ]}; {@code quanta}, {@code arcana},
-     * and {@code rectification} are uncapped (negatives allowed).
+     * <p>Aggregation rules: {@code eterna} is clamped to {@code [0, maxEterna]}
+     * where {@code maxEterna} is the max across contributors; {@code quanta}, {@code arcana},
+     * and {@code rectification} are clamped to {@code [0, 100]}; {@code clues} is clamped to
+     * {@code [0, }{@link StatCollection#MAX_CLUES}{@code ]}.
      *
      * <p>Filtering-shelf blacklists and treasure-shelf flags are picked up via the context
      * lookup: any in-range {@link BlockPos} whose block entity implements {@link BlacklistSource}
@@ -165,13 +165,16 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
             }
         }
         float clampedEterna = Math.max(0F, Math.min(eterna, maxEterna));
+        float clampedQuanta = Math.max(0F, Math.min(quanta, 100F));
+        float clampedArcana = Math.max(0F, Math.min(arcana, 100F));
+        float clampedRectification = Math.max(0F, Math.min(rectification, 100F));
         int clampedClues = Math.max(0, Math.min(clues, StatCollection.MAX_CLUES));
         Set<ResourceKey<Enchantment>> finalBlacklist = blacklist == null
                 ? Set.of()
                 : Set.copyOf(blacklist);
         return new StatCollection(
-                clampedEterna, quanta, arcana, rectification, clampedClues, maxEterna,
-                finalBlacklist, treasureAllowed);
+                clampedEterna, clampedQuanta, clampedArcana, clampedRectification, clampedClues,
+                maxEterna, finalBlacklist, treasureAllowed);
     }
 
     EnchantingStats resolve(BlockState state) {

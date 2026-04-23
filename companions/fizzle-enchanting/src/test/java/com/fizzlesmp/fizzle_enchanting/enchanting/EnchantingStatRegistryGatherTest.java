@@ -132,14 +132,15 @@ class EnchantingStatRegistryGatherTest {
     void gather_negativeContributions_subtract() {
         EnchantingStatRegistry reg = new EnchantingStatRegistry();
         // Stoneshelf drains arcana/rectification but doesn't raise maxEterna, so its
-        // negative eterna sum floors to 0 after clamping. Arcana stays uncapped.
+        // negative eterna sum floors to 0 after clamping. Arcana clamps to [0, 100].
         EnchantingStats stoneshelf = new EnchantingStats(0F, -1.5F, 0F, -7.5F, 0F, 0);
 
         StatCollection result = reg.gatherStatsFromOffsets(offsets(2), pos -> stoneshelf);
 
         assertEquals(0F, result.eterna(), 1e-6,
                 "eterna clamps to the [0, maxEterna] floor when contributions go negative");
-        assertEquals(-15F, result.arcana(), 1e-6);
+        assertEquals(0F, result.arcana(), 1e-6,
+                "arcana clamps to the [0, 100] floor when contributions go negative");
     }
 
     @Test

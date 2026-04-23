@@ -30,6 +30,9 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -82,6 +85,9 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
      * client-side render path.
      */
     private Optional<CraftingResultEntry> lastCraftingResult = Optional.empty();
+    @SuppressWarnings("unchecked")
+    private List<EnchantmentClue>[] clientClues = new List[]{List.of(), List.of(), List.of()};
+    private boolean[] clientCluesExhausted = new boolean[]{true, true, true};
 
     public FizzleEnchantmentMenu(int containerId, Inventory playerInventory) {
         this(containerId, playerInventory, ContainerLevelAccess.NULL);
@@ -198,6 +204,21 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
         this.lastCraftingResult = payload.craftingResult();
     }
 
+    public void applyClientClues(int slot, List<EnchantmentClue> clues, boolean exhausted) {
+        if (slot >= 0 && slot < 3) {
+            this.clientClues[slot] = clues;
+            this.clientCluesExhausted[slot] = exhausted;
+        }
+    }
+
+    public List<EnchantmentClue> getClientClues(int slot) {
+        return (slot >= 0 && slot < 3) ? clientClues[slot] : List.of();
+    }
+
+    public boolean isClientCluesExhausted(int slot) {
+        return (slot >= 0 && slot < 3) && clientCluesExhausted[slot];
+    }
+
     @Override
     public void slotsChanged(Container container) {
         if (container != enchantSlots()) {
@@ -212,10 +233,29 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
         access.execute((level, pos) -> recompute(level, pos, input));
     }
 
+    private static boolean isEnchantableEnough(ItemStack stack) {
+        if (!stack.isEnchanted()) return true;
+        ItemEnchantments enchantments = EnchantmentHelper.getEnchantmentsForCrafting(stack);
+        return enchantments.entrySet().stream()
+                .allMatch(entry -> entry.getKey().is(EnchantmentTags.CURSE));
+    }
+
     private void recompute(Level level, BlockPos pos, ItemStack input) {
         StatCollection stats = EnchantingStatRegistry.gatherStats(level, pos);
         this.lastStats = stats;
         this.currentRecipe = lookupCraftingResult(level.getRecipeManager(), input, stats);
+
+        boolean canEnchant = input.getCount() == 1
+                && (input.getItem().isEnchantable(input) || input.is(Items.BOOK))
+                && isEnchantableEnough(input);
+        if (!canEnchant && currentRecipe.isEmpty()) {
+            clearSlotState();
+            broadcastStats(stats);
+            for (int slot = 0; slot < FizzleEnchantmentLogic.PREVIEW_SLOTS; slot++) {
+                broadcastClues(slot, List.of(), true);
+            }
+            return;
+        }
 
         Registry<Enchantment> registry = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
         Player player = playerInventory.player;
@@ -226,8 +266,13 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
         FizzleEnchantingConfig config = FizzleEnchanting.getConfig();
         boolean allowTreasureOverride = config != null && config.enchantingTable.allowTreasureWithoutShelf;
 
-        FizzleEnchantmentLogic.SlotState[] states = FizzleEnchantmentLogic.recompute(
-                stats, input, seed, lapisCount, hasInf, allowTreasureOverride, registry, random());
+        FizzleEnchantmentLogic.SlotState[] states = canEnchant
+                ? FizzleEnchantmentLogic.recompute(
+                        stats, input, seed, lapisCount, hasInf, allowTreasureOverride, registry, random())
+                : new FizzleEnchantmentLogic.SlotState[]{
+                        FizzleEnchantmentLogic.SlotState.EMPTY,
+                        FizzleEnchantmentLogic.SlotState.EMPTY,
+                        FizzleEnchantmentLogic.SlotState.EMPTY};
 
         List<List<EnchantmentInstance>> newPicks = new ArrayList<>(FizzleEnchantmentLogic.PREVIEW_SLOTS);
         List<List<EnchantmentClue>> cluePayloads = new ArrayList<>(FizzleEnchantmentLogic.PREVIEW_SLOTS);

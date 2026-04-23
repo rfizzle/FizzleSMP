@@ -2,12 +2,21 @@ package com.fizzlesmp.fizzle_enchanting.library;
 
 import com.mojang.serialization.MapCodec;
 
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType.BlockEntitySupplier;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 
 /**
  * Single block class shared by the Basic and Ender libraries. Tier differentiation lives entirely
@@ -54,6 +63,35 @@ public class EnchantmentLibraryBlock extends BaseEntityBlock {
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return this.tileSupplier.create(pos, state);
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
+                                               Player player, BlockHitResult hit) {
+        if (level.isClientSide()) {
+            return InteractionResult.SUCCESS;
+        }
+        player.openMenu(new ExtendedScreenHandlerFactory<BlockPos>() {
+            @Override
+            public BlockPos getScreenOpeningData(ServerPlayer serverPlayer) {
+                return pos;
+            }
+
+            @Override
+            public Component getDisplayName() {
+                return state.getBlock().getName();
+            }
+
+            @Override
+            public AbstractContainerMenu createMenu(int containerId, Inventory inv, Player p) {
+                BlockEntity be = level.getBlockEntity(pos);
+                if (be instanceof EnchantmentLibraryBlockEntity tile) {
+                    return new EnchantmentLibraryMenu(containerId, inv, tile);
+                }
+                return null;
+            }
+        });
+        return InteractionResult.CONSUME;
     }
 
     @Override
