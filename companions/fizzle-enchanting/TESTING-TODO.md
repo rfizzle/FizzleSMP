@@ -282,22 +282,24 @@ Silent-break model: LOS inversion (transmitter check passes-through through wall
 
 ### Tier 3
 
-- [ ] **TEST-2.2-T3a** — Place vanilla bookshelves around a real enchanting table; Eterna sums to expected.
+- [x] **TEST-2.2-T3a** — Place vanilla bookshelves around a real enchanting table; Eterna sums to expected.
   - **Tier:** 3.
-  - **State:** T3-new.
+  - **State:** T3.
   - **Acceptance:**
-    - [ ] Template seeds an enchanting table + 15 bookshelves.
-    - [ ] Open table → `StatCollection.eterna == 15`.
-    - [ ] Block a single offset with stone → Eterna drops by 1.
+    - [x] Template seeds an enchanting table + 15 bookshelves.
+    - [x] Open table → `StatCollection.eterna == 15`.
+    - [x] Block a single offset with stone → Eterna drops by 1.
+  - **File:** `src/gametest/java/.../gametest/ShelfScanGameTest.java`.
   - **Dependencies:** TEST-0.2-T3.
 
-- [ ] **TEST-2.2-T3b** — Filtering/treasure BE hooks invoked exactly once per in-range BE under real-level scan.
+- [x] **TEST-2.2-T3b** — Filtering/treasure BE hooks invoked exactly once per in-range BE under real-level scan.
   - **Tier:** 3 — replaces the legacy unit test `FilteringTreasureIntegrationTest` for the register side; Tier 2 fixture-style coverage is redundant once Tier 3 runs.
-  - **State:** T3-rewrite (replaces `FilteringTreasureIntegrationTest`).
+  - **State:** T3.
   - **Acceptance:**
-    - [ ] Two filtering shelves with unique books → blacklist size 2 at the table.
-    - [ ] Treasure shelf present → `treasureAllowed == true`.
-    - [ ] Removing the treasure shelf → `treasureAllowed == false`.
+    - [x] Two filtering shelves with unique books → blacklist size 2 at the table.
+    - [x] Treasure shelf present → `treasureAllowed == true`.
+    - [x] Removing the treasure shelf → `treasureAllowed == false`.
+  - **File:** `src/gametest/java/.../gametest/ShelfScanGameTest.java`.
   - **Dependencies:** TEST-3.5-T3 (shares BE fixtures).
 
 ## Story S-2.3 — S2C network payloads
