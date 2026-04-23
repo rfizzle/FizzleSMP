@@ -688,7 +688,7 @@ Prismatic Web, iron-block anvil repair, two library tiers with hopper I/O, custo
 
 - [x] **TEST-4.2-T2** — Tier ladder, iron-ingot rejection, enchantment preservation, config gate.
   - **Tier:** 2.
-  - **State:** T2-migrate-clean.
+  - **State:** T2.
   - **Acceptance:**
     - [x] Damaged → chipped; chipped → normal.
     - [x] Normal → declines.

@@ -1,3 +1,4 @@
+// Tier: 2 (fabric-loader-junit)
 package com.fizzlesmp.fizzle_enchanting.anvil;
 
 import com.fizzlesmp.fizzle_enchanting.config.FizzleEnchantingConfig;
