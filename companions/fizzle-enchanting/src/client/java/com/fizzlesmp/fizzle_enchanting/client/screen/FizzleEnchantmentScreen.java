@@ -4,7 +4,6 @@ import com.fizzlesmp.fizzle_enchanting.enchanting.CraftingRowFormatter;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentLogic;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
 import com.fizzlesmp.fizzle_enchanting.enchanting.StatCollection;
-import com.fizzlesmp.fizzle_enchanting.mixin.EnchantmentScreenAccessor;
 import com.fizzlesmp.fizzle_enchanting.net.CraftingResultEntry;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
@@ -90,7 +89,7 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
 
         gfx.blit(TEXTURE, xCenter, yCenter, 0, 0, this.imageWidth, this.imageHeight);
 
-        ((EnchantmentScreenAccessor) this).callRenderBook(gfx, xCenter, yCenter, partialTicks);
+        this.renderBook(gfx, xCenter, yCenter, partialTicks);
 
         EnchantmentNames.getInstance().initSeed(this.menu.getEnchantmentSeed());
         int lapis = this.menu.getGoldCount();

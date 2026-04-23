@@ -9,9 +9,7 @@
         "EnchantmentMenuAccessor",
         "EnchantmentTableBlockMixin"
     ],
-    "client": [
-        "EnchantmentScreenAccessor"
-    ],
+    "client": [],
     "injectors": {
         "defaultRequire": 1
     }
