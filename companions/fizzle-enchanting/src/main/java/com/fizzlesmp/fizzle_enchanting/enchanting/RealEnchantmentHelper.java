@@ -13,6 +13,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.util.random.WeightedEntry;
 import net.minecraft.util.random.WeightedRandom;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
@@ -132,7 +133,7 @@ public final class RealEnchantmentHelper {
         }
         int enchantability = stack.getItem().getEnchantmentValue();
         if (enchantability <= 0) {
-            return chosen;
+            enchantability = 1;
         }
 
         int srcLevel = level;
@@ -224,7 +225,7 @@ public final class RealEnchantmentHelper {
                 continue;
             }
             Enchantment ench = holder.value();
-            if (!ench.canEnchant(stack)) {
+            if (!ench.canEnchant(stack) && !stack.is(Items.BOOK)) {
                 continue;
             }
             for (int lvl = ench.getMaxLevel(); lvl > ench.getMinLevel() - 1; lvl--) {

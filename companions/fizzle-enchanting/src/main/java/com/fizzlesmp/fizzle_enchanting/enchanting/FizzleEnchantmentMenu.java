@@ -201,11 +201,10 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
     @Override
     public void slotsChanged(Container container) {
         if (container != enchantSlots()) {
-            // Player-inventory changes also fire slotsChanged; vanilla ignores them here too.
             return;
         }
         ItemStack input = container.getItem(INPUT_SLOT);
-        if (input.isEmpty() || !input.isEnchantable()) {
+        if (input.isEmpty()) {
             clearSlotState();
             sendEmptyPayloads();
             return;
