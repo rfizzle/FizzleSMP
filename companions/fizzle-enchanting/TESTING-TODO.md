@@ -1025,7 +1025,7 @@ Tomes move player-persistent XP value between items; a broken handler either des
 
 - [x] **TEST-5.3-T2b** — `CraftingResultEntry` projection onto outgoing `StatsPayload`.
   - **Tier:** 2.
-  - **State:** T2-migrate-clean.
+  - **State:** T2.
   - **Acceptance:**
     - [x] Recipe present → payload's `craftingResult` is `Optional.of(...)`.
     - [x] Absent → `Optional.empty()`.
@@ -1034,7 +1034,7 @@ Tomes move player-persistent XP value between items; a broken handler either des
 
 - [x] **TEST-5.3-T2c** — Server handler for `buttonId=3`: recipe subtypes, XP validation, no-op on no recipe.
   - **Tier:** 2.
-  - **State:** T2-migrate-clean.
+  - **State:** T2.
   - **Acceptance:**
     - [x] `keep_nbt_enchanting` preserves `ItemEnchantments`.
     - [x] `enchanting` decrements input + inserts result.
