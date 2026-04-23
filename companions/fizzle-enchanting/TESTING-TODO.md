@@ -464,7 +464,7 @@ Three integration surfaces: mixin swap, menu subclass, screen reader.
 
 - [x] **TEST-3.1-T2b** — Particle theme → `ParticleType` mapping with bootstrap.
   - **Tier:** 2.
-  - **State:** T2-migrate-clean.
+  - **State:** T2.
   - **Acceptance:**
     - [x] Each enum value resolves to the declared `ParticleType` constant (`ParticleTypes.ENCHANT`, etc.).
   - **File:** `src/test/java/.../shelf/ParticleThemeTest.java`.
