@@ -1,4 +1,5 @@
 {
+    "itemGroup.fizzle_enchanting": "Fizzle Enchanting",
     "command.fizzle_enchanting.reload.ok": "Reloaded Fizzle Enchanting config",
     "command.fizzle_enchanting.reload.error": "Failed to reload Fizzle Enchanting config; see server log",
     "command.fizzle_enchanting.stats.not_implemented": "stats for %s: not implemented yet",
@@ -41,6 +42,8 @@
     "block.fizzle_enchanting.rectifier_t3": "Shelf of End-Fused Rectification",
     "block.fizzle_enchanting.filtering_shelf": "Filtering Shelf",
     "block.fizzle_enchanting.treasure_shelf": "Treasure Shelf",
+    "block.fizzle_enchanting.library": "Enchantment Library",
+    "block.fizzle_enchanting.ender_library": "Ender Library",
     "item.fizzle_enchanting.prismatic_web": "Prismatic Web",
     "item.fizzle_enchanting.infused_breath": "Infused Breath",
     "item.fizzle_enchanting.warden_tendril": "Warden Tendril",

@@ -17,17 +17,21 @@ import com.fizzlesmp.fizzle_enchanting.shelf.TreasureShelfBlockEntity;
 import com.fizzlesmp.fizzle_enchanting.tome.ExtractionTomeItem;
 import com.fizzlesmp.fizzle_enchanting.tome.ImprovedScrapTomeItem;
 import com.fizzlesmp.fizzle_enchanting.tome.ScrapTomeItem;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
@@ -37,7 +41,9 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -58,6 +64,12 @@ public final class FizzleEnchantingRegistry {
      * datagen or compat but must not mutate the map directly.
      */
     public static final Map<ResourceLocation, Block> BLOCKS = new LinkedHashMap<>();
+
+    /**
+     * Every standalone item (non-BlockItem) registered via {@link #registerItem(String, Item)},
+     * in insertion order. Used by the creative tab builder to enumerate all mod items.
+     */
+    public static final List<Item> STANDALONE_ITEMS = new ArrayList<>();
 
     public static final MenuType<FizzleEnchantmentMenu> ENCHANTING_TABLE_MENU =
             new MenuType<>(FizzleEnchantmentMenu::new, FeatureFlags.VANILLA_SET);
@@ -144,7 +156,7 @@ public final class FizzleEnchantingRegistry {
      * {@code ScrapTomeHandler} (S-5.2), not ticked down per use.
      */
     public static final ScrapTomeItem SCRAP_TOME =
-            new ScrapTomeItem(new Item.Properties().stacksTo(1));
+            new ScrapTomeItem(new Item.Properties().stacksTo(16));
 
     /**
      * Improved Scrap tome — same hostile-to-item workflow as {@link #SCRAP_TOME} but the output
@@ -152,7 +164,7 @@ public final class FizzleEnchantingRegistry {
      * for the same reasons.
      */
     public static final ImprovedScrapTomeItem IMPROVED_SCRAP_TOME =
-            new ImprovedScrapTomeItem(new Item.Properties().stacksTo(1));
+            new ImprovedScrapTomeItem(new Item.Properties().stacksTo(16));
 
     /**
      * Extraction tome — most expensive tier; preserves the source item (unenchanted, damaged)
@@ -161,7 +173,7 @@ public final class FizzleEnchantingRegistry {
      * consumes the whole tome and is handler-side, not item-data state.
      */
     public static final ExtractionTomeItem EXTRACTION_TOME =
-            new ExtractionTomeItem(new Item.Properties().stacksTo(1));
+            new ExtractionTomeItem(new Item.Properties().stacksTo(16));
 
     /**
      * Tier-1 enchantment-library block. Shares {@link EnchantmentLibraryBlock} with the ender
@@ -243,6 +255,19 @@ public final class FizzleEnchantingRegistry {
         registerBlockEntityType("library", BASIC_LIBRARY_BE);
         registerBlockEntityType("ender_library", ENDER_LIBRARY_BE);
         registerLootConditionType("warden_pool", WARDEN_POOL_CONDITION);
+        registerCreativeTab();
+    }
+
+    private static void registerCreativeTab() {
+        Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, FizzleEnchanting.id("fizzle_enchanting"),
+                FabricItemGroup.builder()
+                        .title(Component.translatable("itemGroup.fizzle_enchanting"))
+                        .icon(() -> new ItemStack(INFUSED_BREATH))
+                        .displayItems((params, output) -> {
+                            BLOCKS.values().forEach(block -> output.accept(block));
+                            STANDALONE_ITEMS.forEach(output::accept);
+                        })
+                        .build());
     }
 
     /**
@@ -283,6 +308,7 @@ public final class FizzleEnchantingRegistry {
     /** Registers a standalone item under {@code fizzle_enchanting:<name>}. */
     public static <T extends Item> T registerItem(String name, T item) {
         Registry.register(BuiltInRegistries.ITEM, FizzleEnchanting.id(name), item);
+        STANDALONE_ITEMS.add(item);
         return item;
     }
 
