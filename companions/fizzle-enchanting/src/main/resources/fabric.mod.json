@@ -16,7 +16,8 @@
         "fabric-gametest": [
             "com.fizzlesmp.fizzle_enchanting.gametest.PlaceholderGameTest",
             "com.fizzlesmp.fizzle_enchanting.gametest.RegistryGameTest",
-            "com.fizzlesmp.fizzle_enchanting.gametest.ShelfRosterGameTest"
+            "com.fizzlesmp.fizzle_enchanting.gametest.ShelfRosterGameTest",
+            "com.fizzlesmp.fizzle_enchanting.enchanting.FilteringTreasureGameTest"
         ],
         "emi": ["com.fizzlesmp.fizzle_enchanting.compat.emi.EmiEnchantingPlugin"],
         "rei_client": ["com.fizzlesmp.fizzle_enchanting.compat.rei.ReiEnchantingPlugin"],

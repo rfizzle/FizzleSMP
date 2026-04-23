@@ -607,24 +607,26 @@ Datagen tests have historically been hard to isolate — they depend on mod cont
 
 ### Tier 3
 
-- [ ] **TEST-3.5-T3a** — `FilteringShelfBlockEntity` end-to-end: place, insert, verify blacklist flows into adjacent table.
+- [x] **TEST-3.5-T3a** — `FilteringShelfBlockEntity` end-to-end: place, insert, verify blacklist flows into adjacent table.
   - **Tier:** 3.
-  - **State:** T3-rewrite (replaces `FilteringShelfTest`).
+  - **State:** T3.
   - **Acceptance:**
-    - [ ] Place filtering shelf, open via `useBlock`, insert book → BE state matches.
-    - [ ] Open adjacent table → blacklist propagates to `StatsPayload`.
-    - [ ] Extract book → blacklist shrinks.
-    - [ ] Full shelf rejects additional inserts.
-    - [ ] Empty shelf contributes as a wood-tier base shelf.
+    - [x] Place filtering shelf, open via `useBlock`, insert book → BE state matches.
+    - [x] Open adjacent table → blacklist propagates to `StatsPayload`.
+    - [x] Extract book → blacklist shrinks.
+    - [x] Full shelf rejects additional inserts.
+    - [x] Empty shelf contributes as a wood-tier base shelf.
+  - **File:** `src/gametest/java/.../enchanting/FilteringTreasureGameTest.java`.
   - **Dependencies:** TEST-0.2-T3.
 
-- [ ] **TEST-3.5-T3b** — `TreasureShelfBlockEntity` presence flips `treasureAllowed`.
+- [x] **TEST-3.5-T3b** — `TreasureShelfBlockEntity` presence flips `treasureAllowed`.
   - **Tier:** 3.
-  - **State:** T3-rewrite (replaces `TreasureShelfTest`).
+  - **State:** T3.
   - **Acceptance:**
-    - [ ] Treasure shelf in range → `StatCollection.treasureAllowed == true` at the table.
-    - [ ] Remove shelf → `false`.
-    - [ ] Zero Eterna contribution.
+    - [x] Treasure shelf in range → `StatCollection.treasureAllowed == true` at the table.
+    - [x] Remove shelf → `false`.
+    - [x] Zero Eterna contribution.
+  - **File:** `src/gametest/java/.../enchanting/FilteringTreasureGameTest.java`.
   - **Dependencies:** TEST-3.5-T3a (shares template).
 
 ---
