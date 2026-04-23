@@ -1,5 +1,8 @@
 {
     "itemGroup.fizzle_enchanting": "Fizzle Enchanting",
+    "gui.fizzle_enchanting.enchant.arcana": "Arcana",
+    "gui.fizzle_enchanting.enchant.eterna": "Eterna",
+    "gui.fizzle_enchanting.enchant.quanta": "Quanta",
     "command.fizzle_enchanting.reload.ok": "Reloaded Fizzle Enchanting config",
     "command.fizzle_enchanting.reload.error": "Failed to reload Fizzle Enchanting config; see server log",
     "command.fizzle_enchanting.stats.not_implemented": "stats for %s: not implemented yet",

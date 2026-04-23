@@ -1,18 +1,21 @@
 package com.fizzlesmp.fizzle_enchanting.client.screen;
 
-import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
-import com.fizzlesmp.fizzle_enchanting.config.FizzleEnchantingConfig;
 import com.fizzlesmp.fizzle_enchanting.enchanting.CraftingRowFormatter;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentLogic;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
-import com.fizzlesmp.fizzle_enchanting.enchanting.StatLineFormatter;
+import com.fizzlesmp.fizzle_enchanting.enchanting.StatCollection;
+import com.fizzlesmp.fizzle_enchanting.mixin.EnchantmentScreenAccessor;
 import com.fizzlesmp.fizzle_enchanting.net.CraftingResultEntry;
 import com.google.common.collect.Lists;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
 import net.minecraft.client.gui.screens.inventory.EnchantmentScreen;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.FormattedText;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.EnchantmentMenu;
@@ -20,32 +23,15 @@ import net.minecraft.world.inventory.EnchantmentMenu;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Stat-aware enchantment screen. Extends vanilla {@link EnchantmentScreen} and draws a single-row
- * stat summary ({@code E: 50  Q: 12  A: 5  R: 10  C: 2}) below the three enchant preview slots.
- * Visibility toggles with {@code config.enchantingTable.showLevelIndicator}.
- *
- * <p>Also paints the fourth-row crafting-result preview (T-5.3.4) when
- * {@link FizzleEnchantmentMenu#lastCraftingResult()} is present — a compact text label produced by
- * {@link CraftingRowFormatter} sitting below the stat line. Clicks in that row dispatch the
- * vanilla {@code ServerboundContainerButtonClickPacket} via {@code MultiPlayerGameMode} with
- * {@code buttonId=3}; server-side routing flows through
- * {@link FizzleEnchantmentMenu#clickMenuButton} (T-5.3.3).
- */
 public class FizzleEnchantmentScreen extends EnchantmentScreen {
 
-    private static final int STAT_LINE_X = 8;
-    private static final int STAT_LINE_Y = 63;
-    private static final int STAT_LINE_COLOR = 0x3F3F3F;
+    private static final ResourceLocation TEXTURE =
+            ResourceLocation.fromNamespaceAndPath("fizzle_enchanting", "textures/gui/enchanting_table.png");
 
-    /**
-     * Fourth-row layout, packed into the 12-pixel gap between the bottom of the enchant slots
-     * (y=71) and the first player-inventory row (y=84). The vanilla "Inventory" label normally
-     * occupies this band — we suppress it while the crafting row is visible so the label doesn't
-     * bleed through the recipe text.
-     */
+    private static final float ABSOLUTE_MAX_ETERNA = 50.0F;
+
     private static final int CRAFTING_ROW_X = 60;
-    private static final int CRAFTING_ROW_Y = 72;
+    private static final int CRAFTING_ROW_Y = 103;
     private static final int CRAFTING_ROW_W = 108;
     private static final int CRAFTING_ROW_H = 10;
     private static final int CRAFTING_ROW_TEXT_COLOR = 0xFF404040;
@@ -53,33 +39,123 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
 
     private final FizzleEnchantmentMenu fizzleMenu;
 
+    private float eterna, lastEterna;
+    private float quanta, lastQuanta;
+    private float arcana, lastArcana;
+
     public FizzleEnchantmentScreen(EnchantmentMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
         this.fizzleMenu = menu instanceof FizzleEnchantmentMenu fm ? fm : null;
+        this.imageHeight = 197;
+    }
+
+    @Override
+    public void containerTick() {
+        super.containerTick();
+        if (fizzleMenu == null) return;
+        StatCollection stats = fizzleMenu.getLastStats();
+
+        float target = stats.eterna();
+        if (target != this.eterna) {
+            if (target > this.eterna)
+                this.eterna += Math.min(target - this.eterna, Math.max(0.16F, (target - this.eterna) * 0.1F));
+            else
+                this.eterna = Math.max(this.eterna - this.lastEterna * 0.075F, target);
+        }
+        if (target > 0) this.lastEterna = target;
+
+        target = stats.quanta();
+        if (target != this.quanta) {
+            if (target > this.quanta)
+                this.quanta += Math.min(target - this.quanta, Math.max(0.04F, (target - this.quanta) * 0.1F));
+            else
+                this.quanta = Math.max(this.quanta - this.lastQuanta * 0.075F, target);
+        }
+        if (target > 0) this.lastQuanta = target;
+
+        target = stats.arcana();
+        if (target != this.arcana) {
+            if (target > this.arcana)
+                this.arcana += Math.min(target - this.arcana, Math.max(0.04F, (target - this.arcana) * 0.1F));
+            else
+                this.arcana = Math.max(this.arcana - this.lastArcana * 0.075F, target);
+        }
+        if (target > 0) this.lastArcana = target;
+    }
+
+    @Override
+    protected void renderBg(GuiGraphics gfx, float partialTicks, int mouseX, int mouseY) {
+        int xCenter = this.leftPos;
+        int yCenter = this.topPos;
+
+        gfx.blit(TEXTURE, xCenter, yCenter, 0, 0, this.imageWidth, this.imageHeight);
+
+        ((EnchantmentScreenAccessor) this).callRenderBook(gfx, xCenter, yCenter, partialTicks);
+
+        EnchantmentNames.getInstance().initSeed(this.menu.getEnchantmentSeed());
+        int lapis = this.menu.getGoldCount();
+
+        for (int slot = 0; slot < 3; ++slot) {
+            int j1 = xCenter + 60;
+            int k1 = j1 + 20;
+            int level = this.menu.costs[slot];
+            if (level == 0) {
+                gfx.blit(TEXTURE, j1, yCenter + 14 + 19 * slot, 148, 218, 108, 19);
+            } else {
+                String s = "" + level;
+                int width = 86 - this.font.width(s);
+                FormattedText randomName = EnchantmentNames.getInstance().getRandomName(this.font, width);
+                int color = 6839882;
+                if ((lapis < slot + 1 || this.minecraft.player.experienceLevel < level)
+                        && !this.minecraft.player.getAbilities().instabuild
+                        || this.menu.enchantClue[slot] == -1) {
+                    gfx.blit(TEXTURE, j1, yCenter + 14 + 19 * slot, 148, 218, 108, 19);
+                    gfx.blit(TEXTURE, j1 + 1, yCenter + 15 + 19 * slot, 16 * slot, 239, 16, 16);
+                    gfx.drawWordWrap(this.font, randomName, k1, yCenter + 16 + 19 * slot, width, (color & 16711422) >> 1);
+                    color = 4226832;
+                } else {
+                    int k2 = mouseX - (xCenter + 60);
+                    int l2 = mouseY - (yCenter + 14 + 19 * slot);
+                    if (k2 >= 0 && l2 >= 0 && k2 < 108 && l2 < 19) {
+                        gfx.blit(TEXTURE, j1, yCenter + 14 + 19 * slot, 148, 237, 108, 19);
+                        color = 16777088;
+                    } else {
+                        gfx.blit(TEXTURE, j1, yCenter + 14 + 19 * slot, 148, 199, 108, 19);
+                    }
+                    gfx.blit(TEXTURE, j1 + 1, yCenter + 15 + 19 * slot, 16 * slot, 223, 16, 16);
+                    gfx.drawWordWrap(this.font, randomName, k1, yCenter + 16 + 19 * slot, width, color);
+                    color = 8453920;
+                }
+                gfx.drawString(this.font, s, k1 + 86 - this.font.width(s), yCenter + 16 + 19 * slot + 7, color);
+            }
+        }
+
+        if (this.eterna > 0) {
+            gfx.blit(TEXTURE, xCenter + 59, yCenter + 75, 0, 197,
+                    (int) (this.eterna / ABSOLUTE_MAX_ETERNA * 110), 5);
+        }
+        if (this.quanta > 0) {
+            gfx.blit(TEXTURE, xCenter + 59, yCenter + 85, 0, 202,
+                    (int) (this.quanta / 100F * 110), 5);
+        }
+        if (this.arcana > 0) {
+            gfx.blit(TEXTURE, xCenter + 59, yCenter + 95, 0, 207,
+                    (int) (this.arcana / 100F * 110), 5);
+        }
     }
 
     @Override
     protected void renderLabels(GuiGraphics gfx, int mouseX, int mouseY) {
-        Optional<CraftingResultEntry> crafting = craftingResult();
-        int originalInventoryLabelY = this.inventoryLabelY;
-        if (crafting.isPresent()) {
-            // Suppress the stock "Inventory" label so super.renderLabels doesn't paint it into
-            // the same band we're about to use for the crafting row. Any negative Y above the
-            // titleLabelY band would also work; sentinel is clearer than a magic offset.
-            this.inventoryLabelY = Integer.MIN_VALUE;
-        }
-        super.renderLabels(gfx, mouseX, mouseY);
-        this.inventoryLabelY = originalInventoryLabelY;
+        gfx.drawString(this.font, this.title, 12, 5, 4210752, false);
+        gfx.drawString(this.font, this.playerInventoryTitle, 7, this.imageHeight - 96 + 4, 4210752, false);
 
-        if (fizzleMenu == null) {
-            return;
-        }
-        FizzleEnchantingConfig config = FizzleEnchanting.getConfig();
-        if (config != null && config.enchantingTable.showLevelIndicator) {
-            String line = StatLineFormatter.format(fizzleMenu.getLastStats());
-            gfx.drawString(this.font, line, STAT_LINE_X, STAT_LINE_Y, STAT_LINE_COLOR, false);
-        }
-        crafting.ifPresent(entry -> renderCraftingRow(gfx, entry, mouseX, mouseY));
+        if (fizzleMenu == null) return;
+
+        gfx.drawString(this.font, I18n.get("gui.fizzle_enchanting.enchant.eterna"), 19, 74, 0x3DB53D, false);
+        gfx.drawString(this.font, I18n.get("gui.fizzle_enchanting.enchant.quanta"), 19, 84, 0xFC5454, false);
+        gfx.drawString(this.font, I18n.get("gui.fizzle_enchanting.enchant.arcana"), 19, 94, 0xA800A8, false);
+
+        craftingResult().ifPresent(entry -> renderCraftingRow(gfx, entry, mouseX, mouseY));
     }
 
     private void renderCraftingRow(GuiGraphics gfx, CraftingResultEntry entry, int mouseX, int mouseY) {
@@ -93,27 +169,42 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
     @Override
     public void render(GuiGraphics gfx, int mouseX, int mouseY, float partialTicks) {
         super.render(gfx, mouseX, mouseY, partialTicks);
+
+        if (fizzleMenu != null) {
+            StatCollection stats = fizzleMenu.getLastStats();
+            if (isHovering(60, 76, 110, 5, mouseX, mouseY) && stats.eterna() > 0) {
+                List<Component> lines = Lists.newArrayList(
+                        Component.literal(String.format("Eterna: %.1f / %.0f", stats.eterna(), ABSOLUTE_MAX_ETERNA))
+                );
+                gfx.renderComponentTooltip(this.font, lines, mouseX, mouseY);
+            } else if (isHovering(60, 86, 110, 5, mouseX, mouseY) && stats.quanta() > 0) {
+                List<Component> lines = Lists.newArrayList(
+                        Component.literal(String.format("Quanta: %.1f%%", stats.quanta()))
+                );
+                gfx.renderComponentTooltip(this.font, lines, mouseX, mouseY);
+            } else if (isHovering(60, 96, 110, 5, mouseX, mouseY) && stats.arcana() > 0) {
+                List<Component> lines = Lists.newArrayList(
+                        Component.literal(String.format("Arcana: %.1f%%", stats.arcana()))
+                );
+                gfx.renderComponentTooltip(this.font, lines, mouseX, mouseY);
+            }
+        }
+
         Optional<CraftingResultEntry> crafting = craftingResult();
-        if (crafting.isEmpty()) {
-            return;
+        if (crafting.isPresent()
+                && isHovering(CRAFTING_ROW_X, CRAFTING_ROW_Y, CRAFTING_ROW_W, CRAFTING_ROW_H, mouseX, mouseY)) {
+            CraftingResultEntry entry = crafting.get();
+            List<Component> lines = Lists.newArrayList(
+                    entry.result().getHoverName(),
+                    Component.translatable("info.fizzle_enchanting.crafting_row.xp_cost", entry.xpCost()),
+                    Component.translatable("info.fizzle_enchanting.crafting_row.recipe_id", entry.recipeId().toString()));
+            gfx.renderComponentTooltip(this.font, lines, mouseX, mouseY);
         }
-        // The in-container hover test is screen-relative; renderLabels' isHovering uses the
-        // same check — so we can reuse it directly to align tooltip + row colouring.
-        if (!isHovering(CRAFTING_ROW_X, CRAFTING_ROW_Y, CRAFTING_ROW_W, CRAFTING_ROW_H, mouseX, mouseY)) {
-            return;
-        }
-        CraftingResultEntry entry = crafting.get();
-        List<Component> lines = Lists.newArrayList(
-                entry.result().getHoverName(),
-                Component.translatable(
-                        "info.fizzle_enchanting.crafting_row.xp_cost", entry.xpCost()),
-                Component.translatable(
-                        "info.fizzle_enchanting.crafting_row.recipe_id", entry.recipeId().toString()));
-        gfx.renderComponentTooltip(this.font, lines, mouseX, mouseY);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        // Crafting row click
         if (craftingResult().isPresent()
                 && isHovering(CRAFTING_ROW_X, CRAFTING_ROW_Y, CRAFTING_ROW_W, CRAFTING_ROW_H, mouseX, mouseY)) {
             Minecraft mc = this.minecraft;
@@ -124,6 +215,27 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
                 return true;
             }
         }
+
+        // Enchantment option button clicks — validate against synced data slots directly,
+        // bypassing clickMenuButton which checks server-only slotPicks and always fails client-side.
+        int i = (this.width - this.imageWidth) / 2;
+        int j = (this.height - this.imageHeight) / 2;
+        for (int k = 0; k < 3; ++k) {
+            double d0 = mouseX - (double) (i + 60);
+            double d1 = mouseY - (double) (j + 14 + 19 * k);
+            if (d0 >= 0.0D && d1 >= 0.0D && d0 < 108.0D && d1 < 19.0D) {
+                int cost = this.menu.costs[k];
+                if (cost <= 0 || this.menu.enchantClue[k] == -1) continue;
+                int lapis = this.menu.getGoldCount();
+                boolean canAfford = this.minecraft.player.getAbilities().instabuild
+                        || (lapis >= k + 1 && this.minecraft.player.experienceLevel >= cost);
+                if (canAfford) {
+                    this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, k);
+                    return true;
+                }
+            }
+        }
+
         return super.mouseClicked(mouseX, mouseY, button);
     }
 

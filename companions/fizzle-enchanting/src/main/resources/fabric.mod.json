@@ -24,6 +24,7 @@
         "jei_mod_plugin": ["com.fizzlesmp.fizzle_enchanting.compat.jei.JeiEnchantingPlugin"],
         "jade": ["com.fizzlesmp.fizzle_enchanting.compat.jade.JadeEnchantingPlugin"]
     },
+    "accessWidener": "fizzle_enchanting.accesswidener",
     "mixins": [
         "fizzle_enchanting.mixins.json"
     ],

@@ -27,6 +27,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Recipe;
@@ -90,6 +91,11 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
         super(containerId, playerInventory, access);
         this.access = access;
         this.playerInventory = playerInventory;
+        for (Slot slot : this.slots) {
+            if (slot.container == playerInventory) {
+                slot.y += 31;
+            }
+        }
     }
 
     /**
