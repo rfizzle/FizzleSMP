@@ -75,13 +75,13 @@ class TomeItemsTest {
     }
 
     @Test
-    void allTomes_stackToOne() {
-        assertEquals(1, FizzleEnchantingRegistry.SCRAP_TOME.getDefaultMaxStackSize(),
-                "scrap tome must stack to 1 — the anvil takes one tome per salvage");
-        assertEquals(1, FizzleEnchantingRegistry.IMPROVED_SCRAP_TOME.getDefaultMaxStackSize(),
-                "improved scrap tome must stack to 1");
-        assertEquals(1, FizzleEnchantingRegistry.EXTRACTION_TOME.getDefaultMaxStackSize(),
-                "extraction tome must stack to 1");
+    void allTomes_stackToSixteen() {
+        assertEquals(16, FizzleEnchantingRegistry.SCRAP_TOME.getDefaultMaxStackSize(),
+                "scrap tome must stack to 16 — matches Zenith recipe output counts");
+        assertEquals(16, FizzleEnchantingRegistry.IMPROVED_SCRAP_TOME.getDefaultMaxStackSize(),
+                "improved scrap tome must stack to 16");
+        assertEquals(16, FizzleEnchantingRegistry.EXTRACTION_TOME.getDefaultMaxStackSize(),
+                "extraction tome must stack to 16");
     }
 
     private static void unfreeze(Registry<?> registry) throws Exception {
