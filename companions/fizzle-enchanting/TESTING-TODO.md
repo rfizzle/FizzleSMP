@@ -522,13 +522,14 @@ Three integration surfaces: mixin swap, menu subclass, screen reader.
 
 ### Tier 3
 
-- [ ] **TEST-3.2-T3** — Every expected shelf id registered; sound group + strength match DESIGN.
+- [x] **TEST-3.2-T3** — Every expected shelf id registered; sound group + strength match DESIGN.
   - **Tier:** 3.
-  - **State:** T3-rewrite (replaces `FizzleShelvesTest`).
+  - **State:** T3.
   - **Acceptance:**
-    - [ ] Parameterized: each id → `BuiltInRegistries.BLOCK.get(id) != null`.
-    - [ ] `SoundType` matches DESIGN (WOOD vs STONE).
-    - [ ] `destroySpeed` / `explosionResistance` match DESIGN.
+    - [x] Parameterized: each id → `BuiltInRegistries.BLOCK.get(id) != null`.
+    - [x] `SoundType` matches DESIGN (WOOD vs STONE).
+    - [x] `destroySpeed` / `explosionResistance` match DESIGN.
+  - **File:** `src/gametest/java/.../gametest/ShelfRosterGameTest.java`.
   - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-3.3 — Utility shelves
