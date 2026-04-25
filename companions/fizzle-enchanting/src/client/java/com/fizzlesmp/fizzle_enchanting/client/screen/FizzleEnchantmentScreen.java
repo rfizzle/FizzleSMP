@@ -47,6 +47,7 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
     private float eterna, lastEterna;
     private float quanta, lastQuanta;
     private float arcana, lastArcana;
+    private int[] savedEnchantClue;
 
     public FizzleEnchantmentScreen(EnchantmentMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
@@ -88,8 +89,7 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
         if (target > 0) this.lastArcana = target;
     }
 
-    @Override
-    protected void renderBg(GuiGraphics gfx, float partialTicks, int mouseX, int mouseY) {
+    private void renderBgImpl(GuiGraphics gfx, float partialTicks, int mouseX, int mouseY) {
         int xCenter = this.leftPos;
         int yCenter = this.topPos;
 
@@ -172,42 +172,102 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
     }
 
     @Override
-    public void render(GuiGraphics gfx, int mouseX, int mouseY, float partialTicks) {
-        super.render(gfx, mouseX, mouseY, partialTicks);
+    protected void renderBg(GuiGraphics gfx, float partialTicks, int mouseX, int mouseY) {
+        if (savedEnchantClue != null) {
+            System.arraycopy(savedEnchantClue, 0, this.menu.enchantClue, 0, 3);
+        }
+        renderBgImpl(gfx, partialTicks, mouseX, mouseY);
+        if (savedEnchantClue != null) {
+            this.menu.enchantClue[0] = -1;
+            this.menu.enchantClue[1] = -1;
+            this.menu.enchantClue[2] = -1;
+        }
+    }
 
-        if (fizzleMenu != null) {
-            renderSlotClueTooltips(gfx, mouseX, mouseY);
+    @Override
+    public void render(GuiGraphics gfx, int mouseX, int mouseY, float partialTicks) {
+        savedEnchantClue = new int[]{this.menu.enchantClue[0], this.menu.enchantClue[1], this.menu.enchantClue[2]};
+        this.menu.enchantClue[0] = -1;
+        this.menu.enchantClue[1] = -1;
+        this.menu.enchantClue[2] = -1;
+        super.render(gfx, mouseX, mouseY, partialTicks);
+        System.arraycopy(savedEnchantClue, 0, this.menu.enchantClue, 0, 3);
+        savedEnchantClue = null;
+
+        if (fizzleMenu == null) return;
+
+        boolean creative = this.minecraft.player.getAbilities().instabuild;
+        int lapis = this.menu.getGoldCount();
+
+        for (int slot = 0; slot < 3; slot++) {
+            int level = this.menu.costs[slot];
+            if (level <= 0) continue;
+            if (!isHovering(60, 14 + 19 * slot, 108, 17, mouseX, mouseY)) continue;
+
+            List<Component> lines = Lists.newArrayList();
+            List<EnchantmentClue> clues = fizzleMenu.getClientClues(slot);
+            boolean exhausted = fizzleMenu.isClientCluesExhausted(slot);
+
+            if (!clues.isEmpty()) {
+                lines.add(Component.translatable("info.fizzle_enchanting.enchant.clues"
+                        + (exhausted ? "_all" : ""))
+                        .withStyle(ChatFormatting.YELLOW, ChatFormatting.UNDERLINE));
+                Registry<Enchantment> registry = this.minecraft.level.registryAccess()
+                        .registryOrThrow(Registries.ENCHANTMENT);
+                for (EnchantmentClue clue : clues) {
+                    Optional<Holder.Reference<Enchantment>> holder = registry.getHolder(clue.enchantment());
+                    holder.ifPresent(ref -> lines.add(Enchantment.getFullname(ref, clue.level())));
+                }
+            } else {
+                lines.add(Component.translatable("info.fizzle_enchanting.enchant.no_clue")
+                        .withStyle(ChatFormatting.DARK_RED, ChatFormatting.UNDERLINE));
+            }
+
+            if (this.menu.enchantClue[slot] != -1 && !creative) {
+                lines.add(Component.literal(""));
+                int cost = slot + 1;
+                if (this.minecraft.player.experienceLevel < level) {
+                    lines.add(Component.translatable("container.enchant.level.requirement", level)
+                            .withStyle(ChatFormatting.RED));
+                } else {
+                    ChatFormatting lapisColor = lapis >= cost ? ChatFormatting.GRAY : ChatFormatting.RED;
+                    lines.add(Component.translatable(cost == 1
+                            ? "container.enchant.lapis.one" : "container.enchant.lapis.many", cost)
+                            .withStyle(lapisColor));
+                    lines.add(Component.translatable(cost == 1
+                            ? "container.enchant.level.one" : "container.enchant.level.many", cost)
+                            .withStyle(ChatFormatting.GRAY));
+                }
+            }
+
+            gfx.renderComponentTooltip(this.font, lines, mouseX, mouseY);
+            break;
         }
 
-        if (fizzleMenu != null) {
-            StatCollection stats = fizzleMenu.getLastStats();
-            if (isHovering(60, 76, 110, 5, mouseX, mouseY) && stats.eterna() > 0) {
-                List<Component> lines = Lists.newArrayList(
-                        Component.literal(String.format("Eterna: %.1f / %.0f", stats.eterna(), ABSOLUTE_MAX_ETERNA))
-                );
-                gfx.renderComponentTooltip(this.font, lines, mouseX, mouseY);
-            } else if (isHovering(60, 86, 110, 5, mouseX, mouseY) && stats.quanta() > 0) {
-                List<Component> lines = Lists.newArrayList(
-                        Component.literal(String.format("Quanta: %.1f%%", stats.quanta()))
-                );
-                gfx.renderComponentTooltip(this.font, lines, mouseX, mouseY);
-            } else if (isHovering(60, 96, 110, 5, mouseX, mouseY) && stats.arcana() > 0) {
-                List<Component> lines = Lists.newArrayList(
-                        Component.literal(String.format("Arcana: %.1f%%", stats.arcana()))
-                );
-                gfx.renderComponentTooltip(this.font, lines, mouseX, mouseY);
-            }
+        StatCollection stats = fizzleMenu.getLastStats();
+        if (isHovering(60, 76, 110, 5, mouseX, mouseY) && stats.eterna() > 0) {
+            gfx.renderComponentTooltip(this.font, Lists.newArrayList(
+                    Component.literal(String.format("Eterna: %.1f / %.0f", stats.eterna(), ABSOLUTE_MAX_ETERNA))),
+                    mouseX, mouseY);
+        } else if (isHovering(60, 86, 110, 5, mouseX, mouseY) && stats.quanta() > 0) {
+            gfx.renderComponentTooltip(this.font, Lists.newArrayList(
+                    Component.literal(String.format("Quanta: %.1f%%", stats.quanta()))),
+                    mouseX, mouseY);
+        } else if (isHovering(60, 96, 110, 5, mouseX, mouseY) && stats.arcana() > 0) {
+            gfx.renderComponentTooltip(this.font, Lists.newArrayList(
+                    Component.literal(String.format("Arcana: %.1f%%", stats.arcana()))),
+                    mouseX, mouseY);
         }
 
         Optional<CraftingResultEntry> crafting = craftingResult();
         if (crafting.isPresent()
                 && isHovering(CRAFTING_ROW_X, CRAFTING_ROW_Y, CRAFTING_ROW_W, CRAFTING_ROW_H, mouseX, mouseY)) {
             CraftingResultEntry entry = crafting.get();
-            List<Component> lines = Lists.newArrayList(
+            gfx.renderComponentTooltip(this.font, Lists.newArrayList(
                     entry.result().getHoverName(),
                     Component.translatable("info.fizzle_enchanting.crafting_row.xp_cost", entry.xpCost()),
-                    Component.translatable("info.fizzle_enchanting.crafting_row.recipe_id", entry.recipeId().toString()));
-            gfx.renderComponentTooltip(this.font, lines, mouseX, mouseY);
+                    Component.translatable("info.fizzle_enchanting.crafting_row.recipe_id", entry.recipeId().toString())),
+                    mouseX, mouseY);
         }
     }
 
@@ -246,30 +306,6 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
-    }
-
-    private void renderSlotClueTooltips(GuiGraphics gfx, int mouseX, int mouseY) {
-        for (int slot = 0; slot < 3; slot++) {
-            if (!isHovering(60, 14 + 19 * slot, 108, 19, mouseX, mouseY)) continue;
-            if (this.menu.costs[slot] == 0) continue;
-
-            List<EnchantmentClue> clues = fizzleMenu.getClientClues(slot);
-            if (clues.isEmpty()) continue;
-
-            Registry<Enchantment> registry = this.minecraft.level.registryAccess()
-                    .registryOrThrow(Registries.ENCHANTMENT);
-            List<Component> lines = Lists.newArrayList();
-            for (EnchantmentClue clue : clues) {
-                Optional<Holder.Reference<Enchantment>> holder = registry.getHolder(clue.enchantment());
-                if (holder.isPresent()) {
-                    lines.add(Enchantment.getFullname(holder.get(), clue.level()));
-                }
-            }
-            if (!lines.isEmpty()) {
-                gfx.renderComponentTooltip(this.font, lines, mouseX, mouseY);
-            }
-            break;
-        }
     }
 
     private Optional<CraftingResultEntry> craftingResult() {
