@@ -65,7 +65,7 @@ public class EnchantmentLibraryMenu extends AbstractContainerMenu {
     final EnchantmentLibraryBlockEntity tile;
 
     /** Three-slot IO container shared by deposit, extract, and scratch slots. */
-    final SimpleContainer ioInv;
+    public final SimpleContainer ioInv;
 
     private final ContainerLevelAccess access;
     private final boolean clientSide;

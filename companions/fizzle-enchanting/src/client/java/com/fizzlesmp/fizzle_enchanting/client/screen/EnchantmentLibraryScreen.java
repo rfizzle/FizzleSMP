@@ -1,183 +1,243 @@
 package com.fizzlesmp.fizzle_enchanting.client.screen;
 
+import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
 import com.fizzlesmp.fizzle_enchanting.library.EnchantmentLibraryBlockEntity;
 import com.fizzlesmp.fizzle_enchanting.library.EnchantmentLibraryMenu;
-import com.fizzlesmp.fizzle_enchanting.library.LibraryRowFormatter;
 
+import com.mojang.blaze3d.vertex.PoseStack;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.resources.language.I18n;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 
+import org.jetbrains.annotations.Nullable;
+
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 /**
- * Client screen for the Basic and Ender enchantment libraries. Paints a scrollable list of every
- * enchantment in the BE's pool with {@code points > 0}, alongside the per-enchant max-level badge
- * and the running point total formatted by {@link LibraryRowFormatter}. Clicking a row sends a
- * bit-packed click ID per DESIGN ({@code id = (shift << 31) | enchantIndex}) which the server-side
- * menu decodes in {@code clickMenuButton}.
- *
- * <p>Scrolling follows the vanilla {@code LoomScreen} / {@code StonecutterScreen} pattern — there
- * is no shared {@code ScrollableContainer} class in 1.21.1, but the convention is consistent: a
- * float {@code scrollOffs} drives a {@code startIndex} into the row list, with mouse wheel and
- * scrollbar drag both writing through the same clamp. The MVP uses a flat solid-color background
- * (no custom GUI texture) so the screen is functional out of the box; texture polish is deferred.
- *
- * <p>Row state is rebuilt every frame from {@link EnchantmentLibraryMenu#getTile()} so the live
- * sync packet (DESIGN: full-map resend on every mutation) feeds the screen without an explicit
- * listener. The menu also exposes {@link EnchantmentLibraryMenu#setNotifier} (wired by
- * {@link EnchantmentLibraryMenu#onChanged()}) — currently unused since the per-frame rebuild
- * already covers the refresh need; the hook stays available for an event-driven optimization.
+ * Client screen for the Basic and Ender enchantment libraries. Renders a textured UI matching the
+ * Zenith/Apotheosis "Library of Alexandria" aesthetic — dark wooden panel with scrollable enchant
+ * entries, per-entry progress bars, a search filter, and detailed extraction-cost tooltips on hover.
  */
 public class EnchantmentLibraryScreen extends AbstractContainerScreen<EnchantmentLibraryMenu> {
 
-    public static final int MAX_VISIBLE = 5;
-    public static final int ROW_HEIGHT = 18;
+    private static final ResourceLocation TEXTURE = FizzleEnchanting.id("textures/gui/library.png");
 
-    private static final int LIST_X = 8;
-    private static final int LIST_Y = 18;
-    private static final int LIST_W = 116;
-    private static final int LIST_H = MAX_VISIBLE * ROW_HEIGHT;
+    private static final int MAX_VISIBLE = 5;
+    private static final int ENTRY_WIDTH = 113;
+    private static final int ENTRY_HEIGHT = 20;
 
-    private static final int SCROLLBAR_X = 128;
-    private static final int SCROLLBAR_Y = LIST_Y;
-    private static final int SCROLLBAR_W = 6;
-    private static final int SCROLLBAR_H = LIST_H;
-    private static final int SCROLLBAR_THUMB_H = 12;
-
-    private static final int BG_PANEL_COLOR = 0xFFC6C6C6;
-    private static final int LIST_FRAME_COLOR = 0xFF373737;
-    private static final int ROW_BG = 0xFF4F4F4F;
-    private static final int ROW_BG_HOVER = 0xFF606060;
-    private static final int ROW_TEXT = 0xFFFFFFFF;
-    private static final int SCROLL_THUMB_ACTIVE = 0xFFA0A0A0;
-    private static final int SCROLL_THUMB_INACTIVE = 0xFF555555;
+    private static final int TEX_W = 307;
+    private static final int TEX_H = 256;
 
     private float scrollOffs;
     private boolean scrolling;
     private int startIndex;
-    private final List<Row> rows = new ArrayList<>();
+
+    private final List<LibrarySlot> data = new ArrayList<>();
+    private EditBox filter;
 
     public EnchantmentLibraryScreen(EnchantmentLibraryMenu menu, Inventory inv, Component title) {
         super(menu, inv, title);
-        this.imageWidth = 176;
         this.imageHeight = 230;
-        this.inventoryLabelY = this.imageHeight - 94;
-        this.titleLabelY = 6;
+        menu.setNotifier(this::containerChanged);
     }
 
     @Override
     protected void init() {
         super.init();
-        rebuildRows();
+        this.filter = this.addRenderableWidget(new EditBox(
+                this.font, this.leftPos + 16, this.topPos + 16, 110, 11, this.filter, Component.literal("")));
+        this.filter.setBordered(false);
+        this.filter.setTextColor(0x97714F);
+        this.filter.setResponder(t -> this.containerChanged());
+        this.setFocused(this.filter);
+        this.containerChanged();
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (this.minecraft != null && this.minecraft.options.keyInventory.matches(keyCode, scanCode)
+                && this.getFocused() == this.filter) {
+            return true;
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
     public void render(GuiGraphics gfx, int mouseX, int mouseY, float partialTicks) {
-        rebuildRows();
         renderBackground(gfx, mouseX, mouseY, partialTicks);
         super.render(gfx, mouseX, mouseY, partialTicks);
         renderTooltip(gfx, mouseX, mouseY);
     }
 
     @Override
-    protected void renderBg(GuiGraphics gfx, float partialTicks, int mouseX, int mouseY) {
-        gfx.fill(this.leftPos, this.topPos,
-                this.leftPos + this.imageWidth, this.topPos + this.imageHeight,
-                BG_PANEL_COLOR);
-        gfx.fill(this.leftPos + LIST_X - 1, this.topPos + LIST_Y - 1,
-                this.leftPos + LIST_X + LIST_W + 1, this.topPos + LIST_Y + LIST_H + 1,
-                LIST_FRAME_COLOR);
-        for (int i = 0; i < MAX_VISIBLE && (this.startIndex + i) < this.rows.size(); i++) {
-            Row row = this.rows.get(this.startIndex + i);
-            int rowX = this.leftPos + LIST_X;
-            int rowY = this.topPos + LIST_Y + i * ROW_HEIGHT;
-            boolean hovered = isHovering(LIST_X, LIST_Y + i * ROW_HEIGHT, LIST_W, ROW_HEIGHT, mouseX, mouseY);
-            gfx.fill(rowX, rowY, rowX + LIST_W, rowY + ROW_HEIGHT, hovered ? ROW_BG_HOVER : ROW_BG);
-            String text = LibraryRowFormatter.format(row.name(), row.maxLevel(), row.points());
-            gfx.drawString(this.font, text, rowX + 4, rowY + 5, ROW_TEXT, false);
+    protected void renderTooltip(GuiGraphics gfx, int mouseX, int mouseY) {
+        super.renderTooltip(gfx, mouseX, mouseY);
+        LibrarySlot slot = getHoveredSlot(mouseX, mouseY);
+        if (slot == null) return;
+
+        List<Component> lines = new ArrayList<>();
+
+        MutableComponent displayName = slot.name().copy()
+                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0xFFFF80)).withUnderlined(true));
+        lines.add(displayName);
+
+        String descKey = "enchantment." + slot.key().location().getNamespace()
+                + "." + slot.key().location().getPath().replace('/', '.') + ".desc";
+        if (I18n.exists(descKey)) {
+            lines.add(Component.translatable(descKey)
+                    .setStyle(Style.EMPTY.withColor(ChatFormatting.GRAY).withItalic(true)));
+            lines.add(Component.literal(""));
         }
-        renderScrollbar(gfx);
-        renderIoSlotFrames(gfx);
+
+        lines.add(Component.translatable("tooltip.fizzle_enchanting.enchlib.max_lvl",
+                Component.translatable("enchantment.level." + slot.maxLvl()))
+                .withStyle(ChatFormatting.GRAY));
+        lines.add(Component.translatable("tooltip.fizzle_enchanting.enchlib.points",
+                formatNumber(slot.points()), formatNumber(getPointCap()))
+                .withStyle(ChatFormatting.GRAY));
+        lines.add(Component.literal(""));
+
+        ItemStack outSlot = this.menu.ioInv.getItem(EnchantmentLibraryMenu.EXTRACT_SLOT);
+        int current = getCurrentLevel(outSlot, slot.key());
+        boolean shift = Screen.hasShiftDown();
+        int targetLevel;
+        if (shift) {
+            targetLevel = Math.min(slot.maxLvl(),
+                    1 + (int) (Math.log(slot.points() + EnchantmentLibraryBlockEntity.points(current))
+                            / Math.log(2)));
+        } else {
+            targetLevel = current + 1;
+        }
+        if (targetLevel == current) targetLevel++;
+
+        int cost = EnchantmentLibraryBlockEntity.points(targetLevel)
+                - EnchantmentLibraryBlockEntity.points(current);
+
+        if (targetLevel > slot.maxLvl()) {
+            lines.add(Component.translatable("tooltip.fizzle_enchanting.enchlib.unavailable")
+                    .withStyle(ChatFormatting.RED));
+        } else {
+            lines.add(Component.translatable("tooltip.fizzle_enchanting.enchlib.extracting",
+                    Component.translatable("enchantment.level." + targetLevel))
+                    .withStyle(ChatFormatting.BLUE));
+            lines.add(Component.translatable("tooltip.fizzle_enchanting.enchlib.cost", cost)
+                    .withStyle(cost > slot.points() ? ChatFormatting.RED : ChatFormatting.GOLD));
+        }
+
+        int tooltipX = this.leftPos - 16 - lines.stream()
+                .mapToInt(this.font::width).max().orElse(100);
+        gfx.renderComponentTooltip(this.font, lines, tooltipX, mouseY);
     }
 
-    private void renderScrollbar(GuiGraphics gfx) {
-        gfx.fill(this.leftPos + SCROLLBAR_X, this.topPos + SCROLLBAR_Y,
-                this.leftPos + SCROLLBAR_X + SCROLLBAR_W, this.topPos + SCROLLBAR_Y + SCROLLBAR_H,
-                LIST_FRAME_COLOR);
-        int thumbY = this.topPos + SCROLLBAR_Y
-                + (int) ((SCROLLBAR_H - SCROLLBAR_THUMB_H) * Mth.clamp(this.scrollOffs, 0F, 1F));
-        gfx.fill(this.leftPos + SCROLLBAR_X, thumbY,
-                this.leftPos + SCROLLBAR_X + SCROLLBAR_W, thumbY + SCROLLBAR_THUMB_H,
-                isScrollBarActive() ? SCROLL_THUMB_ACTIVE : SCROLL_THUMB_INACTIVE);
+    @Override
+    protected void renderBg(GuiGraphics gfx, float partialTicks, int mouseX, int mouseY) {
+        int left = this.leftPos;
+        int top = this.topPos;
+        gfx.blit(TEXTURE, left, top, 0, 0, this.imageWidth, this.imageHeight, TEX_W, TEX_H);
+
+        int scrollbarPos = (int) (90F * this.scrollOffs);
+        int scrollbarV = isScrollBarActive() ? 40 : 52;
+        gfx.blit(TEXTURE, left + 13, top + 29 + scrollbarPos, 303, scrollbarV, 4, 12, TEX_W, TEX_H);
+
+        int idx = this.startIndex;
+        while (idx < this.startIndex + MAX_VISIBLE && idx < this.data.size()) {
+            renderEntry(gfx, this.data.get(idx), left + 20,
+                    top + 30 + ENTRY_HEIGHT * (idx - this.startIndex), mouseX, mouseY);
+            idx++;
+        }
     }
 
-    private void renderIoSlotFrames(GuiGraphics gfx) {
-        // Visual frames around the three IO slots so they read as deposit / extract / scratch
-        // even without a custom GUI texture in MVP.
-        drawSlotFrame(gfx, 142, 18);
-        drawSlotFrame(gfx, 142, 77);
-        drawSlotFrame(gfx, 142, 106);
-        // Inventory + hotbar frame
-        gfx.fill(this.leftPos + 7, this.topPos + 147,
-                this.leftPos + 7 + 162, this.topPos + 147 + 58,
-                LIST_FRAME_COLOR);
-        gfx.fill(this.leftPos + 7, this.topPos + 205,
-                this.leftPos + 7 + 162, this.topPos + 205 + 18,
-                LIST_FRAME_COLOR);
-    }
+    private void renderEntry(GuiGraphics gfx, LibrarySlot slot, int x, int y, int mouseX, int mouseY) {
+        LibrarySlot hover = getHoveredSlot(mouseX, mouseY);
+        int entryV = (slot == hover) ? ENTRY_HEIGHT : 0;
+        gfx.blit(TEXTURE, x, y, 194, entryV, ENTRY_WIDTH, ENTRY_HEIGHT, TEX_W, TEX_H);
 
-    private void drawSlotFrame(GuiGraphics gfx, int x, int y) {
-        gfx.fill(this.leftPos + x - 1, this.topPos + y - 1,
-                this.leftPos + x + 17, this.topPos + y + 17,
-                LIST_FRAME_COLOR);
+        int pointCap = getPointCap();
+        int progress = (pointCap > 0)
+                ? (int) Math.round(85 * Math.sqrt(slot.points()) / Math.sqrt(pointCap))
+                : 0;
+        gfx.blit(TEXTURE, x + 3, y + 14, 197, 42, progress, 3, TEX_W, TEX_H);
+
+        PoseStack pose = gfx.pose();
+        pose.pushPose();
+        Component txt = slot.name();
+        float scale = 1;
+        if (this.font.width(txt) > ENTRY_WIDTH - 6) {
+            scale = 60F / this.font.width(txt);
+        }
+        pose.scale(scale, scale, 1);
+        gfx.drawString(this.font, txt, (int) ((x + 3) / scale), (int) ((y + 3) / scale), 0x8EE14D, false);
+        pose.popPose();
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         this.scrolling = false;
-        if (this.isHovering(SCROLLBAR_X, SCROLLBAR_Y, SCROLLBAR_W, SCROLLBAR_H, mouseX, mouseY)) {
-            this.scrolling = isScrollBarActive();
+
+        if (this.isHovering(14, 29, 4, 103, mouseX, mouseY)) {
+            this.scrolling = true;
+            this.mouseDragged(mouseX, mouseY, button, 0, 0);
             return true;
         }
-        for (int i = 0; i < MAX_VISIBLE && (this.startIndex + i) < this.rows.size(); i++) {
-            if (isHovering(LIST_X, LIST_Y + i * ROW_HEIGHT, LIST_W, ROW_HEIGHT, mouseX, mouseY)) {
-                Row row = this.rows.get(this.startIndex + i);
-                int id = row.registryIndex() & EnchantmentLibraryMenu.INDEX_MASK;
-                if (Screen.hasShiftDown()) id |= EnchantmentLibraryMenu.SHIFT_BIT;
-                if (this.minecraft != null && this.minecraft.gameMode != null) {
-                    this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, id);
-                }
-                if (this.minecraft != null) {
-                    this.minecraft.getSoundManager().play(
-                            SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1.0F));
-                }
-                return true;
+
+        LibrarySlot slot = getHoveredSlot((int) mouseX, (int) mouseY);
+        if (slot != null) {
+            int id = slot.registryIndex();
+            if (Screen.hasShiftDown()) id |= EnchantmentLibraryMenu.SHIFT_BIT;
+            if (this.minecraft != null && this.minecraft.gameMode != null) {
+                this.minecraft.gameMode.handleInventoryButtonClick(this.menu.containerId, id);
             }
+            if (this.minecraft != null) {
+                this.minecraft.getSoundManager().play(
+                        SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1.0F));
+            }
+            return true;
         }
+
+        if (this.filter != null && this.filter.isHovered() && button == 1) {
+            this.filter.setValue("");
+            return true;
+        }
+
+        this.setFocused(null);
+        if (this.filter != null) this.filter.setFocused(false);
+
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double dx, double dy) {
         if (this.scrolling && isScrollBarActive()) {
-            int barTop = this.topPos + SCROLLBAR_Y;
-            int barBot = barTop + SCROLLBAR_H;
-            this.scrollOffs = ((float) mouseY - barTop - SCROLLBAR_THUMB_H / 2F)
-                    / (barBot - barTop - SCROLLBAR_THUMB_H);
-            this.scrollOffs = Mth.clamp(this.scrollOffs, 0F, 1F);
+            int barTop = this.topPos + 14;
+            int barBot = barTop + 103;
+            this.scrollOffs = ((float) mouseY - barTop - 6F) / (barBot - barTop - 12F) - 0.12F;
+            this.scrollOffs = Mth.clamp(this.scrollOffs, 0.0F, 1.0F);
             this.startIndex = (int) (this.scrollOffs * getOffscreenRows() + 0.5D);
             return true;
         }
@@ -189,25 +249,37 @@ public class EnchantmentLibraryScreen extends AbstractContainerScreen<Enchantmen
         if (isScrollBarActive()) {
             int offscreen = getOffscreenRows();
             this.scrollOffs = (float) (this.scrollOffs - dy / offscreen);
-            this.scrollOffs = Mth.clamp(this.scrollOffs, 0F, 1F);
+            this.scrollOffs = Mth.clamp(this.scrollOffs, 0.0F, 1.0F);
             this.startIndex = (int) (this.scrollOffs * offscreen + 0.5D);
-            return true;
         }
-        return super.mouseScrolled(mouseX, mouseY, dx, dy);
+        return true;
     }
 
     private boolean isScrollBarActive() {
-        return this.rows.size() > MAX_VISIBLE;
+        return this.data.size() > MAX_VISIBLE;
     }
 
     private int getOffscreenRows() {
-        return Math.max(1, this.rows.size() - MAX_VISIBLE);
+        return Math.max(1, this.data.size() - MAX_VISIBLE);
     }
 
-    private void rebuildRows() {
-        this.rows.clear();
+    @Nullable
+    private LibrarySlot getHoveredSlot(int mouseX, int mouseY) {
+        for (int i = 0; i < MAX_VISIBLE; i++) {
+            if (this.startIndex + i < this.data.size()) {
+                if (this.isHovering(21, 31 + i * ENTRY_HEIGHT, ENTRY_WIDTH, ENTRY_HEIGHT - 2, mouseX, mouseY)) {
+                    return this.data.get(this.startIndex + i);
+                }
+            }
+        }
+        return null;
+    }
+
+    private void containerChanged() {
+        this.data.clear();
         EnchantmentLibraryBlockEntity tile = this.menu.getTile();
         if (tile == null || this.minecraft == null || this.minecraft.player == null) return;
+
         Registry<Enchantment> registry = this.minecraft.player.level().registryAccess()
                 .registryOrThrow(Registries.ENCHANTMENT);
         for (Object2IntMap.Entry<ResourceKey<Enchantment>> entry
@@ -219,9 +291,13 @@ public class EnchantmentLibraryScreen extends AbstractContainerScreen<Enchantmen
             if (ench == null) continue;
             int maxLvl = tile.getMaxLevels().getInt(key);
             int idx = registry.getId(ench);
-            this.rows.add(new Row(key, ench.description(), maxLvl, points, idx));
+            Component name = ench.description();
+            if (!isAllowedBySearch(name.getString())) continue;
+            if (!isAllowedByItem(registry, key)) continue;
+            this.data.add(new LibrarySlot(key, name, maxLvl, points, idx));
         }
-        this.rows.sort(Comparator.comparing(r -> r.name().getString()));
+        this.data.sort(Comparator.comparing(s -> s.name().getString()));
+
         if (!isScrollBarActive()) {
             this.scrollOffs = 0F;
             this.startIndex = 0;
@@ -231,6 +307,49 @@ public class EnchantmentLibraryScreen extends AbstractContainerScreen<Enchantmen
         }
     }
 
-    private record Row(ResourceKey<Enchantment> key, Component name,
-                       int maxLevel, int points, int registryIndex) {}
+    private boolean isAllowedBySearch(String enchantName) {
+        String search = (this.filter == null) ? "" : this.filter.getValue().trim().toLowerCase(Locale.ROOT);
+        if (search.isEmpty()) return true;
+        String stripped = ChatFormatting.stripFormatting(enchantName);
+        return stripped != null && stripped.toLowerCase(Locale.ROOT).contains(search);
+    }
+
+    private boolean isAllowedByItem(Registry<Enchantment> registry, ResourceKey<Enchantment> key) {
+        ItemStack stack = this.menu.ioInv.getItem(EnchantmentLibraryMenu.SCRATCH_SLOT);
+        if (stack.isEmpty()) return true;
+        Enchantment ench = registry.get(key);
+        if (ench == null) return false;
+        Holder<Enchantment> holder = registry.wrapAsHolder(ench);
+        return ench.canEnchant(stack);
+    }
+
+    private int getCurrentLevel(ItemStack stack, ResourceKey<Enchantment> key) {
+        if (stack.isEmpty() || this.minecraft == null || this.minecraft.player == null) return 0;
+        Registry<Enchantment> registry = this.minecraft.player.level().registryAccess()
+                .registryOrThrow(Registries.ENCHANTMENT);
+        Enchantment ench = registry.get(key);
+        if (ench == null) return 0;
+        Holder<Enchantment> holder = registry.wrapAsHolder(ench);
+        ItemEnchantments stored = stack.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
+        return stored.getLevel(holder);
+    }
+
+    private int getPointCap() {
+        EnchantmentLibraryBlockEntity tile = this.menu.getTile();
+        return (tile != null) ? tile.getMaxPoints() : 32_768;
+    }
+
+    private static final DecimalFormat DECIMAL_FMT = new DecimalFormat("##.#");
+
+    static String formatNumber(int n) {
+        if (n <= 0) return "0";
+        int log = (int) StrictMath.log10(n);
+        if (log <= 4) return String.valueOf(n);
+        if (log == 5) return DECIMAL_FMT.format(n / 1000D) + "K";
+        if (log <= 8) return DECIMAL_FMT.format(n / 1000000D) + "M";
+        return DECIMAL_FMT.format(n / 1000000000D) + "B";
+    }
+
+    private record LibrarySlot(ResourceKey<Enchantment> key, Component name,
+                               int maxLvl, int points, int registryIndex) {}
 }
