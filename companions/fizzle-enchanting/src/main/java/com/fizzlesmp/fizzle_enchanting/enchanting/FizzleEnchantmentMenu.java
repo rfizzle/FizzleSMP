@@ -227,7 +227,14 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
         ItemStack input = container.getItem(INPUT_SLOT);
         if (input.isEmpty()) {
             clearSlotState();
-            sendEmptyPayloads();
+            access.execute((level, pos) -> {
+                StatCollection stats = EnchantingStatRegistry.gatherStats(level, pos);
+                this.lastStats = stats;
+                broadcastStats(stats);
+            });
+            for (int slot = 0; slot < FizzleEnchantmentLogic.PREVIEW_SLOTS; slot++) {
+                broadcastClues(slot, List.of(), true);
+            }
             return;
         }
         access.execute((level, pos) -> recompute(level, pos, input));
