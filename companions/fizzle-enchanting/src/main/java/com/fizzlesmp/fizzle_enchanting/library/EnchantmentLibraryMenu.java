@@ -172,6 +172,12 @@ public class EnchantmentLibraryMenu extends AbstractContainerMenu {
             public int getMaxStackSize() {
                 return 1;
             }
+
+            @Override
+            public void setChanged() {
+                super.setChanged();
+                EnchantmentLibraryMenu.this.onChanged();
+            }
         });
     }
 
@@ -262,15 +268,34 @@ public class EnchantmentLibraryMenu extends AbstractContainerMenu {
         return true;
     }
 
-    /**
-     * Shift-click rules between IO slots and the player inventory are deferred — Zenith's mover
-     * routes deposit→extract→scratch and scratch→player, but for MVP returning {@link ItemStack#EMPTY}
-     * disables shift-move entirely (vanilla treats empty as "nothing moved", which keeps player
-     * items where they were dropped rather than half-routing them).
-     */
     @Override
     public ItemStack quickMoveStack(Player player, int slotIndex) {
-        return ItemStack.EMPTY;
+        Slot slot = this.slots.get(slotIndex);
+        if (slot == null || !slot.hasItem()) return ItemStack.EMPTY;
+
+        ItemStack current = slot.getItem();
+        ItemStack result = current.copy();
+
+        if (slotIndex < IO_SLOT_COUNT) {
+            if (!this.moveItemStackTo(current, IO_SLOT_COUNT, IO_SLOT_COUNT + 36, true)) {
+                return ItemStack.EMPTY;
+            }
+        } else if (current.is(Items.ENCHANTED_BOOK)) {
+            if (!this.moveItemStackTo(current, DEPOSIT_SLOT, DEPOSIT_SLOT + 1, false)) {
+                return ItemStack.EMPTY;
+            }
+        } else {
+            if (!this.moveItemStackTo(current, SCRATCH_SLOT, SCRATCH_SLOT + 1, false)) {
+                return ItemStack.EMPTY;
+            }
+        }
+
+        if (current.isEmpty()) {
+            slot.setByPlayer(ItemStack.EMPTY);
+        } else {
+            slot.setChanged();
+        }
+        return result;
     }
 
     /**

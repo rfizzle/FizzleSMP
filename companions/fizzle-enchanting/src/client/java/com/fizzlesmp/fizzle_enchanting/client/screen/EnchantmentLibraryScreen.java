@@ -80,6 +80,10 @@ public class EnchantmentLibraryScreen extends AbstractContainerScreen<Enchantmen
     }
 
     @Override
+    protected void renderLabels(GuiGraphics gfx, int mouseX, int mouseY) {
+    }
+
+    @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if (this.minecraft != null && this.minecraft.options.keyInventory.matches(keyCode, scanCode)
                 && this.getFocused() == this.filter) {
@@ -320,7 +324,13 @@ public class EnchantmentLibraryScreen extends AbstractContainerScreen<Enchantmen
         Enchantment ench = registry.get(key);
         if (ench == null) return false;
         Holder<Enchantment> holder = registry.wrapAsHolder(ench);
-        return ench.canEnchant(stack);
+        if (!ench.canEnchant(stack)) return false;
+        ItemEnchantments existing = stack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
+        for (var entry : existing.entrySet()) {
+            if (entry.getKey().is(key)) continue;
+            if (!Enchantment.areCompatible(entry.getKey(), holder)) return false;
+        }
+        return true;
     }
 
     private int getCurrentLevel(ItemStack stack, ResourceKey<Enchantment> key) {
