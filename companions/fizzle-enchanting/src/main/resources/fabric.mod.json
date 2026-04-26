@@ -25,7 +25,9 @@
             "com.fizzlesmp.fizzle_enchanting.gametest.TomeRegistryGameTest",
             "com.fizzlesmp.fizzle_enchanting.gametest.TomeAnvilGameTest",
             "com.fizzlesmp.fizzle_enchanting.gametest.CraftingButtonGameTest",
-            "com.fizzlesmp.fizzle_enchanting.gametest.SpecialtyMaterialsGameTest"
+            "com.fizzlesmp.fizzle_enchanting.gametest.SpecialtyMaterialsGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.AdvancementCodecGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.TomeRecipeClassifierGameTest"
         ],
         "emi": ["com.fizzlesmp.fizzle_enchanting.compat.emi.EmiEnchantingPlugin"],
         "rei_client": ["com.fizzlesmp.fizzle_enchanting.compat.rei.ReiEnchantingPlugin"],

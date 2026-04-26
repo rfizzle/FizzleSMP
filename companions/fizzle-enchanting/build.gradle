@@ -206,11 +206,6 @@ configurations.testRuntimeClasspath {
 
 test {
     useJUnitPlatform()
-    // Legacy tests reflectively unfreeze BuiltInRegistries and register mod items/menus,
-    // which latches the registry for the JVM's lifetime. Per-class forking keeps each one
-    // isolated. Remove this line once the Phase 3 Tier-3 rewrites have removed every test
-    // that calls unfreeze/register (see TESTING-TODO.md, Task S-0.1 acceptance).
-    forkEvery = 1
 }
 
 processResources {

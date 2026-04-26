@@ -1,15 +1,12 @@
+// Tier: 2 (fabric-loader-junit)
 package com.fizzlesmp.fizzle_enchanting.compat.common;
 
 import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
 import com.fizzlesmp.fizzle_enchanting.enchanting.recipe.EnchantingRecipe;
-import com.fizzlesmp.fizzle_enchanting.enchanting.recipe.EnchantingRecipeRegistry;
 import com.fizzlesmp.fizzle_enchanting.enchanting.recipe.KeepNbtEnchantingRecipe;
 import com.fizzlesmp.fizzle_enchanting.enchanting.recipe.StatRequirements;
 import net.minecraft.SharedConstants;
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.item.ItemStack;
@@ -20,7 +17,6 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.OptionalInt;
@@ -33,25 +29,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * T-7.1.2 — proves the shared {@link TableCraftingDisplayExtractor} pulls both recipe types out
- * of the live {@link RecipeManager} and tags each one with its {@code keepNbt} flag so REI/JEI/EMI
- * plugins can render the components-preserving variant differently.
- *
- * <p>No EMI runtime is needed: the extractor stays Minecraft-only on purpose so this same test
- * covers the data path for every viewer integration.
- */
 class TableCraftingDisplayExtractorTest {
 
     @BeforeAll
-    static void bootstrap() throws Exception {
+    static void bootstrap() {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
-        unfreeze(BuiltInRegistries.RECIPE_TYPE);
-        unfreeze(BuiltInRegistries.RECIPE_SERIALIZER);
-        EnchantingRecipeRegistry.register();
-        BuiltInRegistries.RECIPE_TYPE.freeze();
-        BuiltInRegistries.RECIPE_SERIALIZER.freeze();
     }
 
     @Test
@@ -140,9 +123,4 @@ class TableCraftingDisplayExtractorTest {
         return manager;
     }
 
-    private static void unfreeze(Registry<?> registry) throws Exception {
-        Field frozen = MappedRegistry.class.getDeclaredField("frozen");
-        frozen.setAccessible(true);
-        frozen.setBoolean(registry, false);
-    }
 }
