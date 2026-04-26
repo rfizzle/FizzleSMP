@@ -28,7 +28,6 @@ class FizzleEnchantingConfigTest {
         assertNotNull(cfg.library);
         assertNotNull(cfg.tomes);
         assertNotNull(cfg.warden);
-        assertNotNull(cfg.foreignEnchantments);
         assertNotNull(cfg.display);
 
         // enchantingTable.maxEterna — clamp [1, 100]
@@ -88,7 +87,6 @@ class FizzleEnchantingConfigTest {
         assertEquals(1.0, cfg.warden.tendrilDropChance);
         assertEquals(0.10, cfg.warden.tendrilLootingBonus);
 
-        assertEquals(true, cfg.foreignEnchantments.applyBundledOverrides);
 
         assertEquals(true, cfg.display.showBookTooltips);
         assertEquals("#FF6600", cfg.display.overLeveledColor);
@@ -106,7 +104,6 @@ class FizzleEnchantingConfigTest {
         assertEquals(0, loaded.library.ioRateLimitTicks);
         assertEquals(3, loaded.tomes.scrapTomeXpCost);
         assertEquals(1.0, loaded.warden.tendrilDropChance);
-        assertEquals(true, loaded.foreignEnchantments.applyBundledOverrides);
         assertEquals("#FF6600", loaded.display.overLeveledColor);
     }
 
@@ -146,9 +143,6 @@ class FizzleEnchantingConfigTest {
         assertNotNull(loaded.warden);
         assertEquals(1.0, loaded.warden.tendrilDropChance);
         assertEquals(0.10, loaded.warden.tendrilLootingBonus);
-
-        assertNotNull(loaded.foreignEnchantments);
-        assertEquals(true, loaded.foreignEnchantments.applyBundledOverrides);
 
         assertNotNull(loaded.display);
         assertEquals(true, loaded.display.showBookTooltips);
@@ -244,7 +238,6 @@ class FizzleEnchantingConfigTest {
         original.library.ioRateLimitTicks = 20;
         original.tomes.extractionTomeRepairPercent = 0.5;
         original.warden.tendrilLootingBonus = 0.33;
-        original.foreignEnchantments.applyBundledOverrides = false;
         original.display.overLeveledColor = "#AABBCC";
         original.save(path);
 
@@ -257,7 +250,6 @@ class FizzleEnchantingConfigTest {
         assertEquals(20, reloaded.library.ioRateLimitTicks);
         assertEquals(0.5, reloaded.tomes.extractionTomeRepairPercent);
         assertEquals(0.33, reloaded.warden.tendrilLootingBonus);
-        assertEquals(false, reloaded.foreignEnchantments.applyBundledOverrides);
         assertEquals("#AABBCC", reloaded.display.overLeveledColor);
     }
 

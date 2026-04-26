@@ -30,7 +30,6 @@ public class FizzleEnchantingConfig {
     public Library library = new Library();
     public Tomes tomes = new Tomes();
     public Warden warden = new Warden();
-    public ForeignEnchantments foreignEnchantments = new ForeignEnchantments();
     public Display display = new Display();
 
     public static FizzleEnchantingConfig load() {
@@ -116,7 +115,6 @@ public class FizzleEnchantingConfig {
         if (library == null) library = new Library();
         if (tomes == null) tomes = new Tomes();
         if (warden == null) warden = new Warden();
-        if (foreignEnchantments == null) foreignEnchantments = new ForeignEnchantments();
         if (display == null) display = new Display();
     }
 
@@ -226,10 +224,6 @@ public class FizzleEnchantingConfig {
     public static class Warden {
         public double tendrilDropChance = 1.0;
         public double tendrilLootingBonus = 0.10;
-    }
-
-    public static class ForeignEnchantments {
-        public boolean applyBundledOverrides = true;
     }
 
     public static class Display {

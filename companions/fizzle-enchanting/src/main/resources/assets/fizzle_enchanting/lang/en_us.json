@@ -16,7 +16,6 @@
     "tooltip.fizzle_enchanting.enchlib.extracting": "Extracting: Level %s",
     "tooltip.fizzle_enchanting.enchlib.cost": "Cost: %s points",
     "tooltip.fizzle_enchanting.enchlib.unavailable": "Cannot extract — insufficient max level",
-    "pack.fizzle_enchanting.foreign_overrides.description": "Fizzle Enchanting — Foreign Enchantment Overrides (Mending / Soulbound weight bumps)",
     "emi.category.fizzle_enchanting.shelves": "Fizzle Enchanting — Shelves",
     "emi.category.fizzle_enchanting.tomes": "Fizzle Enchanting — Tomes",
     "emi.fizzle_enchanting.recipe.keep_nbt": "Preserves enchantments",
