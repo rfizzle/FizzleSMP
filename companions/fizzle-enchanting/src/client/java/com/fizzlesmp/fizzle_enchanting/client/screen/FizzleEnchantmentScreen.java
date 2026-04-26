@@ -3,6 +3,7 @@ package com.fizzlesmp.fizzle_enchanting.client.screen;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentLogic;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
 import com.fizzlesmp.fizzle_enchanting.enchanting.StatCollection;
+import com.fizzlesmp.fizzle_enchanting.enchanting.recipe.EnchantingRecipeRegistry;
 import com.fizzlesmp.fizzle_enchanting.net.CraftingResultEntry;
 import com.fizzlesmp.fizzle_enchanting.net.EnchantmentClue;
 import com.google.common.collect.Lists;
@@ -18,7 +19,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.inventory.EnchantmentMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.util.List;
@@ -136,6 +140,18 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
             gfx.blit(TEXTURE, xCenter + 59, yCenter + 95, 0, 207,
                     (int) (this.arcana / 100F * 110), 5);
         }
+
+        if (isInfoButtonVisible()) {
+            int btnX = xCenter + 148;
+            int btnY = yCenter + 1;
+            boolean hovered = mouseX >= btnX && mouseX < btnX + 20 && mouseY >= btnY && mouseY < btnY + 12;
+            int bg = hovered ? 0xFF4A6A8A : 0xFF2A3A5A;
+            int border = hovered ? 0xFF8AB0DD : 0xFF5A7AAA;
+            gfx.fill(btnX, btnY, btnX + 20, btnY + 12, bg);
+            gfx.renderOutline(btnX, btnY, 20, 12, border);
+            int textColor = hovered ? 0xFFFFFF : 0xCCDDEE;
+            gfx.drawString(this.font, "i", btnX + 8, btnY + 2, textColor, false);
+        }
     }
 
     @Override
@@ -209,7 +225,17 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
                 List<EnchantmentClue> clues = fizzleMenu.getClientClues(slot);
                 boolean exhausted = fizzleMenu.isClientCluesExhausted(slot);
 
-                if (!clues.isEmpty()) {
+                boolean isInfusionFailed = slot == FizzleEnchantmentLogic.CRAFTING_SLOT
+                        && clues.isEmpty()
+                        && isInfusionFailedForInput();
+
+                if (isInfusionFailed) {
+                    lines.add(Component.translatable("info.fizzle_enchanting.enchant.infusion")
+                            .withStyle(ChatFormatting.GOLD, ChatFormatting.ITALIC));
+                    lines.add(Component.literal(""));
+                    lines.add(Component.translatable("info.fizzle_enchanting.enchant.infusion_failed")
+                            .withStyle(ChatFormatting.RED));
+                } else if (!clues.isEmpty()) {
                     lines.add(Component.translatable("info.fizzle_enchanting.enchant.clues"
                             + (exhausted ? "_all" : ""))
                             .withStyle(ChatFormatting.YELLOW, ChatFormatting.UNDERLINE));
@@ -218,6 +244,11 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
                     for (EnchantmentClue clue : clues) {
                         Optional<Holder.Reference<Enchantment>> holder = registry.getHolder(clue.enchantment());
                         holder.ifPresent(ref -> lines.add(Enchantment.getFullname(ref, clue.level())));
+                    }
+                    if (slot == FizzleEnchantmentLogic.CRAFTING_SLOT && isInfusionFailedForInput()) {
+                        lines.add(Component.literal(""));
+                        lines.add(Component.translatable("info.fizzle_enchanting.enchant.infusion_failed")
+                                .withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
                     }
                 } else {
                     lines.add(Component.translatable("info.fizzle_enchanting.enchant.no_clue")
@@ -260,12 +291,34 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
                     Component.literal(String.format("Arcana: %.1f%%", stats.arcana()))),
                     mouseX, mouseY);
         }
+
+        if (isInfoButtonVisible()) {
+            int btnX = this.leftPos + 148;
+            int btnY = this.topPos + 1;
+            if (mouseX >= btnX && mouseX < btnX + 20 && mouseY >= btnY && mouseY < btnY + 12) {
+                gfx.renderComponentTooltip(this.font, Lists.newArrayList(
+                        Component.translatable("gui.fizzle_enchanting.enchant_info.info_button")),
+                        mouseX, mouseY);
+            }
+        }
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
+
+        if (isInfoButtonVisible()) {
+            int btnX = i + 148;
+            int btnY = j + 1;
+            if (mouseX >= btnX && mouseX < btnX + 20 && mouseY >= btnY && mouseY < btnY + 12) {
+                this.minecraft.getSoundManager().play(
+                        SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                this.minecraft.setScreen(new EnchantingInfoScreen(this));
+                return true;
+            }
+        }
+
         for (int k = 0; k < 3; ++k) {
             double d0 = mouseX - (double) (i + 60);
             double d1 = mouseY - (double) (j + 14 + 19 * k);
@@ -287,5 +340,19 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
 
     private Optional<CraftingResultEntry> craftingResult() {
         return fizzleMenu != null ? fizzleMenu.lastCraftingResult() : Optional.empty();
+    }
+
+    private boolean isInfoButtonVisible() {
+        if (fizzleMenu == null) return false;
+        return this.menu.getSlot(0).hasItem()
+                && (this.menu.costs[0] > 0 || this.menu.costs[1] > 0 || this.menu.costs[2] > 0);
+    }
+
+    private boolean isInfusionFailedForInput() {
+        if (fizzleMenu == null || this.minecraft == null || this.minecraft.level == null) return false;
+        ItemStack input = this.menu.getSlot(0).getItem();
+        if (input.isEmpty()) return false;
+        return craftingResult().isEmpty()
+                && EnchantingRecipeRegistry.hasItemMatch(this.minecraft.level.getRecipeManager(), input);
     }
 }

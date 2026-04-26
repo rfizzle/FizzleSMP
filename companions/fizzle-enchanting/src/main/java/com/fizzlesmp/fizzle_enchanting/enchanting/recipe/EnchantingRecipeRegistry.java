@@ -81,14 +81,32 @@ public final class EnchantingRecipeRegistry {
     }
 
     /**
+     * Returns {@code true} when any enchanting recipe's ingredient accepts {@code input},
+     * regardless of stat requirements. Used by the client to detect an "infusion failed" state
+     * (item is infusable but current table stats are insufficient).
+     */
+    public static boolean hasItemMatch(RecipeManager recipes, ItemStack input) {
+        if (input.isEmpty()) return false;
+        for (RecipeHolder<? extends EnchantingRecipe> holder : getAllRecipes(recipes)) {
+            if (holder.value().getInput().test(input)) return true;
+        }
+        return false;
+    }
+
+    private static List<RecipeHolder<? extends EnchantingRecipe>> getAllRecipes(RecipeManager recipes) {
+        List<RecipeHolder<? extends EnchantingRecipe>> all = new ArrayList<>();
+        all.addAll(recipes.getAllRecipesFor(ENCHANTING_TYPE));
+        all.addAll(recipes.getAllRecipesFor(KEEP_NBT_TYPE));
+        return all;
+    }
+
+    /**
      * {@link RecipeManager}-scoped overload, carved out so unit tests can exercise the matcher
      * without standing up a full {@link Level}.
      */
     public static Optional<RecipeHolder<? extends Recipe<SingleRecipeInput>>> findMatch(
             RecipeManager recipes, ItemStack input, StatCollection stats) {
-        List<RecipeHolder<? extends EnchantingRecipe>> candidates = new ArrayList<>();
-        candidates.addAll(recipes.getAllRecipesFor(ENCHANTING_TYPE));
-        candidates.addAll(recipes.getAllRecipesFor(KEEP_NBT_TYPE));
+        List<RecipeHolder<? extends EnchantingRecipe>> candidates = new ArrayList<>(getAllRecipes(recipes));
         candidates.sort(Comparator.comparingDouble(
                 (RecipeHolder<? extends EnchantingRecipe> r) -> r.value().getRequirements().eterna()).reversed());
 

@@ -762,7 +762,7 @@ Key gaps:
 | 1 | Project Structure & Build | [x] Complete | 100% |
 | 2 | Core Stat System | [x] Complete | 100% |
 | 3 | Selection Algorithm | [x] Complete | ~95% (arcana model differs by design) |
-| 4 | GUI / Screen | [x] Complete | ~85% (no info button, no "infusion failed" display) |
+| 4 | GUI / Screen | [x] Complete | ~95% (info button + info browser + infusion failed display) |
 | 5 | Shelf Blocks | [x] Complete | 100% (31 shelves, all tiers, all data-driven) |
 | 6 | Special Shelves | [x] Complete | ~90% (rectification float vs stability boolean) |
 | 7 | Infusion Recipes | [~] Partial | ~70% (system done, 7 recipes vs Apothic's 20) |
@@ -778,7 +778,7 @@ Key gaps:
 | 17 | Data-Driven Audit | [x] Complete | ~90% (all JSON-driven except arcana weights) |
 | 18 | Mixins & Hooks | [x] Complete | Lean (4 mixins vs Apothic's 18; Fabric API covers the rest) |
 | 19 | Items & Misc | [~] Partial | ~60% (missing Inert Trident, Ender Leads, Music Discs) |
-| 20 | Third-Party Integration | [x] Complete | ~95% (EMI+REI+JEI+Jade+ModMenu; no WTHIT) |
+| 20 | Third-Party Integration | [x] Complete | ~100% (EMI+REI+JEI+Jade+WTHIT+ModMenu) |
 
 ---
 
@@ -814,6 +814,9 @@ Key gaps:
 - ModMenu config GUI integration via Cloth Config (all 8 config sections exposed)
 - Custom `enchanted_at_table` advancement trigger with item/level/eterna/quanta/arcana/rectification predicates
 - 18 advancements including 2 stat-milestone advancements (high quanta, high arcana) using the custom trigger
+- Enchantment info browser screen (info button on enchanting GUI, power slider, scrollable list, arcana weight table, exclusion tooltips)
+- "Infusion Failed" display on slot 2 tooltip when item matches an infusion recipe but stats are insufficient
+- WTHIT integration (enchanting table stats + library summary, split common/client plugin via waila_plugins.json)
 
 ### PARTIAL (started but incomplete)
 
@@ -822,11 +825,11 @@ Key gaps:
 - **Stability model** — Rectification is a float stat (0-100) contributed by Rectifier shelves (T1/T2/T3) instead of a binary `stable` flag from a Geode Shelf. Functionally richer but different API shape.
 - **Config system** — Server-side JSON config with 8 sections; no per-enchantment overrides, no power functions, no config sync to client.
 - **API surface** — Marker interfaces (IEnchantingStatProvider, TreasureFlagSource, BlacklistSource) + EnchantingStatRegistry lookup. No EnchantableItem interface, no IMC channel.
-- **Tooltips** — Cost/clues/enchantability shown. No rarity weight table tooltip (by design). No enchantment info browser screen.
+- **Tooltips** — Cost/clues/enchantability shown. Info browser screen with rarity weight table now available via info button.
 
 ### NOT IMPLEMENTED (gaps)
 
-- **Enchantment info browser** — No info button on enchanting screen, no EnchantingInfoScreen equivalent
+- ~~**Enchantment info browser** — No info button on enchanting screen, no EnchantingInfoScreen equivalent~~ ✓ DONE
 - **9 slot-filtered tomes** — Helmet/Chest/Legs/Boots/Weapon/Pickaxe/Bow/Fishing/Other tomes not implemented (intentional cut)
 - **Inert Trident item** — No trident infusion path
 - **Ender Lead (3 tiers)** — Flimsy/Normal/Occult ender leads not implemented
@@ -837,7 +840,7 @@ Key gaps:
 - **Enchantment max level override mixin** — Cannot enforce hard level caps at the enchantment class level
 - **Item enchantability global override** — No mixin on Item#getEnchantability()
 - **Enchantment text color for above-max levels** — Tooltip recoloring exists but no mixin-level color override
-- **WTHIT integration** — Jade only
+- ~~**WTHIT integration** — Jade only~~ ✓ DONE
 - **Trinket/Accessory API** — Not integrated
 - ~~**fabric.mod.json suggests/recommends**~~ — DONE: added `suggests` block for EMI, REI, JEI, Jade
 
@@ -872,10 +875,10 @@ Key gaps:
 6. ~~ModMenu config GUI integration (Cloth Config screen with all 8 config sections)~~ ✓
 7. ~~Custom advancement trigger for "enchanted at table" (item/level/eterna/quanta/arcana/rectification criteria)~~ ✓
 
-**Tier 3 — Nice to have, can defer:**
-8. Enchantment info browser screen (info button on enchanting GUI)
-9. "Infusion Failed" display when item is infusable but stats don't match
-10. WTHIT integration as Jade fallback
+**Tier 3 — Nice to have, can defer: ✓ COMPLETE**
+8. ~~Enchantment info browser screen (info button on enchanting GUI)~~ ✓
+9. ~~"Infusion Failed" display when item is infusable but stats don't match~~ ✓
+10. ~~WTHIT integration as Jade fallback~~ ✓
 11. Inert Trident + infusion recipe
 12. Ender Lead (3 tiers) + infusion recipes
 

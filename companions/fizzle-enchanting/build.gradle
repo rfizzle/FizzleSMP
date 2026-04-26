@@ -101,6 +101,14 @@ repositories {
             includeGroup 'maven.modrinth'
         }
     }
+    maven {
+        name = 'Bai'
+        url = 'https://maven2.bai.lol'
+        content {
+            includeGroup 'lol.bai'
+            includeGroup 'mcp.mobius.waila'
+        }
+    }
 }
 
 loom {
@@ -186,6 +194,11 @@ dependencies {
     // artifact into the dev client so the tooltip renders in-game during development.
     modCompileOnly "maven.modrinth:jade:${project.jade_version}"
     modLocalRuntime "maven.modrinth:jade:${project.jade_version}"
+
+    // WTHIT 12.x — Alternative probe-tooltip integration (Jade fallback). Compile-only against
+    // the API split so the production jar only links WTHIT API types; players who install WTHIT
+    // instead of Jade get the same stat display. Discovered via waila_plugins.json at runtime.
+    modCompileOnly "mcp.mobius.waila:wthit-api:${project.wthit_version}"
 
     // ModMenu 11.x — Config screen entry point for Fabric 1.21.1. Compile-only + dev runtime
     // so end users get the integration only when they install ModMenu themselves.

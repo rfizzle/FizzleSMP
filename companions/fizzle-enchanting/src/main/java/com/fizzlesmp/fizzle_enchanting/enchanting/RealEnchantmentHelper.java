@@ -34,7 +34,7 @@ import java.util.Set;
 public final class RealEnchantmentHelper {
 
     /** Fallback when called before {@link FizzleEnchanting#onInitialize} has populated the config. */
-    static final int DEFAULT_MAX_ETERNA = 100;
+    public static final int DEFAULT_MAX_ETERNA = 100;
 
     private RealEnchantmentHelper() {
     }
@@ -206,7 +206,7 @@ public final class RealEnchantmentHelper {
      * {@code power >= minCost(L)} and either {@code power >= maxCost(L)} or {@code L} is the
      * minimum level).
      */
-    static List<EnchantmentInstance> getAvailableEnchantmentResults(
+    public static List<EnchantmentInstance> getAvailableEnchantmentResults(
             int power,
             ItemStack stack,
             Registry<Enchantment> registry,
@@ -352,12 +352,16 @@ public final class RealEnchantmentHelper {
      * the Arcana rarity bucket matching the wrapped enchantment's own weight — so increasing
      * arcana tilts the pool toward rarer picks without mutating the enchantment registry.
      */
-    static final class ArcanaEnchantmentData extends WeightedEntry.IntrusiveBase {
+    public static final class ArcanaEnchantmentData extends WeightedEntry.IntrusiveBase {
         final EnchantmentInstance data;
 
-        ArcanaEnchantmentData(Arcana arcana, EnchantmentInstance data) {
+        public ArcanaEnchantmentData(Arcana arcana, EnchantmentInstance data) {
             super(arcana.getRarities()[rarityBucket(data.enchantment.value().getWeight())]);
             this.data = data;
+        }
+
+        public EnchantmentInstance getInstance() {
+            return data;
         }
     }
 

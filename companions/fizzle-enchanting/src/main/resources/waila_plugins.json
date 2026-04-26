@@ -1,0 +1,12 @@
+{
+    "fizzle_enchanting:wthit": {
+        "entrypoints": {
+            "common": "com.fizzlesmp.fizzle_enchanting.compat.wthit.WthitCommonPlugin",
+            "client": "com.fizzlesmp.fizzle_enchanting.compat.wthit.WthitClientPlugin"
+        },
+        "side": "*",
+        "required": {
+            "wthit": "*"
+        }
+    }
+}
