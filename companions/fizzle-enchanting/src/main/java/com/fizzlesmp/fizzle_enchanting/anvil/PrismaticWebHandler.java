@@ -62,13 +62,18 @@ public final class PrismaticWebHandler implements AnvilHandler {
             return Optional.empty();
         }
 
-        ItemStack output = left.copy();
-        EnchantmentHelper.updateEnchantments(output,
-                mutable -> mutable.removeIf(holder -> holder.is(EnchantmentTags.CURSE)));
+        ItemStack output = stripCurses(left);
         return Optional.of(new AnvilResult(output, config.anvil.prismaticWebLevelCost, 1));
     }
 
-    private static boolean hasAnyCurse(ItemEnchantments enchantments) {
+    static ItemStack stripCurses(ItemStack input) {
+        ItemStack output = input.copy();
+        EnchantmentHelper.updateEnchantments(output,
+                mutable -> mutable.removeIf(holder -> holder.is(EnchantmentTags.CURSE)));
+        return output;
+    }
+
+    static boolean hasAnyCurse(ItemEnchantments enchantments) {
         for (Holder<Enchantment> holder : enchantments.keySet()) {
             if (holder.is(EnchantmentTags.CURSE)) {
                 return true;

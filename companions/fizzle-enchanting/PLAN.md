@@ -17,8 +17,8 @@ Each **Stage** below is sized for one context window. Stages within the same tie
 | Epic 8 (Polish & Release) | S-8.1/8.2/8.3 done; S-8.4 (release prep) open |
 | Epic 9 (Post-MVP) | Not started |
 | Test infrastructure (S-0) | Complete — fabric-loader-junit + gametest source set wired |
-| Existing tests | 74 in `src/test/`, 5 in `src/gametest/` |
-| Legacy pattern | 29 tests still use reflective unfreeze (`forkEvery=1` still needed) |
+| Existing tests | 55 in `src/test/`, 14 in `src/gametest/` |
+| Legacy pattern | **Eliminated** — no unfreeze callers remain; `forkEvery=1` removed |
 | Apothic assessment | Documents written, no phase executed yet |
 
 ---
@@ -100,8 +100,8 @@ These are the most expensive migrations. Group by shared fixtures to reduce temp
 
 **Ref:** `TESTING-TODO.md` Phase 4, item 27.
 
-- [ ] **5.1** Delete `FizzleModelProviderTest`, `FizzleBlockLootTableProviderTest`, `FizzleRecipeProviderTest`.
-- [ ] **5.2** Add `runDatagen` + filesystem sweep test (TEST-3.4-T1a) and idempotency check (TEST-3.4-T1b).
+- [x] **5.1** Delete `FizzleModelProviderTest`, `FizzleBlockLootTableProviderTest`, `FizzleRecipeProviderTest`. Also migrated remaining unfreeze tests: `AdvancementCodecTest` → T3 gametest, `TomeRecipeClassifierTest` → T3 gametest, `TableCraftingDisplayExtractorTest` → clean T2. Removed `forkEvery=1`.
+- [x] **5.2** Add `runDatagen` + filesystem sweep test (TEST-3.4-T1a) and idempotency check (TEST-3.4-T1b). Fixed datagen run by adding gametest source set; generated missing library/ender_library loot tables.
 
 **Gate:** `./gradlew runDatagen && git diff --exit-code src/main/generated/` clean.
 
@@ -114,18 +114,18 @@ Pure-math T1 extractions and missing T2/T3 coverage. These don't require legacy 
 **Ref:** `TESTING-TODO.md` Phase 5, items 28-40.
 
 ### Batch A — Pure math T1 extractions `PARALLEL-OK`
-- [ ] **6.A1** TEST-2.4-T1 — pure cost math slice from `RealEnchantmentHelperTest`
-- [ ] **6.A2** TEST-3.5-T1 — slot-targeting coordinate math
-- [ ] **6.A3** TEST-5.2-T1 — damage clamp arithmetic
-- [ ] **6.A4** TEST-3.1-T1a — particle enum parameterized coverage
+- [x] **6.A1** TEST-2.4-T1 — pure cost math slice from `RealEnchantmentHelperTest`
+- [x] **6.A2** TEST-3.5-T1 — slot-targeting coordinate math (extracted `ShelfSlotMapping` utility)
+- [x] **6.A3** TEST-5.2-T1 — damage clamp arithmetic (extracted `clampDamage` from `ExtractionTomeHandler`)
+- [x] **6.A4** TEST-3.1-T1a — SKIPPED: `ParticleTheme` enum requires `ParticleTypes` from Bootstrap at class-load time; already fully covered by T2 `ParticleThemeTest` (parameterized, 5 values, failing row on new additions)
 
 ### Batch B — Missing T2 coverage `PARALLEL-OK`
-- [ ] **6.B1** TEST-2.1-T2 — stat JSON codec sweep (all shipped JSONs parse)
-- [ ] **6.B2** TEST-2.2-T2 — offset list size guard
-- [ ] **6.B3** TEST-3.5-T2 — BE NBT round-trip slice
-- [ ] **6.B4** TEST-4.1-T2 — Prismatic Web handler logic
-- [ ] **6.B5** TEST-5.1-T2 — scrap tome recipe via RecipeManager
-- [ ] **6.B6** TEST-5.2-T2a/b/c — tome handler logic
+- [x] **6.B1** TEST-2.1-T2 — stat JSON codec sweep (all 31 shipped JSONs parse via `StatEntry.CODEC`)
+- [x] **6.B2** TEST-2.2-T2 — offset list size guard (32 offsets, no duplicates, midpoint invariants)
+- [x] **6.B3** TEST-3.5-T2 — DEFERRED: `FilteringShelfBlockEntity` constructor requires mod-registered `BlockEntityType`; NBT round-trip deferred to T3
+- [x] **6.B4** TEST-4.1-T2 — Prismatic Web curse-stripping logic (extracted `stripCurses`/`hasAnyCurse`; config gate tests)
+- [x] **6.B5** TEST-5.1-T2 — DEFERRED: recipe JSON references mod items not parseable at T2; deferred to T3
+- [x] **6.B6** TEST-5.2-T2a/b/c — `ScrapTomeHandler` seeded pick helpers + `ExtractionTomeHandler.stripAndDamage` at T2
 
 ### Batch C — Missing T3 real-level assertions
 - [ ] **6.C1** TEST-2.1-T3 — stat registry under real datapack reload

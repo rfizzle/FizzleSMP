@@ -130,6 +130,7 @@ loom {
         datagen {
             inherit server
             name "Data Generation"
+            source sourceSets.gametest
             vmArg "-Dfabric-api.datagen"
             vmArg "-Dfabric-api.datagen.output-dir=${file("src/main/generated")}"
             vmArg "-Dfabric-api.datagen.modid=fizzle_enchanting"
@@ -206,6 +207,35 @@ configurations.testRuntimeClasspath {
 
 test {
     useJUnitPlatform()
+    systemProperty 'fizzle.generated.dir', file('src/main/generated').absolutePath
+}
+
+tasks.register('verifyDatagenIdempotent') {
+    description = 'Runs datagen and asserts no tracked diffs or untracked files in src/main/generated/'
+    group = 'verification'
+    dependsOn 'runDatagen'
+    doLast {
+        def genDir = file('src/main/generated').absolutePath
+        def diffResult = providers.exec {
+            commandLine 'git', 'diff', '--exit-code', genDir
+            ignoreExitValue = true
+        }
+        if (diffResult.result.get().exitValue != 0) {
+            throw new GradleException(
+                    'src/main/generated/ has unstaged changes after runDatagen. ' +
+                    'Run ./gradlew runDatagen and commit the results.')
+        }
+        def untrackedOutput = providers.exec {
+            commandLine 'git', 'ls-files', '--others', '--exclude-standard', genDir
+            ignoreExitValue = true
+        }
+        def untracked = untrackedOutput.standardOutput.asText.get().trim()
+        if (!untracked.isEmpty()) {
+            throw new GradleException(
+                    'src/main/generated/ has untracked files after runDatagen:\n' + untracked +
+                    '\nRun ./gradlew runDatagen, then git add and commit the results.')
+        }
+    }
 }
 
 processResources {

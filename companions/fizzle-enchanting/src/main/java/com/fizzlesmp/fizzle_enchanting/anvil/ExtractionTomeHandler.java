@@ -110,11 +110,15 @@ public final class ExtractionTomeHandler implements AnvilHandler {
             preserved.set(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
         }
         if (preserved.isDamageableItem() && damageDelta > 0) {
-            int maxDamage = preserved.getMaxDamage();
-            int ceiling = Math.max(0, maxDamage - 1);
-            int proposed = preserved.getDamageValue() + damageDelta;
-            preserved.setDamageValue(Math.min(proposed, ceiling));
+            preserved.setDamageValue(
+                    clampDamage(preserved.getDamageValue(), damageDelta, preserved.getMaxDamage()));
         }
         return preserved;
+    }
+
+    static int clampDamage(int currentDamage, int damageDelta, int maxDamage) {
+        int ceiling = Math.max(0, maxDamage - 1);
+        int proposed = currentDamage + damageDelta;
+        return Math.min(proposed, ceiling);
     }
 }

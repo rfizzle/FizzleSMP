@@ -45,11 +45,6 @@ public class FilteringShelfBlock extends ChiseledBookShelfBlock implements IEnch
     public static final MapCodec<ChiseledBookShelfBlock> CODEC =
             (MapCodec) simpleCodec(FilteringShelfBlock::new);
 
-    /** Vanilla draws book sprites with a 1/16 padding from each cell edge; matches vanilla. */
-    private static final float SECTION_MARGIN = 0.0625F;
-    private static final float COLUMN_LOWER = 0.375F;
-    private static final float COLUMN_UPPER = 0.6875F;
-    private static final float COLUMN_RIGHT_MAX = 0.9375F;
 
     public FilteringShelfBlock(Properties properties) {
         super(properties);
@@ -153,23 +148,6 @@ public class FilteringShelfBlock extends ChiseledBookShelfBlock implements IEnch
                 return OptionalInt.empty();
             }
         }
-        int column = columnSection(horizontal);
-        if (column < 0) {
-            return OptionalInt.empty();
-        }
-        // Vertical: top row (slots 0/1/2) when y >= 0.5, bottom row (3/4/5) below.
-        if (dy < SECTION_MARGIN || dy > 1.0D - SECTION_MARGIN) {
-            return OptionalInt.empty();
-        }
-        int row = dy >= 0.5D ? 0 : 1;
-        return OptionalInt.of(row * 3 + column);
-    }
-
-    private static int columnSection(float h) {
-        if (h < SECTION_MARGIN) return -1;
-        if (h < COLUMN_LOWER) return 0;
-        if (h < COLUMN_UPPER) return 1;
-        if (h < COLUMN_RIGHT_MAX) return 2;
-        return -1;
+        return ShelfSlotMapping.computeSlot(horizontal, dy);
     }
 }
