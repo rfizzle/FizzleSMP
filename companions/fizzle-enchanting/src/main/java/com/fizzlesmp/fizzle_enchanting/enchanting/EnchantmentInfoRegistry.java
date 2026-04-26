@@ -10,6 +10,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
@@ -24,6 +25,7 @@ import java.util.Map;
 public final class EnchantmentInfoRegistry {
 
     private static final Map<ResourceKey<Enchantment>, EnchantmentInfo> INFO = new HashMap<>();
+    private static final IdentityHashMap<Enchantment, EnchantmentInfo> INSTANCE_INFO = new IdentityHashMap<>();
 
     private EnchantmentInfoRegistry() {
     }
@@ -40,6 +42,15 @@ public final class EnchantmentInfoRegistry {
         return EnchantmentInfo.fallback(ench);
     }
 
+    /**
+     * Returns the info for an {@link Enchantment} instance, or {@code null} if the registry
+     * has not been populated yet. Used by the {@code getMaxLevel()} mixin where only the
+     * bare instance is available (no {@link Holder}).
+     */
+    public static EnchantmentInfo getInfoByInstance(Enchantment ench) {
+        return INSTANCE_INFO.get(ench);
+    }
+
     public static Map<ResourceKey<Enchantment>, EnchantmentInfo> getAll() {
         return Collections.unmodifiableMap(INFO);
     }
@@ -50,6 +61,7 @@ public final class EnchantmentInfoRegistry {
      */
     public static void rebuild(Registry<Enchantment> registry, FizzleEnchantingConfig config) {
         INFO.clear();
+        INSTANCE_INFO.clear();
         Map<String, FizzleEnchantingConfig.EnchantmentOverride> overrides =
                 config.enchantmentOverrides != null ? config.enchantmentOverrides : Map.of();
         int overrideCount = 0;
@@ -58,12 +70,15 @@ public final class EnchantmentInfoRegistry {
             ResourceKey<Enchantment> key = holder.key();
             FizzleEnchantingConfig.EnchantmentOverride override =
                     overrides.get(key.location().toString());
+            EnchantmentInfo info;
             if (override != null) {
-                INFO.put(key, EnchantmentInfo.fromOverride(holder, override));
+                info = EnchantmentInfo.fromOverride(holder, override);
                 overrideCount++;
             } else {
-                INFO.put(key, EnchantmentInfo.fallback(holder));
+                info = EnchantmentInfo.fallback(holder);
             }
+            INFO.put(key, info);
+            INSTANCE_INFO.put(holder.value(), info);
         }
         FizzleEnchanting.LOGGER.info(
                 "Rebuilt enchantment info registry: {} enchantments, {} overrides",
@@ -75,7 +90,11 @@ public final class EnchantmentInfoRegistry {
      */
     public static void applyFromPayload(Map<ResourceKey<Enchantment>, EnchantmentInfo> data) {
         INFO.clear();
+        INSTANCE_INFO.clear();
         INFO.putAll(data);
+        for (EnchantmentInfo info : data.values()) {
+            INSTANCE_INFO.put(info.ench().value(), info);
+        }
     }
 
     /**

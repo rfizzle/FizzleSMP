@@ -7,7 +7,9 @@
         "AnvilMenuAccessor",
         "AnvilMenuMixin",
         "EnchantmentMenuAccessor",
-        "EnchantmentTableBlockMixin"
+        "EnchantmentMixin",
+        "EnchantmentTableBlockMixin",
+        "ItemMixin"
     ],
     "client": [],
     "injectors": {

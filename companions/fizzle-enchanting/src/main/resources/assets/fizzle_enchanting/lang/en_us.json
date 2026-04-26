@@ -278,6 +278,7 @@
     "config.fizzle_enchanting.allow_treasure_without_shelf": "Allow Treasure Without Shelf",
     "config.fizzle_enchanting.max_eterna": "Max Eterna",
     "config.fizzle_enchanting.show_level_indicator": "Show Level Indicator",
+    "config.fizzle_enchanting.global_min_enchantability": "Global Min Enchantability",
     "config.fizzle_enchanting.sculk_shrieker_chance": "Sculk Shelf Shrieker Chance",
     "config.fizzle_enchanting.sculk_particle_chance": "Sculk Particle Chance",
     "config.fizzle_enchanting.prismatic_web_removes_curses": "Prismatic Web Removes Curses",

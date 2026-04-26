@@ -68,6 +68,7 @@
         "jei": "*",
         "jade": "*",
         "wthit": "*",
-        "modmenu": "*"
+        "modmenu": "*",
+        "trinkets": "*"
     }
 }

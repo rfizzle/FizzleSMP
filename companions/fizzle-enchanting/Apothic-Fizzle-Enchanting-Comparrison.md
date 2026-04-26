@@ -665,11 +665,11 @@ Key gaps:
 **Checklist:**
 - [ ] Enchanting table screen replacement (mixin or screen factory)
 - [ ] Enchanting table menu replacement (mixin or menu factory)
-- [ ] Enchantment max level override hook
+- [x] Enchantment max level override hook
 - [ ] Anvil menu modification
 - [ ] Block stat check hook (all blocks implement stat interface)
-- [ ] Item enchantability override
-- [ ] Enchantment text color for above-max levels
+- [x] Item enchantability override
+- [x] Enchantment text color for above-max levels
 - [ ] Event handlers for: drops, healing, shield block, block break, entity interaction
 - [ ] Total mixin count and targets
 
@@ -740,7 +740,7 @@ Key gaps:
   - [ ] Custom recipe display
 - [ ] Block info integration (WTHIT or Jade)
   - [ ] Shelf stat display on hover
-- [ ] Trinket/accessory slot support (Trinkets or Accessories API)
+- [x] Trinket/accessory slot support (Trinkets or Accessories API)
 - [ ] Mod menu integration (config screen)
 
 **Output:**
@@ -776,9 +776,9 @@ Key gaps:
 | 15 | API Surface | [~] Partial | ~60% (marker interfaces + EnchantableItem, no IMC) |
 | 16 | Network Sync | [x] Complete | ~95% (StatsPayload + CluesPayload + EnchantmentInfoPayload) |
 | 17 | Data-Driven Audit | [x] Complete | ~90% (all JSON-driven except arcana weights) |
-| 18 | Mixins & Hooks | [x] Complete | Lean (4 mixins vs Apothic's 18; Fabric API covers the rest) |
+| 18 | Mixins & Hooks | [x] Complete | 6 mixins (enchantment max level, item enchantability, over-level color, enchanting table, anvil) |
 | 19 | Items & Misc | [~] Partial | ~60% (missing Inert Trident, Ender Leads, Music Discs) |
-| 20 | Third-Party Integration | [x] Complete | ~100% (EMI+REI+JEI+Jade+WTHIT+ModMenu) |
+| 20 | Third-Party Integration | [x] Complete | ~100% (EMI+REI+JEI+Jade+WTHIT+ModMenu+Trinkets) |
 
 ---
 
@@ -823,6 +823,10 @@ Key gaps:
 - EnchantmentInfoPayload S2C sync (sent on player join + datapack/config reload, carries full per-enchant info map)
 - EnchantableItem API interface (items can post-process enchantment selection; checked via instanceof in selection algorithm)
 - Selection algorithm uses EnchantmentInfo for maxLevel and power functions instead of vanilla getMaxLevel/getMinCost/getMaxCost
+- Enchantment.getMaxLevel() mixin — enforces configured max levels at the Enchantment class level (not just at selection time)
+- Item.getEnchantmentValue() mixin — global minimum enchantability (configurable, default 1) makes all items enchantable
+- Enchantment.getFullname() mixin — applies configurable over-leveled color when enchantment level exceeds vanilla max
+- Trinkets API integration — AccessorySlotHelper queries enchanted items in trinket/accessory slots (optional dep)
 
 ### PARTIAL (started but incomplete)
 
@@ -843,11 +847,11 @@ Key gaps:
 - **Corrupted damage type** — Not implemented
 - ~~**Per-enchantment config** — No max level overrides, no max loot level, no hard caps per enchant, no power functions~~ ✓ DONE
 - ~~**EnchantmentInfoPayload** — No config sync to client~~ ✓ DONE
-- **Enchantment max level override mixin** — Cannot enforce hard level caps at the enchantment class level (levelCap is enforced at selection time, not at the Enchantment class level)
-- **Item enchantability global override** — No mixin on Item#getEnchantability()
-- **Enchantment text color for above-max levels** — Tooltip recoloring exists but no mixin-level color override
+- ~~**Enchantment max level override mixin** — Cannot enforce hard level caps at the enchantment class level (levelCap is enforced at selection time, not at the Enchantment class level)~~ ✓ DONE
+- ~~**Item enchantability global override** — No mixin on Item#getEnchantability()~~ ✓ DONE
+- ~~**Enchantment text color for above-max levels** — Tooltip recoloring exists but no mixin-level color override~~ ✓ DONE
 - ~~**WTHIT integration** — Jade only~~ ✓ DONE
-- **Trinket/Accessory API** — Not integrated
+- ~~**Trinket/Accessory API** — Not integrated~~ ✓ DONE
 - ~~**fabric.mod.json suggests/recommends**~~ — DONE: added `suggests` block for EMI, REI, JEI, Jade
 
 ### INTENTIONALLY DIFFERENT (design divergences)

@@ -5,12 +5,8 @@ import com.fizzlesmp.fizzle_enchanting.config.FizzleEnchantingConfig;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextColor;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -42,12 +38,9 @@ public final class OverLeveledTooltipHandler {
                                   net.minecraft.world.item.TooltipFlag flag, List<Component> lines) {
         FizzleEnchantingConfig config = FizzleEnchanting.getConfig();
         if (config == null) return;
-        // Suppression runs before recolor: once book lines are stripped there's no row left to
-        // paint, and running it after would force the recolor to examine phantom lines.
         suppressStoredBookLines(stack, lines, config.display.showBookTooltips);
-        TextColor color = TooltipFormatter.parseColor(config.display.overLeveledColor);
-        recolor(stack, DataComponents.ENCHANTMENTS, lines, color);
-        recolor(stack, DataComponents.STORED_ENCHANTMENTS, lines, color);
+        // Over-leveled recoloring is now handled globally by the EnchantmentMixin injection
+        // on Enchantment.getFullname(), so tooltip lines arrive pre-colored.
     }
 
     private static void suppressStoredBookLines(ItemStack stack, List<Component> lines, boolean showBookTooltips) {
@@ -61,32 +54,4 @@ public final class OverLeveledTooltipHandler {
         TooltipFormatter.suppressBookLines(lines, bookLines, false);
     }
 
-    private static void recolor(ItemStack stack, DataComponentType<ItemEnchantments> type,
-                                List<Component> lines, TextColor color) {
-        ItemEnchantments enchantments = stack.get(type);
-        if (enchantments == null || enchantments.isEmpty()) return;
-        for (Object2IntMap.Entry<Holder<Enchantment>> entry : enchantments.entrySet()) {
-            Holder<Enchantment> holder = entry.getKey();
-            int level = entry.getIntValue();
-            ResourceKey<Enchantment> key = holder.unwrapKey().orElse(null);
-            if (key == null || !TooltipFormatter.isOverLeveled(key, level)) continue;
-            replaceLine(lines, Enchantment.getFullname(holder, level), color);
-        }
-    }
-
-    private static void replaceLine(List<Component> lines, Component target, TextColor color) {
-        String expected = target.getString();
-        for (int i = 0; i < lines.size(); i++) {
-            if (expected.equals(lines.get(i).getString())) {
-                lines.set(i, recolored(target, color));
-                return;
-            }
-        }
-    }
-
-    private static MutableComponent recolored(Component source, TextColor color) {
-        MutableComponent copy = source.copy();
-        copy.setStyle(copy.getStyle().withColor(color));
-        return copy;
-    }
 }

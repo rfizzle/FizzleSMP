@@ -45,6 +45,12 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setDefaultValue(true)
                     .setSaveConsumer(v -> current.enchantingTable.showLevelIndicator = v)
                     .build());
+            tableCategory.addEntry(entry.startIntSlider(
+                            Component.translatable("config.fizzle_enchanting.global_min_enchantability"),
+                            current.enchantingTable.globalMinEnchantability, 0, 100)
+                    .setDefaultValue(1)
+                    .setSaveConsumer(v -> current.enchantingTable.globalMinEnchantability = v)
+                    .build());
 
             // Shelves
             ConfigCategory shelvesCategory = builder.getOrCreateCategory(

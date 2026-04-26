@@ -1,0 +1,47 @@
+package com.fizzlesmp.fizzle_enchanting.mixin;
+
+import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
+import com.fizzlesmp.fizzle_enchanting.config.FizzleEnchantingConfig;
+import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantmentInfo;
+import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantmentInfoRegistry;
+import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextColor;
+import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.world.item.enchantment.Enchantment;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+@Mixin(Enchantment.class)
+public class EnchantmentMixin {
+
+    @Inject(method = "getMaxLevel", at = @At("RETURN"), cancellable = true)
+    private void fizzleEnchanting$overrideMaxLevel(CallbackInfoReturnable<Integer> cir) {
+        EnchantmentInfo info = EnchantmentInfoRegistry.getInfoByInstance((Enchantment) (Object) this);
+        if (info != null) {
+            int configured = info.getMaxLevel();
+            if (configured != cir.getReturnValueI()) {
+                cir.setReturnValue(configured);
+            }
+        }
+    }
+
+    @Inject(method = "getFullname", at = @At("RETURN"))
+    private static void fizzleEnchanting$applyOverLevelColor(
+            Holder<Enchantment> enchantment, int level, CallbackInfoReturnable<Component> cir) {
+        if (enchantment.is(EnchantmentTags.CURSE)) return;
+        int vanillaMax = enchantment.value().definition().maxLevel();
+        if (level <= vanillaMax) return;
+        Component result = cir.getReturnValue();
+        if (result instanceof MutableComponent mc) {
+            FizzleEnchantingConfig config = FizzleEnchanting.getConfig();
+            if (config == null) return;
+            TextColor color = TextColor.parseColor(config.display.overLeveledColor)
+                    .result().orElse(TextColor.fromRgb(0xFF6600));
+            mc.setStyle(mc.getStyle().withColor(color));
+        }
+    }
+}

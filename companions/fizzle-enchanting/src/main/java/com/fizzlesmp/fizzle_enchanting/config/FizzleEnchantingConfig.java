@@ -124,6 +124,8 @@ public class FizzleEnchantingConfig {
 
     private void validate() {
         enchantingTable.maxEterna = clampIntRange("enchantingTable.maxEterna", enchantingTable.maxEterna, 1, 100);
+        enchantingTable.globalMinEnchantability = clampIntRange(
+                "enchantingTable.globalMinEnchantability", enchantingTable.globalMinEnchantability, 0, 100);
 
         shelves.sculkShelfShriekerChance = clampUnit("shelves.sculkShelfShriekerChance", shelves.sculkShelfShriekerChance);
         shelves.sculkParticleChance = clampUnit("shelves.sculkParticleChance", shelves.sculkParticleChance);
@@ -214,6 +216,7 @@ public class FizzleEnchantingConfig {
         public boolean allowTreasureWithoutShelf = false;
         public int maxEterna = 100;
         public boolean showLevelIndicator = true;
+        public int globalMinEnchantability = 1;
     }
 
     public static class Shelves {
