@@ -17,8 +17,9 @@ Annotated reference for `config/fizzle_enchanting.json`. This is the operator-fa
   "configVersion": 1,
   "enchantingTable": {
     "allowTreasureWithoutShelf": false,
-    "maxEterna": 50,
-    "showLevelIndicator": true
+    "maxEterna": 100,
+    "showLevelIndicator": true,
+    "globalMinEnchantability": 1
   },
   "shelves": {
     "sculkShelfShriekerChance": 0.02,
@@ -43,13 +44,11 @@ Annotated reference for `config/fizzle_enchanting.json`. This is the operator-fa
     "tendrilDropChance": 1.0,
     "tendrilLootingBonus": 0.10
   },
-  "foreignEnchantments": {
-    "applyBundledOverrides": true
-  },
   "display": {
     "showBookTooltips": true,
     "overLeveledColor": "#FF6600"
-  }
+  },
+  "enchantmentOverrides": {}
 }
 ```
 
@@ -70,7 +69,7 @@ Example — vanilla-lite server that skips the treasure-shelf progression:
 "enchantingTable": { "allowTreasureWithoutShelf": true }
 ```
 
-### `maxEterna` *(int, default `50`)*
+### `maxEterna` *(int, default `100`)*
 
 Hard cap on the aggregated Eterna across all in-range shelves, regardless of individual shelf `maxEterna` contributions. The table also clamps each shelf's `maxEterna` contribution to this value at aggregation time.
 
@@ -86,6 +85,20 @@ Example — early-game cap:
 ### `showLevelIndicator` *(boolean, default `true`)*
 
 Toggles the one-line stat readout (`E: 50  Q: 12  A: 5  R: 10  C: 2`) rendered below the three enchant slots in the Fizzle enchanting screen. Set `false` for a cleaner UI at the cost of feedback while tuning shelf placement.
+
+### `globalMinEnchantability` *(int, default `1`)*
+
+Minimum enchantability value for all items. When an item's `getEnchantmentValue()` returns less than this value, the mod overrides it via a mixin on `Item`. This makes items that are normally unenchantable (shields, shears, flint-and-steel, etc.) enchantable at the table with an enchantability of at least this value.
+
+- **Clamp:** `[0, 100]`.
+- **Setting to 0:** disables the override entirely — only items that natively return a positive enchantability can be enchanted.
+- **Setting to 1 (default):** mirrors Apothic-Enchanting's behavior — every item becomes enchantable. Items with existing enchantability (swords, armor, etc.) keep their native values since the mixin only fires when the base return is 0.
+- **Setting higher (e.g. 15):** all previously-unenchantable items behave as if they had the enchantability of iron-tier equipment, making it much easier to roll multiple enchantments on them.
+
+Example — disable to restore vanilla enchantability:
+```json
+"enchantingTable": { "globalMinEnchantability": 0 }
+```
 
 ## `shelves`
 
@@ -192,16 +205,6 @@ Per-level-of-Looting probability [0.0–1.0] that a Warden drop-event yields a *
 
 - **Clamp:** unit (0.0–1.0).
 
-## `foreignEnchantments`
-
-Behavior of the bundled datapack overrides that raise weights on foreign mods' enchantments so they feed the library loop.
-
-### `applyBundledOverrides` *(boolean, default `true`)*
-
-When `true`, the bundled `data/minecraft/enchantment/mending.json` and `data/yigd/enchantment/soulbound.json` overrides are loaded normally — these raise weights without changing tag membership, so Mending still respects the treasure-shelf gate. When `false`, the mod restores upstream values via a higher-priority resource-pack source.
-
-Full writeup: [`docs/FOREIGN_ENCHANT_OVERRIDES.md`](FOREIGN_ENCHANT_OVERRIDES.md).
-
 ## `display`
 
 Client-only tooltip tweaks. Values are read client-side every tick; changes apply immediately on reload.
@@ -212,7 +215,7 @@ When `false`, the per-level enchantment lines on stored-book tooltips (e.g. "Sha
 
 ### `overLeveledColor` *(string, default `"#FF6600"`)*
 
-Hex color used to recolor enchantment lines whose level exceeds the vanilla cap (e.g. Sharpness 7 on a level-capped server). Must match the regex `^#[0-9A-Fa-f]{6}$`; invalid strings are replaced with `#FF6600` on load and warned.
+Hex color applied to enchantment names whose level exceeds the vanilla maximum (e.g. Sharpness VII when vanilla caps at V). The color is injected via a mixin on `Enchantment.getFullname()`, so it applies everywhere the enchantment name is rendered — tooltips, anvil UI, library screens, chat hover text, and any mod that calls `getFullname()`. Curses are excluded and always render in vanilla red. Must match the regex `^#[0-9A-Fa-f]{6}$`; invalid strings are replaced with `#FF6600` on load and warned.
 
 - **Accepted:** `"#FF6600"`, `"#ff6600"`, `"#AABBCC"`.
 - **Rejected:** `"FF6600"` (missing hash), `"#F60"` (3-digit), `"orange"` (named), `"#FF66001"` (7-digit).
@@ -222,11 +225,68 @@ Example — electric cyan instead of the default orange:
 "display": { "overLeveledColor": "#00E5FF" }
 ```
 
+## `enchantmentOverrides`
+
+Per-enchantment configuration overrides. Keys are fully-qualified enchantment IDs (e.g. `"minecraft:sharpness"`, `"fizzle_enchanting:vein_miner"`). Each entry is an object with three optional fields; use `-1` on any field to keep the vanilla default.
+
+These overrides are merged with vanilla defaults at server start and after datapack reload. The resulting `EnchantmentInfo` records are synced to clients via `EnchantmentInfoPayload` on join and reload, and enforced at the `Enchantment` class level via a mixin on `getMaxLevel()`.
+
+### Entry format
+
+```json
+"enchantmentOverrides": {
+  "minecraft:sharpness": {
+    "maxLevel": 10,
+    "maxLootLevel": 7,
+    "levelCap": 10
+  },
+  "minecraft:mending": {
+    "maxLevel": 3,
+    "maxLootLevel": -1,
+    "levelCap": -1
+  }
+}
+```
+
+### `maxLevel` *(int, default `-1`)*
+
+Maximum level the enchantment can reach at the enchanting table. Overrides the vanilla `Enchantment.getMaxLevel()` return value for the selection algorithm's power-window loop. `-1` means "use the vanilla definition's `maxLevel`".
+
+- **Clamp (when not -1):** `[1, 127]`.
+- **Mixin enforcement:** the `EnchantmentMixin` on `Enchantment.getMaxLevel()` returns this value globally — not just during table selection, but also for any code path that calls `getMaxLevel()` (anvil combining, loot table generation via other mods, etc.).
+
+### `maxLootLevel` *(int, default `-1`)*
+
+Maximum level the enchantment can appear at in loot tables and villager trades. Separate from `maxLevel` so operators can allow level 10 at the table while capping random loot at level 7. `-1` falls back to the vanilla `maxLevel`.
+
+- **Clamp (when not -1):** `[1, 127]`.
+
+### `levelCap` *(int, default `-1`)*
+
+Hard ceiling applied after both `maxLevel` and `maxLootLevel`. If set, the effective max level is `min(levelCap, maxLevel)` and the effective max loot level is `min(levelCap, maxLootLevel)`. Useful as a server-wide safety net — e.g. set `levelCap: 5` to prevent any enchantment from exceeding level V regardless of per-enchant `maxLevel` settings. `-1` disables the cap.
+
+- **Clamp (when not -1):** `[1, 127]`.
+
+Example — raise Sharpness to 10 at the table, cap loot at 7, hard-cap at 10:
+```json
+"enchantmentOverrides": {
+  "minecraft:sharpness": { "maxLevel": 10, "maxLootLevel": 7, "levelCap": 10 }
+}
+```
+
+Example — allow Mending to roll up to level 3 at the table (for faster repair):
+```json
+"enchantmentOverrides": {
+  "minecraft:mending": { "maxLevel": 3, "maxLootLevel": -1, "levelCap": -1 }
+}
+```
+
 ## Validation summary
 
 | Field | Rule |
 |---|---|
 | `enchantingTable.maxEterna` | clamp to `[1, 100]` |
+| `enchantingTable.globalMinEnchantability` | clamp to `[0, 100]` |
 | `shelves.sculkShelfShriekerChance` | `clampUnit` (0–1) |
 | `shelves.sculkParticleChance` | `clampUnit` (0–1) |
 | `anvil.prismaticWebLevelCost` | `clampNonNegative` |
@@ -239,9 +299,12 @@ Example — electric cyan instead of the default orange:
 | `warden.tendrilDropChance` | `clampUnit` (0–1) |
 | `warden.tendrilLootingBonus` | `clampUnit` (0–1) |
 | `display.overLeveledColor` | regex `^#[0-9A-Fa-f]{6}$`; on mismatch, fall back to `#FF6600` |
+| `enchantmentOverrides.*.maxLevel` | skip if `-1`; otherwise clamp to `[1, 127]` |
+| `enchantmentOverrides.*.maxLootLevel` | skip if `-1`; otherwise clamp to `[1, 127]` |
+| `enchantmentOverrides.*.levelCap` | skip if `-1`; otherwise clamp to `[1, 127]` |
 
 All other fields are typed but not clamped — booleans accept only `true`/`false` (malformed JSON falls back to the default for that field and logs).
 
 ## Forward compatibility
 
-Future iterations (see DESIGN.md § Iteration backlog) will introduce new top-level sections — for example a `"levelCaps"` block when the BeyondEnchant absorption lands. Existing `configVersion: 1` files pick these sections up automatically via the defaults-fill pass; no manual action is required. Dead stubs are **not** shipped ahead of time. If a schema-breaking rename lands later, `configVersion` gets bumped and a per-version migration runs on first load after the update.
+New top-level sections or fields are additive — existing `configVersion: 1` files pick them up automatically via the defaults-fill pass, no manual action required. Dead stubs are **not** shipped ahead of time. If a schema-breaking rename lands later, `configVersion` gets bumped and a per-version migration runs on first load after the update.
