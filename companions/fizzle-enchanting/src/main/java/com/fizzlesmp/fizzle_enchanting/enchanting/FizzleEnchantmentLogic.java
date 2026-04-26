@@ -88,9 +88,11 @@ public final class FizzleEnchantmentLogic {
         boolean treasureAllowed = stats.treasureAllowed() || allowTreasureWithoutShelf;
 
         random.setSeed(enchantmentSeed);
+        float eterna = stats.eterna();
+        if (eterna < 1.5F) eterna = 1.5F;
         int[] costs = new int[PREVIEW_SLOTS];
         for (int slot = 0; slot < PREVIEW_SLOTS; slot++) {
-            int cost = RealEnchantmentHelper.getEnchantmentCost(random, slot, stats.eterna(), input);
+            int cost = RealEnchantmentHelper.getEnchantmentCost(random, slot, eterna, input);
             if (cost < slot + 1) {
                 cost = 0;
             }

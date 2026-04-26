@@ -247,8 +247,32 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
                 .allMatch(entry -> entry.getKey().is(EnchantmentTags.CURSE));
     }
 
+    /**
+     * Applies Zenith-equivalent baseline stats on top of raw shelf contributions. The enchanting
+     * table inherently provides quanta, arcana, and a clue independent of surrounding shelves:
+     * <ul>
+     *   <li>{@code +15} quanta (fixed)</li>
+     *   <li>{@code +itemEnchantability / 2} arcana (item-dependent)</li>
+     *   <li>{@code +1} clue (fixed)</li>
+     * </ul>
+     * Without these baselines, recipes ported from Zenith would require unreachable stat thresholds.
+     */
+    private static StatCollection applyBaselines(StatCollection raw, int itemEnchantability) {
+        return new StatCollection(
+                raw.eterna(),
+                Math.max(0F, Math.min(raw.quanta() + 15F, 100F)),
+                Math.max(0F, Math.min(raw.arcana() + itemEnchantability / 2F, 100F)),
+                raw.rectification(),
+                Math.min(raw.clues() + 1, StatCollection.MAX_CLUES),
+                raw.maxEterna(),
+                raw.blacklist(),
+                raw.treasureAllowed()
+        );
+    }
+
     private void recompute(Level level, BlockPos pos, ItemStack input) {
-        StatCollection stats = EnchantingStatRegistry.gatherStats(level, pos);
+        StatCollection rawStats = EnchantingStatRegistry.gatherStats(level, pos);
+        StatCollection stats = applyBaselines(rawStats, input.getItem().getEnchantmentValue());
         this.lastStats = stats;
         this.currentRecipe = lookupCraftingResult(level.getRecipeManager(), input, stats);
 
