@@ -5,6 +5,7 @@ import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
 import com.fizzlesmp.fizzle_enchanting.event.WardenPoolCondition;
 import com.fizzlesmp.fizzle_enchanting.item.InfusedBreathItem;
 import com.fizzlesmp.fizzle_enchanting.item.WardenTendrilItem;
+import com.fizzlesmp.fizzle_enchanting.sound.ModSounds;
 import com.fizzlesmp.fizzle_enchanting.library.BasicLibraryBlockEntity;
 import com.fizzlesmp.fizzle_enchanting.library.EnchantmentLibraryBlock;
 import com.fizzlesmp.fizzle_enchanting.library.EnchantmentLibraryMenu;
@@ -24,8 +25,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.JukeboxSong;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
@@ -228,6 +232,20 @@ public final class FizzleEnchantingRegistry {
      */
     public static final LootItemConditionType WARDEN_POOL_CONDITION = WardenPoolCondition.TYPE;
 
+    private static final ResourceKey<JukeboxSong> SONG_ETERNA =
+            ResourceKey.create(Registries.JUKEBOX_SONG, FizzleEnchanting.id("eterna"));
+    private static final ResourceKey<JukeboxSong> SONG_QUANTA =
+            ResourceKey.create(Registries.JUKEBOX_SONG, FizzleEnchanting.id("quanta"));
+    private static final ResourceKey<JukeboxSong> SONG_ARCANA =
+            ResourceKey.create(Registries.JUKEBOX_SONG, FizzleEnchanting.id("arcana"));
+
+    public static final Item MUSIC_DISC_ETERNA =
+            new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(SONG_ETERNA));
+    public static final Item MUSIC_DISC_QUANTA =
+            new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(SONG_QUANTA));
+    public static final Item MUSIC_DISC_ARCANA =
+            new Item(new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(SONG_ARCANA));
+
     private static boolean registered = false;
 
     private FizzleEnchantingRegistry() {
@@ -255,6 +273,10 @@ public final class FizzleEnchantingRegistry {
         registerBlockEntityType("library", BASIC_LIBRARY_BE);
         registerBlockEntityType("ender_library", ENDER_LIBRARY_BE);
         registerLootConditionType("warden_pool", WARDEN_POOL_CONDITION);
+        ModSounds.register();
+        registerItem("music_disc_eterna", MUSIC_DISC_ETERNA);
+        registerItem("music_disc_quanta", MUSIC_DISC_QUANTA);
+        registerItem("music_disc_arcana", MUSIC_DISC_ARCANA);
         registerCreativeTab();
     }
 

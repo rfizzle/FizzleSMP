@@ -771,14 +771,14 @@ Key gaps:
 | 10 | Anvil | [x] Complete | 100% (curse removal, repair, tome handlers) |
 | 11 | Custom Enchantments | [x] Different | 49 NeoEnchant+ ports (not Apothic's 20) |
 | 12 | Config & Level Scaling | [~] Partial | ~40% (global config, no per-enchant overrides) |
-| 13 | Particles & Ambience | [~] Partial | ~30% (vanilla particles via theme enum, no discs) |
-| 14 | Advancements | [~] Partial | ~55% (10 of ~18, vanilla triggers only) |
+| 13 | Particles & Ambience | [x] Complete | ~90% (4 custom particle types + 3 music discs + 3 jukebox songs) |
+| 14 | Advancements | [x] Complete | ~85% (18 advancements + custom enchanted_at_table trigger) |
 | 15 | API Surface | [~] Minimal | ~25% (marker interfaces, no EnchantableItem, no IMC) |
 | 16 | Network Sync | [x] Complete | ~85% (StatsPayload + CluesPayload, no config sync) |
 | 17 | Data-Driven Audit | [x] Complete | ~90% (all JSON-driven except arcana weights) |
 | 18 | Mixins & Hooks | [x] Complete | Lean (4 mixins vs Apothic's 18; Fabric API covers the rest) |
 | 19 | Items & Misc | [~] Partial | ~60% (missing Inert Trident, Ender Leads, Music Discs) |
-| 20 | Third-Party Integration | [x] Complete | ~90% (EMI+REI+JEI+Jade; no WTHIT, no ModMenu) |
+| 20 | Third-Party Integration | [x] Complete | ~95% (EMI+REI+JEI+Jade+ModMenu; no WTHIT) |
 
 ---
 
@@ -809,6 +809,11 @@ Key gaps:
 - 10 advancements (root → shelf tiers → library → apotheosis)
 - 19 custom tags (11 enchantment exclusive sets, 5 item, 1 block, 1 entity type)
 - Full datapack extensibility (shelf stats, recipes, enchantments, advancements, tags)
+- 4 custom particle types (fire, water, sculk, end) with themed SGA glyph textures + particle JSONs
+- 3 music discs (Eterna, Quanta, Arcana) with sound events, jukebox songs, infusion recipes, item textures
+- ModMenu config GUI integration via Cloth Config (all 8 config sections exposed)
+- Custom `enchanted_at_table` advancement trigger with item/level/eterna/quanta/arcana/rectification predicates
+- 18 advancements including 2 stat-milestone advancements (high quanta, high arcana) using the custom trigger
 
 ### PARTIAL (started but incomplete)
 
@@ -816,8 +821,6 @@ Key gaps:
 - **Infusion recipe coverage** — 13 recipes (shelf upgrades, tome tier-ups, infused breath, ender library, honey→XP x3 tiers, echo shard duplication, golden carrot, budding amethyst) vs Apothic's 20 (remaining gaps: music disc conversions, ender leads, inert trident).
 - **Stability model** — Rectification is a float stat (0-100) contributed by Rectifier shelves (T1/T2/T3) instead of a binary `stable` flag from a Geode Shelf. Functionally richer but different API shape.
 - **Config system** — Server-side JSON config with 8 sections; no per-enchantment overrides, no power functions, no config sync to client.
-- **Particles** — ParticleTheme enum maps 5 themes to vanilla particle types. No custom particle type registration, no particle JSON definitions.
-- **Advancements** — 16 vs ~18. Added sculk mastery, stable enchanting, all-seeing, curator, treasure seeker, web spinner. Still missing: custom stat-milestone triggers (would need a custom advancement trigger class).
 - **API surface** — Marker interfaces (IEnchantingStatProvider, TreasureFlagSource, BlacklistSource) + EnchantingStatRegistry lookup. No EnchantableItem interface, no IMC channel.
 - **Tooltips** — Cost/clues/enchantability shown. No rarity weight table tooltip (by design). No enchantment info browser screen.
 
@@ -827,9 +830,7 @@ Key gaps:
 - **9 slot-filtered tomes** — Helmet/Chest/Legs/Boots/Weapon/Pickaxe/Bow/Fishing/Other tomes not implemented (intentional cut)
 - **Inert Trident item** — No trident infusion path
 - **Ender Lead (3 tiers)** — Flimsy/Normal/Occult ender leads not implemented
-- **Music Discs (3)** — Eterna/Quanta/Arcana discs not implemented
-- **Custom particle types** — Using vanilla particles only (FLAME, SPLASH, PORTAL, SCULK_SOUL, ENCHANT)
-- **Custom sound events** — No jukebox songs, no custom sculk sounds
+- ~~**Music Discs (3)** — Eterna/Quanta/Arcana discs not implemented~~ ✓ DONE
 - **Corrupted damage type** — Not implemented
 - **Per-enchantment config** — No max level overrides, no max loot level, no hard caps per enchant, no power functions
 - **EnchantmentInfoPayload** — No config sync to client
@@ -837,7 +838,6 @@ Key gaps:
 - **Item enchantability global override** — No mixin on Item#getEnchantability()
 - **Enchantment text color for above-max levels** — Tooltip recoloring exists but no mixin-level color override
 - **WTHIT integration** — Jade only
-- **ModMenu config GUI** — No config screen
 - **Trinket/Accessory API** — Not integrated
 - ~~**fabric.mod.json suggests/recommends**~~ — DONE: added `suggests` block for EMI, REI, JEI, Jade
 
@@ -866,11 +866,11 @@ Key gaps:
 2. ~~Add 6 item-acquisition advancements (sculk mastery, stable enchanting, all-seeing, curator, treasure seeker, web spinner)~~ ✓
 3. ~~Add missing infusion recipes (honey→XP x3 tiers, echo shard, golden carrot, budding amethyst)~~ ✓
 
-**Tier 2 — Medium value, medium effort:**
-4. Custom particle type registration (4 types: fire, water, sculk, end) with proper particle JSONs
-5. Music discs (3 items + 3 infusion recipes + 3 sound events)
-6. ModMenu config GUI integration
-7. Custom advancement trigger for "enchanted at table" (richer criteria than vanilla)
+**Tier 2 — Medium value, medium effort: ✓ COMPLETE**
+4. ~~Custom particle type registration (4 types: fire, water, sculk, end) with proper particle JSONs~~ ✓
+5. ~~Music discs (3 items + 3 infusion recipes + 3 sound events + 3 jukebox songs)~~ ✓
+6. ~~ModMenu config GUI integration (Cloth Config screen with all 8 config sections)~~ ✓
+7. ~~Custom advancement trigger for "enchanted at table" (item/level/eterna/quanta/arcana/rectification criteria)~~ ✓
 
 **Tier 3 — Nice to have, can defer:**
 8. Enchantment info browser screen (info button on enchanting GUI)

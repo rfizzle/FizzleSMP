@@ -49,7 +49,8 @@
         "emi": ["com.fizzlesmp.fizzle_enchanting.compat.emi.EmiEnchantingPlugin"],
         "rei_client": ["com.fizzlesmp.fizzle_enchanting.compat.rei.ReiEnchantingPlugin"],
         "jei_mod_plugin": ["com.fizzlesmp.fizzle_enchanting.compat.jei.JeiEnchantingPlugin"],
-        "jade": ["com.fizzlesmp.fizzle_enchanting.compat.jade.JadeEnchantingPlugin"]
+        "jade": ["com.fizzlesmp.fizzle_enchanting.compat.jade.JadeEnchantingPlugin"],
+        "modmenu": ["com.fizzlesmp.fizzle_enchanting.compat.modmenu.ModMenuIntegration"]
     },
     "accessWidener": "fizzle_enchanting.accesswidener",
     "mixins": [
@@ -65,6 +66,7 @@
         "emi": "*",
         "roughlyenoughitems": "*",
         "jei": "*",
-        "jade": "*"
+        "jade": "*",
+        "modmenu": "*"
     }
 }

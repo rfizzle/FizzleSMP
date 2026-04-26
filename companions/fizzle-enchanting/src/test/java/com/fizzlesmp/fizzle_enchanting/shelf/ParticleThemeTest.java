@@ -3,6 +3,7 @@ package com.fizzlesmp.fizzle_enchanting.shelf;
 
 import java.util.stream.Stream;
 
+import com.fizzlesmp.fizzle_enchanting.particle.ModParticles;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -18,10 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
- * T-3.1.2 — every {@link ParticleTheme} must round-trip to its expected vanilla
- * {@link SimpleParticleType}. The ParticleTypes class statically registers its fields against
- * {@code BuiltInRegistries.PARTICLE_TYPE}, so {@link Bootstrap#bootStrap()} has to run before any
- * field is touched.
+ * T-3.1.2 — every {@link ParticleTheme} must round-trip to its expected
+ * {@link SimpleParticleType}. The generic ENCHANT theme uses vanilla; the four themed variants
+ * use custom {@link ModParticles} types.
  */
 class ParticleThemeTest {
 
@@ -33,10 +33,10 @@ class ParticleThemeTest {
 
     @ParameterizedTest
     @MethodSource("themes")
-    void getParticleType_resolvesToExpectedVanillaParticle(ParticleTheme theme, SimpleParticleType expected) {
+    void getParticleType_resolvesToExpectedParticle(ParticleTheme theme, SimpleParticleType expected) {
         assertNotNull(theme.getParticleType(), "theme " + theme + " must expose a particle type");
         assertSame(expected, theme.getParticleType(),
-                "theme " + theme + " must resolve to the expected vanilla particle");
+                "theme " + theme + " must resolve to the expected particle type");
     }
 
     @Test
@@ -48,9 +48,9 @@ class ParticleThemeTest {
     private static Stream<Arguments> themes() {
         return Stream.of(
                 Arguments.of(ParticleTheme.ENCHANT, ParticleTypes.ENCHANT),
-                Arguments.of(ParticleTheme.ENCHANT_FIRE, ParticleTypes.FLAME),
-                Arguments.of(ParticleTheme.ENCHANT_WATER, ParticleTypes.SPLASH),
-                Arguments.of(ParticleTheme.ENCHANT_END, ParticleTypes.PORTAL),
-                Arguments.of(ParticleTheme.ENCHANT_SCULK, ParticleTypes.SCULK_SOUL));
+                Arguments.of(ParticleTheme.ENCHANT_FIRE, ModParticles.ENCHANT_FIRE),
+                Arguments.of(ParticleTheme.ENCHANT_WATER, ModParticles.ENCHANT_WATER),
+                Arguments.of(ParticleTheme.ENCHANT_END, ModParticles.ENCHANT_END),
+                Arguments.of(ParticleTheme.ENCHANT_SCULK, ModParticles.ENCHANT_SCULK));
     }
 }

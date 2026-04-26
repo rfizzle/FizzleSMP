@@ -187,6 +187,17 @@ dependencies {
     modCompileOnly "maven.modrinth:jade:${project.jade_version}"
     modLocalRuntime "maven.modrinth:jade:${project.jade_version}"
 
+    // ModMenu 11.x — Config screen entry point for Fabric 1.21.1. Compile-only + dev runtime
+    // so end users get the integration only when they install ModMenu themselves.
+    modCompileOnly "maven.modrinth:modmenu:${project.modmenu_version}"
+    modLocalRuntime "maven.modrinth:modmenu:${project.modmenu_version}"
+
+    // Cloth Config 15.x — Config screen builder used by ModMenuIntegration. Compile-only for
+    // the api surface; full mod in dev runtime. Cloth Config is a transitive dep of ModMenu in
+    // most player installs.
+    modCompileOnly "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
+    modLocalRuntime "me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}"
+
     // Tests
     testImplementation platform("org.junit:junit-bom:5.10.2")
     testImplementation "org.junit.jupiter:junit-jupiter"

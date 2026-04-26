@@ -5,9 +5,12 @@
             "conditions": {
                 "levels": {
                     "min": 3
+                },
+                "eterna": {
+                    "min": 45.0
                 }
             },
-            "trigger": "minecraft:enchanted_item"
+            "trigger": "fizzle_enchanting:enchanted_at_table"
         }
     },
     "display": {
