@@ -35,7 +35,16 @@
             "com.fizzlesmp.fizzle_enchanting.gametest.ModSentinelGameTest",
             "com.fizzlesmp.fizzle_enchanting.gametest.ConfigReloadGameTest",
             "com.fizzlesmp.fizzle_enchanting.gametest.EnchantmentRosterGameTest",
-            "com.fizzlesmp.fizzle_enchanting.gametest.IcyThornsEffectGameTest"
+            "com.fizzlesmp.fizzle_enchanting.gametest.enchantments.ArmorEnchantmentGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.enchantments.BootsEnchantmentGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.enchantments.LeggingsEnchantmentGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.enchantments.UpperBodyEnchantmentGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.enchantments.SwordEnchantmentGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.enchantments.RangedEnchantmentGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.enchantments.MaceEnchantmentGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.enchantments.ToolEnchantmentGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.enchantments.MountedEnchantmentGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.enchantments.CurseEnchantmentGameTest"
         ],
         "emi": ["com.fizzlesmp.fizzle_enchanting.compat.emi.EmiEnchantingPlugin"],
         "rei_client": ["com.fizzlesmp.fizzle_enchanting.compat.rei.ReiEnchantingPlugin"],
