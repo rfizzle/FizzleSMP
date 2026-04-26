@@ -1,82 +1,39 @@
 package com.fizzlesmp.fizzle_enchanting.library;
 
-import com.mojang.serialization.Lifecycle;
-
 import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.RegistrationInfo;
-import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponentMap;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.registries.VanillaRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
-import net.minecraft.world.entity.EquipmentSlotGroup;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
-import java.util.IdentityHashMap;
-import java.util.List;
-import java.util.stream.Stream;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * T-4.3.4 — exercises {@link EnchantmentLibraryBlockEntity}'s NBT read/write path. Two contracts
- * matter for this task:
- * <ol>
- *   <li><b>Round-trip preservation.</b> A fully populated pair of point/level maps survives a
- *       {@code saveCustomOnly} → {@code loadCustomOnly} pass with the same entries, same values,
- *       and nothing extra.</li>
- *   <li><b>Resolution-safe load.</b> A stale NBT key (one whose enchantment left the registry —
- *       simulated here by writing an id the test registry never registered) drops on load with
- *       the rest of the map intact. Matching behavior for a malformed id string. This is the
- *       protection against a "datapack uninstalled" user crash.</li>
- * </ol>
- *
- * <p>Shares the bootstrap/unfreeze dance with sibling library tests because
- * {@link BlockEntityType.Builder#build} registers an intrusive holder into a registry that vanilla
- * {@link Bootstrap} has already frozen.
- */
+// Tier: 2
 class LibraryNbtTest {
 
-    private static final ResourceKey<Enchantment> SHARPNESS = key("sharpness");
-    private static final ResourceKey<Enchantment> UNBREAKING = key("unbreaking");
+    private static final ResourceKey<Enchantment> SHARPNESS = Enchantments.SHARPNESS;
+    private static final ResourceKey<Enchantment> UNBREAKING = Enchantments.UNBREAKING;
 
-    private static Registry<Enchantment> enchantmentRegistry;
     private static HolderLookup.Provider provider;
-    private static BlockEntityType<TestLibraryBlockEntity> basicType;
     private static BlockState state;
 
     @BeforeAll
-    static void bootstrap() throws Exception {
+    static void bootstrap() {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
-        unfreeze(BuiltInRegistries.BLOCK_ENTITY_TYPE);
-        enchantmentRegistry = buildEnchantmentRegistry();
-        provider = HolderLookup.Provider.create(Stream.of(enchantmentRegistry.asLookup()));
-        basicType = BlockEntityType.Builder.of(
-                (pos, blockState) -> new TestLibraryBlockEntity(basicType, pos, blockState, 16),
-                Blocks.BOOKSHELF).build(null);
-        Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE,
-                ResourceLocation.fromNamespaceAndPath("fizzle_enchanting", "test_library_nbt"),
-                basicType);
-        BuiltInRegistries.BLOCK_ENTITY_TYPE.freeze();
+        provider = VanillaRegistries.createLookup();
         state = Blocks.BOOKSHELF.defaultBlockState();
     }
 
@@ -127,9 +84,6 @@ class LibraryNbtTest {
 
     @Test
     void load_dropsUnresolvedEnchantmentsKeepingRemainderIntact() {
-        // Synthesize NBT that carries an id our synthetic enchantment registry does not register
-        // ("minecraft:never_registered") — the 1.21.1 library must tolerate this rather than crash
-        // so a datapack uninstall doesn't eat the entire point pool.
         CompoundTag tag = new CompoundTag();
         CompoundTag points = new CompoundTag();
         points.putInt(SHARPNESS.location().toString(), 2048);
@@ -160,8 +114,6 @@ class LibraryNbtTest {
 
     @Test
     void load_dropsMalformedKeysWithoutCrashing() {
-        // A garbage key string (`"not:a:valid:id"` has multiple colons) must not throw — the
-        // reader parses defensively and skips entries with a warning.
         CompoundTag tag = new CompoundTag();
         CompoundTag points = new CompoundTag();
         points.putInt(SHARPNESS.location().toString(), 12);
@@ -180,7 +132,6 @@ class LibraryNbtTest {
 
     @Test
     void load_clearsPriorStateBeforeApplyingNbt() {
-        // Prime the BE with state that would corrupt a merge if load() didn't clear first.
         TestLibraryBlockEntity be = newLibrary();
         be.getPoints().put(UNBREAKING, 77);
         be.getMaxLevels().put(UNBREAKING, 2);
@@ -217,48 +168,7 @@ class LibraryNbtTest {
     }
 
     private static TestLibraryBlockEntity newLibrary() {
-        return new TestLibraryBlockEntity(basicType, BlockPos.ZERO, state, 16);
-    }
-
-    private static ResourceKey<Enchantment> key(String path) {
-        return ResourceKey.create(
-                Registries.ENCHANTMENT,
-                ResourceLocation.fromNamespaceAndPath("minecraft", path));
-    }
-
-    private static Registry<Enchantment> buildEnchantmentRegistry() {
-        MappedRegistry<Enchantment> reg = new MappedRegistry<>(Registries.ENCHANTMENT, Lifecycle.stable());
-        reg.register(SHARPNESS, syntheticEnchantment(), RegistrationInfo.BUILT_IN);
-        reg.register(UNBREAKING, syntheticEnchantment(), RegistrationInfo.BUILT_IN);
-        return reg.freeze();
-    }
-
-    private static Enchantment syntheticEnchantment() {
-        HolderSet<Item> any = HolderSet.direct(List.of(BuiltInRegistries.ITEM.wrapAsHolder(Items.BOOK)));
-        Enchantment.EnchantmentDefinition def = Enchantment.definition(
-                any,
-                10,
-                5,
-                Enchantment.dynamicCost(1, 10),
-                Enchantment.dynamicCost(51, 10),
-                1,
-                EquipmentSlotGroup.ANY);
-        return new Enchantment(
-                Component.literal("test"),
-                def,
-                HolderSet.empty(),
-                DataComponentMap.EMPTY);
-    }
-
-    private static void unfreeze(Registry<?> registry) throws Exception {
-        Field frozen = MappedRegistry.class.getDeclaredField("frozen");
-        frozen.setAccessible(true);
-        frozen.setBoolean(registry, false);
-        Field intrusive = MappedRegistry.class.getDeclaredField("unregisteredIntrusiveHolders");
-        intrusive.setAccessible(true);
-        if (intrusive.get(registry) == null) {
-            intrusive.set(registry, new IdentityHashMap<>());
-        }
+        return new TestLibraryBlockEntity(BlockEntityType.CHEST, BlockPos.ZERO, state, 16);
     }
 
     private static final class TestLibraryBlockEntity extends EnchantmentLibraryBlockEntity {

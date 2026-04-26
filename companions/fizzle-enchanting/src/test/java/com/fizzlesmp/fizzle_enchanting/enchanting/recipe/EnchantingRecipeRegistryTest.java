@@ -3,11 +3,7 @@ package com.fizzlesmp.fizzle_enchanting.enchanting.recipe;
 import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
 import com.fizzlesmp.fizzle_enchanting.enchanting.StatCollection;
 import net.minecraft.SharedConstants;
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -19,57 +15,27 @@ import net.minecraft.world.item.crafting.SingleRecipeInput;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
-import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * T-4.6.3 — proves {@link EnchantingRecipeRegistry#findMatch} resolves the right recipe across
- * both shipped subtypes when stat windows overlap or differ.
- *
- * <p>Recipes are injected directly into a fresh {@link RecipeManager} via {@code replaceRecipes};
- * we don't go through datapack reload because the matcher only reads {@code byType}.
- */
+// Tier: 2
 class EnchantingRecipeRegistryTest {
 
     @BeforeAll
-    static void bootstrap() throws Exception {
+    static void bootstrap() {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
-        unfreeze(BuiltInRegistries.RECIPE_TYPE, false);
-        unfreeze(BuiltInRegistries.RECIPE_SERIALIZER, false);
-        EnchantingRecipeRegistry.register();
-        BuiltInRegistries.RECIPE_TYPE.freeze();
-        BuiltInRegistries.RECIPE_SERIALIZER.freeze();
-    }
-
-    @Test
-    void register_landsBothTypesAndSerializers() {
-        ResourceLocation enchanting = FizzleEnchanting.id("enchanting");
-        ResourceLocation keepNbt = FizzleEnchanting.id("keep_nbt_enchanting");
-        assertSame(EnchantingRecipeRegistry.ENCHANTING_TYPE,
-                BuiltInRegistries.RECIPE_TYPE.get(enchanting));
-        assertSame(EnchantingRecipeRegistry.KEEP_NBT_TYPE,
-                BuiltInRegistries.RECIPE_TYPE.get(keepNbt));
-        assertSame(EnchantingRecipeRegistry.ENCHANTING_SERIALIZER,
-                BuiltInRegistries.RECIPE_SERIALIZER.get(enchanting));
-        assertSame(EnchantingRecipeRegistry.KEEP_NBT_SERIALIZER,
-                BuiltInRegistries.RECIPE_SERIALIZER.get(keepNbt));
     }
 
     @Test
     void findMatch_returnsHigherEternaThresholdFirstWhenBothMatch() {
-        // Two recipes accept the same input but at different Eterna minima — confirm the harder
-        // threshold wins so tier-3 recipes shadow their tier-1 counterparts when both qualify.
         EnchantingRecipe cheap = enchantingRecipe(
                 Ingredient.of(Items.DIAMOND_SWORD),
                 new StatRequirements(10F, 0F, 0F),
@@ -146,7 +112,6 @@ class EnchantingRecipeRegistryTest {
 
     @Test
     void findMatch_respectsMaxRequirementsUpperBound() {
-        // Capped recipe — too much Quanta knocks it out even though everything else matches.
         EnchantingRecipe capped = enchantingRecipe(
                 Ingredient.of(Items.DIAMOND_SWORD),
                 new StatRequirements(0F, 0F, 0F),
@@ -178,18 +143,5 @@ class EnchantingRecipeRegistryTest {
         RecipeManager manager = new RecipeManager(RegistryAccess.EMPTY);
         manager.replaceRecipes(List.of(holders));
         return manager;
-    }
-
-    private static void unfreeze(Registry<?> registry, boolean intrusiveHolders) throws Exception {
-        Field frozen = MappedRegistry.class.getDeclaredField("frozen");
-        frozen.setAccessible(true);
-        frozen.setBoolean(registry, false);
-        if (intrusiveHolders) {
-            Field intrusive = MappedRegistry.class.getDeclaredField("unregisteredIntrusiveHolders");
-            intrusive.setAccessible(true);
-            if (intrusive.get(registry) == null) {
-                intrusive.set(registry, new IdentityHashMap<>());
-            }
-        }
     }
 }

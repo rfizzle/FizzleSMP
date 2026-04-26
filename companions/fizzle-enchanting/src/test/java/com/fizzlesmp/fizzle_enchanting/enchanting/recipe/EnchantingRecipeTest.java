@@ -7,8 +7,6 @@ import io.netty.buffer.Unpooled;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -26,8 +24,6 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
-import java.util.IdentityHashMap;
 import java.util.OptionalInt;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -272,24 +268,6 @@ class EnchantingRecipeTest {
                 "src/main/resources/data/fizzle_enchanting/recipe/enchanting/" + filename);
         try (var reader = java.nio.file.Files.newBufferedReader(path)) {
             return JsonParser.parseReader(reader);
-        }
-    }
-
-    /**
-     * Mirror of {@code FizzleEnchantingRegistryTest#unfreeze} — kept private here so this test
-     * class stays standalone (no cross-test dependency).
-     */
-    @SuppressWarnings("unused")
-    private static void unfreeze(Registry<?> registry, boolean intrusiveHolders) throws Exception {
-        Field frozen = MappedRegistry.class.getDeclaredField("frozen");
-        frozen.setAccessible(true);
-        frozen.setBoolean(registry, false);
-        if (intrusiveHolders) {
-            Field intrusive = MappedRegistry.class.getDeclaredField("unregisteredIntrusiveHolders");
-            intrusive.setAccessible(true);
-            if (intrusive.get(registry) == null) {
-                intrusive.set(registry, new IdentityHashMap<>());
-            }
         }
     }
 }

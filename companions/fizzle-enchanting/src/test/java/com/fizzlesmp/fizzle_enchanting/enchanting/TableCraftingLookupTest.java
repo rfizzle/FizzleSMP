@@ -6,10 +6,7 @@ import com.fizzlesmp.fizzle_enchanting.enchanting.recipe.EnchantingRecipeRegistr
 import com.fizzlesmp.fizzle_enchanting.enchanting.recipe.KeepNbtEnchantingRecipe;
 import com.fizzlesmp.fizzle_enchanting.enchanting.recipe.StatRequirements;
 import net.minecraft.SharedConstants;
-import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -21,7 +18,6 @@ import net.minecraft.world.item.crafting.SingleRecipeInput;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 import java.util.OptionalInt;
@@ -32,35 +28,17 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * T-5.3.1 — proves {@link FizzleEnchantmentMenu#lookupCraftingResult} resolves the stat-gated
- * crafting recipe the menu's {@code slotsChanged} now consults after {@code gatherStats}. The
- * menu field (`currentRecipe`) is populated by calling this helper with the level's recipe
- * manager and the scripted stat totals from the shelf scan; simulating that path without
- * fabric-loader-junit means driving the helper directly.
- *
- * <p>Scenario modeled here is the DESIGN-documented
- * {@code library → ender_library} upgrade: a {@code keep_nbt_enchanting} recipe registered against
- * {@code Items.BOOK} (the scripted input stand-in) that unlocks only when shelf totals hit
- * {@code E 50 / Q 45 / A 100}. A lower-stat scan (simulated below) should leave
- * {@link Optional#empty()} so the fourth-row preview stays hidden.
- */
+// Tier: 2
 class TableCraftingLookupTest {
 
     @BeforeAll
-    static void bootstrap() throws Exception {
+    static void bootstrap() {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
-        unfreeze(BuiltInRegistries.RECIPE_TYPE);
-        unfreeze(BuiltInRegistries.RECIPE_SERIALIZER);
-        EnchantingRecipeRegistry.register();
-        BuiltInRegistries.RECIPE_TYPE.freeze();
-        BuiltInRegistries.RECIPE_SERIALIZER.freeze();
     }
 
     @Test
     void lookupCraftingResult_inputAtMatchingStats_locatesRecipe() {
-        // Library → ender_library shape: keep-nbt recipe, E=50 Q=45..50 A=100.
         KeepNbtEnchantingRecipe enderUpgrade = new KeepNbtEnchantingRecipe(
                 Ingredient.of(Items.BOOK),
                 new StatRequirements(50F, 45F, 100F),
@@ -149,15 +127,5 @@ class TableCraftingLookupTest {
         RecipeManager manager = new RecipeManager(RegistryAccess.EMPTY);
         manager.replaceRecipes(List.of(holders));
         return manager;
-    }
-
-    private static void unfreeze(Registry<?> registry) throws Exception {
-        // Flip `frozen` only — leaving `unregisteredIntrusiveHolders` at its existing (null) value
-        // keeps Registry.register on the non-intrusive path, which is what RECIPE_TYPE /
-        // RECIPE_SERIALIZER expect. Touching the intrusive map here triggers the "Missing intrusive
-        // holder" assertion path from MappedRegistry.register.
-        Field frozen = MappedRegistry.class.getDeclaredField("frozen");
-        frozen.setAccessible(true);
-        frozen.setBoolean(registry, false);
     }
 }
