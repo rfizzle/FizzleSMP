@@ -770,11 +770,11 @@ Key gaps:
 | 9 | Tomes | [~] Partial | ~35% (3 scrapping/extraction tomes; no 9 slot-filtered tomes) |
 | 10 | Anvil | [x] Complete | 100% (curse removal, repair, tome handlers) |
 | 11 | Custom Enchantments | [x] Different | 49 NeoEnchant+ ports (not Apothic's 20) |
-| 12 | Config & Level Scaling | [~] Partial | ~40% (global config, no per-enchant overrides) |
+| 12 | Config & Level Scaling | [x] Complete | ~85% (global config + per-enchant overrides with maxLevel/maxLootLevel/levelCap/power functions) |
 | 13 | Particles & Ambience | [x] Complete | ~90% (4 custom particle types + 3 music discs + 3 jukebox songs) |
 | 14 | Advancements | [x] Complete | ~85% (18 advancements + custom enchanted_at_table trigger) |
-| 15 | API Surface | [~] Minimal | ~25% (marker interfaces, no EnchantableItem, no IMC) |
-| 16 | Network Sync | [x] Complete | ~85% (StatsPayload + CluesPayload, no config sync) |
+| 15 | API Surface | [~] Partial | ~60% (marker interfaces + EnchantableItem, no IMC) |
+| 16 | Network Sync | [x] Complete | ~95% (StatsPayload + CluesPayload + EnchantmentInfoPayload) |
 | 17 | Data-Driven Audit | [x] Complete | ~90% (all JSON-driven except arcana weights) |
 | 18 | Mixins & Hooks | [x] Complete | Lean (4 mixins vs Apothic's 18; Fabric API covers the rest) |
 | 19 | Items & Misc | [~] Partial | ~60% (missing Inert Trident, Ender Leads, Music Discs) |
@@ -817,14 +817,20 @@ Key gaps:
 - Enchantment info browser screen (info button on enchanting GUI, power slider, scrollable list, arcana weight table, exclusion tooltips)
 - "Infusion Failed" display on slot 2 tooltip when item matches an infusion recipe but stats are insufficient
 - WTHIT integration (enchanting table stats + library summary, split common/client plugin via waila_plugins.json)
+- Per-enchantment config system (maxLevel, maxLootLevel, levelCap overrides via `enchantmentOverrides` config section)
+- PowerFunction sealed interface (DefaultMinPowerFunction extrapolates cost for above-max levels, DefaultMaxPowerFunction caps at 200)
+- EnchantmentInfoRegistry (server: rebuilt from config + enchantment registry on start/reload; client: synced via payload)
+- EnchantmentInfoPayload S2C sync (sent on player join + datapack/config reload, carries full per-enchant info map)
+- EnchantableItem API interface (items can post-process enchantment selection; checked via instanceof in selection algorithm)
+- Selection algorithm uses EnchantmentInfo for maxLevel and power functions instead of vanilla getMaxLevel/getMinCost/getMaxCost
 
 ### PARTIAL (started but incomplete)
 
 - **Arcana weighting** — continuous 0-100 model instead of Apothic's discrete 11-tier enum with guaranteed enchantment counts at 33/66. Simpler but less player-visible progression.
 - **Infusion recipe coverage** — 13 recipes (shelf upgrades, tome tier-ups, infused breath, ender library, honey→XP x3 tiers, echo shard duplication, golden carrot, budding amethyst) vs Apothic's 20 (remaining gaps: music disc conversions, ender leads, inert trident).
 - **Stability model** — Rectification is a float stat (0-100) contributed by Rectifier shelves (T1/T2/T3) instead of a binary `stable` flag from a Geode Shelf. Functionally richer but different API shape.
-- **Config system** — Server-side JSON config with 8 sections; no per-enchantment overrides, no power functions, no config sync to client.
-- **API surface** — Marker interfaces (IEnchantingStatProvider, TreasureFlagSource, BlacklistSource) + EnchantingStatRegistry lookup. No EnchantableItem interface, no IMC channel.
+- **Config system** — Server-side JSON config with 9 sections including per-enchantment overrides. No expression-based power functions (only default min/max). Config synced to client via EnchantmentInfoPayload.
+- **API surface** — Marker interfaces (IEnchantingStatProvider, TreasureFlagSource, BlacklistSource) + EnchantingStatRegistry lookup + EnchantableItem interface. No IMC channel.
 - **Tooltips** — Cost/clues/enchantability shown. Info browser screen with rarity weight table now available via info button.
 
 ### NOT IMPLEMENTED (gaps)
@@ -835,9 +841,9 @@ Key gaps:
 - **Ender Lead (3 tiers)** — Flimsy/Normal/Occult ender leads not implemented
 - ~~**Music Discs (3)** — Eterna/Quanta/Arcana discs not implemented~~ ✓ DONE
 - **Corrupted damage type** — Not implemented
-- **Per-enchantment config** — No max level overrides, no max loot level, no hard caps per enchant, no power functions
-- **EnchantmentInfoPayload** — No config sync to client
-- **Enchantment max level override mixin** — Cannot enforce hard level caps at the enchantment class level
+- ~~**Per-enchantment config** — No max level overrides, no max loot level, no hard caps per enchant, no power functions~~ ✓ DONE
+- ~~**EnchantmentInfoPayload** — No config sync to client~~ ✓ DONE
+- **Enchantment max level override mixin** — Cannot enforce hard level caps at the enchantment class level (levelCap is enforced at selection time, not at the Enchantment class level)
 - **Item enchantability global override** — No mixin on Item#getEnchantability()
 - **Enchantment text color for above-max levels** — Tooltip recoloring exists but no mixin-level color override
 - ~~**WTHIT integration** — Jade only~~ ✓ DONE
@@ -882,8 +888,8 @@ Key gaps:
 11. Inert Trident + infusion recipe
 12. Ender Lead (3 tiers) + infusion recipes
 
-**Tier 4 — Design decisions to revisit post-MVP:**
-13. Per-enchantment config system (max level overrides, power functions)
-14. EnchantmentInfoPayload for config sync
-15. EnchantableItem interface for per-item enchantment filtering
+**Tier 4 — Design decisions to revisit post-MVP: #13–15 COMPLETE**
+13. ~~Per-enchantment config system (max level overrides, power functions)~~ ✓
+14. ~~EnchantmentInfoPayload for config sync~~ ✓
+15. ~~EnchantableItem interface for per-item enchantment filtering~~ ✓
 16. 9 slot-filtered tomes (major feature, may not align with Fizzle's design direction)

@@ -15,5 +15,6 @@ public final class FizzleEnchantingNetworking {
     public static void registerPayloads() {
         PayloadTypeRegistry.playS2C().register(StatsPayload.TYPE, StatsPayload.CODEC);
         PayloadTypeRegistry.playS2C().register(CluesPayload.TYPE, CluesPayload.CODEC);
+        PayloadTypeRegistry.playS2C().register(EnchantmentInfoPayload.TYPE, EnchantmentInfoPayload.CODEC);
     }
 }

@@ -11,6 +11,8 @@ import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class FizzleEnchantingConfig {
@@ -31,6 +33,7 @@ public class FizzleEnchantingConfig {
     public Tomes tomes = new Tomes();
     public Warden warden = new Warden();
     public Display display = new Display();
+    public Map<String, EnchantmentOverride> enchantmentOverrides = new HashMap<>();
 
     public static FizzleEnchantingConfig load() {
         return load(configPath());
@@ -116,6 +119,7 @@ public class FizzleEnchantingConfig {
         if (tomes == null) tomes = new Tomes();
         if (warden == null) warden = new Warden();
         if (display == null) display = new Display();
+        if (enchantmentOverrides == null) enchantmentOverrides = new HashMap<>();
     }
 
     private void validate() {
@@ -141,6 +145,20 @@ public class FizzleEnchantingConfig {
             FizzleEnchanting.LOGGER.warn("clamped {} from {} to {}",
                     "display.overLeveledColor", display.overLeveledColor, DEFAULT_OVER_LEVELED_COLOR);
             display.overLeveledColor = DEFAULT_OVER_LEVELED_COLOR;
+        }
+
+        for (var entry : enchantmentOverrides.entrySet()) {
+            String id = entry.getKey();
+            EnchantmentOverride o = entry.getValue();
+            if (o.maxLevel != -1) {
+                o.maxLevel = clampIntRange("enchantmentOverrides." + id + ".maxLevel", o.maxLevel, 1, 127);
+            }
+            if (o.maxLootLevel != -1) {
+                o.maxLootLevel = clampIntRange("enchantmentOverrides." + id + ".maxLootLevel", o.maxLootLevel, 1, 127);
+            }
+            if (o.levelCap != -1) {
+                o.levelCap = clampIntRange("enchantmentOverrides." + id + ".levelCap", o.levelCap, 1, 127);
+            }
         }
     }
 
@@ -229,5 +247,15 @@ public class FizzleEnchantingConfig {
     public static class Display {
         public boolean showBookTooltips = true;
         public String overLeveledColor = "#FF6600";
+    }
+
+    /**
+     * Per-enchantment override entry. Use -1 for any field to keep the vanilla default.
+     * Keys in the {@code enchantmentOverrides} map are enchantment IDs (e.g. "minecraft:sharpness").
+     */
+    public static class EnchantmentOverride {
+        public int maxLevel = -1;
+        public int maxLootLevel = -1;
+        public int levelCap = -1;
     }
 }

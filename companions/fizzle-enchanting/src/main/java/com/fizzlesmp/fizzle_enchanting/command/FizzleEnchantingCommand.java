@@ -57,7 +57,7 @@ public final class FizzleEnchantingCommand {
 
     private static int runReload(CommandContext<CommandSourceStack> ctx) {
         CommandSourceStack src = ctx.getSource();
-        return runReload(FizzleEnchanting::reloadConfig, (success, message) -> {
+        return runReload(() -> FizzleEnchanting.reloadConfig(src.getServer()), (success, message) -> {
             if (success) src.sendSuccess(message, true);
             else src.sendFailure(message.get());
         });

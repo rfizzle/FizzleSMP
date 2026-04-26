@@ -1,7 +1,9 @@
 package com.fizzlesmp.fizzle_enchanting.client.net;
 
+import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantmentInfoRegistry;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
 import com.fizzlesmp.fizzle_enchanting.net.CluesPayload;
+import com.fizzlesmp.fizzle_enchanting.net.EnchantmentInfoPayload;
 import com.fizzlesmp.fizzle_enchanting.net.StatsPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.player.LocalPlayer;
@@ -10,6 +12,7 @@ import net.minecraft.client.player.LocalPlayer;
  * S2C receivers for the enchanting payloads. The stats payload is forwarded to the open
  * {@link FizzleEnchantmentMenu} so {@code FizzleEnchantmentScreen} can read live stat values from
  * the menu instance. Clues are forwarded to the menu's per-slot clue cache for tooltip rendering.
+ * The enchantment info payload updates the client-side {@link EnchantmentInfoRegistry}.
  */
 public final class ClientPayloadHandlers {
 
@@ -32,5 +35,9 @@ public final class ClientPayloadHandlers {
                         menu.applyClientClues(payload.slot(), payload.clues(), payload.exhaustedList());
                     }
                 }));
+
+        ClientPlayNetworking.registerGlobalReceiver(EnchantmentInfoPayload.TYPE,
+                (payload, context) -> context.client().execute(() ->
+                        EnchantmentInfoRegistry.applyFromPayload(payload.info())));
     }
 }

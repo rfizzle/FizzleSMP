@@ -170,6 +170,12 @@ public final class RealEnchantmentHelper {
             removeIncompatible(pool, lastOf(chosen));
             scaledLevel /= 2;
         }
+
+        if (stack.getItem() instanceof EnchantableItem enchantable) {
+            StatCollection stats = new StatCollection(
+                    level, quanta, arcana, rectification, 0, level, safeBlacklist, treasureAllowed);
+            chosen = enchantable.selectEnchantments(chosen, rand, stack, level, stats);
+        }
         return chosen;
     }
 
@@ -212,9 +218,10 @@ public final class RealEnchantmentHelper {
             if (!ench.canEnchant(stack) && !stack.is(Items.BOOK)) {
                 continue;
             }
-            for (int lvl = ench.getMaxLevel(); lvl > ench.getMinLevel() - 1; lvl--) {
-                if (power >= ench.getMinCost(lvl)
-                        && (power >= ench.getMaxCost(lvl) || lvl == ench.getMinLevel())) {
+            EnchantmentInfo info = EnchantmentInfoRegistry.getInfo(holder);
+            for (int lvl = info.getMaxLevel(); lvl > ench.getMinLevel() - 1; lvl--) {
+                if (power >= info.getMinPower(lvl)
+                        && (power >= info.getMaxPower(lvl) || lvl == ench.getMinLevel())) {
                     list.add(new EnchantmentInstance(holder, lvl));
                     break;
                 }
