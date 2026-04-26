@@ -1,6 +1,7 @@
 package com.fizzlesmp.fizzle_enchanting.enchanting.recipe;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.JsonOps;
 import io.netty.buffer.Unpooled;
@@ -220,6 +221,12 @@ class EnchantingRecipeTest {
         assertTypeField("improved_scrap_tome.json", "fizzle_enchanting:enchanting");
         assertTypeField("extraction_tome.json", "fizzle_enchanting:enchanting");
         assertTypeField("ender_library.json", "fizzle_enchanting:keep_nbt_enchanting");
+        assertTypeField("honey_to_xp_t1.json", "fizzle_enchanting:enchanting");
+        assertTypeField("honey_to_xp_t2.json", "fizzle_enchanting:enchanting");
+        assertTypeField("honey_to_xp_t3.json", "fizzle_enchanting:enchanting");
+        assertTypeField("echo_shard_duplication.json", "fizzle_enchanting:enchanting");
+        assertTypeField("golden_carrot.json", "fizzle_enchanting:enchanting");
+        assertTypeField("budding_amethyst.json", "fizzle_enchanting:enchanting");
 
         // Spot-check stat values match Zenith on the ones we can fully read without item lookup.
         JsonElement infusedBreath = readResource("infused_breath.json");
@@ -233,6 +240,47 @@ class EnchantingRecipeTest {
         assertEquals(-1F, ibMax.eterna());
         assertEquals(25F, ibMax.quanta());
         assertEquals(-1F, ibMax.arcana());
+    }
+
+    @Test
+    void honeyRecipes_haveAscendingEternaForTieredOutput() throws Exception {
+        JsonElement t1 = readResource("honey_to_xp_t1.json");
+        JsonElement t2 = readResource("honey_to_xp_t2.json");
+        JsonElement t3 = readResource("honey_to_xp_t3.json");
+
+        float e1 = t1.getAsJsonObject().getAsJsonObject("requirements").get("eterna").getAsFloat();
+        float e2 = t2.getAsJsonObject().getAsJsonObject("requirements").get("eterna").getAsFloat();
+        float e3 = t3.getAsJsonObject().getAsJsonObject("requirements").get("eterna").getAsFloat();
+
+        assertTrue(e1 < e2, "t1 eterna (" + e1 + ") must be < t2 (" + e2 + ")");
+        assertTrue(e2 < e3, "t2 eterna (" + e2 + ") must be < t3 (" + e3 + ")");
+
+        int c1 = t1.getAsJsonObject().getAsJsonObject("result").get("count").getAsInt();
+        int c2 = t2.getAsJsonObject().getAsJsonObject("result").get("count").getAsInt();
+        int c3 = t3.getAsJsonObject().getAsJsonObject("result").get("count").getAsInt();
+
+        assertTrue(c1 < c2, "t1 count must be < t2 count");
+        assertTrue(c2 < c3, "t2 count must be < t3 count");
+    }
+
+    @Test
+    void goldenCarrotRecipe_hasPrecisionMaxBounds() throws Exception {
+        JsonElement json = readResource("golden_carrot.json");
+        JsonObject maxReq = json.getAsJsonObject().getAsJsonObject("max_requirements");
+        assertTrue(maxReq.get("eterna").getAsFloat() > 0,
+                "golden carrot must have an eterna upper bound (precision recipe)");
+        assertTrue(maxReq.get("quanta").getAsFloat() > 0,
+                "golden carrot must have a quanta upper bound");
+    }
+
+    @Test
+    void buddingAmethystRecipe_hasQuantaCap() throws Exception {
+        JsonElement json = readResource("budding_amethyst.json");
+        JsonObject maxReq = json.getAsJsonObject().getAsJsonObject("max_requirements");
+        assertTrue(maxReq.get("quanta").getAsFloat() > 0,
+                "budding amethyst must have a quanta upper bound");
+        assertEquals(-1F, maxReq.get("eterna").getAsFloat(),
+                "budding amethyst eterna should be uncapped");
     }
 
     private static EnchantingRecipe makeRecipe(Ingredient input, StatRequirements req,

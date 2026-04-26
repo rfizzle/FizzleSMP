@@ -242,5 +242,17 @@
     "advancements.fizzle_enchanting.infused_breath.title": "Dragon's Gift",
     "advancements.fizzle_enchanting.infused_breath.description": "Refine Dragon's Breath into Infused Breath at a high-Eterna table.",
     "advancements.fizzle_enchanting.apotheosis.title": "Apotheosis",
-    "advancements.fizzle_enchanting.apotheosis.description": "Reach maximum enchanting power — hit Eterna 50 and take the top-slot enchant."
+    "advancements.fizzle_enchanting.apotheosis.description": "Reach maximum enchanting power — hit Eterna 50 and take the top-slot enchant.",
+    "advancements.fizzle_enchanting.sculk_mastery.title": "Sculk Mastery",
+    "advancements.fizzle_enchanting.sculk_mastery.description": "Craft an Echoing or Soul-Touched Sculkshelf — the pinnacle of enchanting power.",
+    "advancements.fizzle_enchanting.stable_enchanting.title": "Stable Foundations",
+    "advancements.fizzle_enchanting.stable_enchanting.description": "Craft a Rectifier shelf to gain control over enchantment stability.",
+    "advancements.fizzle_enchanting.all_seeing.title": "All-Seeing",
+    "advancements.fizzle_enchanting.all_seeing.description": "Craft a Hellshelf of Masterful Sight to reveal all enchantment clues.",
+    "advancements.fizzle_enchanting.curator.title": "The Curator",
+    "advancements.fizzle_enchanting.curator.description": "Craft a Filtering Shelf to blacklist unwanted enchantments from your table.",
+    "advancements.fizzle_enchanting.treasure_seeker.title": "Treasure Seeker",
+    "advancements.fizzle_enchanting.treasure_seeker.description": "Craft a Treasure Shelf to unlock treasure-tier enchantments at the table.",
+    "advancements.fizzle_enchanting.web_spinner.title": "Web Spinner",
+    "advancements.fizzle_enchanting.web_spinner.description": "Obtain a Prismatic Web — the key to removing curses from enchanted gear."
 }

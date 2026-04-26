@@ -27,7 +27,9 @@ public class AdvancementCodecGameTest implements FabricGameTest {
     private static final String LANG_FILE = "/assets/fizzle_enchanting/lang/en_us.json";
     private static final List<String> ADVANCEMENT_IDS = List.of(
             "root", "stone_tier", "tier_three", "library", "ender_library",
-            "tome_apprentice", "tome_master", "warden_tendril", "infused_breath", "apotheosis");
+            "tome_apprentice", "tome_master", "warden_tendril", "infused_breath", "apotheosis",
+            "sculk_mastery", "stable_enchanting", "all_seeing", "curator", "treasure_seeker",
+            "web_spinner");
 
     @GameTest(template = "fizzle_enchanting:empty_3x3")
     public void advancementDirectoryShipsExpectedRoster(GameTestHelper helper) {

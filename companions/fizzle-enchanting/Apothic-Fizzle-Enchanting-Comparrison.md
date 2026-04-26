@@ -813,11 +813,11 @@ Key gaps:
 ### PARTIAL (started but incomplete)
 
 - **Arcana weighting** — continuous 0-100 model instead of Apothic's discrete 11-tier enum with guaranteed enchantment counts at 33/66. Simpler but less player-visible progression.
-- **Infusion recipe coverage** — 7 recipes (shelf upgrades, tome tier-ups, infused breath, ender library) vs Apothic's 20 (missing: honey→XP bottles, echo shard duplication, music disc conversions, ender leads, golden carrot, budding amethyst).
+- **Infusion recipe coverage** — 13 recipes (shelf upgrades, tome tier-ups, infused breath, ender library, honey→XP x3 tiers, echo shard duplication, golden carrot, budding amethyst) vs Apothic's 20 (remaining gaps: music disc conversions, ender leads, inert trident).
 - **Stability model** — Rectification is a float stat (0-100) contributed by Rectifier shelves (T1/T2/T3) instead of a binary `stable` flag from a Geode Shelf. Functionally richer but different API shape.
 - **Config system** — Server-side JSON config with 8 sections; no per-enchantment overrides, no power functions, no config sync to client.
 - **Particles** — ParticleTheme enum maps 5 themes to vanilla particle types. No custom particle type registration, no particle JSON definitions.
-- **Advancements** — 10 vs ~18. Missing stat milestone advancements (Eterna 60/80/100, Arcana 50/100, Quanta thresholds). No custom trigger class.
+- **Advancements** — 16 vs ~18. Added sculk mastery, stable enchanting, all-seeing, curator, treasure seeker, web spinner. Still missing: custom stat-milestone triggers (would need a custom advancement trigger class).
 - **API surface** — Marker interfaces (IEnchantingStatProvider, TreasureFlagSource, BlacklistSource) + EnchantingStatRegistry lookup. No EnchantableItem interface, no IMC channel.
 - **Tooltips** — Cost/clues/enchantability shown. No rarity weight table tooltip (by design). No enchantment info browser screen.
 
@@ -839,7 +839,7 @@ Key gaps:
 - **WTHIT integration** — Jade only
 - **ModMenu config GUI** — No config screen
 - **Trinket/Accessory API** — Not integrated
-- **fabric.mod.json suggests/recommends** — Missing optional dependency declarations
+- ~~**fabric.mod.json suggests/recommends**~~ — DONE: added `suggests` block for EMI, REI, JEI, Jade
 
 ### INTENTIONALLY DIFFERENT (design divergences)
 
@@ -861,10 +861,10 @@ Key gaps:
 
 ### PRIORITY RANKING (suggested implementation order for gaps)
 
-**Tier 1 — High value, low effort:**
-1. Add `suggests`/`recommends` to `fabric.mod.json` for optional deps (EMI, REI, JEI, Jade)
-2. Add 8 more stat milestone advancements (Eterna 30/50, Arcana 50, Quanta 0/50, stable setup, max stats)
-3. Add missing infusion recipes (honey→XP bottles, echo shard, golden carrot, budding amethyst)
+**Tier 1 — High value, low effort: ✓ COMPLETE**
+1. ~~Add `suggests`/`recommends` to `fabric.mod.json` for optional deps (EMI, REI, JEI, Jade)~~ ✓
+2. ~~Add 6 item-acquisition advancements (sculk mastery, stable enchanting, all-seeing, curator, treasure seeker, web spinner)~~ ✓
+3. ~~Add missing infusion recipes (honey→XP x3 tiers, echo shard, golden carrot, budding amethyst)~~ ✓
 
 **Tier 2 — Medium value, medium effort:**
 4. Custom particle type registration (4 types: fire, water, sculk, end) with proper particle JSONs

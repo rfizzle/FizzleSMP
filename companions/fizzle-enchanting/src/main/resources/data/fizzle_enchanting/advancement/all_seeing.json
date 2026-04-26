@@ -1,0 +1,33 @@
+{
+    "parent": "fizzle_enchanting:stone_tier",
+    "criteria": {
+        "has_sightshelf_t2": {
+            "conditions": {
+                "items": [
+                    {
+                        "items": "fizzle_enchanting:sightshelf_t2"
+                    }
+                ]
+            },
+            "trigger": "minecraft:inventory_changed"
+        }
+    },
+    "display": {
+        "description": {
+            "translate": "advancements.fizzle_enchanting.all_seeing.description"
+        },
+        "icon": {
+            "count": 1,
+            "id": "fizzle_enchanting:sightshelf_t2"
+        },
+        "title": {
+            "translate": "advancements.fizzle_enchanting.all_seeing.title"
+        }
+    },
+    "requirements": [
+        [
+            "has_sightshelf_t2"
+        ]
+    ],
+    "sends_telemetry_event": false
+}

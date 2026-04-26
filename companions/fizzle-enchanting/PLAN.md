@@ -9,7 +9,7 @@ Each **Stage** below is sized for one context window. Stages within the same tie
 
 ---
 
-## Current State (as of 2026-04-26)
+## Current State (as of 2026-04-27)
 
 | Area | Status |
 |------|--------|
@@ -19,7 +19,9 @@ Each **Stage** below is sized for one context window. Stages within the same tie
 | Test infrastructure (S-0) | Complete — fabric-loader-junit + gametest source set wired |
 | Existing tests | 55 in `src/test/`, 14 in `src/gametest/` |
 | Legacy pattern | **Eliminated** — no unfreeze callers remain; `forkEvery=1` removed |
-| Apothic assessment | Documents written, no phase executed yet |
+| Apothic assessment | Complete — Tier 1 gaps implemented, Tier 2+ deferred |
+| Infusion recipes | 13 total (7 original + 6 new) |
+| Advancements | 16 total (10 original + 6 new) |
 
 ---
 
@@ -143,10 +145,12 @@ Pure-math T1 extractions and missing T2/T3 coverage. These don't require legacy 
 
 This is the stage where we act on the Apothic comparison findings. Each sub-stage maps to a gap category.
 
-- [ ] **7.1** Review Stage 1.E decision table and prioritize gaps.
-- [ ] **7.2** Implement highest-priority gaps (likely: stat system nuances, missing enchantment behaviors, GUI polish).
-- [ ] **7.3** Write corresponding tests per `Apothic-GameTests.md` for each implemented gap.
-- [ ] **7.4** Update `Apothic-Fizzle-Enchanting-Comparrison.md` to mark resolved gaps.
+- [x] **7.1** Review Stage 1.E decision table and prioritize gaps.
+- [x] **7.2** Implement Tier 1 gaps: `fabric.mod.json` suggests, 6 infusion recipes (honey→XP x3, echo shard, golden carrot, budding amethyst), 6 advancements (sculk mastery, stable enchanting, all-seeing, curator, treasure seeker, web spinner).
+- [x] **7.3** Write corresponding tests: updated advancement roster in `AdvancementCodecGameTest`, added recipe type-field + stat validation tests in `EnchantingRecipeTest`.
+- [x] **7.4** Update `Apothic-Fizzle-Enchanting-Comparrison.md` to mark resolved gaps.
+
+**Tier 2+ gaps deferred to future sessions:** custom particle types, music discs, ModMenu config GUI, custom advancement trigger, info browser, WTHIT, Inert Trident, Ender Leads.
 
 **Note:** This stage will likely expand into multiple sub-stages once the assessment is complete.
 
