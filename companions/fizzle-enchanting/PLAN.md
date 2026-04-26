@@ -160,11 +160,11 @@ This is the stage where we act on the Apothic comparison findings. Each sub-stag
 
 **Ref:** `TESTING-TODO.md` Phase 6, items 41-45.
 
-- [ ] **8.1** TEST-6.1-T1a/b/c — filesystem sweeps (49 ported files, no `enchantplus:` literals, lang keys)
-- [ ] **8.2** TEST-6.1-T2/T2b — codec parse + exclusive_set tag validation `PARALLEL-OK with 8.1`
-- [ ] **8.3** TEST-6.1-T3 — all 49 ids in registry
-- [ ] **8.4** TEST-6.2-T1/T2a/T2b/T3 — authored enchants (icy_thorns, shield_bash) + tag expansion
-- [ ] **8.5** TEST-6.3-T1/T2/T3a/T3b — foreign overrides (mending weight, soulbound)
+- [x] **8.1** TEST-6.1-T1a/b/c — filesystem sweeps (50 ported files, no `enchantplus:` literals, lang keys) — `PortedEnchantmentsTest`, `PortedEnchantmentLangTest`
+- [x] **8.2** TEST-6.1-T2/T2b — codec parse + exclusive_set tag validation — `PortedEnchantmentsTest` (schema), `PortedExclusiveSetTagsTest`
+- [x] **8.3** TEST-6.1-T3 — all 50+2 ids in registry, cut ids absent — `EnchantmentRosterGameTest`
+- [x] **8.4** TEST-6.2-T1/T2a/T2b/T3 — authored enchants — `AuthoredIcyThornsTest`, `AuthoredShieldBashTest`, `IcyThornsEffectGameTest`
+- [x] **8.5** TEST-6.3-T1/T2/T3a/T3b — foreign overrides — `ForeignEnchantmentOverridesTest`, `MendingOverrideTest`, `SoulboundOverrideTest`, `EnchantmentRosterGameTest.mendingOverrideHasBundledWeight`
 
 ---
 

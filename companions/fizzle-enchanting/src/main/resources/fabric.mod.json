@@ -33,7 +33,9 @@
             "com.fizzlesmp.fizzle_enchanting.gametest.LibraryPersistGameTest",
             "com.fizzlesmp.fizzle_enchanting.gametest.LibraryHopperGameTest",
             "com.fizzlesmp.fizzle_enchanting.gametest.ModSentinelGameTest",
-            "com.fizzlesmp.fizzle_enchanting.gametest.ConfigReloadGameTest"
+            "com.fizzlesmp.fizzle_enchanting.gametest.ConfigReloadGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.EnchantmentRosterGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.IcyThornsEffectGameTest"
         ],
         "emi": ["com.fizzlesmp.fizzle_enchanting.compat.emi.EmiEnchantingPlugin"],
         "rei_client": ["com.fizzlesmp.fizzle_enchanting.compat.rei.ReiEnchantingPlugin"],
