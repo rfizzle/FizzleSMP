@@ -23,7 +23,7 @@ class LibraryTierBlockEntityTest {
     static void bootstrap() {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
-        bookshelf = Blocks.BOOKSHELF.defaultBlockState();
+        bookshelf = Blocks.CHEST.defaultBlockState();
     }
 
     @Test

@@ -40,7 +40,7 @@ class LibraryStorageTest {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
         lookup = VanillaRegistries.createLookup();
-        state = Blocks.BOOKSHELF.defaultBlockState();
+        state = Blocks.CHEST.defaultBlockState();
     }
 
     @Test

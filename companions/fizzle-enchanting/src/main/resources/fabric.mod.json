@@ -18,7 +18,14 @@
             "com.fizzlesmp.fizzle_enchanting.gametest.RegistryGameTest",
             "com.fizzlesmp.fizzle_enchanting.gametest.ShelfRosterGameTest",
             "com.fizzlesmp.fizzle_enchanting.enchanting.FilteringTreasureGameTest",
-            "com.fizzlesmp.fizzle_enchanting.gametest.ShelfScanGameTest"
+            "com.fizzlesmp.fizzle_enchanting.gametest.ShelfScanGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.MenuEndToEndGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.PrismaticWebGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.LibraryGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.TomeRegistryGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.TomeAnvilGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.CraftingButtonGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.SpecialtyMaterialsGameTest"
         ],
         "emi": ["com.fizzlesmp.fizzle_enchanting.compat.emi.EmiEnchantingPlugin"],
         "rei_client": ["com.fizzlesmp.fizzle_enchanting.compat.rei.ReiEnchantingPlugin"],

@@ -96,8 +96,8 @@ class AnvilMenuMixinTest {
         assertNotNull(ats, "@Inject must declare at = @At(...)");
         assertEquals(1, ats.size());
         assertEquals(AT_DESC, ats.get(0).desc);
-        assertEquals("TAIL", extractValue(ats.get(0), "value"),
-                "@At TAIL — we want to overwrite vanilla's result, not replace the whole method");
+        assertEquals("RETURN", extractValue(ats.get(0), "value"),
+                "@At RETURN — we want to overwrite vanilla's result after it runs, not replace the whole method");
 
         // Void createResult() → hook descriptor must be (Lorg/spongepowered/asm/mixin/injection/callback/CallbackInfo;)V.
         String expected = "(" + Type.getDescriptor(CallbackInfo.class) + ")V";
@@ -107,28 +107,25 @@ class AnvilMenuMixinTest {
 
     @Test
     void injectMethod_hasTailOnOnTake() throws Exception {
-        // T-5.2.3: ExtractionTome leaves a leftReplacement on the AnvilResult that must survive
-        // past vanilla's onTake — which unconditionally clears slot 0. A TAIL inject on onTake
-        // reinstates the replacement. If this inject ever drifts to HEAD or disappears, the
-        // Extraction Tome silently stops preserving the source item at runtime.
         ClassNode node = readMixinClass();
-        MethodNode hook = findInjectForTargetMethod(node, "onTake");
-        assertNotNull(hook, "mixin must contain an @Inject hook targeting onTake — otherwise "
+        MethodNode tailHook = findInjectForTargetMethodAndAt(node, "onTake", "TAIL");
+        assertNotNull(tailHook, "mixin must contain a TAIL @Inject hook on onTake — otherwise "
                 + "vanilla's slot-0 clear strips the Extraction Tome's leftReplacement");
 
-        AnnotationNode inject = findAnnotation(hook.invisibleAnnotations, INJECT_DESC);
-        if (inject == null) inject = findAnnotation(hook.visibleAnnotations, INJECT_DESC);
+        AnnotationNode inject = findAnnotation(tailHook.invisibleAnnotations, INJECT_DESC);
+        if (inject == null) inject = findAnnotation(tailHook.visibleAnnotations, INJECT_DESC);
         assertNotNull(inject);
 
         List<String> methods = extractArrayValue(inject, "method");
         assertEquals(List.of("onTake"), methods, "@Inject must target onTake exactly");
+    }
 
-        List<AnnotationNode> ats = extractArrayValue(inject, "at");
-        assertNotNull(ats);
-        assertEquals(1, ats.size());
-        assertEquals("TAIL", extractValue(ats.get(0), "value"),
-                "@At TAIL — vanilla's onTake empties slot 0 before returning, so we MUST "
-                        + "reinstate the leftReplacement after its body runs, never before");
+    @Test
+    void injectMethod_hasHeadOnOnTake() throws Exception {
+        ClassNode node = readMixinClass();
+        MethodNode headHook = findInjectForTargetMethodAndAt(node, "onTake", "HEAD");
+        assertNotNull(headHook, "mixin must contain a HEAD @Inject hook on onTake — "
+                + "guards the takingResult flag for the TAIL hook's leftReplacement path");
     }
 
     @Test
@@ -221,6 +218,20 @@ class AnvilMenuMixinTest {
             match = m;
         }
         return match;
+    }
+
+    private static MethodNode findInjectForTargetMethodAndAt(ClassNode node, String targetMethod, String atValue) {
+        for (MethodNode m : node.methods) {
+            AnnotationNode inject = findAnnotation(m.invisibleAnnotations, INJECT_DESC);
+            if (inject == null) inject = findAnnotation(m.visibleAnnotations, INJECT_DESC);
+            if (inject == null) continue;
+            List<String> methods = extractArrayValue(inject, "method");
+            if (methods == null || !methods.contains(targetMethod)) continue;
+            List<AnnotationNode> ats = extractArrayValue(inject, "at");
+            if (ats == null || ats.isEmpty()) continue;
+            if (atValue.equals(extractValue(ats.get(0), "value"))) return m;
+        }
+        return null;
     }
 
     private static ClassNode readMixinClass() throws Exception {

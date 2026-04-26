@@ -34,7 +34,7 @@ class LibraryNbtTest {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
         provider = VanillaRegistries.createLookup();
-        state = Blocks.BOOKSHELF.defaultBlockState();
+        state = Blocks.CHEST.defaultBlockState();
     }
 
     @Test

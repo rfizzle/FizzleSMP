@@ -42,7 +42,7 @@ class EnchantmentLibraryBlockEntityTest {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
         lookup = VanillaRegistries.createLookup();
-        state = Blocks.BOOKSHELF.defaultBlockState();
+        state = Blocks.CHEST.defaultBlockState();
     }
 
     // ---- ctor sanity --------------------------------------------------------
