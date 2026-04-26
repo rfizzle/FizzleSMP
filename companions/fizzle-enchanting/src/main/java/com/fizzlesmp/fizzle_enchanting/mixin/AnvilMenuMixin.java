@@ -19,13 +19,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.util.Optional;
 
 /**
- * T-4.1.1 — TAIL hook on {@code AnvilMenu#createResult} that lets
+ * T-4.1.1 — RETURN hook on {@code AnvilMenu#createResult} that lets
  * {@link AnvilDispatcher} swap in custom outputs for combinations vanilla doesn't handle
  * (prismatic web curse-strip, iron-block anvil repair, the tome families).
  *
- * <p>Running at TAIL lets vanilla compute its output first, then we overwrite it only when a
- * dispatcher handler claims the pairing. Every other left/right combination keeps vanilla's
- * result untouched — the mixin is behaviorally transparent when no handler fires.
+ * <p>Injected at every RETURN opcode so the dispatcher fires even when vanilla early-exits
+ * for unrecognized item pairings. {@code createResult()} contains multiple early returns
+ * (empty input, non-enchantable item, no valid repair/combine match); using RETURN instead
+ * of TAIL ensures our handlers are consulted on every code path. When no handler claims the
+ * pairing the mixin is still behaviorally transparent — vanilla's result is left untouched.
  *
  * <p>T-5.2.3 extends the hook with an {@code onTake} tail that reinstates the handler's
  * {@link AnvilResult#leftReplacement()} into slot 0 after vanilla has cleared it. Most
@@ -45,7 +47,7 @@ abstract class AnvilMenuMixin extends ItemCombinerMenu {
 
     /**
      * The most recent claim returned by the dispatcher, or {@code null} if no handler fired
-     * on the current slot state. Stashed at {@code createResult} TAIL and consumed at
+     * on the current slot state. Stashed at {@code createResult} RETURN and consumed at
      * {@code onTake} TAIL. Cleared whenever the dispatcher returns empty so a stale
      * {@code leftReplacement} from a prior slot state cannot leak into a later take.
      */
@@ -53,13 +55,25 @@ abstract class AnvilMenuMixin extends ItemCombinerMenu {
     @Nullable
     private AnvilResult fizzleEnchanting$pendingResult;
 
+    /**
+     * Guard flag set during {@code onTake} to suppress re-entrant dispatch. Vanilla's
+     * {@code onTake} clears input slots via {@code inputSlots.setItem}, which synchronously
+     * triggers {@code slotsChanged} → {@code createResult} → our RETURN hook. Without this
+     * guard, that re-entrant call would null out {@link #fizzleEnchanting$pendingResult}
+     * before the {@code onTake} TAIL hook can consume the {@code leftReplacement}.
+     */
+    @Unique
+    private boolean fizzleEnchanting$takingResult;
+
     private AnvilMenuMixin(
             @Nullable MenuType<?> type, int containerId, Inventory inv, ContainerLevelAccess access) {
         super(type, containerId, inv, access);
     }
 
-    @Inject(method = "createResult", at = @At("TAIL"))
+    @Inject(method = "createResult", at = @At("RETURN"))
     private void fizzleEnchanting$dispatch(CallbackInfo ci) {
+        if (this.fizzleEnchanting$takingResult) return;
+
         AnvilMenu self = (AnvilMenu) (Object) this;
         AnvilMenuAccessor accessor = (AnvilMenuAccessor) (Object) this;
         ItemStack left = this.inputSlots.getItem(0);
@@ -82,8 +96,14 @@ abstract class AnvilMenuMixin extends ItemCombinerMenu {
         self.broadcastChanges();
     }
 
+    @Inject(method = "onTake", at = @At("HEAD"))
+    private void fizzleEnchanting$beginTake(Player player, ItemStack stack, CallbackInfo ci) {
+        this.fizzleEnchanting$takingResult = true;
+    }
+
     @Inject(method = "onTake", at = @At("TAIL"))
     private void fizzleEnchanting$restoreLeft(Player player, ItemStack stack, CallbackInfo ci) {
+        this.fizzleEnchanting$takingResult = false;
         AnvilResult pending = this.fizzleEnchanting$pendingResult;
         this.fizzleEnchanting$pendingResult = null;
         if (pending == null) return;
