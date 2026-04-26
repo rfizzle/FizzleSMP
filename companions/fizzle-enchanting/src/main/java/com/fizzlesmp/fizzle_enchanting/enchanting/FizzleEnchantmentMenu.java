@@ -71,18 +71,17 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
     /** Slot picks from the most recent {@link #slotsChanged} — consumed on click. */
     private List<List<EnchantmentInstance>> slotPicks = List.of(List.of(), List.of(), List.of());
     /**
-     * Stat-gated crafting recipe that matches the current input + shelf totals (T-5.3.1). Consumed
-     * server-side by the button-id=3 handler (T-5.3.3) and projected onto the outgoing
-     * {@link StatsPayload} (T-5.3.2). Reset to {@link Optional#empty()} whenever the input slot is
-     * cleared or the stack becomes unenchantable.
+     * Stat-gated crafting recipe that matches the current input + shelf totals. When present,
+     * slot 2 is overridden with the recipe's XP cost (Zenith's INFUSION pattern). Projected onto
+     * the outgoing {@link StatsPayload} for the client tooltip. Reset to {@link Optional#empty()}
+     * whenever the input slot is cleared or the stack becomes unenchantable.
      */
     private Optional<RecipeHolder<? extends Recipe<SingleRecipeInput>>> currentRecipe = Optional.empty();
     /**
      * Client mirror of the server's projected {@link CraftingResultEntry}. Populated from the
      * incoming {@link StatsPayload} in {@link #applyClientStats} so {@code FizzleEnchantmentScreen}
-     * can paint the fourth-row preview without plumbing an extra network hop (T-5.3.4). The
-     * server-side {@link #currentRecipe} stays authoritative; this field exists solely for the
-     * client-side render path.
+     * can render the slot-2 crafting tooltip. The server-side {@link #currentRecipe} stays
+     * authoritative; this field exists solely for the client-side render path.
      */
     private Optional<CraftingResultEntry> lastCraftingResult = Optional.empty();
     @SuppressWarnings("unchecked")
@@ -131,9 +130,9 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
     }
 
     /**
-     * Server-resolved recipe holder for the fourth-row crafting preview, if any. Only ever
+     * Server-resolved recipe holder for the slot-2 crafting override, if any. Only ever
      * populated during a {@link #recompute} pass on the server — clients read the projected
-     * {@code CraftingResultEntry} off {@link StatsPayload} instead (T-5.3.2).
+     * {@code CraftingResultEntry} off {@link StatsPayload} for the tooltip.
      */
     public Optional<RecipeHolder<? extends Recipe<SingleRecipeInput>>> currentRecipe() {
         return currentRecipe;
@@ -141,9 +140,8 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
 
     /**
      * Client-side mirror of the outgoing {@link StatsPayload}'s {@code craftingResult}. The menu
-     * caches it here on {@link #applyClientStats} so {@code FizzleEnchantmentScreen} can decide
-     * whether to paint the fourth row and dispatch a {@code buttonId=3} click without reaching
-     * into the raw payload (T-5.3.4).
+     * caches it here on {@link #applyClientStats} so {@code FizzleEnchantmentScreen} can render
+     * the slot-2 crafting tooltip.
      */
     public Optional<CraftingResultEntry> lastCraftingResult() {
         return lastCraftingResult;
@@ -305,6 +303,16 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
                         FizzleEnchantmentLogic.SlotState.EMPTY,
                         FizzleEnchantmentLogic.SlotState.EMPTY};
 
+        if (currentRecipe.isPresent()) {
+            int xpCost = currentRecipe
+                    .map(h -> h.value() instanceof EnchantingRecipe e ? e.getXpCost() : 0)
+                    .orElse(0);
+            if (xpCost < 1) xpCost = 1;
+            states[FizzleEnchantmentLogic.CRAFTING_SLOT] = new FizzleEnchantmentLogic.SlotState(
+                    xpCost, List.of(),
+                    new RealEnchantmentHelper.ClueBuild(null, List.of(), true));
+        }
+
         List<List<EnchantmentInstance>> newPicks = new ArrayList<>(FizzleEnchantmentLogic.PREVIEW_SLOTS);
         List<List<EnchantmentClue>> cluePayloads = new ArrayList<>(FizzleEnchantmentLogic.PREVIEW_SLOTS);
         List<Boolean> exhaustedFlags = new ArrayList<>(FizzleEnchantmentLogic.PREVIEW_SLOTS);
@@ -316,6 +324,9 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
             if (primary != null) {
                 enchantClue[slot] = FizzleEnchantmentLogic.idForHolder(registry, primary.enchantment);
                 levelClue[slot] = primary.level;
+            } else if (slot == FizzleEnchantmentLogic.CRAFTING_SLOT && currentRecipe.isPresent()) {
+                enchantClue[slot] = 0;
+                levelClue[slot] = 1;
             } else {
                 enchantClue[slot] = -1;
                 levelClue[slot] = -1;
@@ -370,7 +381,7 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
 
     @Override
     public boolean clickMenuButton(Player player, int id) {
-        if (id == FizzleEnchantmentLogic.CRAFTING_BUTTON_ID) {
+        if (id == FizzleEnchantmentLogic.CRAFTING_SLOT && currentRecipe.isPresent()) {
             return handleCraftingClick(player);
         }
 
@@ -430,57 +441,62 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
     }
 
     /**
-     * Handles a click on the stat-gated crafting-result row (button id 3 per DESIGN §
-     * "Crafting-Result Row"). Gating runs server-authoritatively against {@link #currentRecipe}
-     * and the recipe's {@code xp_cost}; a present client payload with a stale recipe cache
-     * rejects cleanly. Delegates recipe application to {@link #applyCraftingRecipe} inside
-     * {@link ContainerLevelAccess#execute} so the {@link Level} is only touched on the server
-     * tick thread that owns the table.
+     * Handles a click on slot 2 when a stat-gated crafting recipe matches (Zenith's INFUSION
+     * pattern). Validates lapis (3) and XP against the recipe's cost, then delegates to
+     * {@link #applyCraftingRecipe}. The result replaces the input in the enchanting slot.
      */
     private boolean handleCraftingClick(Player player) {
-        Optional<RecipeHolder<? extends Recipe<SingleRecipeInput>>> recipeOpt = currentRecipe;
-        int xpCost = recipeOpt
-                .map(holder -> holder.value() instanceof EnchantingRecipe e ? e.getXpCost() : 0)
-                .orElse(0);
-        FizzleEnchantmentLogic.CraftingClickAttempt attempt = FizzleEnchantmentLogic.validateCraftingClick(
-                recipeOpt.isPresent(), xpCost, player.experienceLevel, player.hasInfiniteMaterials());
-        if (!attempt.success()) {
-            return false;
-        }
-        RecipeHolder<? extends Recipe<SingleRecipeInput>> holder = recipeOpt.get();
+        if (currentRecipe.isEmpty()) return false;
+
+        Container enchantSlots = enchantSlots();
+        ItemStack input = enchantSlots.getItem(INPUT_SLOT);
+        ItemStack lapis = enchantSlots.getItem(LAPIS_SLOT);
+        boolean hasInf = player.hasInfiniteMaterials();
+        int lapisRequired = FizzleEnchantmentLogic.CRAFTING_SLOT + 1;
+        int xpCost = costs[FizzleEnchantmentLogic.CRAFTING_SLOT];
+
+        if (input.isEmpty()) return false;
+        if (!hasInf && (lapis.isEmpty() || lapis.getCount() < lapisRequired)) return false;
+        if (!hasInf && player.experienceLevel < xpCost) return false;
+
+        RecipeHolder<? extends Recipe<SingleRecipeInput>> holder = currentRecipe.get();
         access.execute((level, pos) -> applyCraftingRecipe(level, pos, player, holder, xpCost));
         return true;
     }
 
     /**
-     * Server-side application of the cached crafting recipe. Mirrors Zenith's button-id=3 flow:
-     * the recipe's {@link Recipe#assemble} runs against the current input (keep-nbt subtypes copy
-     * {@code ItemEnchantments} onto the result there), the input stack is decremented by one, the
-     * result is inserted into the player's inventory (dropped at the table if full), XP is
-     * consumed, and the shelf scan is re-run via {@link Container#setChanged()} so the
-     * fourth-row preview refreshes from the new input state.
+     * Server-side application of the cached crafting recipe. Mirrors Zenith's slot-2 INFUSION
+     * flow: the recipe's {@link Recipe#assemble} result replaces the input in the enchanting slot,
+     * lapis is consumed (3 for slot 2), XP is deducted, and the shelf scan re-runs via
+     * {@link Container#setChanged()}.
      */
     private void applyCraftingRecipe(
             Level level, BlockPos pos, Player player,
             RecipeHolder<? extends Recipe<SingleRecipeInput>> holder, int xpCost) {
         Container enchantSlots = enchantSlots();
         ItemStack input = enchantSlots.getItem(INPUT_SLOT);
-        if (input.isEmpty()) {
-            return;
-        }
+        if (input.isEmpty()) return;
+
         ItemStack result = holder.value().assemble(new SingleRecipeInput(input), level.registryAccess());
+        enchantSlots.setItem(INPUT_SLOT, result);
 
-        input.shrink(1);
-        if (input.isEmpty()) {
-            enchantSlots.setItem(INPUT_SLOT, ItemStack.EMPTY);
+        if (!player.hasInfiniteMaterials()) {
+            int lapisRequired = FizzleEnchantmentLogic.CRAFTING_SLOT + 1;
+            ItemStack lapis = enchantSlots.getItem(LAPIS_SLOT);
+            lapis.shrink(lapisRequired);
+            if (lapis.isEmpty()) {
+                enchantSlots.setItem(LAPIS_SLOT, ItemStack.EMPTY);
+            }
         }
 
-        if (!player.getInventory().add(result)) {
-            player.drop(result, false);
-        }
-
+        player.onEnchantmentPerformed(result, 0);
         if (!player.hasInfiniteMaterials() && xpCost > 0) {
             player.giveExperienceLevels(-xpCost);
+        }
+
+        player.awardStat(Stats.ENCHANT_ITEM);
+        if (player instanceof ServerPlayer sp) {
+            CriteriaTriggers.ENCHANTED_ITEM.trigger(sp, result, xpCost);
         }
 
         enchantSlots.setChanged();

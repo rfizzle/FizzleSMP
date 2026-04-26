@@ -29,12 +29,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * T-5.3.3 — covers the crafting-result-row click path wired through
- * {@link FizzleEnchantmentMenu#clickMenuButton} (button id 3). The actual menu click requires a
- * live {@code ServerPlayer} + {@code Level} pair, so the click-time gate is exercised through its
- * extracted helper ({@link FizzleEnchantmentLogic#validateCraftingClick}) and the keep-nbt path
- * is verified against the same {@link net.minecraft.world.item.crafting.Recipe#assemble} call the
- * server handler performs.
+ * Covers the crafting-result click path wired through slot 2 (Zenith's INFUSION pattern).
+ * The actual menu click requires a live {@code ServerPlayer} + {@code Level} pair, so the
+ * click-time gate is exercised through {@link FizzleEnchantmentLogic#validateClick} targeting
+ * slot 2 (which requires 3 lapis), and the keep-nbt path is verified against the same
+ * {@link net.minecraft.world.item.crafting.Recipe#assemble} call the server handler performs.
  */
 class CraftingResultFlowTest {
 
@@ -44,8 +43,6 @@ class CraftingResultFlowTest {
     static void bootstrap() {
         SharedConstants.tryDetectVersion();
         Bootstrap.bootStrap();
-        // Enchantments are data-driven in 1.21.1; VanillaRegistries populates the dynamic lookup
-        // so Sharpness resolves below without a server boot.
         lookup = VanillaRegistries.createLookup();
     }
 
@@ -53,70 +50,43 @@ class CraftingResultFlowTest {
         return lookup.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(Enchantments.SHARPNESS);
     }
 
-    // ---- validateCraftingClick (server-side gate) --------------------------
+    // ---- validateClick for slot 2 (crafting slot gate) --------------------------
 
     @Test
-    void validateCraftingClick_noRecipe_rejects() {
-        // Stale client payload: the client still shows the fourth row but the server's cached
-        // recipe has since cleared (input removed between the send and the click).
-        FizzleEnchantmentLogic.CraftingClickAttempt attempt = FizzleEnchantmentLogic
-                .validateCraftingClick(false, 20, 30, false);
+    void craftingSlotClick_insufficientLapis_rejects() {
+        FizzleEnchantmentLogic.ClickAttempt attempt = FizzleEnchantmentLogic
+                .validateClick(FizzleEnchantmentLogic.CRAFTING_SLOT, 10, false, 2, 30, false);
         assertFalse(attempt.success(),
-                "id==3 with no cached recipe must reject — there's nothing to craft");
-        assertTrue(attempt.rejection().contains("recipe"),
-                "rejection reason should mention the missing recipe for debuggability");
+                "slot 2 requires 3 lapis — 2 is insufficient");
     }
 
     @Test
-    void validateCraftingClick_insufficientXp_rejects() {
-        // Recipe present but player has 12 levels vs. a 15-level cost — reject, no side effects.
-        FizzleEnchantmentLogic.CraftingClickAttempt attempt = FizzleEnchantmentLogic
-                .validateCraftingClick(true, 15, 12, false);
+    void craftingSlotClick_insufficientXp_rejects() {
+        FizzleEnchantmentLogic.ClickAttempt attempt = FizzleEnchantmentLogic
+                .validateClick(FizzleEnchantmentLogic.CRAFTING_SLOT, 15, false, 3, 12, false);
         assertFalse(attempt.success(),
-                "player xp below the recipe's xp_cost must reject the click");
-        assertTrue(attempt.rejection().contains("experience"),
-                "rejection reason should mention experience for log grepping");
+                "player xp below the recipe's cost must reject the click");
     }
 
     @Test
-    void validateCraftingClick_enoughXp_passes() {
-        FizzleEnchantmentLogic.CraftingClickAttempt attempt = FizzleEnchantmentLogic
-                .validateCraftingClick(true, 10, 10, false);
+    void craftingSlotClick_enoughResources_passes() {
+        FizzleEnchantmentLogic.ClickAttempt attempt = FizzleEnchantmentLogic
+                .validateClick(FizzleEnchantmentLogic.CRAFTING_SLOT, 10, false, 3, 10, false);
         assertTrue(attempt.success(),
-                "xp exactly equal to cost must pass — the ledger balances");
+                "3 lapis + xp exactly equal to cost must pass");
     }
 
     @Test
-    void validateCraftingClick_creative_bypassesXpGate() {
-        // Creative bypasses the xp gate just like vanilla enchanting. The recipe-presence check
-        // still runs so a click with no server-side match no-ops regardless.
-        FizzleEnchantmentLogic.CraftingClickAttempt attempt = FizzleEnchantmentLogic
-                .validateCraftingClick(true, 30, 0, true);
-        assertTrue(attempt.success(), "creative bypasses the xp gate");
-
-        FizzleEnchantmentLogic.CraftingClickAttempt missing = FizzleEnchantmentLogic
-                .validateCraftingClick(false, 30, 0, true);
-        assertFalse(missing.success(),
-                "creative does not bypass the recipe-presence check — no recipe, no op");
-    }
-
-    @Test
-    void validateCraftingClick_zeroCost_passesWithNoXp() {
-        // Free recipes (xp_cost omitted → default 0) must still apply without any xp.
-        FizzleEnchantmentLogic.CraftingClickAttempt attempt = FizzleEnchantmentLogic
-                .validateCraftingClick(true, 0, 0, false);
-        assertTrue(attempt.success(),
-                "xp_cost=0 recipes apply regardless of the player's xp bar");
+    void craftingSlotClick_creative_bypassesResourceGate() {
+        FizzleEnchantmentLogic.ClickAttempt attempt = FizzleEnchantmentLogic
+                .validateClick(FizzleEnchantmentLogic.CRAFTING_SLOT, 30, false, 0, 0, true);
+        assertTrue(attempt.success(), "creative bypasses both lapis and xp gates");
     }
 
     // ---- assemble path (keep-nbt preserves stored books) --------------------
 
     @Test
     void keepNbtAssemble_preservesStoredEnchantmentsOnLibraryUpgrade() {
-        // Library → Ender Library upgrade: the menu's button-id=3 handler calls
-        // recipe.assemble(new SingleRecipeInput(input), registryAccess). Stand in for the library
-        // block-item with Items.BOOK marked with ItemEnchantments — the same DataComponent the
-        // keep-nbt subtype copies.
         ItemStack libraryIn = new ItemStack(Items.BOOK);
         ItemEnchantments.Mutable stored = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
         stored.set(sharpness(), 5);
@@ -144,9 +114,6 @@ class CraftingResultFlowTest {
 
     @Test
     void baseAssemble_doesNotPropagateInputEnchantments() {
-        // The non-keep-nbt subtype (the default for most table recipes — hellshelf → infused, tome
-        // upgrades, etc.) must produce a vanilla result with no carryover, so the server handler's
-        // "enchanting recipe" branch doesn't accidentally copy NBT from the source stack.
         ItemStack swordIn = new ItemStack(Items.DIAMOND_SWORD);
         ItemEnchantments.Mutable stored = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
         stored.set(sharpness(), 5);
@@ -163,8 +130,6 @@ class CraftingResultFlowTest {
         ItemStack crafted = plain.assemble(new SingleRecipeInput(swordIn), null);
 
         ItemEnchantments carried = crafted.get(DataComponents.ENCHANTMENTS);
-        // ItemStack components default to ItemEnchantments.EMPTY when never set; verify the
-        // output carries the default (empty) map rather than the input's sharpness 5.
         assertTrue(carried == null || carried.isEmpty(),
                 "non-keep-nbt recipes must not leak input enchantments onto the output");
         assertEquals(Items.DIAMOND, crafted.getItem(),

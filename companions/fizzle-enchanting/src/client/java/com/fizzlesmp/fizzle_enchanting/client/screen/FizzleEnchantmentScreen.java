@@ -1,6 +1,5 @@
 package com.fizzlesmp.fizzle_enchanting.client.screen;
 
-import com.fizzlesmp.fizzle_enchanting.enchanting.CraftingRowFormatter;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentLogic;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
 import com.fizzlesmp.fizzle_enchanting.enchanting.StatCollection;
@@ -8,19 +7,16 @@ import com.fizzlesmp.fizzle_enchanting.net.CraftingResultEntry;
 import com.fizzlesmp.fizzle_enchanting.net.EnchantmentClue;
 import com.google.common.collect.Lists;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
 import net.minecraft.client.gui.screens.inventory.EnchantmentScreen;
 import net.minecraft.client.resources.language.I18n;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -34,13 +30,6 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
             ResourceLocation.fromNamespaceAndPath("fizzle_enchanting", "textures/gui/enchanting_table.png");
 
     private static final float ABSOLUTE_MAX_ETERNA = 100.0F;
-
-    private static final int CRAFTING_ROW_X = 60;
-    private static final int CRAFTING_ROW_Y = 103;
-    private static final int CRAFTING_ROW_W = 108;
-    private static final int CRAFTING_ROW_H = 10;
-    private static final int CRAFTING_ROW_TEXT_COLOR = 0xFF404040;
-    private static final int CRAFTING_ROW_TEXT_HOVER_COLOR = 0xFF80A030;
 
     private final FizzleEnchantmentMenu fizzleMenu;
 
@@ -159,16 +148,6 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
         gfx.drawString(this.font, I18n.get("gui.fizzle_enchanting.enchant.eterna"), 19, 74, 0x3DB53D, false);
         gfx.drawString(this.font, I18n.get("gui.fizzle_enchanting.enchant.quanta"), 19, 84, 0xFC5454, false);
         gfx.drawString(this.font, I18n.get("gui.fizzle_enchanting.enchant.arcana"), 19, 94, 0xA800A8, false);
-
-        craftingResult().ifPresent(entry -> renderCraftingRow(gfx, entry, mouseX, mouseY));
-    }
-
-    private void renderCraftingRow(GuiGraphics gfx, CraftingResultEntry entry, int mouseX, int mouseY) {
-        int color = isHovering(CRAFTING_ROW_X, CRAFTING_ROW_Y, CRAFTING_ROW_W, CRAFTING_ROW_H, mouseX, mouseY)
-                ? CRAFTING_ROW_TEXT_HOVER_COLOR
-                : CRAFTING_ROW_TEXT_COLOR;
-        String label = CraftingRowFormatter.format(entry);
-        gfx.drawString(this.font, label, CRAFTING_ROW_X + 2, CRAFTING_ROW_Y + 1, color, false);
     }
 
     @Override
@@ -205,38 +184,61 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
             if (!isHovering(60, 14 + 19 * slot, 108, 17, mouseX, mouseY)) continue;
 
             List<Component> lines = Lists.newArrayList();
-            List<EnchantmentClue> clues = fizzleMenu.getClientClues(slot);
-            boolean exhausted = fizzleMenu.isClientCluesExhausted(slot);
 
-            if (!clues.isEmpty()) {
-                lines.add(Component.translatable("info.fizzle_enchanting.enchant.clues"
-                        + (exhausted ? "_all" : ""))
+            if (slot == FizzleEnchantmentLogic.CRAFTING_SLOT && craftingResult().isPresent()) {
+                CraftingResultEntry entry = craftingResult().get();
+                lines.add(entry.result().getHoverName().copy()
                         .withStyle(ChatFormatting.YELLOW, ChatFormatting.UNDERLINE));
-                Registry<Enchantment> registry = this.minecraft.level.registryAccess()
-                        .registryOrThrow(Registries.ENCHANTMENT);
-                for (EnchantmentClue clue : clues) {
-                    Optional<Holder.Reference<Enchantment>> holder = registry.getHolder(clue.enchantment());
-                    holder.ifPresent(ref -> lines.add(Enchantment.getFullname(ref, clue.level())));
+                if (!creative) {
+                    lines.add(Component.literal(""));
+                    int cost = slot + 1;
+                    if (this.minecraft.player.experienceLevel < level) {
+                        lines.add(Component.translatable("container.enchant.level.requirement", level)
+                                .withStyle(ChatFormatting.RED));
+                    } else {
+                        ChatFormatting lapisColor = lapis >= cost ? ChatFormatting.GRAY : ChatFormatting.RED;
+                        lines.add(Component.translatable(cost == 1
+                                ? "container.enchant.lapis.one" : "container.enchant.lapis.many", cost)
+                                .withStyle(lapisColor));
+                        lines.add(Component.translatable(cost == 1
+                                ? "container.enchant.level.one" : "container.enchant.level.many", cost)
+                                .withStyle(ChatFormatting.GRAY));
+                    }
                 }
             } else {
-                lines.add(Component.translatable("info.fizzle_enchanting.enchant.no_clue")
-                        .withStyle(ChatFormatting.DARK_RED, ChatFormatting.UNDERLINE));
-            }
+                List<EnchantmentClue> clues = fizzleMenu.getClientClues(slot);
+                boolean exhausted = fizzleMenu.isClientCluesExhausted(slot);
 
-            if (this.menu.enchantClue[slot] != -1 && !creative) {
-                lines.add(Component.literal(""));
-                int cost = slot + 1;
-                if (this.minecraft.player.experienceLevel < level) {
-                    lines.add(Component.translatable("container.enchant.level.requirement", level)
-                            .withStyle(ChatFormatting.RED));
+                if (!clues.isEmpty()) {
+                    lines.add(Component.translatable("info.fizzle_enchanting.enchant.clues"
+                            + (exhausted ? "_all" : ""))
+                            .withStyle(ChatFormatting.YELLOW, ChatFormatting.UNDERLINE));
+                    Registry<Enchantment> registry = this.minecraft.level.registryAccess()
+                            .registryOrThrow(Registries.ENCHANTMENT);
+                    for (EnchantmentClue clue : clues) {
+                        Optional<Holder.Reference<Enchantment>> holder = registry.getHolder(clue.enchantment());
+                        holder.ifPresent(ref -> lines.add(Enchantment.getFullname(ref, clue.level())));
+                    }
                 } else {
-                    ChatFormatting lapisColor = lapis >= cost ? ChatFormatting.GRAY : ChatFormatting.RED;
-                    lines.add(Component.translatable(cost == 1
-                            ? "container.enchant.lapis.one" : "container.enchant.lapis.many", cost)
-                            .withStyle(lapisColor));
-                    lines.add(Component.translatable(cost == 1
-                            ? "container.enchant.level.one" : "container.enchant.level.many", cost)
-                            .withStyle(ChatFormatting.GRAY));
+                    lines.add(Component.translatable("info.fizzle_enchanting.enchant.no_clue")
+                            .withStyle(ChatFormatting.DARK_RED, ChatFormatting.UNDERLINE));
+                }
+
+                if (this.menu.enchantClue[slot] != -1 && !creative) {
+                    lines.add(Component.literal(""));
+                    int cost = slot + 1;
+                    if (this.minecraft.player.experienceLevel < level) {
+                        lines.add(Component.translatable("container.enchant.level.requirement", level)
+                                .withStyle(ChatFormatting.RED));
+                    } else {
+                        ChatFormatting lapisColor = lapis >= cost ? ChatFormatting.GRAY : ChatFormatting.RED;
+                        lines.add(Component.translatable(cost == 1
+                                ? "container.enchant.lapis.one" : "container.enchant.lapis.many", cost)
+                                .withStyle(lapisColor));
+                        lines.add(Component.translatable(cost == 1
+                                ? "container.enchant.level.one" : "container.enchant.level.many", cost)
+                                .withStyle(ChatFormatting.GRAY));
+                    }
                 }
             }
 
@@ -258,35 +260,10 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
                     Component.literal(String.format("Arcana: %.1f%%", stats.arcana()))),
                     mouseX, mouseY);
         }
-
-        Optional<CraftingResultEntry> crafting = craftingResult();
-        if (crafting.isPresent()
-                && isHovering(CRAFTING_ROW_X, CRAFTING_ROW_Y, CRAFTING_ROW_W, CRAFTING_ROW_H, mouseX, mouseY)) {
-            CraftingResultEntry entry = crafting.get();
-            gfx.renderComponentTooltip(this.font, Lists.newArrayList(
-                    entry.result().getHoverName(),
-                    Component.translatable("info.fizzle_enchanting.crafting_row.xp_cost", entry.xpCost()),
-                    Component.translatable("info.fizzle_enchanting.crafting_row.recipe_id", entry.recipeId().toString())),
-                    mouseX, mouseY);
-        }
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        // Crafting row click
-        if (craftingResult().isPresent()
-                && isHovering(CRAFTING_ROW_X, CRAFTING_ROW_Y, CRAFTING_ROW_W, CRAFTING_ROW_H, mouseX, mouseY)) {
-            Minecraft mc = this.minecraft;
-            if (mc != null && mc.gameMode != null && mc.player != null) {
-                mc.gameMode.handleInventoryButtonClick(this.menu.containerId,
-                        FizzleEnchantmentLogic.CRAFTING_BUTTON_ID);
-                mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1.0F));
-                return true;
-            }
-        }
-
-        // Enchantment option button clicks — validate against synced data slots directly,
-        // bypassing clickMenuButton which checks server-only slotPicks and always fails client-side.
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
         for (int k = 0; k < 3; ++k) {
