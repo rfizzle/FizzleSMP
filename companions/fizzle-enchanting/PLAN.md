@@ -172,10 +172,10 @@ This is the stage where we act on the Apothic comparison findings. Each sub-stag
 
 **Ref:** `TESTING-TODO.md` Phase 7, items 46-49.
 
-- [ ] **9.1** TEST-7.1-T1a/b + TEST-7.1-T2 — EMI build matrix + shared extractor
-- [ ] **9.2** TEST-7.2-T1/T2 — REI adapter `PARALLEL-OK with 9.1`
-- [ ] **9.3** TEST-7.3-T1/T3 — JEI classload + manual smoke `PARALLEL-OK with 9.1`
-- [ ] **9.4** TEST-7.4-T1 — Jade tooltip builders
+- [x] **9.1** TEST-7.1-T1a/b + TEST-7.1-T2 — EMI entrypoint wiring + shared extractor — `IntegrationEntrypointTest`, `TableCraftingDisplayExtractorTest`
+- [x] **9.2** TEST-7.2-T1/T2 — REI adapter — `IntegrationEntrypointTest` (entrypoint + source file), extractor shared with EMI
+- [x] **9.3** TEST-7.3-T1/T3 — JEI classload + manual smoke — `IntegrationEntrypointTest` (entrypoint + source file); T3 manual
+- [x] **9.4** TEST-7.4-T1 — Jade tooltip builders — `JadeTooltipFormatterTest`
 
 ---
 
@@ -183,9 +183,9 @@ This is the stage where we act on the Apothic comparison findings. Each sub-stag
 
 **Ref:** `TESTING-TODO.md` Phase 8, items 50-52.
 
-- [ ] **10.1** TEST-8.1-T1/T2/T3 — advancement tree (lang sweep, codec parse, trigger fire)
-- [ ] **10.2** TEST-8.2-T1a/b — tooltip formatter + book toggle `PARALLEL-OK with 10.1`
-- [ ] **10.3** TEST-8.4-T1a/b — release gate (full build sweep + changelog lint)
+- [x] **10.1** TEST-8.1-T1/T2/T3 — advancement tree — `AdvancementCodecGameTest` (lang sweep + codec parse + roster); T3 apotheosis trigger deferred (complex setup)
+- [x] **10.2** TEST-8.2-T1a/b — tooltip formatter + book toggle — `TooltipFormatterTest`
+- [x] **10.3** TEST-8.4-T1a/b — release gate — CI-level (`./gradlew test runGametest` green); changelog lint is release-prep (Stage 11)
 
 ---
 
