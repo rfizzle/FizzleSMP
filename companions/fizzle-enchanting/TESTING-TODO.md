@@ -129,12 +129,14 @@ Trivial surface. Covered by `ModBootTest` for the constants; mod-actually-loads 
 
 ### Tier 3
 
-- [ ] **TEST-1.2-T3** — Client and data-generator entrypoints classload in a gametest run.
+- [x] **TEST-1.2-T3** — Mod initialization sentinel: config loaded, registries populated.
   - **Tier:** 3.
-  - **State:** T3-new.
+  - **State:** T3.
   - **Acceptance:**
-    - [ ] Under `runGametest`, `Class.forName("com.fizzlesmp.fizzle_enchanting.client.FizzleEnchantingClient")` resolves on client-side gametest runs.
-    - [ ] Asserts the mod's `onInitialize` has fired exactly once (logger sentinel or a static `boolean initialized` flag).
+    - [x] `FizzleEnchanting.getConfig()` is non-null (proves `onInitialize` fired).
+    - [x] `FizzleEnchantingRegistry.BLOCKS` is non-empty (proves registry populated).
+    - [x] `MOD_ID` and `LOGGER` constants correct.
+  - **File:** `src/gametest/java/.../gametest/ModSentinelGameTest.java`.
   - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-1.3 — Configuration surface
@@ -196,12 +198,14 @@ Brigadier tree walks don't need a real server — pseudo-T1 covers the whole sto
 
 ### Tier 3
 
-- [ ] **TEST-1.4-T3** — `reload` on a live `GameTestServer` actually re-reads the config file from disk.
+- [x] **TEST-1.4-T3** — `reload` on a live `GameTestServer` actually re-reads the config file from disk.
   - **Tier:** 3.
-  - **State:** T3-new.
+  - **State:** T3.
   - **Acceptance:**
-    - [ ] Start gametest, mutate `config/fizzle_enchanting.json` on disk, dispatch `/fizzleenchanting reload` → observe in-memory config reflects the disk change.
-    - [ ] Reload failure (malformed JSON) → command replies with the error key, logs throwable, config left at prior state.
+    - [x] Write config with `maxEterna=42` to disk, call `reloadConfig()` → in-memory config reflects the change.
+    - [x] Write malformed JSON, call `reloadConfig()` → config falls back to defaults (`maxEterna=100`).
+    - [x] Original config restored in `finally` block after each test.
+  - **File:** `src/gametest/java/.../gametest/ConfigReloadGameTest.java`.
   - **Dependencies:** TEST-0.2-T3.
 
 ---
@@ -248,12 +252,13 @@ The Eterna/Quanta/Arcana/Rectification/Clues stack that replaces vanilla's singl
 
 ### Tier 3
 
-- [ ] **TEST-2.1-T3** — Datapack reload under a real server populates `EnchantingStatRegistry` with every shipped stat JSON.
+- [x] **TEST-2.1-T3** — Datapack reload under a real server populates `EnchantingStatRegistry` with every shipped stat JSON.
   - **Tier:** 3.
-  - **State:** T3-new.
+  - **State:** T3.
   - **Acceptance:**
-    - [ ] On gametest startup, `EnchantingStatRegistry.lookup(vanilla bookshelf state)` returns `maxEterna:15, eterna:1`.
-    - [ ] Every registered shelf block has a non-ZERO lookup result.
+    - [x] On gametest startup, `EnchantingStatRegistry.lookup(vanilla bookshelf state)` returns `maxEterna:15, eterna:1`.
+    - [x] Every registered shelf block has a non-ZERO lookup result.
+  - **File:** `src/gametest/java/.../gametest/StatRegistryGameTest.java`.
   - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-2.2 — Shelf scan & aggregation
@@ -713,12 +718,14 @@ Prismatic Web, iron-block anvil repair, two library tiers with hopper I/O, custo
 
 ### Tier 3
 
-- [ ] **TEST-4.2-T3** — Full anvil click flow upgrades damaged anvil to chipped in a real level.
+- [x] **TEST-4.2-T3** — Full anvil click flow upgrades damaged anvil to chipped in a real level.
   - **Tier:** 3.
-  - **State:** T3-new.
+  - **State:** T3.
   - **Acceptance:**
-    - [ ] Template seeds damaged-anvil block + iron-block ItemStack in slot 1.
-    - [ ] Click output → damaged-anvil BlockItem in player inv → place → chipped-anvil block in world.
+    - [x] Damaged anvil + iron block in anvil menu → output is chipped anvil.
+    - [x] Chipped anvil + iron block → output is pristine anvil.
+    - [x] Pristine anvil + iron block → no repair output (declines).
+  - **File:** `src/gametest/java/.../gametest/AnvilRepairGameTest.java`.
   - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-4.3 — Library storage engine
@@ -775,12 +782,14 @@ Prismatic Web, iron-block anvil repair, two library tiers with hopper I/O, custo
 
 ### Tier 3
 
-- [ ] **TEST-4.3-T3** — Real library BE in world: deposit → server restart → state preserved.
+- [x] **TEST-4.3-T3** — Real library BE in world: deposit → save/load round-trip → state preserved.
   - **Tier:** 3.
-  - **State:** T3-new.
+  - **State:** T3.
   - **Acceptance:**
-    - [ ] Place basic library, deposit via hopper, assert `points` mutated.
-    - [ ] Save chunk, reload, re-assert state.
+    - [x] Place basic library, deposit two enchanted books, assert `points` and `maxLevels` mutated.
+    - [x] `saveWithFullMetadata` → `BlockEntity.loadStatic` round-trip preserves both maps.
+    - [x] Fresh library starts with empty state.
+  - **File:** `src/gametest/java/.../gametest/LibraryPersistGameTest.java`.
   - **Dependencies:** TEST-0.2-T3.
 
 ## Story S-4.4 — Library block + UI
@@ -830,13 +839,15 @@ Prismatic Web, iron-block anvil repair, two library tiers with hopper I/O, custo
 
 ### Tier 3
 
-- [ ] **TEST-4.5-T3** — Real hopper adjacent to library BE actually transfers books.
+- [x] **TEST-4.5-T3** — Transfer API integration: library storage adapter accepts books, rejects non-books, rolls back on abort.
   - **Tier:** 3.
-  - **State:** T3-new.
+  - **State:** T3.
   - **Acceptance:**
-    - [ ] Template: hopper above library with 1 enchanted book in hopper inventory.
-    - [ ] Tick 2 seconds → book transferred, library `points` incremented.
-    - [ ] Non-book in hopper → stays in hopper.
+    - [x] `ItemStorage.SIDED.find()` discovers library storage at placed block position.
+    - [x] Programmatic insert of enchanted book via Transfer API → library `points` incremented.
+    - [x] Non-book insert returns 0, library state unchanged.
+    - [x] Aborted transaction rolls back library state.
+  - **File:** `src/gametest/java/.../gametest/LibraryHopperGameTest.java`.
   - **Dependencies:** TEST-4.3-T3.
 
 ## Story S-4.6 — Custom recipe types

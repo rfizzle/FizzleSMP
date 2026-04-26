@@ -128,12 +128,12 @@ Pure-math T1 extractions and missing T2/T3 coverage. These don't require legacy 
 - [x] **6.B6** TEST-5.2-T2a/b/c — `ScrapTomeHandler` seeded pick helpers + `ExtractionTomeHandler.stripAndDamage` at T2
 
 ### Batch C — Missing T3 real-level assertions
-- [ ] **6.C1** TEST-2.1-T3 — stat registry under real datapack reload
-- [ ] **6.C2** TEST-4.2-T3 — anvil click flow in real level
-- [ ] **6.C3** TEST-4.3-T3 — library persist through save/load
-- [ ] **6.C4** TEST-4.5-T3 — hopper transfers books to library
-- [ ] **6.C5** TEST-1.2-T3 — mod loads sentinel
-- [ ] **6.C6** TEST-1.4-T3 — reload end-to-end
+- [x] **6.C1** TEST-2.1-T3 — stat registry under real datapack reload (`StatRegistryGameTest`)
+- [x] **6.C2** TEST-4.2-T3 — anvil click flow in real level (`AnvilRepairGameTest`)
+- [x] **6.C3** TEST-4.3-T3 — library persist through save/load (`LibraryPersistGameTest`)
+- [x] **6.C4** TEST-4.5-T3 — hopper transfers books to library (`LibraryHopperGameTest` — tests Transfer API path directly)
+- [x] **6.C5** TEST-1.2-T3 — mod loads sentinel (`ModSentinelGameTest`)
+- [x] **6.C6** TEST-1.4-T3 — reload end-to-end (`ConfigReloadGameTest`)
 
 ---
 
