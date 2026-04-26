@@ -83,8 +83,8 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
      *
      * <p>Aggregation rules: {@code eterna} is clamped to {@code [0, maxEterna]}
      * where {@code maxEterna} is the max across contributors; {@code quanta}, {@code arcana},
-     * and {@code rectification} are clamped to {@code [0, 100]}; {@code clues} is clamped to
-     * {@code [0, }{@link StatCollection#MAX_CLUES}{@code ]}.
+     * and {@code rectification} are clamped to {@code [0, 100]}; {@code clues} is floored at 0
+     * with no upper bound (matching Apothic's unbounded clue count).
      *
      * <p>Filtering-shelf blacklists and treasure-shelf flags are picked up via the context
      * lookup: any in-range {@link BlockPos} whose block entity implements {@link BlacklistSource}
@@ -168,7 +168,7 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
         float clampedQuanta = Math.max(0F, Math.min(quanta, 100F));
         float clampedArcana = Math.max(0F, Math.min(arcana, 100F));
         float clampedRectification = Math.max(0F, Math.min(rectification, 100F));
-        int clampedClues = Math.max(0, Math.min(clues, StatCollection.MAX_CLUES));
+        int clampedClues = Math.max(0, clues);
         Set<ResourceKey<Enchantment>> finalBlacklist = blacklist == null
                 ? Set.of()
                 : Set.copyOf(blacklist);

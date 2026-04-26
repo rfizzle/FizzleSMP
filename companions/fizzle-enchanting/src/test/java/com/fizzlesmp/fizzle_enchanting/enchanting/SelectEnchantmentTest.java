@@ -277,7 +277,7 @@ class SelectEnchantmentTest {
         Holder.Reference<Enchantment> mending = register(reg, MENDING, synthetic(anyItems, 2, 1));
         Holder.Reference<Enchantment> lure = register(reg, LURE, synthetic(rodItems, 2, 3));
 
-        List<Holder<Enchantment>> inTable = List.of(sharpness, smite, bane, unbreaking, mending, lure);
+        List<Holder<Enchantment>> inTable = List.of(sharpness, smite, bane, unbreaking, lure);
         List<Holder<Enchantment>> treasure = List.of(mending);
         reg.bindTags(Map.of(
                 EnchantmentTags.IN_ENCHANTING_TABLE, inTable,

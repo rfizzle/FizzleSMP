@@ -125,7 +125,7 @@ class EnchantingStatRegistryGatherTest {
         StatCollection result = reg.gatherStatsFromOffsets(offsets(2), lookup);
 
         assertEquals(3, result.clues(),
-                "clues sum to exactly MAX_CLUES — inside the [0, 3] clamp");
+                "clues sum to 3 (1 + 2 from the two shelves)");
     }
 
     @Test
@@ -251,15 +251,15 @@ class EnchantingStatRegistryGatherTest {
     }
 
     @Test
-    void gather_singleShelfWithOverflowingClues_clampsToThree() {
+    void gather_singleShelfWithHighClues_passesThrough() {
         EnchantingStatRegistry reg = new EnchantingStatRegistry();
         EnchantingStats overclued = new EnchantingStats(0F, 0F, 0F, 0F, 0F, 5);
 
         StatCollection result = reg.gatherStatsFromOffsets(
                 List.of(new BlockPos(0, 0, 0)), pos -> overclued);
 
-        assertEquals(StatCollection.MAX_CLUES, result.clues(),
-                "A lone shelf with clues=5 clamps to the MAX_CLUES preview-slot ceiling");
+        assertEquals(5, result.clues(),
+                "clues are unbounded — a shelf with clues=5 passes through without clamping");
     }
 
     @Test

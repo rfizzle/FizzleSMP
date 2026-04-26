@@ -92,7 +92,7 @@ public final class FizzleEnchantmentLogic {
         for (int slot = 0; slot < PREVIEW_SLOTS; slot++) {
             int cost = RealEnchantmentHelper.getEnchantmentCost(random, slot, eterna, input);
             if (cost < slot + 1) {
-                cost = 0;
+                cost++;
             }
             if (!hasInfiniteMaterials && lapisCount < slot + 1) {
                 cost = 0;

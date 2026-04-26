@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * T-3.3.1 — sightshelf and sightshelf_t2 contribute clues only. Their shipped JSONs omit
  * {@code maxEterna}, which the codec zero-fills, so placing a sightshelf beside lower-tier
  * stone shelves does not raise the enchanting ceiling by itself. Stacking two sightshelf_t2s
- * adds four raw clues, which the aggregator caps at {@link StatCollection#MAX_CLUES} since the
- * enchanting screen only draws three preview slots.
+ * adds four raw clues; the aggregator passes them through unbounded (matching Apothic's
+ * behavior where clue count has no ceiling).
  */
 class SightshelfStatsTest {
 
@@ -71,17 +71,15 @@ class SightshelfStatsTest {
     }
 
     @Test
-    void twoSightshelfT2_stackToFourCluesThenClampToMaxClues() throws Exception {
+    void twoSightshelfT2_stackToFourCluesUnbounded() throws Exception {
         EnchantingStatRegistry reg = new EnchantingStatRegistry();
         EnchantingStats sightT2 = loadShippedStats("sightshelf_t2.json");
 
         List<BlockPos> offsets = List.of(new BlockPos(0, 0, 0), new BlockPos(1, 0, 0));
         StatCollection result = reg.gatherStatsFromOffsets(offsets, pos -> sightT2);
 
-        // Raw clue sum is 4 (2 + 2). The aggregator clamps to MAX_CLUES since the
-        // enchanting screen has three preview slots.
-        assertEquals(StatCollection.MAX_CLUES, result.clues(),
-                "two sightshelf_t2 in range sum to four raw clues; aggregator caps at MAX_CLUES");
+        assertEquals(4, result.clues(),
+                "two sightshelf_t2 in range sum to four raw clues; no upper clamp");
         assertEquals(0F, result.maxEterna(), 1e-6F,
                 "a pair of sightshelves leaves the Eterna ceiling at zero");
         assertEquals(0F, result.eterna(), 1e-6F,

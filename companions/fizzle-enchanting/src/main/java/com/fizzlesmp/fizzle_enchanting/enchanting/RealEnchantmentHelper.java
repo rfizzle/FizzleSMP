@@ -81,7 +81,7 @@ public final class RealEnchantmentHelper {
      * lower tail — at {@code rectification=100} the factor is {@code >= 0} and outcomes are
      * monotonically {@code >= level}.
      *
-     * <p>Arcana shifts the rarity weighting and unlocks extra picks at 25 and 75. Incompatible
+     * <p>Arcana shifts the rarity weighting and unlocks extra picks at 33, 66, and 99. Incompatible
      * enchantments are pruned after each pick so two mutually-exclusive rolls never coexist.
      *
      * @param rand             pre-seeded random; callers use the player's enchantment seed
@@ -136,9 +136,8 @@ public final class RealEnchantmentHelper {
             enchantability = 1;
         }
 
-        int srcLevel = level;
         float quantaFactor = getQuantaFactor(rand, quanta, rectification);
-        int powerCap = resolveMaxEterna() * 4;
+        int powerCap = resolveMaxEterna() * 2;
         int scaledLevel = Mth.clamp(Math.round(level * (1F + quantaFactor)), 1, powerCap);
 
         Set<ResourceKey<Enchantment>> safeBlacklist = blacklist == null ? Set.of() : blacklist;
@@ -156,34 +155,20 @@ public final class RealEnchantmentHelper {
             pool.add(new ArcanaEnchantmentData(arcanaTier, inst));
         }
 
-        pickInto(rand, pool, chosen);
-        if (!chosen.isEmpty()) {
-            removeIncompatible(pool, lastOf(chosen));
-        }
-        if (arcana >= 25F && !pool.isEmpty()) {
-            pickInto(rand, pool, chosen);
-            if (!chosen.isEmpty()) {
-                removeIncompatible(pool, lastOf(chosen));
+        for (int i = 0; i < 100; i += 33) {
+            if (arcana >= i && !pool.isEmpty()) {
+                pickInto(rand, pool, chosen);
+                if (!chosen.isEmpty()) {
+                    removeIncompatible(pool, lastOf(chosen));
+                }
             }
-        }
-        if (arcana >= 75F && !pool.isEmpty()) {
-            pickInto(rand, pool, chosen);
         }
 
-        int rollingLevel = scaledLevel;
-        if (rollingLevel > 45) {
-            rollingLevel = (int) (srcLevel * 1.15F);
-        }
-        int randomBound = 50;
-        while (rand.nextInt(randomBound) <= rollingLevel) {
-            if (!chosen.isEmpty()) {
-                removeIncompatible(pool, lastOf(chosen));
-            }
-            if (pool.isEmpty()) {
-                break;
-            }
+        int randomBound = Math.max(50, (int) (scaledLevel * 1.15F));
+        while (rand.nextInt(randomBound) <= scaledLevel && !pool.isEmpty()) {
             pickInto(rand, pool, chosen);
-            rollingLevel /= 2;
+            removeIncompatible(pool, lastOf(chosen));
+            scaledLevel /= 2;
         }
         return chosen;
     }
@@ -194,9 +179,9 @@ public final class RealEnchantmentHelper {
      *
      * <p>Filters applied:
      * <ul>
-     *     <li>{@link EnchantmentTags#IN_ENCHANTING_TABLE} — only enchantments the datapack
-     *         publishes to the table.</li>
-     *     <li>{@link EnchantmentTags#TREASURE} — gated by {@code allowTreasure}.</li>
+     *     <li>{@link EnchantmentTags#IN_ENCHANTING_TABLE} OR ({@code allowTreasure} AND
+     *         {@link EnchantmentTags#TREASURE}) — treasure-only enchantments (e.g. Mending)
+     *         are unlocked when a treasure shelf is present.</li>
      *     <li>{@code blacklist} — filtering-shelf book contents.</li>
      *     <li>{@link Enchantment#canEnchant(ItemStack)} — supported-items check.</li>
      * </ul>
@@ -215,10 +200,9 @@ public final class RealEnchantmentHelper {
     ) {
         List<EnchantmentInstance> list = new ArrayList<>();
         for (Holder.Reference<Enchantment> holder : (Iterable<Holder.Reference<Enchantment>>) registry.holders()::iterator) {
-            if (!holder.is(EnchantmentTags.IN_ENCHANTING_TABLE)) {
-                continue;
-            }
-            if (!allowTreasure && holder.is(EnchantmentTags.TREASURE)) {
+            boolean inTable = holder.is(EnchantmentTags.IN_ENCHANTING_TABLE);
+            boolean isTreasure = holder.is(EnchantmentTags.TREASURE);
+            if (!inTable && !(allowTreasure && isTreasure)) {
                 continue;
             }
             if (blacklist.contains(holder.key())) {
@@ -260,7 +244,7 @@ public final class RealEnchantmentHelper {
      *
      * @param rand        pre-seeded random shared with {@link #selectEnchantment} in the caller
      * @param slotPicks   the selection pool for this slot; never mutated by this method
-     * @param cluesCount  clamped clues stat in {@code [0, 3]}; values {@code <= 0} still permit
+     * @param cluesCount  clamped clues stat in {@code [0, ∞)}; values {@code <= 0} still permit
      *                    a primary pick (so the slot has something to display) but return an
      *                    empty clue list
      * @return the primary, clue list, and exhaustion flag for this slot

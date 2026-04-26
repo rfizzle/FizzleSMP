@@ -23,9 +23,6 @@ public record StatCollection(
         boolean treasureAllowed
 ) {
 
-    /** Vanilla enchanting tables render three preview slots; clues cannot exceed that count. */
-    public static final int MAX_CLUES = 3;
-
     public static final StatCollection EMPTY = new StatCollection(
             0F, 0F, 0F, 0F, 0, 0F, Set.of(), false);
 }

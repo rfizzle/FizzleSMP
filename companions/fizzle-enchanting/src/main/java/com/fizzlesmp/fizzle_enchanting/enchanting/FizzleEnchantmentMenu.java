@@ -262,7 +262,7 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
                 Math.max(0F, Math.min(raw.quanta() + 15F, 100F)),
                 Math.max(0F, Math.min(raw.arcana() + itemEnchantability / 2F, 100F)),
                 raw.rectification(),
-                Math.min(raw.clues() + 1, StatCollection.MAX_CLUES),
+                raw.clues() + 1,
                 raw.maxEterna(),
                 raw.blacklist(),
                 raw.treasureAllowed()
