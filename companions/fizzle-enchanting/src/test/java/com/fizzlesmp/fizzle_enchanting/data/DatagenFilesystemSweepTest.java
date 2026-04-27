@@ -54,8 +54,9 @@ class DatagenFilesystemSweepTest {
             "beeshelf", "melonshelf", "stoneshelf",
             "hellshelf", "blazing_hellshelf", "glowing_hellshelf",
             "seashelf", "heart_seashelf", "crystal_seashelf",
-            "pearl_endshelf", "draconic_endshelf",
+            "endshelf", "pearl_endshelf", "draconic_endshelf",
             "dormant_deepshelf", "echoing_deepshelf", "soul_touched_deepshelf",
+            "filtering_shelf", "treasure_shelf",
             "sightshelf", "sightshelf_t2",
             "rectifier", "rectifier_t2", "rectifier_t3");
 

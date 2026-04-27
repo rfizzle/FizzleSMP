@@ -1,6 +1,7 @@
 package com.fizzlesmp.fizzle_enchanting.data;
 
 import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
+import com.fizzlesmp.fizzle_enchanting.FizzleEnchantingRegistry;
 import com.fizzlesmp.fizzle_enchanting.shelf.FizzleShelves;
 
 import java.util.concurrent.CompletableFuture;
@@ -37,13 +38,10 @@ import net.minecraft.world.item.crafting.Ingredient;
  * against {@code minecraft:potion}. The Zenith regeneration/water/night-vision recipes route
  * through {@link #potionIngredient(Holder)}.
  *
- * <p><b>Deferred recipes:</b> three shelves and the Prismatic Web need items that later epics
- * register:
+ * <p><b>Deferred recipes:</b> two sculk shelves still need items from later epics:
  * <ul>
- *   <li>{@code endshelf} — uses {@code infused_breath} (T-5.4.1).</li>
  *   <li>{@code echoing_sculkshelf} / {@code soul_touched_sculkshelf} — use
  *       {@code warden_tendril} (T-5.4.2).</li>
- *   <li>{@code prismatic_web} — the item itself ships in T-4.1.3.</li>
  * </ul>
  * Those slots are called out in {@link #buildRecipes} as TODO comments so they're picked up when
  * the downstream items land. Every remaining shelf that can be built from registered items gets
@@ -167,9 +165,18 @@ public class FizzleRecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_infused_seashelf", has(FizzleShelves.INFUSED_SEASHELF))
                 .save(exporter);
 
-        // === End family — endshelf itself deferred (needs infused_breath from T-5.4.1) ===
-        // TODO(T-5.4.1): endshelf shaped recipe (uses minecraft:end_stone_bricks + minecraft:ender_pearl
-        // + fizzle_enchanting:infused_breath + c:bookshelves).
+        // === End family ===
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, FizzleShelves.ENDSHELF)
+                .pattern("EEE")
+                .pattern("IBP")
+                .pattern("EEE")
+                .define('E', Items.END_STONE_BRICKS)
+                .define('I', FizzleEnchantingRegistry.INFUSED_BREATH)
+                .define('B', ConventionalItemTags.BOOKSHELVES)
+                .define('P', Items.ENDER_PEARL)
+                .unlockedBy("has_infused_breath", has(FizzleEnchantingRegistry.INFUSED_BREATH))
+                .save(exporter);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, FizzleShelves.PEARL_ENDSHELF)
                 .pattern("R R")
                 .pattern("PSP")
@@ -278,6 +285,29 @@ public class FizzleRecipeProvider extends FabricRecipeProvider {
                 .define('H', Items.PURPUR_BLOCK)
                 .define('S', FizzleShelves.RECTIFIER_T2)
                 .unlockedBy("has_rectifier_t2", has(FizzleShelves.RECTIFIER_T2))
+                .save(exporter);
+
+        // === Utility — filtering shelf ===
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, FizzleEnchantingRegistry.FILTERING_SHELF)
+                .pattern("PSP")
+                .pattern("LLL")
+                .pattern("PSP")
+                .define('P', Items.PRISMARINE_BRICKS)
+                .define('S', FizzleShelves.INFUSED_SEASHELF)
+                .define('L', Items.PRISMARINE_BRICK_SLAB)
+                .unlockedBy("has_infused_seashelf", has(FizzleShelves.INFUSED_SEASHELF))
+                .save(exporter);
+
+        // === Utility — treasure shelf ===
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, FizzleEnchantingRegistry.TREASURE_SHELF)
+                .pattern("GSG")
+                .pattern("DED")
+                .pattern("GSG")
+                .define('G', Items.GOLD_BLOCK)
+                .define('S', FizzleShelves.DEEPSHELF)
+                .define('D', ConventionalItemTags.DIAMOND_GEMS)
+                .define('E', Items.EMERALD_BLOCK)
+                .unlockedBy("has_deepshelf", has(FizzleShelves.DEEPSHELF))
                 .save(exporter);
 
         // === Prismatic Web ===

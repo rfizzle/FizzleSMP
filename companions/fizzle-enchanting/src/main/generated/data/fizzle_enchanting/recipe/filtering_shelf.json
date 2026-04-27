@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "L": {
+      "item": "minecraft:prismarine_brick_slab"
+    },
+    "P": {
+      "item": "minecraft:prismarine_bricks"
+    },
+    "S": {
+      "item": "fizzle_enchanting:infused_seashelf"
+    }
+  },
+  "pattern": [
+    "PSP",
+    "LLL",
+    "PSP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "fizzle_enchanting:filtering_shelf"
+  }
+}

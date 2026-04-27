@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_deepshelf": {
+      "conditions": {
+        "items": [
+          {
+            "items": "fizzle_enchanting:deepshelf"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "fizzle_enchanting:treasure_shelf"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_deepshelf"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "fizzle_enchanting:treasure_shelf"
+    ]
+  }
+}
