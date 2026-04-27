@@ -7,7 +7,7 @@
     "authors": ["FizzleSMP"],
     "contact": {},
     "license": "All-Rights-Reserved",
-    "icon": "",
+    "icon": "assets/fizzle_difficulty/icon.png",
     "environment": "*",
     "entrypoints": {
         "main": ["com.fizzlesmp.fizzle_difficulty.FizzleDifficulty"],
