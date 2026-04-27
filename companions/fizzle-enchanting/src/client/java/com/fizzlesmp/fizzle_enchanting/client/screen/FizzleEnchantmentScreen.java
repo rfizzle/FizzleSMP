@@ -325,8 +325,20 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
             list.add(Component.translatable("gui.fizzle_enchanting.stat.arcana.desc3").withStyle(ChatFormatting.GRAY));
             if (stats.arcana() > 0) {
                 list.add(Component.literal(""));
-                list.add(Component.translatable("gui.fizzle_enchanting.stat.arcana.value",
-                        f(stats.arcana())).withStyle(ChatFormatting.GOLD));
+                ItemStack inputItem = this.menu.slots.get(0).getItem();
+                float enchBonus = inputItem.isEmpty() ? 0F : inputItem.getItem().getEnchantmentValue() / 2F;
+                float baseArcana = Math.max(0F, stats.arcana() - enchBonus);
+                if (enchBonus > 0) {
+                    list.add(Component.translatable("gui.fizzle_enchanting.stat.arcana.base",
+                            f(baseArcana)).withStyle(ChatFormatting.GRAY));
+                    list.add(Component.translatable("gui.fizzle_enchanting.stat.arcana.ench_bonus",
+                            f(enchBonus)).withStyle(ChatFormatting.GRAY));
+                    list.add(Component.translatable("gui.fizzle_enchanting.stat.arcana.total",
+                            f(stats.arcana())).withStyle(ChatFormatting.GOLD));
+                } else {
+                    list.add(Component.translatable("gui.fizzle_enchanting.stat.arcana.value",
+                            f(stats.arcana())).withStyle(ChatFormatting.GOLD));
+                }
             }
             gfx.renderComponentTooltip(this.font, list, mouseX, mouseY);
             pose.popPose();

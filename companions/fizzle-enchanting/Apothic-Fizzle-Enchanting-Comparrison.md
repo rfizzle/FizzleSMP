@@ -12,7 +12,7 @@
 | Phase | Area | Parity | Key Gaps |
 |-------|------|--------|----------|
 | 1 | Core Systems (Structure, Stats, Selection, Network) | ~100% | — |
-| 2 | GUI & UX (Screen, Info Browser, Particles) | ~95% | Minor: no item enchantability breakdown in arcana tooltip |
+| 2 | GUI & UX (Screen, Info Browser, Particles) | ~100% | — |
 | 3 | Blocks & Shelves (27 shelves, special shelves) | ~100% | — |
 | 4 | Recipes & Data-Driven Audit | ~90% | 16/20 infusion recipes (4 intentionally cut); KeepNBT copies enchantments only |
 | 5 | Library, Tomes & Anvil | ~90% | Library extract produces books only (not direct apply); 9 typed tomes cut |
@@ -512,5 +512,5 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 These are places where Fizzle's underlying enchanting system diverges from Apothic by design (or necessity). The GUI is aligned to Apothic's patterns but the display reflects Fizzle's actual mechanics.
 
 1. **XP charging** — Fizzle deducts `slot + 1` levels (vanilla pattern via `player.giveExperienceLevels`). Apothic computes raw XP points via `MiscUtil.getExpCostForSlot` and charges actual experience points. The slot hover panel shows "Level Cost" instead of Apothic's "Raw XP Cost: N (M Levels)".
-2. **Item enchantability does not contribute to arcana** — Apothic's `EnchantmentTableStats.Builder` starts with `arcana = itemEnch / 2F`, so higher-enchantability items get a natural arcana boost. Fizzle's `gatherStats` sums only shelf contributions. Apothic's arcana tooltip breaks this down into "Base Value" (shelves) + "Enchantability Bonus" (item) + "Total Value"; Fizzle shows only the total since the bonus doesn't exist.
+2. ~~**Item enchantability does not contribute to arcana**~~ — RESOLVED: Fizzle's `applyBaselines` already adds `itemEnchantability / 2` to arcana (matching Apothic). Arcana tooltip now shows "Base Value" (shelves) + "Enchantability Bonus" (item) + "Total Value" breakdown.
 3. **Rectification vs Stability** — Apothic has a boolean `stable` flag (quanta variance disabled entirely). Fizzle has a continuous `rectification` stat (0–100%) that truncates the negative tail of quanta variance. The quanta tooltip shows "Rectification" instead of "Quantic Stability".
