@@ -44,12 +44,12 @@ The MVP is the **Apotheosis/Zenith core**. Everything else is iteration backlog.
 |---|---|---|
 | Stat-driven enchanting table (5 stats) | ✅ | Core |
 | Stat datapack (`enchanting_stats/*.json`) | ✅ | Schema ported from Zenith 1:1 |
-| Full Zenith shelf roster (25 blocks) | ✅ | Exact parity with Zenith — see "Shelf Blocks" below |
+| Full shelf roster (27 blocks) | ✅ | 25 themed shelves + filtering shelf + treasure shelf — see "Shelf Blocks" below |
 | Enchantment-table crafting (stat-gated) | ✅ | Zenith's `zenith:enchanting` + `zenith:keep_nbt_enchanting` recipe types; gates tier-3 shelves, tome upgrades, Ender Library |
 | Enchantment Library block (2 tiers) | ✅ | Basic (lvl 16) + Ender (lvl 31) |
 | Prismatic Web (removes curses) | ✅ | The only non-tome anvil interaction Zenith ships |
 | Iron block repairs damaged anvil | ✅ | Zenith's iron-block anvil-repair recipe |
-| Scrap Tome + Improved Scrap Tome | ✅ | Both destroy the item; Scrap outputs one random enchant, Improved outputs all |
+| Scrap Tome + Improved Scrap Tome | ✅ | Both destroy the item; Scrap outputs ~half of enchants (Apothic behavior), Improved outputs all |
 | Extraction Tome | ✅ | Preserves the item; outputs all enchants as one book (most expensive tier) |
 | 51 MVP enchantments (49 NeoEnchant+ ports + 2 Zenith) | ✅ | All pure JSON against vanilla `EnchantmentEffectComponents` — zero custom effect component types needed. See list below |
 | `infused_breath` specialty item | ✅ | Required to craft endshelf + infused-tier shelves + library; produced via table crafting from dragon_breath |
@@ -220,12 +220,20 @@ Each shelf block contributes a per-stat scalar that sums across all shelves with
 
 Zenith-style menu replacement rather than direct `slotsChanged` injection. Cleaner to reason about, same runtime semantics, and tracks the reference 1:1.
 
-**Mixin footprint — two classes, one injection, three accessors:**
+**Mixin footprint — 6 mixins + 2 access wideners:**
 
-| Mixin | Target | Type | Purpose |
-|---|---|---|---|
-| `EnchantmentTableBlockMixin` | `getMenuProvider` | `@Inject HEAD cancellable` | Swap in our menu |
-| `EnchantmentMenuAccessor` | `enchantSlots` / `random` / `enchantmentSeed` | `@Accessor` × 3 | Read private fields from the subclass |
+| Mixin | Target | Purpose |
+|---|---|---|
+| `EnchantmentTableBlockMixin` | `EnchantingTableBlock` | Swap in custom menu; drive shelf particles from table |
+| `EnchantmentMenuAccessor` | `EnchantmentMenu` | Expose enchantSlots, random, enchantmentSeed |
+| `AnvilMenuAccessor` | `AnvilMenu` | Expose cost + repairItemCountCost fields |
+| `AnvilMenuMixin` | `AnvilMenu` | Dispatch custom anvil operations (tomes, prismatic web, iron repair); left-replacement with re-entrancy guard |
+| `EnchantmentMixin` | `Enchantment` | Override maxLevel from per-enchantment config; over-leveled name color |
+| `ItemMixin` | `Item` | Global minimum enchantability floor via `globalMinEnchantability` (default 1) |
+
+**Access wideners:** `Slot.y` (mutable field), `EnchantmentScreen.renderBook()` (accessible method).
+
+Apothic uses 15+ mixins + 3 ASM coremods. Fizzle leverages 1.21.1 data-driven enchantments and Fabric API events instead, keeping the mixin count at 6 with zero ASM.
 
 ```java
 @Inject(method = "getMenuProvider", at = @At("HEAD"), cancellable = true)
@@ -329,67 +337,55 @@ Each `enchanting_stats/<id>.json` entry has five possible fields (Zenith schema)
 - `rectification` — reduces negative Quanta variance
 - `clues` — extra preview slots revealed
 
-**Wood-tier shelves** (noise: WOOD, strength 0.75):
+#### Complete Shelf Stats Table
 
-| Block | maxEterna | eterna | quanta | arcana | Notes |
-|---|---|---|---|---|---|
-| `beeshelf` | 15 | 1 | 1 | 0 | Honeycomb + bookshelf |
-| `melonshelf` | 15 | 1 | 0 | 1 | Melon + bookshelf |
+All values are from the implemented `enchanting_stats/*.json` files (31 JSON stat files).
 
-**Stone-tier shelves** (noise: STONE, strength 1.5–5.0):
+| Block | Tier | maxE | eterna | quanta | arcana | clues | rectif. | Particle | Notes |
+|---|---|---|---|---|---|---|---|---|---|
+| Vanilla Bookshelf | Starter | 15 | 1 | 0 | 0 | 0 | 0 | ENCHANT | Tag fallback |
+| `stoneshelf` | Starter | 0 | −1.5 | 0 | −7.5 | 0 | 0 | ENCHANT | Negative stats for tuning |
+| `beeshelf` | Starter | 0 | −15 | 100 | 0 | 0 | 0 | ENCHANT | Max quanta, negative eterna |
+| `melonshelf` | Starter | 0 | −1 | −10 | 0 | 0 | 0 | ENCHANT | Negative quanta/eterna |
+| `dormant_deepshelf` | Starter | 15 | 1 | 0 | 0 | 0 | 0 | ENCHANT_SCULK | Pre-infusion |
+| `hellshelf` | Early | 22.5 | 1.5 | 3 | 0 | 0 | 0 | ENCHANT_FIRE | Nether T1 |
+| `seashelf` | Early | 22.5 | 1.5 | 0 | 2 | 0 | 0 | ENCHANT_WATER | Ocean T1 |
+| `infused_hellshelf` | Mid | 27 | 1.75 | 1.75 | 0 | 0 | 0 | ENCHANT_FIRE | Table craft |
+| `infused_seashelf` | Mid | 27 | 1.75 | 0 | 1.75 | 0 | 0 | ENCHANT_WATER | Table craft |
+| `glowing_hellshelf` | Mid | 30 | 2 | 2 | 4 | 0 | 0 | ENCHANT_FIRE | |
+| `blazing_hellshelf` | Mid | 30 | 4 | 5 | 0 | −1 | 0 | ENCHANT_FIRE | Removes a clue |
+| `crystal_seashelf` | Mid | 30 | 2 | 4 | 2 | 0 | 0 | ENCHANT_WATER | |
+| `heart_seashelf` | Mid | 30 | 3 | 0 | 10 | 0 | −5 | ENCHANT_WATER | Negative rectification |
+| `deepshelf` | Late | 35 | 2.5 | 5 | 5 | 0 | 0 | ENCHANT_SCULK | Table craft |
+| `echoing_deepshelf` | Late | 37.5 | 2.5 | 0 | 15 | 0 | 0 | ENCHANT_SCULK | Arcana-focused |
+| `soul_touched_deepshelf` | Late | 37.5 | 2.5 | 15 | 0 | 0 | 0 | ENCHANT_SCULK | Quanta-focused |
+| `echoing_sculkshelf` | Late | 40 | 5 | 5 | 15 | 1 | 0 | ENCHANT_SCULK | Clue + sculk |
+| `soul_touched_sculkshelf` | Late | 40 | 5 | 15 | 5 | 0 | 5 | ENCHANT_SCULK | Rectification + sculk |
+| `endshelf` | End | 45 | 2.5 | 5 | 5 | 0 | 0 | ENCHANT_END | |
+| `pearl_endshelf` | End | 45 | 5 | 7.5 | 7.5 | 0 | 0 | ENCHANT_END | Balanced end variant |
+| `draconic_endshelf` | Max | 50 | 10 | 0 | 0 | 0 | 0 | ENCHANT_END | Only way to max eterna |
+| `sightshelf` | Utility | — | 0 | 0 | 0 | 1 | 0 | — | Clue only |
+| `sightshelf_t2` | Utility | — | 0 | 0 | 0 | 2 | 0 | — | Double clue |
+| `rectifier` | Utility | — | 0 | 0 | 0 | 0 | 10 | — | Fizzle-original |
+| `rectifier_t2` | Utility | — | 0 | 0 | 0 | 0 | 15 | — | Fizzle-original |
+| `rectifier_t3` | Utility | — | 0 | 0 | 0 | 0 | 25 | — | Fizzle-original |
+| `filtering_shelf` | Utility | 15 | 1 | 0 | 0 | 0 | 0 | — | Blacklists enchantments |
+| `treasure_shelf` | Utility | 0 | 0 | 0 | 0 | 0 | 0 | — | Enables treasure enchants |
 
-| Block | maxEterna | eterna | quanta | arcana | Particle | Tier theme |
-|---|---|---|---|---|---|---|
-| `stoneshelf` | 0 | −1.5 | 0 | −7.5 | ENCHANT | Baseline/cheap; intentionally weak |
-| `hellshelf` | 22.5 | 1.5 | 3 | 0 | ENCHANT_FIRE | Nether T1 — Quanta-heavy |
-| `blazing_hellshelf` | 22.5 | 1.5 | +Q | 0 | ENCHANT_FIRE | Nether T2 |
-| `glowing_hellshelf` | 22.5 | 1.5 | +Q | 0 | ENCHANT_FIRE | Nether T2 alt |
-| `infused_hellshelf` | 30 | 2 | +Q | 0 | ENCHANT_FIRE | Nether T3 (glowy item) |
-| `seashelf` | 22.5 | 1.5 | 0 | 2 | ENCHANT_WATER | Ocean T1 — Arcana-heavy |
-| `heart_seashelf` | 22.5 | 1.5 | 0 | +A | ENCHANT_WATER | Ocean T2 |
-| `crystal_seashelf` | 22.5 | 1.5 | 0 | +A | ENCHANT_WATER | Ocean T2 alt |
-| `infused_seashelf` | 30 | 2 | 0 | +A | ENCHANT_WATER | Ocean T3 (glowy item) |
-| `endshelf` | 45 | 2.5 | 5 | 5 | ENCHANT_END | End T1 — balanced endgame |
-| `pearl_endshelf` | 45 | 2.5 | +Q | +A | ENCHANT_END | End T2 |
-| `draconic_endshelf` | 50 | 3 | +Q | +A | ENCHANT_END | End T3 |
-| `deepshelf` | 30 | 2 | 2 | 0 | ENCHANT_SCULK | Deep T1 (glowy item) |
-| `dormant_deepshelf` | 25 | 1.5 | 1 | 0 | ENCHANT_SCULK | Deep T0 |
-| `echoing_deepshelf` | 35 | 2.5 | +Q | 0 | ENCHANT_SCULK | Deep T2 |
-| `soul_touched_deepshelf` | 35 | 2.5 | +Q | 0 | ENCHANT_SCULK | Deep T2 alt |
-
-**Sculk-tier shelves** (reanimated-bookshelf subtype):
-
-| Block | maxEterna | eterna | quanta | arcana | Notes |
-|---|---|---|---|---|---|
-| `echoing_sculkshelf` | 40 | 3 | +Q | +A | Sculk variant |
-| `soul_touched_sculkshelf` | 40 | 3 | +Q | +A | Sculk variant |
-
-**Utility shelves** (pure stat contributions, no Eterna):
-
-| Block | Stat | Value | Role |
-|---|---|---|---|
-| `sightshelf` | `clues` | +1 | Reveals one extra preview enchantment |
-| `sightshelf_t2` | `clues` | +2 | Reveals two extra |
-| `rectifier` | `rectification` | 10 | Reduces negative Quanta variance |
-| `rectifier_t2` | `rectification` | 15 | Stronger rectification |
-| `rectifier_t3` | `rectification` | 20 | Maximum rectification |
-
-**Special shelves** (block-entity backed):
-
-| Block | Role |
-|---|---|
-| `filtering_shelf` | Chiseled-bookshelf variant. Stored books blacklist those enchantments from table results. Acts as a wood-tier base shelf when empty. |
-| `treasure_shelf` | Unlocks treasure enchantments at the table (Mending, Frost Walker, Soul Speed, etc.). No Eterna contribution of its own. |
+**Special shelf notes:**
+- **Filtering shelf**: `ChiseledBookShelfBlock` extension with 6 book slots. Stored books blacklist their enchantments from the table. Currently gives flat stats from JSON regardless of book count — **planned to match Apothic** which scales +0.5 eterna / +1 arcana per book stored.
+- **Treasure shelf**: `TreasureFlagSource` marker; no stat contribution; custom texture.
+- **Sculk shelves**: `randomTicks()` set on block properties; config fields `sculkShelfShriekerChance` and `sculkParticleChance` exist but `randomTick()` is not yet wired — **planned to implement** ambient sounds matching Apothic.
 
 **Non-shelf stat providers** (vanilla blocks picked up by the stat registry):
 
-| Block | Stat | Purpose |
-|---|---|---|
-| `amethyst_cluster` | `arcana +0.5` (example) | Flavor bonus from nearby amethyst |
-| `skeleton_skull` (basic_skulls.json) | flavor | Small bonus near skulls |
-| `wither_skull` / `wither_wall_skull` | flavor | Small bonus near wither skulls |
+| Block | maxE | eterna | quanta | arcana | rectif. | Notes |
+|---|---|---|---|---|---|---|
+| Amethyst Cluster | — | 0 | 0 | 0 | +1.5 | Rectification bonus |
+| Basic Skulls (zombie, piglin, creeper) | 0 | 0 | +5 | 0 | 0 | Quanta via tag |
+| Wither Skeleton Skull | 0 | 0 | +10 | 0 | 0 | Double skull quanta |
 
-Exact values are copied verbatim from `/home/rfizzle/Projects/Zenith/src/main/resources/data/zenith/enchanting_stats/*.json` at implementation time; the tables above are summaries, not sources of truth. Values marked `+Q`/`+A` indicate "some positive contribution, exact value taken from the Zenith JSON" — I've collapsed them for readability.
+Values are the authoritative source of truth in `data/fizzle_enchanting/enchanting_stats/*.json` (31 files). The table above reflects the current implementation.
 
 **Recipes and textures:** All 25 shelves' textures and recipes come from Zenith verbatim. See "Asset Sources" below for exact source paths. Recipes go under `data/fizzle_enchanting/recipe/` with the same craft patterns. Credit: textures originate from Apotheosis (Shadows_of_Fire) via Zenith (bageldotjpg).
 
@@ -437,15 +433,24 @@ Each recipe JSON carries:
 
 | Recipe | Input | Output | E | Q | A | Type |
 |---|---|---|---|---|---|---|
-| `infused_breath` | `minecraft:dragon_breath` | `infused_breath` × 3 | 40–∞ | 15–25 | 60–∞ | enchanting |
-| `infused_hellshelf` | `hellshelf` | `infused_hellshelf` | 22.5–∞ | 30–∞ | 0–∞ | enchanting |
-| `infused_seashelf` | `seashelf` | `infused_seashelf` | 22.5–∞ | 0–∞ | 30–∞ | enchanting |
-| `deepshelf` | `dormant_deepshelf` | `deepshelf` | 25–∞ | 10–∞ | 0–∞ | enchanting |
-| `improved_scrap_tome` | `scrap_tome` | `improved_scrap_tome` × 4 | 22.5–∞ | 25–50 | 35–∞ | enchanting |
-| `extraction_tome` | `improved_scrap_tome` | `extraction_tome` × 4 | 30–∞ | 25–75 | 45–∞ | enchanting |
-| `ender_library` | `library` | `ender_library` | 50 | 45–50 | 100 | keep_nbt_enchanting |
+| `infused_seashelf` | `seashelf` | `infused_seashelf` | 22.5 | 15 | 10 | enchanting |
+| `infused_hellshelf` | `hellshelf` | `infused_hellshelf` | 22.5 | 30 | 0 | enchanting |
+| `deepshelf` | `dormant_deepshelf` | `deepshelf` | 30 | 40 | 40 | enchanting |
+| `improved_scrap_tome` | `scrap_tome` | `improved_scrap_tome` × 4 | 22.5 | 25 | 35 | enchanting |
+| `extraction_tome` | `improved_scrap_tome` | `extraction_tome` × 4 | 30 | 25 | 45 | enchanting |
+| `infused_breath` | `minecraft:dragon_breath` | `infused_breath` × 3 | 40 | 15 | 60 | enchanting |
+| `budding_amethyst` | `minecraft:amethyst_block` | `minecraft:budding_amethyst` | 30 | 30 | 50 | enchanting |
+| `golden_carrot` | `minecraft:carrot` | `minecraft:golden_carrot` | 10 | 10 | 0 | enchanting |
+| `honey_xp_t1` | `minecraft:honey_bottle` | `minecraft:experience_bottle` × 1 | 10 | 25 | 25 | enchanting |
+| `honey_xp_t2` | `minecraft:honey_bottle` | `minecraft:experience_bottle` × 8 | 30 | 25 | 25 | enchanting |
+| `honey_xp_t3` | `minecraft:honey_bottle` | `minecraft:experience_bottle` × 32 | 50 | 25 | 25 | enchanting |
+| `echo_shard` | `minecraft:echo_shard` | `minecraft:echo_shard` × 4 | 35 | 50 | 50 | enchanting |
+| `ender_library` | `library` | `ender_library` | 50 | 45 | 100 | keep_nbt_enchanting |
+| `disc_eterna` | `#creeper_drop_music_discs` | `disc_eterna` | 40 | 0 | 0 | enchanting |
+| `disc_quanta` | `#creeper_drop_music_discs` | `disc_quanta` | 10 | 40 | 0 | enchanting |
+| `disc_arcana` | `#creeper_drop_music_discs` | `disc_arcana` | 10 | 0 | 40 | enchanting |
 
-Exact values (including any `display_level` / stack sizes we missed above) come from `/home/rfizzle/Projects/Zenith/src/main/resources/data/zenith/recipes/enchanting/*.json` at implementation time.
+All eterna thresholds are scaled ~0.5× from Apothic (Fizzle maxE=50 vs Apothic maxE=100). 4 Apothic recipes intentionally cut: Inert Trident → Trident, Flimsy Ender Lead → Lead, Ender Lead → Occult Lead (all belong to Apothic modules we don't ship).
 
 Implementation:
 - New `Recipe<SingleRecipeInput>` subtypes registered against `BuiltInRegistries.RECIPE_TYPE`.
@@ -477,6 +482,8 @@ Per book deposited: `1, 2, 4, 8, 16, 32, …`. Books of the same enchantment sta
 Extraction gate requires **both**: `maxLevels[e] ≥ target` **and** `points[e] ≥ points(target) − points(curLvl)`. So depositing 32,768 Sharpness I books gives you the point budget for Sharpness V but `maxLevels[Sharpness] = 1` blocks the pull — prevents "grind commons, extract rares" strategies.
 
 **Extraction upgrades books in place.** Clicking an enchant button with a book already in the extract slot raises it from `curLvl` → `target` for `points(target) − points(curLvl)` points. Upgrading an existing book is far cheaper than pulling a fresh one — this is a deliberate design beat.
+
+**Current state: book-only extraction.** The current implementation produces enchanted books only — the player applies them via anvil. Apothic applies enchantments directly to any item in the extract slot. **Planned to align with Apothic** for direct-item application, which streamlines the UX and cuts the anvil step.
 
 Shift-click resolves `target = min(maxLevels[e], 1 + log₂(points + points(curLvl)))` — the max level affordable from the current pool in one click.
 
@@ -539,11 +546,11 @@ All three tomes destroy the *tome* on use. They differ by how much of the source
 
 | Item | Enchantments removed | Source item fate | Output book |
 |---|---|---|---|
-| **Scrap Tome** (`scrap_tome`) | **One random** enchantment | **Destroyed** | Enchanted book with that one random enchantment |
+| **Scrap Tome** (`scrap_tome`) | **~Half** of enchantments (random) | **Destroyed** | Enchanted book with the removed enchantments |
 | **Improved Scrap Tome** (`improved_scrap_tome`) | **All** enchantments | **Destroyed** | Enchanted book with all the enchantments |
 | **Extraction Tome** (`extraction_tome`) | **All** enchantments | **Preserved**, fully unenchanted | Enchanted book with all the enchantments |
 
-The progression is: Scrap Tome is cheap but loses both the item and most of the enchants (only one comes back, randomly). Improved Scrap Tome still burns the item but salvages every enchantment. Extraction Tome does the same salvage *and* gives the item back, making it the "best-of-both" tier and accordingly the most expensive to craft. The Extraction Tome also exposes an item-repair side-path using the anvil fuel slot (Zenith behavior preserved).
+The progression is: Scrap Tome is cheap but loses the item and roughly half the enchants (matching Apothic's ~half behavior — **currently implemented as 1 random, planned to align with Apothic**). Improved Scrap Tome still burns the item but salvages every enchantment. Extraction Tome does the same salvage *and* gives the item back, making it the "best-of-both" tier and accordingly the most expensive to craft. The Extraction Tome also exposes an item-repair side-path using the anvil fuel slot (Zenith behavior preserved).
 
 All three piggyback on the vanilla anvil menu, dispatched from our single `AnvilMenu#createResult` mixin. No custom screens — the interaction is always "place item in slot A + place tome in slot B → output appears in slot C."
 
@@ -735,6 +742,10 @@ Hybrid split, driven by **copy volume vs. boilerplate volume**: ported/hand-auth
   "foreignEnchantments": {
     "applyBundledOverrides": true
   },
+  "enchantmentOverrides": {
+    "minecraft:sharpness": { "maxLevel": 7, "maxLootLevel": 5, "levelCap": -1 },
+    "minecraft:efficiency": { "maxLevel": 10, "maxLootLevel": 5, "levelCap": -1 }
+  },
   "display": {
     "showBookTooltips": true,
     "overLeveledColor": "#FF6600"
@@ -788,21 +799,28 @@ When a schema-breaking change lands (e.g. renaming `tomes.extractionTomeItemDama
 
 | Command | Permission | Description |
 |---|---|---|
-| `/fizzleenchanting reload` | 2 | Reload config from disk |
+| `/fizzleenchanting reload` | 2 | Reload config from disk, rebuild enchantment info registry, sync to all connected clients |
 | `/fizzleenchanting stats <player>` | 0 | Dump the stats of the enchanting table the player is looking at |
 | `/fizzleenchanting library <player> dump` | 2 | Dump point contents of the library the player is looking at |
 | `/fizzleenchanting give-tome <player> <type>` | 2 | Debug helper for testing tome flows |
 
 ## Integrations
 
-All four shipped at launch as lightweight display adapters (no direct runtime dependency, entry-point-gated in `fabric.mod.json`):
+Seven integrations shipped, all as lightweight display adapters (no direct runtime dependency, entry-point-gated in `fabric.mod.json`):
 
-- **EMI** — shelf stat info panel, tome recipe rendering.
-- **REI** — same adapter pattern as EMI.
-- **JEI** — compatibility for players who run JEI instead of EMI/REI.
-- **Jade** — probe tooltip for enchantment tables (showing current stats) and libraries (showing book points for the enchant under the cursor).
+| Mod | Plugin Classes | Features |
+|---|---|---|
+| **EMI** | `EmiEnchantingPlugin`, `EmiEnchantingRecipe` | 2 recipe categories (Shelves + Tomes), per-shelf info panels |
+| **REI** | `ReiEnchantingPlugin`, `ReiEnchantingCategory`, `ReiEnchantingDisplay` | 2 recipe categories, same layout |
+| **JEI** | `JeiEnchantingPlugin`, `JeiEnchantingCategory` | 2 recipe categories, same layout |
+| **Jade** | `JadeEnchantingPlugin`, 2 providers | Enchanting table 5-axis stats + library enchant count |
+| **WTHIT** | `WthitCommonPlugin`, `WthitClientPlugin`, 2 providers | Same as Jade; discovered via `waila_plugins.json` |
+| **Trinkets** | `AccessorySlotHelper`, `TrinketsCompat` | Slot enumeration + enchantment level query (wired but idle — all enchantments are pure JSON) |
+| **ModMenu** | `ModMenuIntegration` | Full Cloth Config screen, 7 categories, 19 entries |
 
-Each integration module lives under `compat/<name>/` with its own `entrypoints` stanza. Failure to load one (because the user doesn't have it installed) is silent.
+Shared compat layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftingDisplay`, `RecipeInfoFormatter`, `TomeRecipeClassifier`, `JadeTooltipFormatter`.
+
+Each integration module lives under `compat/<name>/` with its own `entrypoints` stanza. All 9 entrypoints declared in `fabric.mod.json` (main, client, datagen, gametest, emi, rei_client, jei_mod_plugin, jade, modmenu). Failure to load one (because the user doesn't have it installed) is silent.
 
 ## Fabric & Quilt
 
@@ -819,18 +837,132 @@ Single Fabric artifact. `fabric.mod.json` declares `depends: { "fabricloader": "
   - **NeoEnchant+ enchantment JSONs + lang keys** — CC BY-NC-SA 4.0 (Hardel). Redistributing the 49 ported JSONs pulls the SA obligation onto derivative works and adds the NC commercial-use question to any public CurseForge/Modrinth hosting. Two paths at publish time: (a) dual-license the `data/` dir as CC BY-NC-SA and clarify NC status for the target platform, or (b) re-author the 49 enchantment JSONs from scratch before shipping publicly.
   - Decision punted until a public release is actually on the table. Private SMP distribution does not trigger either obligation beyond attribution.
 
+## Enchanting Table GUI
+
+The GUI uses a custom texture at `textures/gui/enchanting_table.png` (176×197 pixels, taller than vanilla's 166px).
+
+**Implemented elements:**
+- Custom `FizzleEnchantmentScreen` extending `EnchantmentScreen`
+- Three stat bars at y=75,85,95; width=110px; smooth interpolation (0.1F up, 0.075F down)
+- Enchantment slot hover shows clue enchantments; partial vs full clue toggle via `isClientCluesExhausted`
+- Info button `[i]` at (148,1) opens `EnchantingInfoScreen`
+- Infusion display in slot 2 (yellow underline result name + cost)
+- "Infusion Failed" display (red text) when item matches recipe but stats insufficient
+
+**Enchantment Info Browser:**
+- Opens from `[i]` button; scrollable 11-row enchantment list with scrollbar
+- `PowerSlider` controls `currentPower` within quanta-adjusted range; recomputes enchantments on change
+- Arcana weight table (Common/Uncommon/Rare/Very Rare) with per-enchantment weight + chance %
+- Exclusion tooltips: "Exclusive With: ..." in red via `Enchantment.areCompatible()` check
+
+**Planned GUI improvements (to match Apothic):**
+- Stat bar tooltips with descriptive text explaining what each stat does (Apothic shows "Eterna: Enchanting Power" + explanation + value)
+- `drawOnLeft` side-panel tooltips for quanta buff percentage and arcana bonus breakdown with weight table
+- Power range display on main screen slot tooltips
+- Item enchantability display
+- Explicit clue count display
+- XP cost in both points and levels (currently levels only)
+
+## Per-Enchantment Configuration
+
+Every enchantment (vanilla and modded) gets configurable overrides synced from server to client:
+
+- **`maxLevel`** — cap on effective level the enchanting table can produce
+- **`maxLootLevel`** — different max for loot table generation vs. direct table enchanting
+- **`levelCap`** — hard cap on effective level regardless of NBT
+
+Synced via `EnchantmentInfoPayload` (S2C) on player join and datapack reload. The `/fizzleenchanting reload` command triggers config re-read + registry rebuild + client sync.
+
+**`EnchantmentMixin.getMaxLevel()`** reads from `EnchantmentInfoRegistry` at runtime. **`EnchantmentMixin.getFullname()`** applies configurable hex color (`display.overLeveledColor`, default `#FF6600`) for enchantments above their vanilla max.
+
+**`PowerFunction`** system provides per-enchantment min/max power overrides:
+- `DefaultMinPowerFunction`: vanilla cost extrapolation with 1.6 exponent for above-max levels
+- `DefaultMaxPowerFunction`: flat cap at 200
+- Currently sealed with 2 built-in implementations — **planned: configurable power functions** via expression system (Apothic uses EvalEx)
+
+## Advancements
+
+18 custom advancements with a custom `enchanted_at_table` criterion trigger:
+
+| Advancement | Parent | Trigger |
+|---|---|---|
+| root | — | Obtain any mod shelf |
+| stone_tier | root | Hellshelf/Seashelf/Dormant Deepshelf |
+| tier_three | stone_tier | Infused Hellshelf/Seashelf/Deepshelf |
+| apotheosis | tier_three | `enchanted_at_table` E≥45, levels≥3 |
+| high_arcana | stone_tier | `enchanted_at_table` arcana≥60 |
+| high_quanta | stone_tier | `enchanted_at_table` quanta≥60 |
+| stable_enchanting | stone_tier | Obtain any rectifier |
+| all_seeing | stone_tier | Obtain sightshelf_t2 |
+| curator | tier_three | Obtain filtering_shelf |
+| treasure_seeker | tier_three | Obtain treasure_shelf |
+| library | tier_three | Obtain basic library |
+| ender_library | library | Obtain ender library |
+| tome_apprentice | root | Obtain scrap_tome |
+| tome_master | tome_apprentice | Obtain extraction_tome |
+| web_spinner | root | Obtain prismatic_web |
+| warden_tendril | root | Obtain warden_tendril |
+| sculk_mastery | warden_tendril | Echoing/Soul-Touched Sculkshelf |
+| infused_breath | root | Obtain infused_breath |
+
+The custom `enchanted_at_table` trigger fires with item/levels/eterna/quanta/arcana/rectification predicates.
+
+## Particles & Music
+
+**4 custom particle types:** `ENCHANT_FIRE`, `ENCHANT_WATER`, `ENCHANT_SCULK`, `ENCHANT_END`. 104 textures (26 SGA glyphs × 4 themes). `FlyTowardsPositionParticle.EnchantProvider` drives motion toward the table. `EnchantmentTableBlockMixin.animateTick` spawns themed particles per shelf via `IEnchantingStatProvider`.
+
+**3 music discs** (Eterna, Quanta, Arcana) with sound events, OGG files, jukebox songs, item models/textures. Produced via infusion recipes at the enchanting table.
+
+## Test Infrastructure
+
+- **61 JUnit tests** + **31 gametest classes**
+- `useJUnitPlatform()`, `fabric-loader-junit`, dedicated gametest sourceset
+- Covers config parsing, stat accumulation, point math, selection algorithm, recipe matching, library operations, anvil dispatch
+
+## Design Divergences from Apothic
+
+The following table documents intentional differences from Apothic Enchanting and whether they are permanent Fizzle-original features or planned to align with Apothic.
+
+| Area | Apothic Behavior | Fizzle Current | Planned Direction |
+|---|---|---|---|
+| **Stability model** | Binary `stable` flag from Geode Shelf | Rectification float 0–100 from 3-tier Rectifier shelves | **Keep Fizzle-original** — richer tuning surface; graduated stability is a QoL improvement |
+| **Enchantment source** | 19 custom enchantments (Java-coded) | 51 NeoEnchant+ ports (100% JSON) | **Keep Fizzle-original** — larger, more diverse roster; fully datapack-editable |
+| **Eterna scale** | maxEterna=100 | Code defaults to maxEterna=100 but design target is 50 (shelf values already at half-scale) | **Align with Apothic** — change config default to 50 to match shelf stat scale |
+| **Eterna accumulation** | Step-ladder algorithm (blocks sorted by maxEterna ascending, each group gated) | Flat sum clamped to highest maxEterna seen | **Align with Apothic** — low-tier shelves are less strictly gated currently |
+| **Library extraction** | Direct item application (any item in extract slot) | Book-only (Zenith pattern) | **Align with Apothic** — streamlines UX, cuts the anvil step |
+| **Scrap Tome** | Removes ~half enchantments randomly | Removes 1 random enchantment | **Align with Apothic** — current behavior makes Scrap Tome too weak |
+| **Arcana guaranteed picks** | 3 max (at arcana 0, 33, 66) | 4 picks (adds a 4th at arcana 99) | **Align with Apothic** — remove the 4th pick at 99 |
+| **Anvil repair** | XP cost only | Iron block + 1 level (Zenith) | **Keep Fizzle-original** — iron block cost adds a material sink |
+| **Typed tomes** | 9 slot-filtered tomes | Cut entirely | **Keep cut** — UX felt counter-intuitive |
+| **KeepNBT scope** | Full NBT preservation | Copies `ENCHANTMENTS` component only | **Keep Fizzle-original** — correct for 1.21.1 component model |
+| **Filtering shelf stats** | Dynamic: +0.5 eterna / +1 arcana per book stored | Flat stats from JSON regardless of occupancy | **Align with Apothic** — per-book scaling is more interesting gameplay |
+| **Sculk ambient sounds** | `randomTick()` plays sounds at configurable intervals | Config fields exist but `randomTick()` not wired | **Align with Apothic** — wire `randomTick()` to config fields |
+| **GUI tooltips** | Rich descriptive text, `drawOnLeft` side panels, power range, enchantability | Terse stat bar tooltips, no side panels | **Align with Apothic** — full tooltip suite planned |
+| **Item tooltips** | `appendHoverText()` on all items | No tooltips on standalone items | **Align with Apothic** — add tooltips to tomes, prismatic web, infused breath, warden tendril, music discs |
+| **Mixin strategy** | 15+ mixins + 3 ASM coremods | 6 mixins + 0 ASM | **Keep Fizzle-original** — Fabric events + data-driven enchantments cover the difference |
+
+### Fizzle-Original Features (Not in Apothic)
+
+- **Rectifier shelves (T1/T2/T3)** — three-tier rectification progression (10/15/25)
+- **Rectification as a stat axis** — fifth tracked stat alongside Eterna/Quanta/Arcana/Clues
+- **49 NeoEnchant+ enchantments** — mounted combat, mace, elytra, bow elemental, hoe/farming, size modification
+- **Non-shelf stat providers** — Amethyst Cluster (+1.5 rectification), Skulls (+5/+10 quanta)
+- **Triple recipe viewer support** — EMI + REI + JEI simultaneously
+- **Dual block-info support** — Jade + WTHIT with shared tooltip formatter
+- **Music discs** — 3 custom discs (Eterna, Quanta, Arcana) with infusion recipes
+
 ## MVP Phased Delivery
 
-1. **Phase 1 — Scaffolding:** Gradle, `fabric.mod.json`, empty initializer, mixin config, datagen skeleton, local `./gradlew build`. Committed as `feat: scaffold fizzle-enchanting`.
-2. **Phase 2 — Stat system & table:** `IEnchantingStatProvider`, datapack loader, menu mixin, server→client payloads, one wood shelf block to prove the loop.
-3. **Phase 3 — Shelf family:** The other 7 launch blocks + their JSON stat entries + particles.
-4. **Phase 4 — Anvil & Library:** The 4 MVP anvil tweaks + the 2-tier library block with menu and storage adapter.
-5. **Phase 5 — Tomes:** 3 tome items (Scrap, Improved Scrap, Extraction) wired through the anvil mixin.
-6. **Phase 6 — Enchantments:** Port 49 NeoEnchant+ JSONs + author 2 Zenith-flavor JSONs (Icy Thorns, Shield Bash). No Java code — purely `resources/data/` work + lang keys.
-7. **Phase 7 — Integrations:** EMI, REI, JEI, Jade adapters.
-8. **Phase 8 — Polish:** Advancement tree, tooltips, config docs, test-server playthrough.
+> **Status: All phases complete.** The mod is at ~90% Apothic parity across all areas. Remaining work tracked in the gap assessment (`Apothic-Fizzle-Enchanting-Comparrison.md`).
 
-Each phase ends with a conventional commit (`feat(enchanting): …`) and is independently reviewable.
+1. **Phase 1 — Scaffolding:** ✅ Gradle, `fabric.mod.json`, empty initializer, mixin config, datagen skeleton.
+2. **Phase 2 — Stat system & table:** ✅ `IEnchantingStatProvider`, datapack loader, menu mixin, 3 S2C payloads.
+3. **Phase 3 — Shelf family:** ✅ 27 shelf blocks + 31 JSON stat entries + 4 particle types.
+4. **Phase 4 — Anvil & Library:** ✅ `AnvilDispatcher` with 6 handlers + 2-tier library with GUI and hopper automation.
+5. **Phase 5 — Tomes:** ✅ 3 tome items (Scrap, Improved Scrap, Extraction) wired through anvil mixin.
+6. **Phase 6 — Enchantments:** ✅ 51 enchantments (49 NeoEnchant+ + 2 Zenith-inspired), all pure JSON.
+7. **Phase 7 — Integrations:** ✅ EMI, REI, JEI, Jade, WTHIT, Trinkets, ModMenu (7 integrations, expanded from original 4).
+8. **Phase 8 — Polish:** ✅ 18 advancements, per-enchantment config system, `/fizzleenchanting reload`, 61 JUnit + 31 gametests.
 
 ---
 
@@ -847,7 +979,7 @@ Summary:
 |---|---|---|
 | **Grind Enchantments** | ✅ Superseded by MVP | Scrap / Improved Scrap / Extraction tomes cover the enchant-salvage workflow. The anvil is now the single "enchant management" surface; the grindstone stays vanilla. |
 | **Easy Anvils** | ⚠️ Mostly unnecessary | Its main QoL features (cap removal, items-persist, name-tag tweaks) aren't covered by Zenith. Decide per feature whether to implement, or accept that this mod stays in the pack. |
-| **BeyondEnchant** | 🔨 Needs Iteration 1 | Raising vanilla enchantment caps is additive — not in Zenith's scope. |
+| **BeyondEnchant** | 🔨 Iteration 1 (partially complete) | Java infra done (per-enchant config + mixin + sync). Needs 16 datapack override JSONs + config wiring. |
 | **NeoEnchant+** | ✅ Absorbed into MVP | 49 of NeoEnchant+'s 56 JSONs ship directly in the MVP enchantment roster (7 cut, see "MVP Enchantments" above). Pulled forward from Iteration 2 because the port is pure JSON copy — no reason to defer. |
 | **Enchanting Infuser** | ✅ Superseded by MVP | Library (deterministic dispense) + stat-driven table (discovery feed) cover the pick-your-enchant loop. Bundled foreign-enchant overrides handle Mending / Soulbound. |
 
@@ -891,9 +1023,9 @@ Either is fine. Pick when the MVP is shipped and playtested — if players compl
 
 ## Iteration 1 — Absorb BeyondEnchant
 
-[BeyondEnchant](https://www.curseforge.com/minecraft/mc-mods/beyondenchant) (CF 1135664, by Hardel) raises `max_level` on ~16 vanilla enchantments via `data/minecraft/enchantment/*.json` overrides.
+> **Status: Partially complete.** The Java infrastructure is done — `EnchantmentMixin.getMaxLevel()` reads from `EnchantmentInfoRegistry`, per-enchantment `maxLevel`/`maxLootLevel`/`levelCap` config is synced via `EnchantmentInfoPayload`, and `overLeveledColor` rendering works. What remains is shipping the 16 datapack override JSONs and wiring the config entries.
 
-This iteration is *mostly* a datapack shipped inside the mod jar. The only Java work is a small UX affordance: a tooltip color for enchantments that have been raised beyond their vanilla cap (see `overLeveledColor` in the MVP config).
+[BeyondEnchant](https://www.curseforge.com/minecraft/mc-mods/beyondenchant) (CF 1135664, by Hardel) raises `max_level` on ~16 vanilla enchantments via `data/minecraft/enchantment/*.json` overrides.
 
 **Shipped level caps** (match BeyondEnchant defaults so the swap is transparent):
 
