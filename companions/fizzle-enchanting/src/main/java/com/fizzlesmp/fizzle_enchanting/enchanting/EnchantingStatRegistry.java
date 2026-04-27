@@ -95,7 +95,14 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
     public static StatCollection gatherStats(Level level, BlockPos tablePos) {
         return INSTANCE.gatherStatsFromOffsets(
                 EnchantingTableBlock.BOOKSHELF_OFFSETS,
-                offset -> INSTANCE.resolve(level.getBlockState(tablePos.offset(offset))),
+                offset -> {
+                    BlockPos shelfPos = tablePos.offset(offset);
+                    BlockState state = level.getBlockState(shelfPos);
+                    if (state.getBlock() instanceof IEnchantingStatProvider provider) {
+                        return provider.getStats(level, shelfPos, state);
+                    }
+                    return INSTANCE.resolve(state);
+                },
                 offset -> level.getBlockState(tablePos.offset(midpoint(offset)))
                         .is(BlockTags.ENCHANTMENT_POWER_TRANSMITTER),
                 offset -> level.getBlockEntity(tablePos.offset(offset)));

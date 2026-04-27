@@ -1,5 +1,7 @@
 package com.fizzlesmp.fizzle_enchanting.shelf;
 
+import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantingStatRegistry;
+import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantingStats;
 import com.fizzlesmp.fizzle_enchanting.enchanting.IEnchantingStatProvider;
 import com.mojang.serialization.MapCodec;
 
@@ -50,9 +52,32 @@ public class FilteringShelfBlock extends ChiseledBookShelfBlock implements IEnch
         super(properties);
     }
 
+    static final float ETERNA_PER_BOOK = 0.5F;
+    static final float ARCANA_PER_BOOK = 1.0F;
+
     @Override
     public MapCodec<ChiseledBookShelfBlock> codec() {
         return CODEC;
+    }
+
+    @Override
+    public EnchantingStats getStats(Level level, BlockPos pos, BlockState state) {
+        EnchantingStats base = EnchantingStatRegistry.lookup(level, state);
+        if (level.getBlockEntity(pos) instanceof FilteringShelfBlockEntity be) {
+            return applyBookScaling(base, be.count());
+        }
+        return base;
+    }
+
+    static EnchantingStats applyBookScaling(EnchantingStats base, int bookCount) {
+        if (bookCount <= 0) return base;
+        return new EnchantingStats(
+                base.maxEterna(),
+                base.eterna() + bookCount * ETERNA_PER_BOOK,
+                base.quanta(),
+                base.arcana() + bookCount * ARCANA_PER_BOOK,
+                base.rectification(),
+                base.clues());
     }
 
     @Override

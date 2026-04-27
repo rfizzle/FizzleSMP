@@ -13,7 +13,7 @@
 |-------|------|--------|----------|
 | 1 | Core Systems (Structure, Stats, Selection, Network) | ~95% | Step-ladder eterna accumulation absent; arcana 99 gives 4th guaranteed pick |
 | 2 | GUI & UX (Screen, Info Browser, Particles) | ~95% | Minor: no item enchantability breakdown in arcana tooltip |
-| 3 | Blocks & Shelves (27 shelves, special shelves) | ~98% | Filtering shelf per-book dynamic stats absent |
+| 3 | Blocks & Shelves (27 shelves, special shelves) | ~100% | — |
 | 4 | Recipes & Data-Driven Audit | ~90% | 16/20 infusion recipes (4 intentionally cut); KeepNBT copies enchantments only |
 | 5 | Library, Tomes & Anvil | ~90% | Library extract produces books only (not direct apply); 9 typed tomes cut |
 | 6 | Enchantments & Config | Divergent (by design) | 51 enchantments vs Apothic's 19 (different sets); no configurable power functions |
@@ -149,7 +149,7 @@ Non-shelf stat providers: Amethyst Cluster (+1.5 rect), Basic Skulls (+5 quanta)
 ### B. Special Shelves
 
 - [x] **Filtering shelf**: 6-slot `ChiseledBookShelfBlock` extension; reads enchantments from stored books; `BlacklistSource` interface; block entity persistence + client sync
-- [~] Filtering shelf stats are flat (JSON) regardless of book count — Apothic scales +0.5 eterna / +1 arcana per book
+- [x] Filtering shelf per-book dynamic stats: `getStats()` override adds +0.5 eterna / +1 arcana per stored book (matches Apothic)
 - [x] **Treasure shelf**: `TreasureFlagSource` marker; no stat contribution; custom texture
 - [x] **Rectifier shelves (Fizzle-original)**: 3 tiers (10/15/25 rectification); all have recipes, models, textures
 - [x] **Sculk ambient**: `SculkShelfBlock` overrides `animateTick()` — plays `SCULK_CATALYST_BLOOM` sounds and spawns `SCULK_SOUL` particles using config fields `sculkShelfShriekerChance` and `sculkParticleChance`
@@ -446,7 +446,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 ~~7. **No tooltips on standalone items**~~ — FIXED: `appendHoverText()` added to prismatic web, 3 tomes, infused breath, warden tendril
 8. **No configurable power functions** — sealed `PowerFunction` with 2 built-in implementations only
 9. **No inline enchantment descriptions** client option
-10. **Filtering shelf per-book dynamic stats** — Apothic scales +0.5 eterna / +1 arcana per book; Fizzle gives flat stats regardless of occupancy
+~~10. **Filtering shelf per-book dynamic stats**~~ — FIXED: `FilteringShelfBlock.getStats()` override adds +0.5 eterna / +1 arcana per stored book
 
 ### Minor
 
@@ -499,7 +499,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 
 ### Tier 3 — Nice to Have (needs design review)
 
-- [ ] 9. Implement filtering shelf per-book dynamic stats
+- [x] 9. Implement filtering shelf per-book dynamic stats
 - [ ] 10. Implement step-ladder eterna accumulation (behavioral change — needs design review)
 - [ ] 11. Add configurable power functions (EvalEx or similar expression system — needs design review)
 - [ ] 12. Add inline enchantment descriptions client option
