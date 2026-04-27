@@ -1,5 +1,6 @@
 package com.fizzlesmp.fizzle_enchanting.compat.common;
 
+import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantingStats;
 import com.fizzlesmp.fizzle_enchanting.enchanting.StatCollection;
 import org.junit.jupiter.api.Test;
 
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * T-7.4.1 — pins the text content the Jade probe shows when aimed at an enchanting table or a
@@ -97,5 +99,68 @@ class JadeTooltipFormatterTest {
         assertEquals("Basic Library — 0 enchants stored",
                 JadeTooltipFormatter.libraryLine("Basic Library", -3),
                 "Defensive clamp: a miscounted BE must never leak a negative count to the tooltip.");
+    }
+
+    @Test
+    void blockStatsLines_vanillaBookshelf_showsEternaWithMaxEterna() {
+        EnchantingStats stats = new EnchantingStats(15F, 1F, 0F, 0F, 0F, 0);
+
+        assertEquals(List.of("Eterna: +1 / 15"),
+                JadeTooltipFormatter.blockStatsLines(stats),
+                "Vanilla bookshelf: eterna contribution with maxEterna ceiling, zero stats omitted.");
+    }
+
+    @Test
+    void blockStatsLines_hellshelf_showsEternaAndQuanta() {
+        EnchantingStats stats = new EnchantingStats(22.5F, 1.5F, 3F, 0F, 0F, 0);
+
+        assertEquals(List.of(
+                "Eterna: +1.5 / 22.5",
+                "Quanta: +3"
+        ), JadeTooltipFormatter.blockStatsLines(stats));
+    }
+
+    @Test
+    void blockStatsLines_stoneshelf_showsNegativeValues() {
+        EnchantingStats stats = new EnchantingStats(0F, -1.5F, 0F, -7.5F, 0F, 0);
+
+        assertEquals(List.of(
+                "Eterna: -1.5",
+                "Arcana: -7.5"
+        ), JadeTooltipFormatter.blockStatsLines(stats),
+                "Negative contributions display without + sign; maxEterna of 0 is suppressed.");
+    }
+
+    @Test
+    void blockStatsLines_sightshelf_showsCluesOnly() {
+        EnchantingStats stats = new EnchantingStats(0F, 0F, 0F, 0F, 0F, 1);
+
+        assertEquals(List.of("Clues: +1"),
+                JadeTooltipFormatter.blockStatsLines(stats));
+    }
+
+    @Test
+    void blockStatsLines_rectifier_showsRectificationOnly() {
+        EnchantingStats stats = new EnchantingStats(0F, 0F, 0F, 0F, 10F, 0);
+
+        assertEquals(List.of("Rectification: +10"),
+                JadeTooltipFormatter.blockStatsLines(stats));
+    }
+
+    @Test
+    void blockStatsLines_allZero_returnsEmptyList() {
+        assertTrue(JadeTooltipFormatter.blockStatsLines(EnchantingStats.ZERO).isEmpty(),
+                "A block with no stat contributions should produce no tooltip lines.");
+    }
+
+    @Test
+    void blockStatsLines_heartSeashelf_showsNegativeRectification() {
+        EnchantingStats stats = new EnchantingStats(30F, 3F, 0F, 10F, -5F, 0);
+
+        assertEquals(List.of(
+                "Eterna: +3 / 30",
+                "Arcana: +10",
+                "Rectification: -5"
+        ), JadeTooltipFormatter.blockStatsLines(stats));
     }
 }

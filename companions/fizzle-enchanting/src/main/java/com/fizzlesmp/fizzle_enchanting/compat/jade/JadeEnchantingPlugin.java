@@ -2,6 +2,7 @@ package com.fizzlesmp.fizzle_enchanting.compat.jade;
 
 import com.fizzlesmp.fizzle_enchanting.library.EnchantmentLibraryBlock;
 
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EnchantingTableBlock;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
@@ -42,5 +43,7 @@ public final class JadeEnchantingPlugin implements IWailaPlugin {
                 EnchantingTableJadeProvider.INSTANCE, EnchantingTableBlock.class);
         registration.registerBlockComponent(
                 EnchantmentLibraryJadeProvider.INSTANCE, EnchantmentLibraryBlock.class);
+        registration.registerBlockComponent(
+                BlockStatsJadeProvider.INSTANCE, Block.class);
     }
 }

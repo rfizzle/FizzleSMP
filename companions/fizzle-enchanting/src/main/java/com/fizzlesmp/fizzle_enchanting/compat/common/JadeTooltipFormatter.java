@@ -1,5 +1,6 @@
 package com.fizzlesmp.fizzle_enchanting.compat.common;
 
+import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantingStats;
 import com.fizzlesmp.fizzle_enchanting.enchanting.StatCollection;
 
 import java.util.ArrayList;
@@ -49,6 +50,43 @@ public final class JadeTooltipFormatter {
         lines.add("Rectification: " + formatPercent(stats.rectification()));
         lines.add("Clues: " + stats.clues());
         return lines;
+    }
+
+    /**
+     * Per-block stat contribution lines shown when the probe is aimed at a shelf or other
+     * enchanting stat provider. Only emits lines for non-zero stats so the tooltip stays compact.
+     * Uses signed format (+/-) to make it clear these are contributions, not totals.
+     */
+    public static List<String> blockStatsLines(EnchantingStats stats) {
+        List<String> lines = new ArrayList<>(6);
+        if (stats.eterna() != 0F || stats.maxEterna() > 0F) {
+            String eternaLine = "Eterna: " + signedFloat(stats.eterna());
+            if (stats.maxEterna() > 0F) {
+                eternaLine += " / " + formatFloat(stats.maxEterna());
+            }
+            lines.add(eternaLine);
+        }
+        if (stats.quanta() != 0F) {
+            lines.add("Quanta: " + signedFloat(stats.quanta()));
+        }
+        if (stats.arcana() != 0F) {
+            lines.add("Arcana: " + signedFloat(stats.arcana()));
+        }
+        if (stats.rectification() != 0F) {
+            lines.add("Rectification: " + signedFloat(stats.rectification()));
+        }
+        if (stats.clues() != 0) {
+            lines.add("Clues: " + (stats.clues() > 0 ? "+" : "") + stats.clues());
+        }
+        return lines;
+    }
+
+    static String signedFloat(float value) {
+        String formatted = formatFloat(value);
+        if (value > 0F) {
+            return "+" + formatted;
+        }
+        return formatted;
     }
 
     /**

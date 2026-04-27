@@ -398,7 +398,7 @@ Fizzle: 6 mixins + 0 ASM. Apothic: 15+ mixins + 3 ASM coremods. Fizzle leverages
 | EMI | `EmiEnchantingPlugin`, `EmiEnchantingRecipe` | 2 recipe categories (Shelves + Tomes), per-shelf info panels |
 | REI | `ReiEnchantingPlugin`, `ReiEnchantingCategory`, `ReiEnchantingDisplay` | 2 recipe categories, same layout |
 | JEI | `JeiEnchantingPlugin`, `JeiEnchantingCategory` | 2 recipe categories, same layout |
-| Jade | `JadeEnchantingPlugin`, 2 providers | Enchanting table 5-axis stats + library enchant count; vanilla "Ench Power" suppressed |
+| Jade | `JadeEnchantingPlugin`, 3 providers | Enchanting table 5-axis stats + library enchant count + per-block stat contributions; vanilla "Ench Power" suppressed |
 | WTHIT | `WthitCommonPlugin`, `WthitClientPlugin`, 2 providers | Same as Jade; discovered via `waila_plugins.json` |
 | Trinkets | `AccessorySlotHelper`, `TrinketsCompat` | Slot enumeration + enchantment level query (wired but idle) |
 | ModMenu | `ModMenuIntegration` | Full Cloth Config screen, 7 categories, 19 entries |
@@ -532,7 +532,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 
 - [x] 16. **Old "Ench Power" still showing on enchanting table** — FIXED: `EnchantingTableJadeProvider.appendTooltip()` now calls `tooltip.remove(JadeIds.MC_TOTAL_ENCHANTMENT_POWER)` to suppress the vanilla enchantment power line, matching Apothic's approach.
 
-- [ ] 17. **Old "Ench Power" showing on vanilla bookshelves** — JADE tooltip on vanilla `Bookshelf` shows "Ench Power: 1" with no Fizzle stat breakdown. Since Fizzle replaces the vanilla enchanting system, vanilla bookshelves should show their Fizzle stats (eterna: 1, maxEterna: 15) instead of — or in addition to — the vanilla "Ench Power" value. May need a new Jade provider for `IEnchantingStatProvider` blocks, or extend the existing one.
+- [x] 17. **Old "Ench Power" showing on vanilla bookshelves** — FIXED: New `BlockStatsJadeProvider` (client-only, registered for `Block.class`) shows per-block Fizzle stat contributions and suppresses `JadeIds.MC_ENCHANTMENT_POWER`. Vanilla bookshelves resolve via the tag-based `VANILLA_FALLBACK` (eterna: +1 / 15). Also covers custom shelves and non-shelf stat providers (skulls, amethyst clusters).
 
 - [ ] 18. **Rectification displays as 7500%** — The JADE tooltip on the enchanting table shows "Rectification: 7500%" instead of a value in the 0–100% range. This is a scaling/accumulation bug — either the rectification stat is being summed without clamping, or the display is multiplying by 100 on an already-percentage value. Audit `EnchantingStats.gatherStats()` for rectification clamping and `JadeTooltipFormatter` for display formatting.
 
