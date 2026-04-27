@@ -12,6 +12,7 @@ import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
+import snownee.jade.api.JadeIds;
 import snownee.jade.api.config.IPluginConfig;
 
 /**
@@ -72,6 +73,7 @@ final class EnchantingTableJadeProvider implements IServerDataProvider<BlockAcce
         for (String line : JadeTooltipFormatter.enchantingTableLines(stats)) {
             tooltip.add(Component.literal(line));
         }
+        tooltip.remove(JadeIds.MC_TOTAL_ENCHANTMENT_POWER);
     }
 
     @Override

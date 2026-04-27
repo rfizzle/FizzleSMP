@@ -398,7 +398,7 @@ Fizzle: 6 mixins + 0 ASM. Apothic: 15+ mixins + 3 ASM coremods. Fizzle leverages
 | EMI | `EmiEnchantingPlugin`, `EmiEnchantingRecipe` | 2 recipe categories (Shelves + Tomes), per-shelf info panels |
 | REI | `ReiEnchantingPlugin`, `ReiEnchantingCategory`, `ReiEnchantingDisplay` | 2 recipe categories, same layout |
 | JEI | `JeiEnchantingPlugin`, `JeiEnchantingCategory` | 2 recipe categories, same layout |
-| Jade | `JadeEnchantingPlugin`, 2 providers | Enchanting table 5-axis stats + library enchant count |
+| Jade | `JadeEnchantingPlugin`, 2 providers | Enchanting table 5-axis stats + library enchant count; vanilla "Ench Power" suppressed |
 | WTHIT | `WthitCommonPlugin`, `WthitClientPlugin`, 2 providers | Same as Jade; discovered via `waila_plugins.json` |
 | Trinkets | `AccessorySlotHelper`, `TrinketsCompat` | Slot enumeration + enchantment level query (wired but idle) |
 | ModMenu | `ModMenuIntegration` | Full Cloth Config screen, 7 categories, 19 entries |
@@ -530,7 +530,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 
 #### JADE / WTHIT Integration
 
-- [ ] 16. **Old "Ench Power" still showing on enchanting table** — JADE tooltip displays "Ench Power: 3" (the vanilla enchanting power metric) alongside the Fizzle stats (Eterna, Quanta, Arcana, Rectification, Clues). The vanilla provider should be suppressed or replaced entirely by the Fizzle provider. Check if `JadeEnchantingPlugin` needs to override/remove the vanilla `EnchantingTableProvider` priority.
+- [x] 16. **Old "Ench Power" still showing on enchanting table** — FIXED: `EnchantingTableJadeProvider.appendTooltip()` now calls `tooltip.remove(JadeIds.MC_TOTAL_ENCHANTMENT_POWER)` to suppress the vanilla enchantment power line, matching Apothic's approach.
 
 - [ ] 17. **Old "Ench Power" showing on vanilla bookshelves** — JADE tooltip on vanilla `Bookshelf` shows "Ench Power: 1" with no Fizzle stat breakdown. Since Fizzle replaces the vanilla enchanting system, vanilla bookshelves should show their Fizzle stats (eterna: 1, maxEterna: 15) instead of — or in addition to — the vanilla "Ench Power" value. May need a new Jade provider for `IEnchantingStatProvider` blocks, or extend the existing one.
 
