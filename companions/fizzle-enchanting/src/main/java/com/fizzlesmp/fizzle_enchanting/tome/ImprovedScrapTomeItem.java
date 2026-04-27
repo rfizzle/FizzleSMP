@@ -1,19 +1,22 @@
 package com.fizzlesmp.fizzle_enchanting.tome;
 
-import net.minecraft.world.item.Item;
+import java.util.List;
 
-/**
- * Mid-tier tome — consumed at the anvil with an enchanted item to salvage
- * <strong>every</strong> enchantment onto one fresh enchanted book. The source item is still
- * destroyed; the Extraction tier (see {@link ExtractionTomeItem}) is the one that preserves it.
- *
- * <p>Like the other tomes this class is a bare {@link Item} hook — behaviour lives in
- * {@code ImprovedScrapTomeHandler} (S-5.2) which dispatches from
- * {@link com.fizzlesmp.fizzle_enchanting.anvil.AnvilDispatcher}.
- */
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+
 public class ImprovedScrapTomeItem extends Item {
 
     public ImprovedScrapTomeItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.translatable("info.fizzle_enchanting.improved_scrap_tome").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("info.fizzle_enchanting.improved_scrap_tome2").withStyle(ChatFormatting.GRAY));
     }
 }

@@ -1,20 +1,21 @@
 package com.fizzlesmp.fizzle_enchanting.item;
 
-import net.minecraft.world.item.Item;
+import java.util.List;
 
-/**
- * Warden-drop specialty material required to craft the {@code echoing_sculkshelf} and
- * {@code soul_touched_sculkshelf} tier-3 sculk shelves. Distribution is handled by
- * {@code WardenLootHandler} (T-5.4.3) via {@code LootTableEvents.MODIFY}: 1 guaranteed drop gated
- * by {@code config.warden.tendrilDropChance} plus a looting-scaled extra gated by
- * {@code config.warden.tendrilLootingBonus}.
- *
- * <p>The class has no runtime behaviour — it is a plain identity item. Rarity stays default
- * because the tendril is a routine Warden reward, not an epic-tier find like infused_breath.
- */
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+
 public class WardenTendrilItem extends Item {
 
     public WardenTendrilItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.translatable("info.fizzle_enchanting.warden_tendril").withStyle(ChatFormatting.GRAY));
     }
 }

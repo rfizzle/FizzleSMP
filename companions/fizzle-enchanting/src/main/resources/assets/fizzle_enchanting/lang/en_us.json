@@ -342,5 +342,14 @@
     "info.fizzle_enchanting.level_cost": "Level Cost: %s",
     "info.fizzle_enchanting.power_range": "Power Range: %s to %s",
     "info.fizzle_enchanting.item_ench": "Item Enchantability: %s",
-    "info.fizzle_enchanting.num_clues": "Enchanting Clues: %s"
+    "info.fizzle_enchanting.num_clues": "Enchanting Clues: %s",
+    "info.fizzle_enchanting.prismatic_web": "Can be used to remove curses in an anvil.",
+    "info.fizzle_enchanting.infused_breath": "Crafting material for endgame shelves and libraries.",
+    "info.fizzle_enchanting.warden_tendril": "Crafting material for sculk-tier shelves.",
+    "info.fizzle_enchanting.scrap_tome": "Extracts one random enchantment from an item.",
+    "info.fizzle_enchanting.scrap_tome2": "Destroys the item in the process.",
+    "info.fizzle_enchanting.improved_scrap_tome": "Extracts all enchantments from an item.",
+    "info.fizzle_enchanting.improved_scrap_tome2": "Destroys the item in the process.",
+    "info.fizzle_enchanting.extraction_tome": "Extracts all enchantments from an item.",
+    "info.fizzle_enchanting.extraction_tome2": "Does not destroy the item."
 }

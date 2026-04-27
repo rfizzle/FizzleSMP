@@ -15,9 +15,9 @@
 | 2 | GUI & UX (Screen, Info Browser, Particles) | ~95% | Minor: no item enchantability breakdown in arcana tooltip |
 | 3 | Blocks & Shelves (27 shelves, special shelves) | ~95% | Sculk ambient sounds dead code; 2 missing crafting recipes (sculk shelves) |
 | 4 | Recipes & Data-Driven Audit | ~90% | 16/20 infusion recipes (4 intentionally cut); KeepNBT copies enchantments only |
-| 5 | Library, Tomes & Anvil | ~85% | Library extract produces books only (not direct apply); 9 typed tomes cut; no tome tooltips |
+| 5 | Library, Tomes & Anvil | ~90% | Library extract produces books only (not direct apply); 9 typed tomes cut |
 | 6 | Enchantments & Config | Divergent (by design) | 51 enchantments vs Apothic's 19 (different sets); no configurable power functions |
-| 7 | Progression & Content (Advancements, API, Items) | ~95% | No tooltips on standalone items; no corrupted damage type |
+| 7 | Progression & Content (Advancements, API, Items) | ~98% | Corrupted damage type N/A (Berserker's Fury cut) |
 | 8 | Integration & Compat (Mixins, REI/EMI/JEI, WTHIT/Jade) | ~100% | Trinkets API wired but idle (all enchantments are JSON) |
 
 ---
@@ -239,7 +239,7 @@ All eterna thresholds scaled ~0.5× from Apothic (Fizzle maxE=50 vs Apothic maxE
 - [x] Improved Scrap Tome: removes all enchantments into one book, destroys source
 - [x] Extraction Tome: removes all enchantments into book, preserves source (with damage tick)
 - [N/A] 9 typed slot-filtered tomes — intentionally cut ("UX felt counter-intuitive")
-- [-] No tome tooltips (no `appendHoverText` on any tome item)
+- [x] Tome tooltips via `appendHoverText` on all 3 tome items
 - [~] Scrap Tome removes 1 random enchantment (not Apothic's "~half")
 
 ### C. Anvil Modifications
@@ -357,7 +357,7 @@ No IMC channel (Fabric has no IMC system). All API interfaces live in `enchantin
 **Loot:** Warden tendril via `LootTableEvents.MODIFY` with config-driven drop chance + looting scaling. 29 block self-drop loot tables.
 
 **Gaps:**
-- [-] No `appendHoverText` on standalone items (prismatic web, tomes, infused breath, warden tendril, music discs)
+- [x] `appendHoverText` on standalone items (prismatic web, tomes, infused breath, warden tendril)
 - [N/A] Corrupted damage type — only used by Berserker's Fury which was cut
 
 ---
@@ -443,7 +443,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 4. ~~**No power range / enchantability / clue count**~~ — FIXED: slot hover drawOnLeft panel shows power range, item enchantability, and clue count
 5. ~~**Missing crafting recipes** — filtering shelf, treasure shelf, endshelf~~ — FIXED; echoing sculkshelf, soul_touched_sculkshelf still pending (see Tier 2 #8)
 ~~6. **Sculk ambient sounds dead code**~~ — FIXED: `SculkShelfBlock.animateTick()` wires config fields to ambient sounds and particles
-7. **No tooltips on standalone items** — prismatic web, tomes, infused breath, warden tendril, music discs lack `appendHoverText()`
+~~7. **No tooltips on standalone items**~~ — FIXED: `appendHoverText()` added to prismatic web, 3 tomes, infused breath, warden tendril
 8. **No configurable power functions** — sealed `PowerFunction` with 2 built-in implementations only
 9. **No inline enchantment descriptions** client option
 10. **Filtering shelf per-book dynamic stats** — Apothic scales +0.5 eterna / +1 arcana per book; Fizzle gives flat stats regardless of occupancy
@@ -494,7 +494,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 - [x] 4. Enrich stat bar tooltips with descriptive text + drawOnLeft side panels
 - [x] 5. Add power range, item enchantability, and clue count to main screen slot tooltips (drawOnLeft panel)
 - [x] 6. Implement sculk shelf ambient sounds (wire `randomTick()` to config fields)
-- [ ] 7. Add `appendHoverText()` to standalone items (tomes, prismatic web, etc.)
+- [x] 7. Add `appendHoverText()` to standalone items (tomes, prismatic web, etc.)
 - [ ] 8. Add remaining crafting recipes (echoing/soul_touched sculkshelf pending warden_tendril availability)
 
 ### Tier 3 — Nice to Have (needs design review)

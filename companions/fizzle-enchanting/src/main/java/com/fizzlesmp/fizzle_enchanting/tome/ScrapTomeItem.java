@@ -1,22 +1,22 @@
 package com.fizzlesmp.fizzle_enchanting.tome;
 
-import net.minecraft.world.item.Item;
+import java.util.List;
 
-/**
- * Cheapest tome tier — consumed at the anvil with an enchanted item to salvage
- * <strong>one random</strong> enchantment onto a fresh enchanted book. The source item is
- * destroyed in the process (see DESIGN § "Tome items").
- *
- * <p>The class carries no behaviour itself: {@code ScrapTomeHandler} (S-5.2) keys off
- * {@link net.minecraft.world.item.ItemStack#getItem() item identity} through
- * {@link com.fizzlesmp.fizzle_enchanting.anvil.AnvilDispatcher}. Extending {@link Item} only
- * exists so handler code and datagen can reference a dedicated type without re-resolving the
- * item by id, and to anchor future tweaks (custom tooltips etc.) without touching {@link Item}'s
- * defaults.
- */
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+
 public class ScrapTomeItem extends Item {
 
     public ScrapTomeItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.translatable("info.fizzle_enchanting.scrap_tome").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("info.fizzle_enchanting.scrap_tome2").withStyle(ChatFormatting.GRAY));
     }
 }

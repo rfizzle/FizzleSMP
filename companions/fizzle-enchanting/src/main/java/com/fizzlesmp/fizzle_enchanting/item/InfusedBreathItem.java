@@ -1,20 +1,21 @@
 package com.fizzlesmp.fizzle_enchanting.item;
 
-import net.minecraft.world.item.Item;
+import java.util.List;
 
-/**
- * Specialty crafting material produced only by the {@code fizzle_enchanting:enchanting}
- * table-crafting recipe that consumes {@code minecraft:dragon_breath}. Required to craft the
- * tier-3 themed shelves (infused hellshelf / seashelf / endshelf) and the Basic Library.
- *
- * <p>The class has no runtime behaviour — progression is gated purely by whether the player
- * can reach the recipe's stat thresholds at the enchanting table (E ≥ 40, Q 15-25, A ≥ 60).
- * Rarity is {@link net.minecraft.world.item.Rarity#EPIC} to match Zenith's presentation and to
- * make the item visually distinct from bulk ingredients in inventories.
- */
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+
 public class InfusedBreathItem extends Item {
 
     public InfusedBreathItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.translatable("info.fizzle_enchanting.infused_breath").withStyle(ChatFormatting.GRAY));
     }
 }
