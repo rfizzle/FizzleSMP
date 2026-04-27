@@ -74,8 +74,6 @@
     "info.fizzle_enchanting.shelf.clues": " - Enchanting Clues: %s",
     "info.fizzle_enchanting.shelf.clues.p": " - Enchanting Clues: +%s",
     "info.fizzle_enchanting.shelf.allows_treasure": " - Allows Treasure Enchantments",
-    "emi.category.fizzle_enchanting.shelves": "Fizzle Enchanting — Shelves",
-    "emi.category.fizzle_enchanting.tomes": "Fizzle Enchanting — Tomes",
     "enchantment.fizzle_enchanting.accuracy_shot": "Accuracy Shot",
     "enchantment.fizzle_enchanting.accuracy_shot.desc": "Arrows fly straight without gravity.",
     "enchantment.fizzle_enchanting.agility": "Agility",

@@ -536,11 +536,11 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 
 - [x] 18. **Rectification displays as 7500%** — FIXED: `formatPercent()` was multiplying by 100 but rectification is already in [0, 100] range; removed the double multiplication. Tests updated to use realistic [0, 100] values.
 
-- [ ] 19. **No JADE stats on Fizzle Enchanting shelves** — Custom shelf blocks (e.g., Soul-Touched Sculkshelf) show only their block name and "Fizzle Enchanting" mod label in JADE — no per-shelf stat contribution breakdown (eterna, quanta, arcana, rectification, clues). Apothic shows per-block stat contributions in WTHIT/Jade. Need a new `ComponentProvider` that reads from `EnchantingStatRegistry` for any `IEnchantingStatProvider` block and renders the stat lines. (Check if Apothic Enchanting has a dedicated shelf Jade provider to reference.)
+- [x] 19. **No JADE stats on Fizzle Enchanting shelves** — FIXED: `BlockStatsJadeProvider` (added for item 17) is registered for `Block.class` and handles `IEnchantingStatProvider` blocks via instanceof dispatch — custom shelves, filtering shelf, treasure shelf, and non-shelf stat providers (skulls, amethyst clusters) all show per-block stat contributions.
 
 #### EMI / Recipe Viewer Integration
 
-- [ ] 20. **"Fizzle Enchanting" label positioning inconsistent** — The mod attribution label ("Fizzle Enchanting") renders at different positions/styles in different EMI contexts: red italic under Extraction Tome vs purple italic under Infused Hellshelf. This may be EMI's own mod label vs a custom tooltip line — audit whether `EmiEnchantingRecipe` or shelf tooltip code is adding a redundant mod label that conflicts with EMI's built-in attribution.
+- [x] 20. **"Fizzle Enchanting" label positioning inconsistent** — AUDITED: `EmiEnchantingRecipe.addWidgets()` adds no mod attribution label; `registerShelfInfoPanels()` uses plain `EmiInfoRecipe` with stat lines only. The color/style difference (red vs purple italic) is EMI's built-in mod attribution rendering, which varies by recipe display context — not controllable from our code. Removed duplicate EMI category lang keys (lines 77-78 duplicated lines 19-20 in `en_us.json`).
 
 - [ ] 21. **EMI shelf recipe category title overflow** — The category title "Fizzle Enchanting — Shelves" is too long and truncates to "Fizzle Enchanting — Shel..." in the EMI viewer. Shorten to something like "Shelf Upgrades" or "Enchanting Shelves". Also review the body layout — stat requirement lines (Eterna/Quanta/Arcana/XP cost) are cramped against the right edge.
 
