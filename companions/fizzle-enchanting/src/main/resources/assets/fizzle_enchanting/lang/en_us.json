@@ -355,5 +355,29 @@
     "info.fizzle_enchanting.improved_scrap_tome": "Extracts all enchantments from an item.",
     "info.fizzle_enchanting.improved_scrap_tome2": "Destroys the item in the process.",
     "info.fizzle_enchanting.extraction_tome": "Extracts all enchantments from an item.",
-    "info.fizzle_enchanting.extraction_tome2": "Does not destroy the item."
+    "info.fizzle_enchanting.extraction_tome2": "Does not destroy the item.",
+
+    "enchantment.fizzle_enchanting.bag_of_souls": "Bag of Souls",
+    "enchantment.fizzle_enchanting.bag_of_souls.desc": "Increases experience gained from kills and mining.",
+    "enchantment.fizzle_enchanting.berserkers_fury": "Berserker's Fury",
+    "enchantment.fizzle_enchanting.berserkers_fury.desc": "Taking damage grants Resistance, Strength, and Speed at the cost of health.",
+    "enchantment.fizzle_enchanting.chromatic": "Chromatic Aberration",
+    "enchantment.fizzle_enchanting.chromatic.desc": "Sheared wool becomes a random color.",
+    "enchantment.fizzle_enchanting.growth_serum": "Growth Serum",
+    "enchantment.fizzle_enchanting.growth_serum.desc": "Sheep have a chance to regrow wool instantly after shearing.",
+    "enchantment.fizzle_enchanting.life_mending": "Life-Mending",
+    "enchantment.fizzle_enchanting.life_mending.desc": "Incoming healing repairs item durability instead.",
+    "enchantment.fizzle_enchanting.rebounding": "Rebounding",
+    "enchantment.fizzle_enchanting.rebounding.desc": "Melee attackers are knocked away when they strike you.",
+    "enchantment.fizzle_enchanting.reflective_defenses": "Reflective Defenses",
+    "enchantment.fizzle_enchanting.reflective_defenses.desc": "Chance to reflect blocked damage back to the attacker.",
+    "enchantment.fizzle_enchanting.scavenger": "Scavenger",
+    "enchantment.fizzle_enchanting.scavenger.desc": "Small chance for killed mobs to drop their loot twice.",
+    "enchantment.fizzle_enchanting.stable_footing": "Stable Footing",
+    "enchantment.fizzle_enchanting.stable_footing.desc": "Negates the mining speed penalty while flying.",
+    "enchantment.fizzle_enchanting.temptation": "Temptation",
+    "enchantment.fizzle_enchanting.temptation.desc": "Farm animals follow you while holding this tool.",
+
+    "death.attack.fizzle_enchanting.corrupted": "%1$s was consumed by a corrupted enchantment",
+    "death.attack.fizzle_enchanting.corrupted.player": "%1$s was corrupted by %2$s"
 }

@@ -16,7 +16,7 @@
 | 3 | Blocks & Shelves (27 shelves, special shelves) | ~100% | — |
 | 4 | Recipes & Data-Driven Audit | ~90% | 16/20 infusion recipes (4 intentionally cut); KeepNBT copies enchantments only |
 | 5 | Library, Tomes & Anvil | ~90% | Library extract produces books only (not direct apply); 9 typed tomes cut |
-| 6 | Enchantments & Config | Divergent (by design) | 51 enchantments vs Apothic's 19 (different sets); configurable power functions (linear/fixed); inline ench descs option added |
+| 6 | Enchantments & Config | ~75% | 61 enchantments (12/19 Apothic implemented); 9 Java-backed + 1 Fizzle-original (Bag of Souls); configurable power functions (linear/fixed); inline ench descs option added |
 | 7 | Progression & Content (Advancements, API, Items) | ~98% | Corrupted damage type N/A (Berserker's Fury cut) |
 | 8 | Integration & Compat (Mixins, REI/EMI/JEI, WTHIT/Jade) | ~100% | Trinkets API wired but idle (all enchantments are JSON) |
 
@@ -257,35 +257,47 @@ All eterna thresholds scaled ~0.5× from Apothic (Fizzle maxE=50 vs Apothic maxE
 
 ### A. Enchantment Roster
 
-**51 total enchantments** (49 NeoEnchant+ ports + 2 Zenith-inspired). All are **pure JSON** using vanilla `EnchantmentEffectComponents` — zero custom Java effect code.
+**61 total enchantments** (49 NeoEnchant+ ports + 2 Zenith-inspired + 10 Apothic ports). 50 are pure JSON; 9 use Java-backed effects via Fabric events and mixins; 1 (Bag of Souls) is pure JSON with vanilla `mob_experience`/`block_experience` components.
 
-#### Apothic Parity (2/19 partial, 17/19 not implemented)
+#### Apothic Parity (12/19 implemented, 7/19 not implemented)
 
 | Apothic Enchantment | Status | Notes |
 |---------------------|--------|-------|
+| Bag of Souls | [x] | Inspired by Prominence 2 / MCDungeonsArmors; armor XP boost via `mob_experience` + `block_experience` multiply; stacks to ~3x |
+| Berserker's Fury | [x] | Chest armor; on-damage enrage (Resistance/Strength/Speed) with HP cost and 45s cooldown; custom corrupted damage type |
+| Chromatic Aberration | [x] | Shears; sheep wool becomes random color via `SheepMixin` |
+| Growth Serum | [x] | Shears; 50% chance sheep regrow wool via `SheepMixin` |
 | Icy Thorns | [~] | Present but chest-only, slowness-only (no freeze) |
+| Life-Mending | [x] | Any slot; healing → durability at 2^level ratio; exclusive with Mending; via `LivingEntityHealMixin` |
+| Rebounding | [x] | Chest/leg armor; knockback melee attackers via `AFTER_DAMAGE` event |
+| Reflective Defenses | [x] | Shield; reflects blocked damage at 15%/lvl with proc chance; via `AFTER_DAMAGE` event |
+| Scavenger | [x] | Weapon; 2.5%/lvl chance to re-roll loot table on kill; via `AFTER_DEATH` event + invoker mixin |
 | Shield Bash | [~] | Present but mainhand attack damage, not shield-blocking knockback |
-| Berserker's Fury, Boon of the Earth, Chainsaw, Chromatic, Crescendo of Bolts, Endless Quiver, Growth Serum, Knowledge of the Ages, Life Mending, Miner's Fervor, Nature's Blessing, Rebounding, Reflective Defenses, Scavenger, Stable Footing, Tempting, Worker Exploitation | [-] | Not implemented — intentional; Fizzle chose NeoEnchant+ roster instead |
+| Stable Footing | [x] | Boots; negates 5x flying mining penalty via `PlayerMixin` |
+| Temptation | [x] | Hoe; farm animals follow player via `TemptGoalMixin` |
+| Boon of the Earth, Chainsaw, Crescendo of Bolts, Endless Quiver, Knowledge of the Ages, Miner's Fervor, Nature's Blessing | [-] | Not implemented — low value-to-complexity ratio or niche |
 
-#### Fizzle Enchantment Categories (51 total)
+#### Fizzle Enchantment Categories (61 total)
 
 | Category | Count | Examples |
 |----------|-------|---------|
-| Armor (general) | 3 | Fury, Life+, Venom Protection |
+| Armor (general) | 5 | Fury, Life+, Venom Protection, Bag of Souls, Rebounding |
 | Helmet | 2 | Bright Vision, Voidless |
-| Chestplate | 1 | Builder Arm |
+| Chestplate | 2 | Builder Arm, Berserker's Fury |
 | Leggings | 4 | Dwarfed, Fast Swim, Leaping, Oversize |
-| Boots | 3 | Agility, Lava Walker, Step Assist |
+| Boots | 4 | Agility, Lava Walker, Step Assist, Stable Footing |
 | Elytra | 2 | Armored, Kinetic Protection |
-| Sword | 12 | Attack Speed, Critical, Death Touch, Life Steal, Reach, XP Boost, ... |
+| Sword/Weapon | 13 | Attack Speed, Critical, Death Touch, Life Steal, Reach, XP Boost, Scavenger, ... |
 | Bow/Crossbow | 7 | Accuracy Shot, Breezing Arrows, Echo Shot, Explosive Arrow, Storm Arrows, ... |
 | Trident | 1 | Gungnir Breath |
 | Mace | 3 | Striker, Teluric Wave, Wind Propulsion |
 | Pickaxe | 1 | Vein Miner |
 | Tools | 1 | Mining+ |
-| Hoe | 3 | Harvest, Scyther, Seior's Oblivion |
+| Hoe | 4 | Harvest, Scyther, Seior's Oblivion, Temptation |
+| Shears | 2 | Chromatic Aberration, Growth Serum |
+| Shield | 1 | Reflective Defenses |
+| Any (durability) | 3 | Curse of Breaking, Curse of Enchant, Life-Mending |
 | Mounted/Dog | 4 | Cavalier Egis, Ethereal Leap, Steel Fang, Velocity |
-| Durability | 2 | Curse of Breaking, Curse of Enchant |
 | Other | 2 | Midas Touch, Icy Thorns (chest), Shield Bash (mainhand) |
 
 ### B. Configuration System
@@ -462,7 +474,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 
 | Area | Apothic | Fizzle | Rationale |
 |------|---------|--------|-----------|
-| Enchantment source | 19 custom enchantments (Java-coded) | 51 NeoEnchant+ ports (100% JSON) | Larger, more diverse roster; fully datapack-editable |
+| Enchantment source | 19 custom enchantments (Java-coded) | 61 total: 49 NeoEnchant+ (JSON) + 10 Apothic ports (9 Java-backed) + 2 Zenith | Larger, more diverse roster; 12/19 Apothic enchants implemented |
 | Stability model | Binary `stable` flag from Geode Shelf | Rectification float 0-100 from 3-tier Rectifier shelves | Richer tuning surface; graduated stability |
 | Arcana model | Continuous 0-100 weight adjustment | Same (matches Apothic) | — |
 | Typed tomes | 9 slot-filtered tomes | Cut entirely | "UX felt counter-intuitive" |
@@ -477,6 +489,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 - **Rectifier shelves (T1/T2/T3)** — three-tier rectification progression (10/15/25)
 - **Rectification as a stat axis** — fifth tracked stat alongside Eterna/Quanta/Arcana/Clues
 - **49 NeoEnchant+ enchantments** — mounted combat, mace, elytra, bow elemental, hoe/farming, size modification, and more
+- **Bag of Souls** — armor XP multiplier (inspired by MCDungeonsArmors / Prominence 2); stacks across armor slots to ~3x max
 - **Non-shelf stat providers** — Amethyst Cluster (+1.5 rectification), Skulls (+5/+10 quanta)
 - **Comprehensive recipe viewer support** — EMI + REI + JEI (all three simultaneously)
 - **Dual block-info support** — Jade + WTHIT with shared tooltip formatter

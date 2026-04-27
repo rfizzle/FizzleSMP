@@ -1,0 +1,24 @@
+package com.fizzlesmp.fizzle_enchanting.mixin;
+
+import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantmentEffects;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.state.BlockState;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+@Mixin(Player.class)
+public abstract class PlayerMixin {
+
+    @Inject(method = "getDestroySpeed", at = @At("RETURN"), cancellable = true)
+    private void fizzle$stableFooting(BlockState state, CallbackInfoReturnable<Float> cir) {
+        Player self = (Player) (Object) this;
+        if (!self.onGround()) {
+            if (EnchantmentEffects.getEquippedLevel(self, "stable_footing", EquipmentSlot.FEET) > 0) {
+                cir.setReturnValue(cir.getReturnValue() * 5.0F);
+            }
+        }
+    }
+}

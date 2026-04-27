@@ -7,6 +7,7 @@ import com.fizzlesmp.fizzle_enchanting.advancement.ModTriggers;
 import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantingStatRegistry;
 import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantmentInfoRegistry;
 import com.fizzlesmp.fizzle_enchanting.enchanting.recipe.EnchantingRecipeRegistry;
+import com.fizzlesmp.fizzle_enchanting.event.EnchantmentEffectHandler;
 import com.fizzlesmp.fizzle_enchanting.event.WardenLootHandler;
 import com.fizzlesmp.fizzle_enchanting.net.EnchantmentInfoPayload;
 import com.fizzlesmp.fizzle_enchanting.net.FizzleEnchantingNetworking;
@@ -43,6 +44,7 @@ public class FizzleEnchanting implements ModInitializer {
         EnchantingRecipeRegistry.register();
         FizzleAnvilHandlers.register();
         WardenLootHandler.register();
+        EnchantmentEffectHandler.register();
         FizzleEnchantingNetworking.registerPayloads();
         registerLifecycleEvents();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->
