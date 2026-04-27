@@ -1,78 +1,182 @@
-# Fizzle Enchanting
+# Meridian
 
-A companion Fabric mod for **FizzleSMP** (Minecraft 1.21.1) that overhauls vanilla enchanting with a stat-driven table, themed shelf roster, anvil tweaks, a two-tier library, and salvage tomes.
+**A complete enchanting overhaul for Minecraft 1.21.1 Fabric.**
 
-It is a clean-room 1.21.1 rewrite of the enchanting module from [Apotheosis](https://www.curseforge.com/minecraft/mc-mods/apotheosis) (Shadows_of_Fire, Forge/NeoForge) and its outdated Fabric port [Zenith](https://www.curseforge.com/minecraft/mc-mods/zenith) (bageldotjpg, MC 1.20.1), rebuilt on vanilla `EnchantmentEffectComponents` with no runtime dependencies beyond Fabric API.
+Meridian replaces the vanilla enchanting table with a stat-driven system featuring five independent stats, 25+ themed shelf blocks, a two-tier enchantment library, salvage tomes, anvil upgrades, and 68 new enchantments — all built on vanilla's data-driven `EnchantmentEffectComponents` with no heavy runtime dependencies.
+
+---
 
 ## Features
 
-- **Stat-driven enchanting table** — five independent stats (Eterna, Quanta, Arcana, Rectification, Clues) replace vanilla's single "power" value. Stat contributions per block live in datapack JSON.
-- **25 shelf blocks** — biome-themed tiers (wood, stone, nether, ocean, end, deep/sculk) plus utility shelves (sightshelf, rectifier) and special shelves (filtering, treasure).
-- **Enchantment-table crafting** — stat-gated recipes produce tier-3 shelves, `infused_breath`, tome upgrades, and the Ender Library. Two recipe types: `fizzle_enchanting:enchanting` and `fizzle_enchanting:keep_nbt_enchanting`.
-- **Two-tier Enchantment Library** — Basic (level cap 16) and Ender (level cap 31) blocks pool enchanted books into a per-enchantment point bank, then dispense them deterministically for XP.
-- **Anvil tweaks** — Prismatic Web strips curses (30 levels, 1 web), and a block of iron repairs a damaged/chipped anvil by one tier.
-- **Salvage tomes** — Scrap (one random enchant, item destroyed), Improved Scrap (all enchants, item destroyed), Extraction (all enchants, item preserved).
-- **51 MVP enchantments** — 49 ports from NeoEnchant+ (Hardel) plus 2 authored by us (Icy Thorns, Shield Bash), all pure JSON against vanilla effect components.
-- **Foreign-enchant overrides** — bundled datapack raises weights on `minecraft:mending` and `yigd:soulbound` so they feed the library loop.
-- **Warden loot modifier** — 1 guaranteed `warden_tendril` drop (+10%/looting for a second), required for sculkshelf crafts.
-- **Integrations** — first-class EMI, REI, JEI, and Jade adapters shipped at launch.
-- **Advancement tree** — ten-advancement progression from root shelf pickup to Eterna 50 (`apotheosis`).
+### Stat-Driven Enchanting Table
 
-## Configuration
+The vanilla enchanting table's single "power" value is replaced by five independent stats, each influencing a different aspect of the enchanting process:
 
-- **Path:** `config/fizzle_enchanting.json` (inside the Fabric instance's config directory — `FabricLoader.getConfigDir()`).
-- **Generated on first launch** with sensible defaults; out-of-range values are clamped with a `LOGGER.warn` on load.
-- **Hot reload** via `/fizzleenchanting reload` (permission level 2) — rereads the file from disk without a server restart.
+| Stat | Effect |
+|------|--------|
+| **Eterna** | Maximum enchanting level (scales 0–50, replacing vanilla's 0–30 cap) |
+| **Quanta** | Upper bound of the random power roll — higher means more variance |
+| **Arcana** | Biases selection toward rarer, more obscure enchantments |
+| **Rectification** | Reduces Quanta's negative variance for more consistent results |
+| **Clues** | Reveals additional enchantments in the preview tooltip |
 
-Full annotated reference: [`docs/CONFIG.md`](docs/CONFIG.md).
+Stats are contributed by nearby shelf blocks and are fully data-driven — server operators can retune every block's contribution via datapack JSON without touching the jar.
 
-## Commands
+### Shelf Blocks
 
-| Command | Permission | Description |
-|---|---|---|
-| `/fizzleenchanting reload` | 2 | Reload config from disk |
-| `/fizzleenchanting stats <player>` | 0 | Dump stats of the enchanting table the player is looking at |
-| `/fizzleenchanting library <player> dump` | 2 | Dump point contents of the library the player is looking at |
-| `/fizzleenchanting give-tome <player> <type>` | 2 | Debug helper for testing tome flows |
+25 themed shelves organized into progression tiers:
 
-## Requirements
+- **Starter** — Vanilla Bookshelves, Stoneshelf, Beeshelf, Melonshelf, Dormant Deepshelf
+- **Early** — Hellshelf, Seashelf (Nether and Ocean materials)
+- **Mid** — Infused and upgraded variants (Infused Hellshelf, Glowing Hellshelf, Blazing Hellshelf, Infused Seashelf, Crystal Seashelf, Heart Seashelf)
+- **Late** — Deepshelf, Echoing Deepshelf, Soul-Touched Deepshelf, Echoing Sculkshelf, Soul-Touched Sculkshelf
+- **End** — Endshelf, Pearl Endshelf, Draconic Endshelf (the only way to reach Eterna 50)
+- **Utility** — Sightshelf (bonus Clues), Rectifier (bonus Rectification), Filtering Shelf (blacklist specific enchantments), Treasure Shelf (unlocks treasure enchantments like Mending)
+
+Higher-tier shelves are crafted at the enchanting table itself using stat-gated recipes — building your shelf collection *is* the progression.
+
+### Enchantment-Table Crafting
+
+The enchanting table doubles as a stat-gated crafting station. When the table's stats meet a recipe's thresholds, the third enchant slot is replaced with the crafting result — click it to spend XP and craft the item. Recipes include:
+
+- Tier-2 and tier-3 shelf upgrades
+- Infused Breath (from Dragon's Breath — key material for end-tier shelves)
+- Tome upgrades (Scrap → Improved Scrap → Extraction)
+- Basic Library → Ender Library upgrade
+- Budding Amethyst, Experience Bottles, Echo Shards, and more
+
+### Enchantment Library
+
+A two-tier storage block that pools enchanted books into a per-enchantment point bank, then dispenses them deterministically for XP:
+
+- **Basic Library** — stores enchantments up to level 16
+- **Ender Library** — stores enchantments up to level 31 (upgrade preserves stored books)
+
+Points follow an exponential curve: `2^(level - 1)` per book deposited. The library tracks both accumulated points *and* the highest level ever deposited per enchantment — you can't grind thousands of Sharpness I books to pull a Sharpness V without first depositing at least one Sharpness V book.
+
+Supports hopper automation for bulk book deposits. Extraction is menu-only.
+
+### Salvage Tomes
+
+Three tomes for moving enchantments between items, each with a different cost/reward tradeoff:
+
+| Tome | Enchantments Recovered | Source Item | XP Cost |
+|------|----------------------|-------------|---------|
+| **Scrap Tome** | One (random) | Destroyed | 3 levels |
+| **Improved Scrap Tome** | All | Destroyed | 5 levels |
+| **Extraction Tome** | All | Preserved (takes durability damage) | 10 levels |
+
+Tomes are used in the anvil: place the enchanted item on the left, the tome on the right.
+
+### Anvil Upgrades
+
+- **Prismatic Web** — Strips all curses from an item (30 levels, 1 web consumed). Non-curse enchantments are preserved.
+- **Iron Block Repair** — Repairs a Damaged or Chipped Anvil by one tier (1 iron block consumed).
+
+### 68 Enchantments
+
+A roster of 68 enchantments spanning combat, tools, mobility, mounts, and more. All are pure JSON definitions against vanilla effect components — no custom Java code required.
+
+Highlights include:
+
+- **Combat** — Life Steal, Critical Hit, Attack Speed, Poison Aspect, Dimensional Strike, Last Hope, Fear, and more
+- **Ranged** — Explosive Arrow, Storm Arrows, Echo Shot, Accuracy Shot, Breezing Arrows, Eternal Frost, Rebound
+- **Tools** — Vein Miner, Mining+ (3x3 area), Harvest, Scyther
+- **Mobility** — Agility, Step Assist, Lava Walker, Fast Swim, Leaping
+- **Utility** — Builder Arm (extended reach), Bright Vision (night vision), Voidless (void safety), XP Boost, Midas Touch
+- **Mounts** — Velocity, Steel Fang, Ethereal Leap, Cavalier Egis
+- **Elytra** — Armored, Kinetic Protection
+
+### Warden Loot
+
+Wardens drop Warden Tendrils (1 guaranteed, +10% per Looting level for a second), the key material for crafting Sculk-tier shelves.
+
+### Integrations
+
+First-class recipe and tooltip adapters ship at launch for:
+
+- **EMI**, **REI**, and **JEI** — enchanting-table crafting recipes, library mechanics
+- **Jade** — shelf stat tooltips, library contents
+
+### Advancement Tree
+
+18 advancements guide players through the progression, from picking up their first shelf to reaching Eterna 50.
+
+### Per-Enchantment Overrides
+
+Server operators can override `maxLevel`, `maxLootLevel`, and `levelCap` for any enchantment (vanilla or modded) via the config file. Changes sync to clients automatically.
+
+---
+
+## Installation
+
+### Requirements
 
 - Minecraft **1.21.1**
 - Fabric Loader **0.16.10+**
 - Fabric API **0.116.1+1.21.1** or newer
 - Java **21**
 
-Quilt users can run the mod transparently via Quilted Fabric API; no separate artifact is shipped.
+### Setup
 
-## Installation
+Drop the jar into the `mods/` directory on both server and client. The mod must be present on **both sides** — a client missing the mod will desync on the first table interaction.
 
-Drop the built jar into the server and client `mods/` directory. The mod is `environment: "*"` and must be present on **both sides** — client-missing setups desync on the first table interaction.
+Quilt users can run the mod via Quilted Fabric API with no changes.
 
-The mod is distributed as a FizzleSMP-local jar (`Mod Loader: Manual` in the packwiz plugin list). A public Modrinth/CurseForge release is a later decision; see "License & Credits" below for the compliance gate.
+---
 
-## Build
+## Configuration
+
+The mod generates `config/fizzle_enchanting.json` on first launch with sensible defaults. Every value can be tuned without a restart using `/fizzleenchanting reload`.
+
+See the full annotated reference: **[Configuration Guide](docs/CONFIG.md)**
+
+---
+
+## Commands
+
+| Command | Permission | Description |
+|---------|-----------|-------------|
+| `/fizzleenchanting reload` | 2 | Reload config from disk |
+| `/fizzleenchanting stats <player>` | 0 | Show stats of the enchanting table the player is looking at |
+| `/fizzleenchanting library <player> dump` | 2 | Dump point contents of a library block |
+| `/fizzleenchanting give-tome <player> <type>` | 2 | Give a tome item (debug/testing) |
+
+---
+
+## Building from Source
 
 ```sh
-cd companions/fizzle-enchanting
-./gradlew build                 # builds build/libs/fizzle-enchanting-<version>.jar
-./gradlew test                  # runs unit tests
-./gradlew runDatagen            # regenerates src/main/generated/
+./gradlew build          # produces build/libs/fizzle-enchanting-<version>.jar
+./gradlew test           # runs unit tests
+./gradlew runDatagen     # regenerates src/main/generated/
 ```
 
-## Documentation
+---
 
-- [`DESIGN.md`](DESIGN.md) — architecture, scope, stat system, shelf/library/anvil/tome details, iteration backlog.
-- [`docs/CONFIG.md`](docs/CONFIG.md) — annotated config reference.
-- [`docs/PLAYTHROUGH.md`](docs/PLAYTHROUGH.md) — manual QA checklist.
+## Credits & Attribution
 
-## License & Credits
+Meridian is a clean-room 1.21.1 Fabric rewrite inspired by and building on the work of several projects:
 
-- **Code:** MIT.
-- **Textures:** Reused from Apotheosis (Shadows_of_Fire) via Zenith (bageldotjpg) under Apotheosis's separate `LICENSE_ASSETS`. Private SMP distribution is in bounds; a public release requires a compliance pass.
-- **Enchantment JSONs + lang keys:** 49 of the 51 MVP enchantments are ported from **NeoEnchant+** by Hardel, licensed **CC BY-NC-SA 4.0**. Redistribution on a public platform would either require dual-licensing the `data/` tree or re-authoring those JSONs from scratch.
+### [Apotheosis](https://www.curseforge.com/minecraft/mc-mods/apotheosis) — Shadows_of_Fire
+The original enchanting module design: stat-driven table, shelf blocks, enchantment library, anvil interactions, and tome system. Apotheosis is a Forge/NeoForge mod and the foundational inspiration for Meridian's mechanics. Textures are reused with credit under Apotheosis's asset license.
 
-**Credits:**
+### [Zenith](https://www.curseforge.com/minecraft/mc-mods/zenith) — bageldotjpg
+The 1.20.1 Fabric port of Apotheosis. Zenith's stat schema, shelf roster, recipe shapes, and texture pipeline were the direct reference for Meridian's implementation. All code is a fresh 1.21.1 rewrite — no Zenith source was copied — but the design debt is substantial.
 
-- **Apotheosis** — Shadows_of_Fire — original enchanting module design, mechanics, and asset source.
-- **Zenith** — bageldotjpg — 1.20.1 Fabric port of Apotheosis; stat schema, shelf roster, recipe shapes, and texture pipeline all trace back here.
-- **NeoEnchant+** — Hardel — 49 of the 51 MVP enchantments' JSON + lang entries (CC BY-NC-SA 4.0).
+### [NeoEnchant+](https://www.curseforge.com/minecraft/mc-mods/neoenchant) — Hardel
+49 of Meridian's enchantments are data-only namespace rewrites of NeoEnchant+ v5.14.0's JSON definitions. NeoEnchant+ is licensed under **CC BY-NC-SA 4.0**.
+
+### [Enchantology](https://www.curseforge.com/minecraft/mc-mods/enchantology) — Various
+6 enchantments (Certainty, Divinity, Vigilance, Oppression, Ironclad, Magic Protection) are inspired by Enchantology's designs, implemented as pure JSON.
+
+### [Prominence 2](https://www.curseforge.com/minecraft/modpacks/prominence-2-rpg) — Various
+Bag of Souls enchantment concept originates from the Prominence 2 modpack.
+
+---
+
+## License
+
+- **Code:** MIT
+- **Textures:** Reused from Apotheosis (via Zenith) under Apotheosis's separate asset license (`LICENSE_ASSETS`).
+- **Enchantment data (49 of 68):** Ported from NeoEnchant+ under **CC BY-NC-SA 4.0**.

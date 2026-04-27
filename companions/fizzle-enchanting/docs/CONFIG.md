@@ -1,4 +1,4 @@
-# Fizzle Enchanting — Config Reference
+# Meridian — Config Reference
 
 Annotated reference for `config/fizzle_enchanting.json`. This is the operator-facing tuning surface; stat values per block live in datapack JSON under `data/fizzle_enchanting/enchanting_stats/` and are not covered here.
 
@@ -84,7 +84,7 @@ Example — early-game cap:
 
 ### `showLevelIndicator` *(boolean, default `true`)*
 
-Toggles the one-line stat readout (`E: 50  Q: 12  A: 5  R: 10  C: 2`) rendered below the three enchant slots in the Fizzle enchanting screen. Set `false` for a cleaner UI at the cost of feedback while tuning shelf placement.
+Toggles the one-line stat readout (`E: 50  Q: 12  A: 5  R: 10  C: 2`) rendered below the three enchant slots in the enchanting screen. Set `false` for a cleaner UI at the cost of feedback while tuning shelf placement.
 
 ### `globalMinEnchantability` *(int, default `1`)*
 
