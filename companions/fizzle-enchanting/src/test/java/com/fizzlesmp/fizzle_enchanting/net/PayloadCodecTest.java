@@ -46,7 +46,7 @@ class PayloadCodecTest {
     @Test
     void statsPayload_zeroStat_roundTrips() {
         StatsPayload original = new StatsPayload(
-                0F, 0F, 0F, 0F, 0, List.of(), false, Optional.empty());
+                0F, 0F, 0F, 0F, 0, 0F, List.of(), false, Optional.empty());
 
         RegistryFriendlyByteBuf buf = newBuf();
         StatsPayload.CODEC.encode(buf, original);
@@ -59,7 +59,7 @@ class PayloadCodecTest {
     @Test
     void statsPayload_midStat_roundTrips() {
         StatsPayload original = new StatsPayload(
-                7.5F, 3F, 2F, 1F, 2,
+                7.5F, 3F, 2F, 1F, 2, 22.5F,
                 List.of(enchantKey("minecraft:sharpness"), enchantKey("minecraft:mending")),
                 false,
                 Optional.empty());
@@ -81,7 +81,7 @@ class PayloadCodecTest {
                 30,
                 ResourceLocation.fromNamespaceAndPath("fizzle_enchanting", "test_recipe"));
         StatsPayload original = new StatsPayload(
-                50F, 15F, 15F, 20F, 3,
+                50F, 15F, 15F, 20F, 3, 50F,
                 List.of(enchantKey("minecraft:fortune"),
                         enchantKey("minecraft:efficiency"),
                         enchantKey("minecraft:unbreaking")),
@@ -97,6 +97,7 @@ class PayloadCodecTest {
         assertEquals(original.arcana(), decoded.arcana());
         assertEquals(original.rectification(), decoded.rectification());
         assertEquals(original.clues(), decoded.clues());
+        assertEquals(original.maxEterna(), decoded.maxEterna());
         assertEquals(original.blacklist(), decoded.blacklist());
         assertEquals(original.treasure(), decoded.treasure());
         assertTrue(decoded.craftingResult().isPresent(),

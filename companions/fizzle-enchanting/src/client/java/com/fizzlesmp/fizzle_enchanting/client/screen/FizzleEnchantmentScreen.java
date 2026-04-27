@@ -38,7 +38,7 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
     private static final ResourceLocation TEXTURE =
             ResourceLocation.fromNamespaceAndPath("fizzle_enchanting", "textures/gui/enchanting_table.png");
 
-    private static final float ABSOLUTE_MAX_ETERNA = 100.0F;
+    private static final float FALLBACK_MAX_ETERNA = 50.0F;
 
     private final FizzleEnchantmentMenu fizzleMenu;
 
@@ -134,8 +134,10 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
         }
 
         if (this.eterna > 0) {
+            float barMax = fizzleMenu != null && fizzleMenu.getLastStats().maxEterna() > 0
+                    ? fizzleMenu.getLastStats().maxEterna() : FALLBACK_MAX_ETERNA;
             gfx.blit(TEXTURE, xCenter + 59, yCenter + 75, 0, 197,
-                    (int) (this.eterna / ABSOLUTE_MAX_ETERNA * 110), 5);
+                    (int) (Math.min(this.eterna / barMax, 1.0F) * 110), 5);
         }
         if (this.quanta > 0) {
             gfx.blit(TEXTURE, xCenter + 59, yCenter + 85, 0, 202,
@@ -288,7 +290,7 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
             list.add(eternaLabel().append(Component.translatable("gui.fizzle_enchanting.stat.eterna.desc1")));
             list.add(Component.translatable("gui.fizzle_enchanting.stat.eterna.desc2").withStyle(ChatFormatting.GRAY));
             if (stats.eterna() > 0) {
-                float displayMax = stats.maxEterna() > 0 ? stats.maxEterna() : ABSOLUTE_MAX_ETERNA;
+                float displayMax = stats.maxEterna() > 0 ? stats.maxEterna() : FALLBACK_MAX_ETERNA;
                 list.add(Component.literal(""));
                 list.add(Component.translatable("gui.fizzle_enchanting.stat.eterna.value",
                         f(stats.eterna()), (int) displayMax).withStyle(ChatFormatting.GRAY));

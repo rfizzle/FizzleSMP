@@ -61,7 +61,7 @@
 
 ### D. Network & Client-Server Sync
 
-- [x] `StatsPayload` (S2C): 5 stats + blacklist + treasure + crafting result
+- [x] `StatsPayload` (S2C): 5 stats + maxEterna + blacklist + treasure + crafting result
 - [x] `CluesPayload` (S2C): per-slot enchantment clues + exhausted flag; sent 3× per `slotsChanged`
 - [x] `EnchantmentInfoPayload` (S2C): full per-enchant config map; synced on join + datapack reload
 - [x] All payloads use proper codec serialization; registered on correct channels
@@ -517,6 +517,38 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 - [x] 11. Add configurable power functions (simplified: linear + fixed types — no expression engine needed)
 - [x] 12. Add inline enchantment descriptions client option
 - [x] 13. Fix arcana guaranteed picks at 99 threshold (removed 4th pick to match Apothic)
+
+### Tier 4 — Bug Fixes & Polish
+
+> Discovered via in-game testing 2026-04-28. Screenshots saved in `/mnt/c/Users/colet/Downloads/Screenshot 2026-04-28 00*.png`.
+
+#### GUI / Enchanting Table
+
+- [x] 14. **Eterna bar max inconsistency** — FIXED: Added `maxEterna` to `StatsPayload` so the client receives the real shelf-derived max; bar fill now uses `maxEterna` from stats instead of hardcoded 100; fallback set to 50 matching config default.
+
+- [ ] 15. **Weak enchantments at max eterna (level 3 slot)** — With 50/50 eterna and a full shelf setup, the level 3 slot offers underwhelming enchantments (Silk Touch, Swift Sneak, Soul Speed I, Infinity, Respiration I). The selection algorithm's power range or quanta factor may not be scaling correctly relative to the Fizzle maxEterna=50 scale. Audit `EnchantmentSelectionAlgorithm` slot level computation, power range derivation (`powerCap = maxEterna * 2` → 100 when it should arguably reach 200 at max build), and compare against Apothic output at equivalent eterna fraction.
+
+#### JADE / WTHIT Integration
+
+- [ ] 16. **Old "Ench Power" still showing on enchanting table** — JADE tooltip displays "Ench Power: 3" (the vanilla enchanting power metric) alongside the Fizzle stats (Eterna, Quanta, Arcana, Rectification, Clues). The vanilla provider should be suppressed or replaced entirely by the Fizzle provider. Check if `JadeEnchantingPlugin` needs to override/remove the vanilla `EnchantingTableProvider` priority.
+
+- [ ] 17. **Old "Ench Power" showing on vanilla bookshelves** — JADE tooltip on vanilla `Bookshelf` shows "Ench Power: 1" with no Fizzle stat breakdown. Since Fizzle replaces the vanilla enchanting system, vanilla bookshelves should show their Fizzle stats (eterna: 1, maxEterna: 15) instead of — or in addition to — the vanilla "Ench Power" value. May need a new Jade provider for `IEnchantingStatProvider` blocks, or extend the existing one.
+
+- [ ] 18. **Rectification displays as 7500%** — The JADE tooltip on the enchanting table shows "Rectification: 7500%" instead of a value in the 0–100% range. This is a scaling/accumulation bug — either the rectification stat is being summed without clamping, or the display is multiplying by 100 on an already-percentage value. Audit `EnchantingStats.gatherStats()` for rectification clamping and `JadeTooltipFormatter` for display formatting.
+
+- [ ] 19. **No JADE stats on Fizzle Enchanting shelves** — Custom shelf blocks (e.g., Soul-Touched Sculkshelf) show only their block name and "Fizzle Enchanting" mod label in JADE — no per-shelf stat contribution breakdown (eterna, quanta, arcana, rectification, clues). Apothic shows per-block stat contributions in WTHIT/Jade. Need a new `ComponentProvider` that reads from `EnchantingStatRegistry` for any `IEnchantingStatProvider` block and renders the stat lines. (Check if Apothic Enchanting has a dedicated shelf Jade provider to reference.)
+
+#### EMI / Recipe Viewer Integration
+
+- [ ] 20. **"Fizzle Enchanting" label positioning inconsistent** — The mod attribution label ("Fizzle Enchanting") renders at different positions/styles in different EMI contexts: red italic under Extraction Tome vs purple italic under Infused Hellshelf. This may be EMI's own mod label vs a custom tooltip line — audit whether `EmiEnchantingRecipe` or shelf tooltip code is adding a redundant mod label that conflicts with EMI's built-in attribution.
+
+- [ ] 21. **EMI shelf recipe category title overflow** — The category title "Fizzle Enchanting — Shelves" is too long and truncates to "Fizzle Enchanting — Shel..." in the EMI viewer. Shorten to something like "Shelf Upgrades" or "Enchanting Shelves". Also review the body layout — stat requirement lines (Eterna/Quanta/Arcana/XP cost) are cramped against the right edge.
+
+#### Mechanical Decisions (needs design review)
+
+- [ ] 22. **XP charging model** — Fizzle currently deducts `slot + 1` levels (vanilla pattern). Apothic computes raw XP points via `MiscUtil.getExpCostForSlot` and charges actual experience points, making high-level enchanting significantly more expensive. Need to decide: keep vanilla level-cost simplicity, or adopt Apothic's raw-XP model for better progression gating? (See "Intentional Mechanical Differences" §1 below.)
+
+- [ ] 23. **Rectification vs Stability semantics** — Fizzle uses continuous rectification (0–100%) that truncates the negative quanta tail. Apothic uses a boolean `stable` flag that disables quanta variance entirely. Current implementation is intentionally different, but the 7500% display bug (item 18) suggests the accumulation math may also need review. Decide whether rectification should hard-cap at 100% in `gatherStats()` or whether the unclamped sum is useful for anything. (See "Intentional Mechanical Differences" §3 below.)
 
 ---
 

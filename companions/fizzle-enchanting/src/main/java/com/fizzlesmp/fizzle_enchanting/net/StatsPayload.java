@@ -24,6 +24,7 @@ public record StatsPayload(
         float arcana,
         float rectification,
         int clues,
+        float maxEterna,
         List<ResourceKey<Enchantment>> blacklist,
         boolean treasure,
         Optional<CraftingResultEntry> craftingResult
@@ -38,7 +39,7 @@ public record StatsPayload(
     private static final StreamCodec<RegistryFriendlyByteBuf, Optional<CraftingResultEntry>> CRAFTING_CODEC =
             ByteBufCodecs.optional(CraftingResultEntry.STREAM_CODEC);
 
-    // StreamCodec.composite supports at most 6 fields in 1.21.1; this payload has 8, so encode
+    // StreamCodec.composite supports at most 6 fields in 1.21.1; this payload has 9, so encode
     // and decode are expanded by hand to preserve the DESIGN-mandated flat record shape.
     public static final StreamCodec<RegistryFriendlyByteBuf, StatsPayload> CODEC =
             StreamCodec.of(StatsPayload::encode, StatsPayload::decode);
@@ -49,6 +50,7 @@ public record StatsPayload(
         buf.writeFloat(payload.arcana);
         buf.writeFloat(payload.rectification);
         ByteBufCodecs.VAR_INT.encode(buf, payload.clues);
+        buf.writeFloat(payload.maxEterna);
         BLACKLIST_CODEC.encode(buf, payload.blacklist);
         buf.writeBoolean(payload.treasure);
         CRAFTING_CODEC.encode(buf, payload.craftingResult);
@@ -60,11 +62,12 @@ public record StatsPayload(
         float arcana = buf.readFloat();
         float rectification = buf.readFloat();
         int clues = ByteBufCodecs.VAR_INT.decode(buf);
+        float maxEterna = buf.readFloat();
         List<ResourceKey<Enchantment>> blacklist = BLACKLIST_CODEC.decode(buf);
         boolean treasure = buf.readBoolean();
         Optional<CraftingResultEntry> craftingResult = CRAFTING_CODEC.decode(buf);
         return new StatsPayload(eterna, quanta, arcana, rectification, clues,
-                blacklist, treasure, craftingResult);
+                maxEterna, blacklist, treasure, craftingResult);
     }
 
     @Override

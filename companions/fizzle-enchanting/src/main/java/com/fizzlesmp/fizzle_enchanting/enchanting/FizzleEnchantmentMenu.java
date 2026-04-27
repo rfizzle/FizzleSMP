@@ -185,11 +185,6 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
         });
     }
 
-    /**
-     * Client-side entry point for {@link StatsPayload}. The packet carries the aggregated stat
-     * values; the client never re-scans shelves itself, so {@code maxEterna} is stored as the
-     * final eterna value (display-only — click-time gating happens server-side).
-     */
     public void applyClientStats(StatsPayload payload) {
         this.lastStats = new StatCollection(
                 payload.eterna(),
@@ -197,7 +192,7 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
                 payload.arcana(),
                 payload.rectification(),
                 payload.clues(),
-                payload.eterna(),
+                payload.maxEterna(),
                 new java.util.HashSet<>(payload.blacklist()),
                 payload.treasure());
         this.lastCraftingResult = payload.craftingResult();
@@ -368,7 +363,7 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
         List<ResourceKey<Enchantment>> blacklist = List.copyOf(stats.blacklist());
         StatsPayload payload = new StatsPayload(
                 stats.eterna(), stats.quanta(), stats.arcana(), stats.rectification(),
-                stats.clues(), blacklist, stats.treasureAllowed(),
+                stats.clues(), stats.maxEterna(), blacklist, stats.treasureAllowed(),
                 projectCraftingResult(currentRecipe));
         ServerPlayNetworking.send(sp, payload);
     }
