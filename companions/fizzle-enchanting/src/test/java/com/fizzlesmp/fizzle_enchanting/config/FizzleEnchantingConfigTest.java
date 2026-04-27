@@ -90,6 +90,7 @@ class FizzleEnchantingConfigTest {
 
         assertEquals(true, cfg.display.showBookTooltips);
         assertEquals("#FF6600", cfg.display.overLeveledColor);
+        assertEquals(false, cfg.display.enableInlineEnchDescs);
     }
 
     @Test
@@ -239,6 +240,7 @@ class FizzleEnchantingConfigTest {
         original.tomes.extractionTomeRepairPercent = 0.5;
         original.warden.tendrilLootingBonus = 0.33;
         original.display.overLeveledColor = "#AABBCC";
+        original.display.enableInlineEnchDescs = true;
         original.save(path);
 
         FizzleEnchantingConfig reloaded = FizzleEnchantingConfig.load(path);
@@ -251,6 +253,7 @@ class FizzleEnchantingConfigTest {
         assertEquals(0.5, reloaded.tomes.extractionTomeRepairPercent);
         assertEquals(0.33, reloaded.warden.tendrilLootingBonus);
         assertEquals("#AABBCC", reloaded.display.overLeveledColor);
+        assertEquals(true, reloaded.display.enableInlineEnchDescs);
     }
 
     @Test

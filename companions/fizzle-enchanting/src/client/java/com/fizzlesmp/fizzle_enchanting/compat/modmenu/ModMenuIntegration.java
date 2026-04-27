@@ -169,6 +169,12 @@ public class ModMenuIntegration implements ModMenuApi {
                     .setDefaultValue("#FF6600")
                     .setSaveConsumer(v -> current.display.overLeveledColor = v)
                     .build());
+            displayCategory.addEntry(entry.startBooleanToggle(
+                            Component.translatable("config.fizzle_enchanting.enable_inline_ench_descs"),
+                            current.display.enableInlineEnchDescs)
+                    .setDefaultValue(false)
+                    .setSaveConsumer(v -> current.display.enableInlineEnchDescs = v)
+                    .build());
 
             builder.setSavingRunnable(() -> {
                 current.save();

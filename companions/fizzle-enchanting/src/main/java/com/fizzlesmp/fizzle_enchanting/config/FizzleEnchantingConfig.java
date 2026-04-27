@@ -263,6 +263,7 @@ public class FizzleEnchantingConfig {
     public static class Display {
         public boolean showBookTooltips = true;
         public String overLeveledColor = "#FF6600";
+        public boolean enableInlineEnchDescs = false;
     }
 
     /**

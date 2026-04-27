@@ -300,6 +300,7 @@
     "config.fizzle_enchanting.tendril_looting_bonus": "Tendril Looting Bonus",
     "config.fizzle_enchanting.show_book_tooltips": "Show Book Tooltips",
     "config.fizzle_enchanting.over_leveled_color": "Over-Leveled Color (hex)",
+    "config.fizzle_enchanting.enable_inline_ench_descs": "Inline Enchantment Descriptions",
     "info.fizzle_enchanting.enchant.infusion": "Infusion",
     "info.fizzle_enchanting.enchant.infusion_failed": "Insufficient table stats for infusion",
     "gui.fizzle_enchanting.enchant_info.title": "Available Enchantments",

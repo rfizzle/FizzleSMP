@@ -16,7 +16,7 @@
 | 3 | Blocks & Shelves (27 shelves, special shelves) | ~100% | — |
 | 4 | Recipes & Data-Driven Audit | ~90% | 16/20 infusion recipes (4 intentionally cut); KeepNBT copies enchantments only |
 | 5 | Library, Tomes & Anvil | ~90% | Library extract produces books only (not direct apply); 9 typed tomes cut |
-| 6 | Enchantments & Config | Divergent (by design) | 51 enchantments vs Apothic's 19 (different sets); configurable power functions (linear/fixed) |
+| 6 | Enchantments & Config | Divergent (by design) | 51 enchantments vs Apothic's 19 (different sets); configurable power functions (linear/fixed); inline ench descs option added |
 | 7 | Progression & Content (Advancements, API, Items) | ~98% | Corrupted damage type N/A (Berserker's Fury cut) |
 | 8 | Integration & Compat (Mixins, REI/EMI/JEI, WTHIT/Jade) | ~100% | Trinkets API wired but idle (all enchantments are JSON) |
 
@@ -296,7 +296,7 @@ All eterna thresholds scaled ~0.5× from Apothic (Fizzle maxE=50 vs Apothic maxE
 - [x] Client config: `display.showBookTooltips`, `display.overLeveledColor`
 - [x] Sculk config fields (`sculkShelfShriekerChance`, `sculkParticleChance`) wired to `SculkShelfBlock.animateTick()`
 - [x] **Configurable power functions** — `PowerFunction` sealed interface with 4 implementations: `default_min` (vanilla extrapolation), `default_max` (flat 200), `linear` (base + perLevel × level), `fixed` (constant). Configured per-enchantment via `minPowerFunction`/`maxPowerFunction` in `EnchantmentOverride`
-- [-] No inline enchantment descriptions client option
+- [x] Inline enchantment descriptions client option (`display.enableInlineEnchDescs`, default off)
 
 ### C. Level Scaling & Enforcement
 
@@ -445,7 +445,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 ~~6. **Sculk ambient sounds dead code**~~ — FIXED: `SculkShelfBlock.animateTick()` wires config fields to ambient sounds and particles
 ~~7. **No tooltips on standalone items**~~ — FIXED: `appendHoverText()` added to prismatic web, 3 tomes, infused breath, warden tendril
 ~~8. **No configurable power functions**~~ — FIXED: `linear` and `fixed` power function types added to `EnchantmentOverride`
-9. **No inline enchantment descriptions** client option
+~~9. **No inline enchantment descriptions** client option~~ — FIXED: `display.enableInlineEnchDescs` config option added (default off); shows `.desc` translations inline below each enchantment in item tooltips
 ~~10. **Filtering shelf per-book dynamic stats**~~ — FIXED: `FilteringShelfBlock.getStats()` override adds +0.5 eterna / +1 arcana per stored book
 
 ### Minor
@@ -502,7 +502,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 - [x] 9. Implement filtering shelf per-book dynamic stats
 - [x] 10. Implement step-ladder eterna accumulation (behavioral change — needs design review)
 - [x] 11. Add configurable power functions (simplified: linear + fixed types — no expression engine needed)
-- [ ] 12. Add inline enchantment descriptions client option
+- [x] 12. Add inline enchantment descriptions client option
 - [ ] 13. Fix arcana guaranteed picks at 99 threshold (remove 4th pick to match Apothic, or keep as Fizzle-original — needs design review)
 
 ---
