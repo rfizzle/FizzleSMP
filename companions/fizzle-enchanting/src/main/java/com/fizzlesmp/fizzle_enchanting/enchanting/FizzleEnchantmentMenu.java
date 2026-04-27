@@ -481,6 +481,14 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
         if (input.isEmpty()) return;
 
         ItemStack result = holder.value().assemble(new SingleRecipeInput(input), level.registryAccess());
+
+        if (input.getCount() > 1) {
+            ItemStack excess = input.copyWithCount(input.getCount() - 1);
+            if (!player.getInventory().add(excess)) {
+                player.drop(excess, false);
+            }
+        }
+
         enchantSlots.setItem(INPUT_SLOT, result);
 
         if (!player.hasInfiniteMaterials()) {
