@@ -20,7 +20,7 @@ class JadeTooltipFormatterTest {
 
     @Test
     void enchantingTableLines_level50Table_rendersFiveStatsWithEternaHeadroom() {
-        StatCollection stats = new StatCollection(50F, 5F, 3F, 0.25F, 2, 50F, Set.of(), false);
+        StatCollection stats = new StatCollection(50F, 5F, 3F, 25F, 2, 50F, Set.of(), false);
 
         assertEquals(List.of(
                 "Eterna: 50 / 50",
@@ -65,7 +65,7 @@ class JadeTooltipFormatterTest {
 
     @Test
     void enchantingTableLines_fractionalRectification_rendersOneDecimal() {
-        StatCollection stats = new StatCollection(10F, 0F, 0F, 0.125F, 0, 15F, Set.of(), false);
+        StatCollection stats = new StatCollection(10F, 0F, 0F, 12.5F, 0, 15F, Set.of(), false);
 
         assertEquals("Rectification: 12.5%",
                 JadeTooltipFormatter.enchantingTableLines(stats).get(3),

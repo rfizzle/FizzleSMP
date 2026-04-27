@@ -109,10 +109,9 @@ public final class JadeTooltipFormatter {
     }
 
     static String formatPercent(float value) {
-        float pct = value * 100F;
-        if (Math.abs(pct - Math.round(pct)) < 1e-4F) {
-            return Math.round(pct) + "%";
+        if (Math.abs(value - Math.round(value)) < 1e-4F) {
+            return Math.round(value) + "%";
         }
-        return (Math.round(pct * 10F) / 10F) + "%";
+        return (Math.round(value * 10F) / 10F) + "%";
     }
 }

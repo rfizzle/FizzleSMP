@@ -534,7 +534,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 
 - [x] 17. **Old "Ench Power" showing on vanilla bookshelves** — FIXED: New `BlockStatsJadeProvider` (client-only, registered for `Block.class`) shows per-block Fizzle stat contributions and suppresses `JadeIds.MC_ENCHANTMENT_POWER`. Vanilla bookshelves resolve via the tag-based `VANILLA_FALLBACK` (eterna: +1 / 15). Also covers custom shelves and non-shelf stat providers (skulls, amethyst clusters).
 
-- [ ] 18. **Rectification displays as 7500%** — The JADE tooltip on the enchanting table shows "Rectification: 7500%" instead of a value in the 0–100% range. This is a scaling/accumulation bug — either the rectification stat is being summed without clamping, or the display is multiplying by 100 on an already-percentage value. Audit `EnchantingStats.gatherStats()` for rectification clamping and `JadeTooltipFormatter` for display formatting.
+- [x] 18. **Rectification displays as 7500%** — FIXED: `formatPercent()` was multiplying by 100 but rectification is already in [0, 100] range; removed the double multiplication. Tests updated to use realistic [0, 100] values.
 
 - [ ] 19. **No JADE stats on Fizzle Enchanting shelves** — Custom shelf blocks (e.g., Soul-Touched Sculkshelf) show only their block name and "Fizzle Enchanting" mod label in JADE — no per-shelf stat contribution breakdown (eterna, quanta, arcana, rectification, clues). Apothic shows per-block stat contributions in WTHIT/Jade. Need a new `ComponentProvider` that reads from `EnchantingStatRegistry` for any `IEnchantingStatProvider` block and renders the stat lines. (Check if Apothic Enchanting has a dedicated shelf Jade provider to reference.)
 
