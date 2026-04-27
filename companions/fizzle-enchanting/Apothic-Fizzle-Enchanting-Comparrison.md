@@ -39,7 +39,7 @@
 ### B. Core Stat System
 
 - [x] Five-stat model: Eterna, Quanta, Arcana, Rectification, Clues (superset of Apothic's three + secondaries)
-- [~] Eterna clamped to `[0, maxEterna]` (config default 100); Quanta/Arcana/Rectification to `[0, 100]`. DESIGN.md says 0-50 but code defaults to 0-100 — doc is stale
+- [x] Eterna clamped to `[0, maxEterna]` (config default 50); Quanta/Arcana/Rectification to `[0, 100]`. Config and DESIGN.md now aligned
 - [~] **Step-ladder eterna accumulation is absent.** Fizzle uses flat sum clamped to highest `maxEterna` seen. Apothic sorts blocks by `maxEterna` ascending and gates each group's contribution. Low-tier shelves are less strictly gated in Fizzle
 - [x] Baselines: +15 quanta, +itemEnchantability/2 arcana, +1 clue (matches Apothic exactly)
 - [x] `StatsPayload` carries all 5 stats + blacklist + treasure flag + crafting result; hand-written `StreamCodec`
@@ -458,7 +458,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 13. Scrap Tome removes 1 random enchantment (not Apothic's "~half")
 14. Anvil repair uses iron blocks (Zenith approach) vs Apothic XP-only
 15. KeepNBT copies `ENCHANTMENTS` component only (not full NBT)
-16. DESIGN.md says Eterna 0-50 but code defaults to 0-100 — doc is stale
+~~16. DESIGN.md says Eterna 0-50 but code defaults to 0-100 — doc is stale~~ — FIXED: code default changed to 50
 17. Trinkets API wired but idle (all enchantments are JSON, no Java callers)
 
 ## INTENTIONALLY DIFFERENT (Design Divergences)
@@ -490,7 +490,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 
 - [x] 1. Add mineable block tags for shelves (pickaxe/axe as appropriate)
 - [x] 2. Add missing crafting recipes (filtering shelf, treasure shelf, endshelf — infused_breath is available now)
-- [ ] 3. Fix stale DESIGN.md eterna range (0-50 → 0-100 or reconcile)
+- [x] 3. Fix stale DESIGN.md eterna range — reconciled code default to 50 to match shelf stat scale
 
 ### Tier 2 — High Value / Medium Effort
 

@@ -214,7 +214,7 @@ public class FizzleEnchantingConfig {
 
     public static class EnchantingTable {
         public boolean allowTreasureWithoutShelf = false;
-        public int maxEterna = 100;
+        public int maxEterna = 50;
         public boolean showLevelIndicator = true;
         public int globalMinEnchantability = 1;
     }

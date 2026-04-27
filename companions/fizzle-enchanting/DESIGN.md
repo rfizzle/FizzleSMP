@@ -927,7 +927,7 @@ The following table documents intentional differences from Apothic Enchanting an
 |---|---|---|---|
 | **Stability model** | Binary `stable` flag from Geode Shelf | Rectification float 0–100 from 3-tier Rectifier shelves | **Keep Fizzle-original** — richer tuning surface; graduated stability is a QoL improvement |
 | **Enchantment source** | 19 custom enchantments (Java-coded) | 51 NeoEnchant+ ports (100% JSON) | **Keep Fizzle-original** — larger, more diverse roster; fully datapack-editable |
-| **Eterna scale** | maxEterna=100 | Code defaults to maxEterna=100 but design target is 50 (shelf values already at half-scale) | **Align with Apothic** — change config default to 50 to match shelf stat scale |
+| **Eterna scale** | maxEterna=100 | Config defaults to maxEterna=50 (shelf values at half-scale); configurable up to 100 | **Done** — config default changed to 50 to match shelf stat scale |
 | **Eterna accumulation** | Step-ladder algorithm (blocks sorted by maxEterna ascending, each group gated) | Flat sum clamped to highest maxEterna seen | **Align with Apothic** — low-tier shelves are less strictly gated currently |
 | **Library extraction** | Direct item application (any item in extract slot) | Book-only (Zenith pattern) | **Align with Apothic** — streamlines UX, cuts the anvil step |
 | **Scrap Tome** | Removes ~half enchantments randomly | Removes 1 random enchantment | **Align with Apothic** — current behavior makes Scrap Tome too weak |
