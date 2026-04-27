@@ -1138,6 +1138,11 @@ hash = "174c727584c2667b7b9fe3dfb22036e95fd11546651212d2c455ea515b8169ac"
 metafile = true
 
 [[files]]
+file = "mods/staaaaaaaaaaaack.pw.toml"
+hash = "d3e093d690e07868594db916c3a37904261cabc33692831bc47c9d5abd83e33f"
+metafile = true
+
+[[files]]
 file = "mods/stack-refill.pw.toml"
 hash = "cbbd729ae00922ec7a0130aaf1dc279a7879198f44465ed2e357e4033608fb1a"
 metafile = true

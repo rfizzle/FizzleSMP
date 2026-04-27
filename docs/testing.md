@@ -327,7 +327,10 @@ Key mods: Chipped, Supplementaries, Supplementaries Squared, Handcrafted, Beauti
 
 ## 13. Performance Stress Tests
 
-- [ ] **Entity stress** — Spawn 200+ mobs in a small area. Monitor FPS and TPS. Confirm Entity Culling, Clumps (for XP), and Let Me Despawn help manage load.
+- [ ] **Staaaaaaaaaaaack item merging** — Drop 5+ stacks of the same item on the ground (e.g., 320 cobblestone). Confirm they merge into a single super-stack entity with a count overlay. Verify the items split back to normal stacks when picked up.
+- [ ] **Staaaaaaaaaaaack blacklist** — Add an item to the Staaaaaaaaaaaack blacklist config (e.g., `minecraft:diamond`). Drop multiple stacks of that item. Confirm they do NOT merge beyond vanilla limits.
+- [ ] **Staaaaaaaaaaaack + Clumps coexistence** — Kill 50+ mobs in a small area. Confirm Clumps merges XP orbs and Staaaaaaaaaaaack merges item drops independently without conflicts.
+- [ ] **Entity stress** — Spawn 200+ mobs in a small area. Monitor FPS and TPS. Confirm Entity Culling, Clumps (for XP), Staaaaaaaaaaaack (for item drops), and Let Me Despawn help manage load.
 - [ ] **Redstone stress** — Build a large redstone contraption. Confirm Lithium optimizations keep TPS stable.
 - [ ] **Chunk loading stress** — Fly at high speed across unloaded chunks. Confirm C2ME and NoisiumForked handle parallel generation without crashes.
 - [ ] **Memory usage** — After 30+ minutes of gameplay, check F3 memory. Confirm FerriteCore and ModernFix keep usage reasonable.

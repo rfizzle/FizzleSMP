@@ -240,3 +240,14 @@
 - **Why:** Required dependency of Let Me Despawn.
 - **Dependencies:** None
 - **Conflicts:** None known
+
+## Staaaaaaaaaaaack (Stxck)
+- **CurseForge ID:** 866957
+- **Slug:** staaaaaaaaaaaack
+- **Modrinth Slug:** staaaaaaaaaaaack
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Merges dropped items beyond the vanilla stack limit to reduce entity lag from large item piles.
+- **Why:** Reduces lag caused by mass item drops (mob farms, TNT mining, tree chopping) by consolidating ground items into super-stacks without changing inventory stack sizes.
+- **Dependencies:** None
+- **Conflicts:** None known
