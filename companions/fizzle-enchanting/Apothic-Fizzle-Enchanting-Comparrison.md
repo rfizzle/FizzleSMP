@@ -11,7 +11,7 @@
 
 | Phase | Area | Parity | Key Gaps |
 |-------|------|--------|----------|
-| 1 | Core Systems (Structure, Stats, Selection, Network) | ~98% | Arcana 99 gives 4th guaranteed pick (Apothic stops at 66) |
+| 1 | Core Systems (Structure, Stats, Selection, Network) | ~100% | — |
 | 2 | GUI & UX (Screen, Info Browser, Particles) | ~95% | Minor: no item enchantability breakdown in arcana tooltip |
 | 3 | Blocks & Shelves (27 shelves, special shelves) | ~100% | — |
 | 4 | Recipes & Data-Driven Audit | ~90% | 16/20 infusion recipes (4 intentionally cut); KeepNBT copies enchantments only |
@@ -53,7 +53,7 @@
 - [x] Rectification truncates negative tail (at rect=100 equivalent to Apothic's "stable" mode)
 - [x] Power range 1-200 (`powerCap = maxEterna * 2`)
 - [x] `Arcana` enum with 11 tiers matching Apothic values verbatim
-- [~] Guaranteed picks at arcana 0, 33, 66, **99** — Apothic stops at 66 (3 picks max), Fizzle adds a 4th at 99
+- [x] Guaranteed picks at arcana 0, 33, 66 — matches Apothic (3 picks max)
 - [x] Random additional enchantments with `randomBound = max(50, scaledLevel*1.15)`, `scaledLevel /= 2`
 - [x] Blacklist filtering from filtering shelves; treasure filtering gated by treasure shelf
 - [x] `EnchantableItem` interface for post-processing; compatibility check via `Enchantment.areCompatible()`
@@ -450,7 +450,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 
 ### Minor
 
-11. Arcana guaranteed picks loop fires at 99 (4th pick) — Apothic stops at 66 (3 picks)
+~~11. Arcana guaranteed picks loop fires at 99 (4th pick) — Apothic stops at 66 (3 picks)~~ — FIXED: loop capped at 66 to match Apothic
 12. Library extract produces books only (not direct item application like Apothic)
 13. Scrap Tome removes 1 random enchantment (not Apothic's "~half")
 14. Anvil repair uses iron blocks (Zenith approach) vs Apothic XP-only
@@ -503,7 +503,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 - [x] 10. Implement step-ladder eterna accumulation (behavioral change — needs design review)
 - [x] 11. Add configurable power functions (simplified: linear + fixed types — no expression engine needed)
 - [x] 12. Add inline enchantment descriptions client option
-- [ ] 13. Fix arcana guaranteed picks at 99 threshold (remove 4th pick to match Apothic, or keep as Fizzle-original — needs design review)
+- [x] 13. Fix arcana guaranteed picks at 99 threshold (removed 4th pick to match Apothic)
 
 ---
 

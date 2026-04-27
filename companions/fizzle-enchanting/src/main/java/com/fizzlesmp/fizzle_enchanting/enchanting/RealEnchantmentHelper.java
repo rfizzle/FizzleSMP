@@ -81,7 +81,7 @@ public final class RealEnchantmentHelper {
      * lower tail — at {@code rectification=100} the factor is {@code >= 0} and outcomes are
      * monotonically {@code >= level}.
      *
-     * <p>Arcana shifts the rarity weighting and unlocks extra picks at 33, 66, and 99. Incompatible
+     * <p>Arcana shifts the rarity weighting and unlocks extra picks at 33 and 66. Incompatible
      * enchantments are pruned after each pick so two mutually-exclusive rolls never coexist.
      *
      * @param rand             pre-seeded random; callers use the player's enchantment seed
@@ -155,7 +155,7 @@ public final class RealEnchantmentHelper {
             pool.add(new ArcanaEnchantmentData(arcanaTier, inst));
         }
 
-        for (int i = 0; i < 100; i += 33) {
+        for (int i = 0; i <= 66; i += 33) {
             if (arcana >= i && !pool.isEmpty()) {
                 pickInto(rand, pool, chosen);
                 if (!chosen.isEmpty()) {

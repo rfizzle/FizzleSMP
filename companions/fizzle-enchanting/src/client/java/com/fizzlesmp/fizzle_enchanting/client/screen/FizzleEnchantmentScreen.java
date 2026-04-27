@@ -469,7 +469,7 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
 
     private static int guaranteedPicks(float arcana) {
         int picks = 0;
-        for (int i = 0; i < 100; i += 33) {
+        for (int i = 0; i <= 66; i += 33) {
             if (arcana >= i) picks++;
         }
         return picks;
