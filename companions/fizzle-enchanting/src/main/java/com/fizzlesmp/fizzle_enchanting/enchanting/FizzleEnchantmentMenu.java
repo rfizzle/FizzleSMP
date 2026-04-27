@@ -178,7 +178,7 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
             if (holder.value() instanceof EnchantingRecipe enchanting) {
                 return Optional.of(new CraftingResultEntry(
                         enchanting.getResult().copy(),
-                        enchanting.getXpCost(),
+                        enchanting.getEffectiveXpCost(),
                         holder.id()));
             }
             return Optional.empty();
@@ -301,9 +301,8 @@ public class FizzleEnchantmentMenu extends EnchantmentMenu {
 
         if (currentRecipe.isPresent()) {
             int xpCost = currentRecipe
-                    .map(h -> h.value() instanceof EnchantingRecipe e ? e.getXpCost() : 0)
-                    .orElse(0);
-            if (xpCost < 1) xpCost = 1;
+                    .map(h -> h.value() instanceof EnchantingRecipe e ? e.getEffectiveXpCost() : 1)
+                    .orElse(1);
             states[FizzleEnchantmentLogic.CRAFTING_SLOT] = new FizzleEnchantmentLogic.SlotState(
                     xpCost, List.of(),
                     new RealEnchantmentHelper.ClueBuild(null, List.of(), true));

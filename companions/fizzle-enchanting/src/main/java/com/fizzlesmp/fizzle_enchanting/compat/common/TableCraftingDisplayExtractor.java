@@ -43,7 +43,7 @@ public final class TableCraftingDisplayExtractor {
                 recipe.getRequirements(),
                 recipe.getMaxRequirements(),
                 recipe.getDisplayLevel(),
-                recipe.getXpCost(),
+                recipe.getEffectiveXpCost(),
                 keepNbt);
     }
 }

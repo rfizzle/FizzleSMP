@@ -83,6 +83,17 @@ public class EnchantingRecipe implements Recipe<SingleRecipeInput> {
     }
 
     /**
+     * Returns the XP level cost to perform this infusion. If the recipe specifies an explicit
+     * {@code xp_cost}, that value is used. Otherwise, derives the cost from the recipe's eterna
+     * requirement — matching Apothic Enchanting's slot-2 behavior where the level cost equals
+     * {@code Math.round(eterna)}.
+     */
+    public int getEffectiveXpCost() {
+        if (xpCost > 0) return xpCost;
+        return Math.max(1, Math.round(requirements.eterna()));
+    }
+
+    /**
      * Dual-axis match: the ingredient must accept the stack and each stat axis must be within the
      * {@code [requirements, maxRequirements]} window. A {@code -1} entry on
      * {@link #maxRequirements} disables that axis' upper bound (Zenith convention).
