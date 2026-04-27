@@ -3,6 +3,7 @@ package com.fizzlesmp.fizzle_enchanting.mixin_test;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EnchantingTableBlock;
@@ -13,6 +14,7 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.AnnotationNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.io.InputStream;
@@ -28,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * T-2.5.2 — structural verification that {@code EnchantmentTableBlockMixin}
- * correctly targets {@code EnchantingTableBlock#getMenuProvider}.
+ * correctly targets {@code EnchantingTableBlock}.
  *
  * <p>fabric-loader-junit is not on the test classpath (matches fizzle-difficulty),
  * so the mixin transformer does not run during unit tests. The mixin-related
@@ -74,38 +76,19 @@ class EnchantmentTableBlockMixinTest {
     @Test
     void injectMethod_hasHeadCancellableOnGetMenuProvider() throws Exception {
         ClassNode node = readMixinClass();
-        MethodNode hook = null;
-        int injectCount = 0;
-        for (MethodNode m : node.methods) {
-            if (findAnnotation(m.invisibleAnnotations, INJECT_DESC) != null
-                    || findAnnotation(m.visibleAnnotations, INJECT_DESC) != null) {
-                hook = m;
-                injectCount++;
-            }
-        }
-        assertEquals(1, injectCount, "exactly one @Inject hook in MVP — more would widen the mixin footprint");
-        assertNotNull(hook);
+        MethodNode hook = findInjectTargeting(node, "getMenuProvider");
+        assertNotNull(hook, "must have an @Inject hook targeting getMenuProvider");
 
         AnnotationNode inject = findAnnotation(hook.invisibleAnnotations, INJECT_DESC);
         if (inject == null) inject = findAnnotation(hook.visibleAnnotations, INJECT_DESC);
         assertNotNull(inject);
 
-        List<String> methods = extractArrayValue(inject, "method");
-        assertNotNull(methods, "@Inject must declare method = \"getMenuProvider\"");
-        assertEquals(List.of("getMenuProvider"), methods);
-
         Object cancellable = extractValue(inject, "cancellable");
         assertEquals(Boolean.TRUE, cancellable,
                 "hook must be cancellable so setReturnValue actually short-circuits vanilla");
 
-        List<AnnotationNode> ats = extractArrayValue(inject, "at");
-        assertNotNull(ats, "@Inject must declare at = @At(...)");
-        assertEquals(1, ats.size());
-        assertEquals(AT_DESC, ats.get(0).desc);
-        assertEquals("HEAD", extractValue(ats.get(0), "value"),
-                "@At HEAD — we want to pre-empt vanilla's BE lookup, not piggyback on it");
+        assertAtHead(inject);
 
-        // Verify the hook's descriptor matches vanilla getMenuProvider + the CIR tail.
         String expected = "("
                 + Type.getDescriptor(BlockState.class)
                 + Type.getDescriptor(Level.class)
@@ -114,6 +97,39 @@ class EnchantmentTableBlockMixinTest {
                 + ")V";
         assertEquals(expected, hook.desc,
                 "hook params must mirror getMenuProvider + CallbackInfoReturnable for the injector to bind");
+    }
+
+    @Test
+    void injectMethod_hasHeadCancellableOnAnimateTick() throws Exception {
+        ClassNode node = readMixinClass();
+        MethodNode hook = findInjectTargeting(node, "animateTick");
+        assertNotNull(hook, "must have an @Inject hook targeting animateTick for shelf particles");
+
+        AnnotationNode inject = findAnnotation(hook.invisibleAnnotations, INJECT_DESC);
+        if (inject == null) inject = findAnnotation(hook.visibleAnnotations, INJECT_DESC);
+        assertNotNull(inject);
+
+        Object cancellable = extractValue(inject, "cancellable");
+        assertEquals(Boolean.TRUE, cancellable,
+                "hook must be cancellable so ci.cancel() replaces vanilla particle logic");
+
+        assertAtHead(inject);
+
+        String expected = "("
+                + Type.getDescriptor(BlockState.class)
+                + Type.getDescriptor(Level.class)
+                + Type.getDescriptor(BlockPos.class)
+                + Type.getDescriptor(RandomSource.class)
+                + Type.getDescriptor(CallbackInfo.class)
+                + ")V";
+        assertEquals(expected, hook.desc,
+                "hook params must mirror animateTick + CallbackInfo for the injector to bind");
+    }
+
+    @Test
+    void targetMethod_animateTick_stillExistsOnEnchantingTableBlock() throws NoSuchMethodException {
+        EnchantingTableBlock.class.getDeclaredMethod(
+                "animateTick", BlockState.class, Level.class, BlockPos.class, RandomSource.class);
     }
 
     @Test
@@ -131,6 +147,28 @@ class EnchantmentTableBlockMixinTest {
     }
 
     // --- ASM helpers ---
+
+    private static MethodNode findInjectTargeting(ClassNode node, String targetMethod) {
+        for (MethodNode m : node.methods) {
+            AnnotationNode inject = findAnnotation(m.invisibleAnnotations, INJECT_DESC);
+            if (inject == null) inject = findAnnotation(m.visibleAnnotations, INJECT_DESC);
+            if (inject == null) continue;
+            List<String> methods = extractArrayValue(inject, "method");
+            if (methods != null && methods.contains(targetMethod)) {
+                return m;
+            }
+        }
+        return null;
+    }
+
+    private static void assertAtHead(AnnotationNode inject) {
+        List<AnnotationNode> ats = extractArrayValue(inject, "at");
+        assertNotNull(ats, "@Inject must declare at = @At(...)");
+        assertEquals(1, ats.size());
+        assertEquals(AT_DESC, ats.get(0).desc);
+        assertEquals("HEAD", extractValue(ats.get(0), "value"),
+                "@At HEAD — we want to pre-empt vanilla, not piggyback on it");
+    }
 
     private static ClassNode readMixinClass() throws Exception {
         // String path — a class literal on a mixin-package class trips Knot's IllegalClassLoadError.
