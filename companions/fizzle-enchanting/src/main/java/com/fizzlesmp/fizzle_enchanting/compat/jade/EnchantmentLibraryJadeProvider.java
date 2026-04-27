@@ -34,9 +34,8 @@ final class EnchantmentLibraryJadeProvider implements IBlockComponentProvider {
         if (!(accessor.getBlockEntity() instanceof EnchantmentLibraryBlockEntity be)) {
             return;
         }
-        String tierName = be.getBlockState().getBlock().getName().getString();
         int storedCount = countStoredEnchants(be);
-        tooltip.add(Component.literal(JadeTooltipFormatter.libraryLine(tierName, storedCount)));
+        tooltip.add(Component.literal(JadeTooltipFormatter.libraryLine(storedCount)));
     }
 
     /** Visible for package-private tests and the library provider above. */

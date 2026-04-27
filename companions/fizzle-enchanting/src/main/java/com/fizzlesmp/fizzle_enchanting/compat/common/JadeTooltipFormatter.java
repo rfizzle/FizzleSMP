@@ -17,7 +17,7 @@ import java.util.List;
  *       axis (Eterna, Quanta, Arcana, Rectification, Clues) regardless of the stat value, so
  *       the tooltip has a stable shape the player can learn — Jade's own line renderer handles
  *       the visual compaction.</li>
- *   <li>{@link #libraryLine(String, int)} — the one-line summary shown when aimed at either
+ *   <li>{@link #libraryLine(int)} — the one-line summary shown when aimed at either
  *       library tier. Per-enchant points stay inside the library UI (DESIGN: detailed
  *       pool breakdown only in the menu, never bleeding into world tooltips).</li>
  * </ul>
@@ -90,15 +90,14 @@ public final class JadeTooltipFormatter {
     }
 
     /**
-     * Singular/plural aware library summary. {@code tierName} is the display string for the
-     * library tier (typically resolved from the BE's block's {@code getName().getString()} by
-     * the caller so lang swaps flow through naturally). {@code storedCount} is the number of
-     * enchantments with at least one stored point.
+     * Singular/plural aware library summary. {@code storedCount} is the number of
+     * enchantments with at least one stored point. The tier name is omitted because
+     * Jade already displays the block name as the tooltip header.
      */
-    public static String libraryLine(String tierName, int storedCount) {
+    public static String libraryLine(int storedCount) {
         int clamped = Math.max(0, storedCount);
-        String noun = clamped == 1 ? "enchant" : "enchants";
-        return tierName + " — " + clamped + " " + noun + " stored";
+        String noun = clamped == 1 ? "enchantment" : "enchantments";
+        return clamped + " " + noun + " stored";
     }
 
     static String formatFloat(float value) {

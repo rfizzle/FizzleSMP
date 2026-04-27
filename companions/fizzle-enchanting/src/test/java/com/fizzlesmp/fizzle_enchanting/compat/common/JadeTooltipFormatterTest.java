@@ -74,30 +74,23 @@ class JadeTooltipFormatterTest {
 
     @Test
     void libraryLine_pluralNoun_appliesToZeroAndMulti() {
-        assertEquals("Basic Library — 0 enchants stored",
-                JadeTooltipFormatter.libraryLine("Basic Library", 0));
-        assertEquals("Basic Library — 7 enchants stored",
-                JadeTooltipFormatter.libraryLine("Basic Library", 7));
+        assertEquals("0 enchantments stored",
+                JadeTooltipFormatter.libraryLine(0));
+        assertEquals("7 enchantments stored",
+                JadeTooltipFormatter.libraryLine(7));
     }
 
     @Test
     void libraryLine_singularNoun_forOneEnchant() {
-        assertEquals("Basic Library — 1 enchant stored",
-                JadeTooltipFormatter.libraryLine("Basic Library", 1),
-                "Singular form must match English — '1 enchants stored' would look like a bug.");
-    }
-
-    @Test
-    void libraryLine_enderTier_passesThroughDisplayName() {
-        assertEquals("Ender Library — 42 enchants stored",
-                JadeTooltipFormatter.libraryLine("Ender Library", 42),
-                "Tier name flows through verbatim so a lang swap (e.g. localised name) is respected.");
+        assertEquals("1 enchantment stored",
+                JadeTooltipFormatter.libraryLine(1),
+                "Singular form must match English — '1 enchantments stored' would look like a bug.");
     }
 
     @Test
     void libraryLine_negativeStoredClampsToZero() {
-        assertEquals("Basic Library — 0 enchants stored",
-                JadeTooltipFormatter.libraryLine("Basic Library", -3),
+        assertEquals("0 enchantments stored",
+                JadeTooltipFormatter.libraryLine(-3),
                 "Defensive clamp: a miscounted BE must never leak a negative count to the tooltip.");
     }
 
