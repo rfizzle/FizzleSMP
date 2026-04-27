@@ -11,7 +11,7 @@
 
 | Phase | Area | Parity | Key Gaps |
 |-------|------|--------|----------|
-| 1 | Core Systems (Structure, Stats, Selection, Network) | ~95% | Step-ladder eterna accumulation absent; arcana 99 gives 4th guaranteed pick |
+| 1 | Core Systems (Structure, Stats, Selection, Network) | ~98% | Arcana 99 gives 4th guaranteed pick (Apothic stops at 66) |
 | 2 | GUI & UX (Screen, Info Browser, Particles) | ~95% | Minor: no item enchantability breakdown in arcana tooltip |
 | 3 | Blocks & Shelves (27 shelves, special shelves) | ~100% | — |
 | 4 | Recipes & Data-Driven Audit | ~90% | 16/20 infusion recipes (4 intentionally cut); KeepNBT copies enchantments only |
@@ -40,7 +40,7 @@
 
 - [x] Five-stat model: Eterna, Quanta, Arcana, Rectification, Clues (superset of Apothic's three + secondaries)
 - [x] Eterna clamped to `[0, maxEterna]` (config default 50); Quanta/Arcana/Rectification to `[0, 100]`. Config and DESIGN.md now aligned
-- [~] **Step-ladder eterna accumulation is absent.** Fizzle uses flat sum clamped to highest `maxEterna` seen. Apothic sorts blocks by `maxEterna` ascending and gates each group's contribution. Low-tier shelves are less strictly gated in Fizzle
+- [x] Step-ladder eterna accumulation matches Apothic: contributions grouped by `maxEterna`, sorted ascending, each tier's running total capped at its ceiling
 - [x] Baselines: +15 quanta, +itemEnchantability/2 arcana, +1 clue (matches Apothic exactly)
 - [x] `StatsPayload` carries all 5 stats + blacklist + treasure flag + crafting result; hand-written `StreamCodec`
 - [x] Gathers from `EnchantingTableBlock.BOOKSHELF_OFFSETS` (vanilla 15-offset list); air/transmitter midpoint check
@@ -438,7 +438,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 
 ### Functional
 
-2. **Step-ladder eterna accumulation absent** — flat sum clamped to highest maxEterna; low-tier shelves less strictly gated than Apothic
+~~2. **Step-ladder eterna accumulation absent**~~ — FIXED: contributions grouped by maxEterna, sorted ascending, each tier caps running total
 3. ~~**Stat bar tooltips too terse**~~ — FIXED: Apothic-aligned tooltips with drawOnLeft panels (quanta warping, arcana rarity weights)
 4. ~~**No power range / enchantability / clue count**~~ — FIXED: slot hover drawOnLeft panel shows power range, item enchantability, and clue count
 5. ~~**Missing crafting recipes** — filtering shelf, treasure shelf, endshelf, echoing sculkshelf, soul_touched_sculkshelf~~ — FIXED
@@ -500,7 +500,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 ### Tier 3 — Nice to Have (needs design review)
 
 - [x] 9. Implement filtering shelf per-book dynamic stats
-- [ ] 10. Implement step-ladder eterna accumulation (behavioral change — needs design review)
+- [x] 10. Implement step-ladder eterna accumulation (behavioral change — needs design review)
 - [ ] 11. Add configurable power functions (EvalEx or similar expression system — needs design review)
 - [ ] 12. Add inline enchantment descriptions client option
 - [ ] 13. Fix arcana guaranteed picks at 99 threshold (remove 4th pick to match Apothic, or keep as Fizzle-original — needs design review)

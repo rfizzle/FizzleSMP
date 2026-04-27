@@ -90,9 +90,9 @@ class EnchantingStatRegistryGatherTest {
 
         StatCollection result = reg.gatherStatsFromOffsets(offsets(4), lookup);
 
-        // 2 hellshelves + 2 seashelves
+        // 2 hellshelves + 2 seashelves — same maxEterna tier, step-ladder has one group
         assertEquals(6F, result.eterna(), 1e-6,
-                "eterna sums linearly without regard to maxEterna at scaffolding stage");
+                "eterna sums within the same maxEterna tier, capped at that tier's ceiling");
         assertEquals(6F, result.quanta(), 1e-6);
         assertEquals(4F, result.arcana(), 1e-6);
         assertEquals(22.5F, result.maxEterna(), 1e-6,
@@ -248,6 +248,67 @@ class EnchantingStatRegistryGatherTest {
                 "maxEterna uses the highest contributor, not a sum or an average");
         assertEquals(35F, result.eterna(), 1e-6);
         assertEquals(10F, result.quanta(), 1e-6, "quanta is uncapped and sums across shelves");
+    }
+
+    @Test
+    void gather_stepLadder_lowTierOverflowDoesNotCarryToHigherTier() {
+        EnchantingStatRegistry reg = new EnchantingStatRegistry();
+        // 14 vanilla bookshelves overcontribute (maxE=15, e=2 each → raw 28, but capped at 15)
+        // 1 hellshelf (maxE=22.5, e=1.5)
+        // Step-ladder: tier 15 → min(15, 0+28)=15; tier 22.5 → min(22.5, 15+1.5)=16.5
+        EnchantingStats vanilla = new EnchantingStats(15F, 2F, 0F, 0F, 0F, 0);
+        EnchantingStats hellshelf = new EnchantingStats(22.5F, 1.5F, 0F, 0F, 0F, 0);
+
+        Function<BlockPos, EnchantingStats> lookup = pos ->
+                pos.getX() == 0 ? hellshelf : vanilla;
+
+        StatCollection result = reg.gatherStatsFromOffsets(offsets(15), lookup);
+
+        assertEquals(16.5F, result.eterna(), 1e-6,
+                "low-tier overflow is capped at tier ceiling before higher tiers add");
+        assertEquals(22.5F, result.maxEterna(), 1e-6);
+    }
+
+    @Test
+    void gather_stepLadder_threeTierProgression() {
+        EnchantingStatRegistry reg = new EnchantingStatRegistry();
+        // 5 vanilla (maxE=15, e=1), 5 hellshelf (maxE=22.5, e=1.5), 5 endshelf (maxE=45, e=2.5)
+        // Step-ladder: tier 15 → min(15, 0+5)=5; tier 22.5 → min(22.5, 5+7.5)=12.5; tier 45 → min(45, 12.5+12.5)=25
+        EnchantingStats vanilla = new EnchantingStats(15F, 1F, 0F, 0F, 0F, 0);
+        EnchantingStats hellshelf = new EnchantingStats(22.5F, 1.5F, 0F, 0F, 0F, 0);
+        EnchantingStats endshelf = new EnchantingStats(45F, 2.5F, 0F, 0F, 0F, 0);
+
+        Function<BlockPos, EnchantingStats> lookup = pos -> {
+            int x = pos.getX();
+            if (x < 5) return vanilla;
+            if (x < 10) return hellshelf;
+            return endshelf;
+        };
+
+        StatCollection result = reg.gatherStatsFromOffsets(offsets(15), lookup);
+
+        assertEquals(25F, result.eterna(), 1e-6,
+                "three-tier step-ladder accumulates through each ceiling");
+        assertEquals(45F, result.maxEterna(), 1e-6);
+    }
+
+    @Test
+    void gather_stepLadder_negativeMaxEternaAddsDirectly() {
+        EnchantingStatRegistry reg = new EnchantingStatRegistry();
+        // Beeshelf (maxE=0, e=-15) drains eterna without capping
+        // Combined with vanilla shelves (maxE=15, e=1)
+        EnchantingStats beeshelf = new EnchantingStats(0F, -15F, 0F, 0F, 0F, 0);
+        EnchantingStats vanilla = new EnchantingStats(15F, 1F, 0F, 0F, 0F, 0);
+
+        Function<BlockPos, EnchantingStats> lookup = pos ->
+                pos.getX() == 0 ? beeshelf : vanilla;
+
+        // Step-ladder: tier 0 → eterna += -15 → eterna=-15; tier 15 → min(15, -15+14)=min(15,-1)=-1
+        // Final clamp: max(0, -1) = 0
+        StatCollection result = reg.gatherStatsFromOffsets(offsets(15), lookup);
+
+        assertEquals(0F, result.eterna(), 1e-6,
+                "negative contributions from zero-maxEterna shelves reduce the running total");
     }
 
     @Test

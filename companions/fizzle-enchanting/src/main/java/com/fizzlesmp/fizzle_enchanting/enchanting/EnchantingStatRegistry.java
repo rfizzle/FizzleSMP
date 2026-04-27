@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -81,10 +82,14 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
      * {@link BlockTags#ENCHANTMENT_POWER_TRANSMITTER} contribute zero, matching vanilla's
      * {@link EnchantingTableBlock#isValidBookShelf} line-of-sight rule.
      *
-     * <p>Aggregation rules: {@code eterna} is clamped to {@code [0, maxEterna]}
-     * where {@code maxEterna} is the max across contributors; {@code quanta}, {@code arcana},
-     * and {@code rectification} are clamped to {@code [0, 100]}; {@code clues} is floored at 0
-     * with no upper bound (matching Apothic's unbounded clue count).
+     * <p>Eterna uses <b>step-ladder accumulation</b> (matching Apothic): contributions are
+     * grouped by {@code maxEterna}, sorted ascending, and each group's running total is capped
+     * at that tier's ceiling. This prevents low-tier shelf overflow from carrying into higher
+     * tiers. Groups with {@code maxEterna <= 0} add eterna directly without capping.
+     * The final eterna is floored at 0.
+     *
+     * <p>{@code quanta}, {@code arcana}, and {@code rectification} are clamped to
+     * {@code [0, 100]}; {@code clues} is floored at 0 with no upper bound.
      *
      * <p>Filtering-shelf blacklists and treasure-shelf flags are picked up via the context
      * lookup: any in-range {@link BlockPos} whose block entity implements {@link BlacklistSource}
@@ -134,7 +139,7 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
             Function<BlockPos, EnchantingStats> lookup,
             Predicate<BlockPos> transmitterCheck,
             Function<BlockPos, Object> contextLookup) {
-        float eterna = 0F;
+        TreeMap<Float, Float> eternaByMax = new TreeMap<>();
         float quanta = 0F;
         float arcana = 0F;
         float rectification = 0F;
@@ -148,7 +153,7 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
             }
             EnchantingStats stats = lookup.apply(offset);
             if (stats != null && !stats.equals(EnchantingStats.ZERO)) {
-                eterna += stats.eterna();
+                eternaByMax.merge(stats.maxEterna(), stats.eterna(), Float::sum);
                 quanta += stats.quanta();
                 arcana += stats.arcana();
                 rectification += stats.rectification();
@@ -171,7 +176,16 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
                 treasureAllowed = true;
             }
         }
-        float clampedEterna = Math.max(0F, Math.min(eterna, maxEterna));
+        // Step-ladder eterna: groups sorted by maxEterna ascending, each tier caps the running total.
+        float eterna = 0F;
+        for (Map.Entry<Float, Float> entry : eternaByMax.entrySet()) {
+            if (entry.getKey() > 0) {
+                eterna = Math.min(entry.getKey(), eterna + entry.getValue());
+            } else {
+                eterna += entry.getValue();
+            }
+        }
+        float clampedEterna = Math.max(0F, eterna);
         float clampedQuanta = Math.max(0F, Math.min(quanta, 100F));
         float clampedArcana = Math.max(0F, Math.min(arcana, 100F));
         float clampedRectification = Math.max(0F, Math.min(rectification, 100F));
