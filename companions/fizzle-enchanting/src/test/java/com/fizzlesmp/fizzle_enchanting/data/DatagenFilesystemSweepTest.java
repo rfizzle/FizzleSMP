@@ -56,6 +56,7 @@ class DatagenFilesystemSweepTest {
             "seashelf", "heart_seashelf", "crystal_seashelf",
             "endshelf", "pearl_endshelf", "draconic_endshelf",
             "dormant_deepshelf", "echoing_deepshelf", "soul_touched_deepshelf",
+            "echoing_sculkshelf", "soul_touched_sculkshelf",
             "filtering_shelf", "treasure_shelf",
             "sightshelf", "sightshelf_t2",
             "rectifier", "rectifier_t2", "rectifier_t3");
@@ -120,7 +121,7 @@ class DatagenFilesystemSweepTest {
                 "loot table count should equal block count (" + ALL_BLOCK_IDS.size() + ")");
     }
 
-    // --- Recipes: 19 generated shaped recipes ---
+    // --- Recipes: 24 generated shaped recipes ---
 
     @TestFactory
     Stream<DynamicTest> everyGeneratedRecipe_exists() {

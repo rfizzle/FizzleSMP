@@ -13,7 +13,7 @@
 |-------|------|--------|----------|
 | 1 | Core Systems (Structure, Stats, Selection, Network) | ~95% | Step-ladder eterna accumulation absent; arcana 99 gives 4th guaranteed pick |
 | 2 | GUI & UX (Screen, Info Browser, Particles) | ~95% | Minor: no item enchantability breakdown in arcana tooltip |
-| 3 | Blocks & Shelves (27 shelves, special shelves) | ~95% | Sculk ambient sounds dead code; 2 missing crafting recipes (sculk shelves) |
+| 3 | Blocks & Shelves (27 shelves, special shelves) | ~98% | Filtering shelf per-book dynamic stats absent |
 | 4 | Recipes & Data-Driven Audit | ~90% | 16/20 infusion recipes (4 intentionally cut); KeepNBT copies enchantments only |
 | 5 | Library, Tomes & Anvil | ~90% | Library extract produces books only (not direct apply); 9 typed tomes cut |
 | 6 | Enchantments & Config | Divergent (by design) | 51 enchantments vs Apothic's 19 (different sets); no configurable power functions |
@@ -157,7 +157,7 @@ Non-shelf stat providers: Amethyst Cluster (+1.5 rect), Basic Skulls (+5 quanta)
 ### C. Shelf Gaps
 
 - ~~**CRITICAL: No mineable block tags**~~ — FIXED: wood-tier shelves added to `minecraft:mineable/axe`, stone/sculk-tier shelves + libraries added to `minecraft:mineable/pickaxe`
-- ~~**Missing crafting recipes**: filtering shelf, treasure shelf, endshelf~~ — FIXED; echoing sculkshelf, soul_touched_sculkshelf recipes still pending
+- ~~**Missing crafting recipes**: filtering shelf, treasure shelf, endshelf, echoing sculkshelf, soul_touched_sculkshelf~~ — FIXED
 - **No Geode Shelf** — replaced by Rectifier shelves (intentional divergence)
 
 ---
@@ -441,7 +441,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 2. **Step-ladder eterna accumulation absent** — flat sum clamped to highest maxEterna; low-tier shelves less strictly gated than Apothic
 3. ~~**Stat bar tooltips too terse**~~ — FIXED: Apothic-aligned tooltips with drawOnLeft panels (quanta warping, arcana rarity weights)
 4. ~~**No power range / enchantability / clue count**~~ — FIXED: slot hover drawOnLeft panel shows power range, item enchantability, and clue count
-5. ~~**Missing crafting recipes** — filtering shelf, treasure shelf, endshelf~~ — FIXED; echoing sculkshelf, soul_touched_sculkshelf still pending (see Tier 2 #8)
+5. ~~**Missing crafting recipes** — filtering shelf, treasure shelf, endshelf, echoing sculkshelf, soul_touched_sculkshelf~~ — FIXED
 ~~6. **Sculk ambient sounds dead code**~~ — FIXED: `SculkShelfBlock.animateTick()` wires config fields to ambient sounds and particles
 ~~7. **No tooltips on standalone items**~~ — FIXED: `appendHoverText()` added to prismatic web, 3 tomes, infused breath, warden tendril
 8. **No configurable power functions** — sealed `PowerFunction` with 2 built-in implementations only
@@ -495,7 +495,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 - [x] 5. Add power range, item enchantability, and clue count to main screen slot tooltips (drawOnLeft panel)
 - [x] 6. Implement sculk shelf ambient sounds (wire `randomTick()` to config fields)
 - [x] 7. Add `appendHoverText()` to standalone items (tomes, prismatic web, etc.)
-- [ ] 8. Add remaining crafting recipes (echoing/soul_touched sculkshelf pending warden_tendril availability)
+- [x] 8. Add remaining crafting recipes (echoing/soul_touched sculkshelf pending warden_tendril availability)
 
 ### Tier 3 — Nice to Have (needs design review)
 

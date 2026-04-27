@@ -38,14 +38,9 @@ import net.minecraft.world.item.crafting.Ingredient;
  * against {@code minecraft:potion}. The Zenith regeneration/water/night-vision recipes route
  * through {@link #potionIngredient(Holder)}.
  *
- * <p><b>Deferred recipes:</b> two sculk shelves still need items from later epics:
- * <ul>
- *   <li>{@code echoing_sculkshelf} / {@code soul_touched_sculkshelf} — use
- *       {@code warden_tendril} (T-5.4.2).</li>
- * </ul>
- * Those slots are called out in {@link #buildRecipes} as TODO comments so they're picked up when
- * the downstream items land. Every remaining shelf that can be built from registered items gets
- * its Zenith-matched shaped recipe here.
+ * <p>Every shelf that can be built from registered items gets its Zenith-matched shaped recipe
+ * here, including the sculk-tier shelves ({@code echoing_sculkshelf},
+ * {@code soul_touched_sculkshelf}) which use {@code warden_tendril}.
  *
  * <p>The Zenith {@code zenith:deepslate} item tag (used by {@code dormant_deepshelf}) ships
  * verbatim as {@code data/fizzle_enchanting/tags/item/deepslate.json}; see {@link #DEEPSLATE_TAG}.
@@ -227,10 +222,28 @@ public class FizzleRecipeProvider extends FabricRecipeProvider {
                 .unlockedBy("has_deepshelf", has(FizzleShelves.DEEPSHELF))
                 .save(exporter);
 
-        // === Sculk tier — deferred (both need warden_tendril from T-5.4.2) ===
-        // TODO(T-5.4.2): echoing_sculkshelf + soul_touched_sculkshelf once warden_tendril is
-        // registered. Patterns: " T " / "SBS" / "SCS", keys T=warden_tendril, S=sculk,
-        // C=sculk_catalyst, B=echoing_deepshelf or soul_touched_deepshelf respectively.
+        // === Sculk tier ===
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, FizzleShelves.ECHOING_SCULKSHELF)
+                .pattern(" T ")
+                .pattern("SBS")
+                .pattern("SCS")
+                .define('T', FizzleEnchantingRegistry.WARDEN_TENDRIL)
+                .define('S', Items.SCULK)
+                .define('B', FizzleShelves.ECHOING_DEEPSHELF)
+                .define('C', Items.SCULK_CATALYST)
+                .unlockedBy("has_echoing_deepshelf", has(FizzleShelves.ECHOING_DEEPSHELF))
+                .save(exporter);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, FizzleShelves.SOUL_TOUCHED_SCULKSHELF)
+                .pattern(" T ")
+                .pattern("SBS")
+                .pattern("SCS")
+                .define('T', FizzleEnchantingRegistry.WARDEN_TENDRIL)
+                .define('S', Items.SCULK)
+                .define('B', FizzleShelves.SOUL_TOUCHED_DEEPSHELF)
+                .define('C', Items.SCULK_CATALYST)
+                .unlockedBy("has_soul_touched_deepshelf", has(FizzleShelves.SOUL_TOUCHED_DEEPSHELF))
+                .save(exporter);
 
         // === Utility — clue shelves (sightshelf tier) ===
         ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, FizzleShelves.SIGHTSHELF)
