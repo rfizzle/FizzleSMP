@@ -253,6 +253,132 @@ class FizzleEnchantingConfigTest {
         assertEquals("#AABBCC", reloaded.display.overLeveledColor);
     }
 
+    @Test
+    void load_powerFunctionOverride_linear(@TempDir Path tmp) throws IOException {
+        Path path = tmp.resolve("fizzle_enchanting.json");
+        Files.writeString(path, """
+                {
+                  "enchantmentOverrides": {
+                    "minecraft:sharpness": {
+                      "maxLevel": 10,
+                      "minPowerFunction": { "type": "linear", "base": 1, "perLevel": 11 },
+                      "maxPowerFunction": { "type": "linear", "base": 21, "perLevel": 11 }
+                    }
+                  }
+                }
+                """);
+
+        FizzleEnchantingConfig loaded = FizzleEnchantingConfig.load(path);
+
+        FizzleEnchantingConfig.EnchantmentOverride o = loaded.enchantmentOverrides.get("minecraft:sharpness");
+        assertNotNull(o);
+        assertEquals(10, o.maxLevel);
+        assertNotNull(o.minPowerFunction);
+        assertEquals("linear", o.minPowerFunction.type);
+        assertEquals(1, o.minPowerFunction.base);
+        assertEquals(11, o.minPowerFunction.perLevel);
+        assertNotNull(o.maxPowerFunction);
+        assertEquals("linear", o.maxPowerFunction.type);
+        assertEquals(21, o.maxPowerFunction.base);
+        assertEquals(11, o.maxPowerFunction.perLevel);
+    }
+
+    @Test
+    void load_powerFunctionOverride_fixed(@TempDir Path tmp) throws IOException {
+        Path path = tmp.resolve("fizzle_enchanting.json");
+        Files.writeString(path, """
+                {
+                  "enchantmentOverrides": {
+                    "minecraft:mending": {
+                      "maxPowerFunction": { "type": "fixed", "value": 150 }
+                    }
+                  }
+                }
+                """);
+
+        FizzleEnchantingConfig loaded = FizzleEnchantingConfig.load(path);
+
+        FizzleEnchantingConfig.EnchantmentOverride o = loaded.enchantmentOverrides.get("minecraft:mending");
+        assertNotNull(o);
+        assertNotNull(o.maxPowerFunction);
+        assertEquals("fixed", o.maxPowerFunction.type);
+        assertEquals(150, o.maxPowerFunction.value);
+    }
+
+    @Test
+    void load_powerFunctionOverride_invalidType_resetsToDefault(@TempDir Path tmp) throws IOException {
+        Path path = tmp.resolve("fizzle_enchanting.json");
+        Files.writeString(path, """
+                {
+                  "enchantmentOverrides": {
+                    "minecraft:sharpness": {
+                      "minPowerFunction": { "type": "quadratic", "base": 1 }
+                    }
+                  }
+                }
+                """);
+
+        FizzleEnchantingConfig loaded = FizzleEnchantingConfig.load(path);
+
+        FizzleEnchantingConfig.EnchantmentOverride o = loaded.enchantmentOverrides.get("minecraft:sharpness");
+        assertNotNull(o);
+        assertNotNull(o.minPowerFunction);
+        assertEquals("default", o.minPowerFunction.type);
+    }
+
+    @Test
+    void load_powerFunctionOverride_nullWhenAbsent(@TempDir Path tmp) throws IOException {
+        Path path = tmp.resolve("fizzle_enchanting.json");
+        Files.writeString(path, """
+                {
+                  "enchantmentOverrides": {
+                    "minecraft:sharpness": { "maxLevel": 8 }
+                  }
+                }
+                """);
+
+        FizzleEnchantingConfig loaded = FizzleEnchantingConfig.load(path);
+
+        FizzleEnchantingConfig.EnchantmentOverride o = loaded.enchantmentOverrides.get("minecraft:sharpness");
+        assertNotNull(o);
+        assertEquals(8, o.maxLevel);
+        assertTrue(o.minPowerFunction == null, "minPowerFunction should be null when not specified");
+        assertTrue(o.maxPowerFunction == null, "maxPowerFunction should be null when not specified");
+    }
+
+    @Test
+    void saveAndLoad_powerFunctionOverride_roundTrips(@TempDir Path tmp) {
+        Path path = tmp.resolve("fizzle_enchanting.json");
+        FizzleEnchantingConfig original = new FizzleEnchantingConfig();
+
+        FizzleEnchantingConfig.EnchantmentOverride o = new FizzleEnchantingConfig.EnchantmentOverride();
+        o.maxLevel = 10;
+        FizzleEnchantingConfig.PowerFunctionConfig minPf = new FizzleEnchantingConfig.PowerFunctionConfig();
+        minPf.type = "linear";
+        minPf.base = 1;
+        minPf.perLevel = 11;
+        o.minPowerFunction = minPf;
+        FizzleEnchantingConfig.PowerFunctionConfig maxPf = new FizzleEnchantingConfig.PowerFunctionConfig();
+        maxPf.type = "fixed";
+        maxPf.value = 150;
+        o.maxPowerFunction = maxPf;
+        original.enchantmentOverrides.put("minecraft:sharpness", o);
+
+        original.save(path);
+        FizzleEnchantingConfig reloaded = FizzleEnchantingConfig.load(path);
+
+        FizzleEnchantingConfig.EnchantmentOverride ro = reloaded.enchantmentOverrides.get("minecraft:sharpness");
+        assertNotNull(ro);
+        assertEquals(10, ro.maxLevel);
+        assertNotNull(ro.minPowerFunction);
+        assertEquals("linear", ro.minPowerFunction.type);
+        assertEquals(1, ro.minPowerFunction.base);
+        assertEquals(11, ro.minPowerFunction.perLevel);
+        assertNotNull(ro.maxPowerFunction);
+        assertEquals("fixed", ro.maxPowerFunction.type);
+        assertEquals(150, ro.maxPowerFunction.value);
+    }
+
     private static boolean inUnit(double v) {
         return v >= 0.0 && v <= 1.0;
     }

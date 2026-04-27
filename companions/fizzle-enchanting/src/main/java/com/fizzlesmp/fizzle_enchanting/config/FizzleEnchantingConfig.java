@@ -13,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 public class FizzleEnchantingConfig {
@@ -23,6 +24,7 @@ public class FizzleEnchantingConfig {
             .create();
     private static final Pattern HEX_COLOR = Pattern.compile("^#[0-9A-Fa-f]{6}$");
     private static final String DEFAULT_OVER_LEVELED_COLOR = "#FF6600";
+    private static final Set<String> VALID_POWER_FUNCTION_TYPES = Set.of("default", "linear", "fixed");
     private static final int CURRENT_VERSION = 1;
 
     public int configVersion = 1;
@@ -161,6 +163,8 @@ public class FizzleEnchantingConfig {
             if (o.levelCap != -1) {
                 o.levelCap = clampIntRange("enchantmentOverrides." + id + ".levelCap", o.levelCap, 1, 127);
             }
+            validatePowerFunctionConfig("enchantmentOverrides." + id + ".minPowerFunction", o.minPowerFunction);
+            validatePowerFunctionConfig("enchantmentOverrides." + id + ".maxPowerFunction", o.maxPowerFunction);
         }
     }
 
@@ -212,6 +216,15 @@ public class FizzleEnchantingConfig {
         return value;
     }
 
+    private static void validatePowerFunctionConfig(String name, PowerFunctionConfig pfc) {
+        if (pfc == null) return;
+        if (pfc.type == null || !VALID_POWER_FUNCTION_TYPES.contains(pfc.type)) {
+            FizzleEnchanting.LOGGER.warn("{}.type '{}' is not valid (expected one of {}); resetting to 'default'",
+                    name, pfc.type, VALID_POWER_FUNCTION_TYPES);
+            pfc.type = "default";
+        }
+    }
+
     public static class EnchantingTable {
         public boolean allowTreasureWithoutShelf = false;
         public int maxEterna = 50;
@@ -260,5 +273,24 @@ public class FizzleEnchantingConfig {
         public int maxLevel = -1;
         public int maxLootLevel = -1;
         public int levelCap = -1;
+        public PowerFunctionConfig minPowerFunction;
+        public PowerFunctionConfig maxPowerFunction;
+    }
+
+    /**
+     * Configures a custom power function for an enchantment override.
+     *
+     * <p>Supported types:
+     * <ul>
+     *   <li>{@code "linear"} — {@code base + perLevel * level}
+     *   <li>{@code "fixed"} — constant {@code value} regardless of level
+     *   <li>{@code "default"} — vanilla behavior (min extrapolation or 200 ceiling)
+     * </ul>
+     */
+    public static class PowerFunctionConfig {
+        public String type = "default";
+        public int base = 0;
+        public int perLevel = 0;
+        public int value = 0;
     }
 }

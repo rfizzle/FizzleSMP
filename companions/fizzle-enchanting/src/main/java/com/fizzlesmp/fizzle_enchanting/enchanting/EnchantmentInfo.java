@@ -76,9 +76,20 @@ public record EnchantmentInfo(
         int maxLevel = override.maxLevel > 0 ? override.maxLevel : e.getMaxLevel();
         int maxLootLevel = override.maxLootLevel > 0 ? override.maxLootLevel : e.getMaxLevel();
         int levelCap = override.levelCap;
-        return new EnchantmentInfo(
-                ench, maxLevel, maxLootLevel, levelCap,
-                PowerFunction.DefaultMaxPowerFunction.INSTANCE,
+        PowerFunction minPower = resolvePowerFunction(override.minPowerFunction,
                 new PowerFunction.DefaultMinPowerFunction(ench));
+        PowerFunction maxPower = resolvePowerFunction(override.maxPowerFunction,
+                PowerFunction.DefaultMaxPowerFunction.INSTANCE);
+        return new EnchantmentInfo(ench, maxLevel, maxLootLevel, levelCap, maxPower, minPower);
+    }
+
+    private static PowerFunction resolvePowerFunction(
+            FizzleEnchantingConfig.PowerFunctionConfig pfc, PowerFunction fallback) {
+        if (pfc == null || "default".equals(pfc.type)) return fallback;
+        return switch (pfc.type) {
+            case "linear" -> new PowerFunction.LinearPowerFunction(pfc.base, pfc.perLevel);
+            case "fixed" -> new PowerFunction.FixedPowerFunction(pfc.value);
+            default -> fallback;
+        };
     }
 }

@@ -21,6 +21,8 @@ public sealed interface PowerFunction {
             return switch (type) {
                 case DEFAULT_MIN -> DefaultMinPowerFunction.INNER_CODEC.decode(buf);
                 case DEFAULT_MAX -> DefaultMaxPowerFunction.INSTANCE;
+                case LINEAR -> LinearPowerFunction.INNER_CODEC.decode(buf);
+                case FIXED -> FixedPowerFunction.INNER_CODEC.decode(buf);
             };
         }
 
@@ -29,6 +31,10 @@ public sealed interface PowerFunction {
             buf.writeByte(value.getType().ordinal());
             if (value instanceof DefaultMinPowerFunction dmp) {
                 DefaultMinPowerFunction.INNER_CODEC.encode(buf, dmp);
+            } else if (value instanceof LinearPowerFunction lp) {
+                LinearPowerFunction.INNER_CODEC.encode(buf, lp);
+            } else if (value instanceof FixedPowerFunction fp) {
+                FixedPowerFunction.INNER_CODEC.encode(buf, fp);
             }
         }
     };
@@ -39,7 +45,9 @@ public sealed interface PowerFunction {
 
     enum Type {
         DEFAULT_MIN,
-        DEFAULT_MAX
+        DEFAULT_MAX,
+        LINEAR,
+        FIXED
     }
 
     /**
@@ -90,6 +98,49 @@ public sealed interface PowerFunction {
         @Override
         public Type getType() {
             return Type.DEFAULT_MAX;
+        }
+    }
+
+    /**
+     * Returns {@code base + perLevel * level}. Covers the most common enchantment cost curves.
+     */
+    record LinearPowerFunction(int base, int perLevel) implements PowerFunction {
+
+        static final StreamCodec<RegistryFriendlyByteBuf, LinearPowerFunction> INNER_CODEC =
+                StreamCodec.composite(
+                        ByteBufCodecs.VAR_INT, LinearPowerFunction::base,
+                        ByteBufCodecs.VAR_INT, LinearPowerFunction::perLevel,
+                        LinearPowerFunction::new);
+
+        @Override
+        public int getPower(int level) {
+            return base + perLevel * level;
+        }
+
+        @Override
+        public Type getType() {
+            return Type.LINEAR;
+        }
+    }
+
+    /**
+     * Always returns a fixed value regardless of level. Useful for flat max-power ceilings.
+     */
+    record FixedPowerFunction(int value) implements PowerFunction {
+
+        static final StreamCodec<RegistryFriendlyByteBuf, FixedPowerFunction> INNER_CODEC =
+                StreamCodec.composite(
+                        ByteBufCodecs.VAR_INT, FixedPowerFunction::value,
+                        FixedPowerFunction::new);
+
+        @Override
+        public int getPower(int level) {
+            return value;
+        }
+
+        @Override
+        public Type getType() {
+            return Type.FIXED;
         }
     }
 }
