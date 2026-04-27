@@ -78,10 +78,9 @@ class RecipeInfoFormatterTest {
         List<String> lines = RecipeInfoFormatter.shelfStatLines(hellshelf);
 
         assertEquals(List.of(
-                "Max Eterna: 22.5",
-                "Eterna: 1.5",
-                "Quanta: 3"
-        ), lines, "Zero axes must be skipped — a shelf with no clues/rectification shouldn't show 'Clues: 0'");
+                "Eterna: +1.5 (Max 22.5)",
+                "Quanta: +3%"
+        ), lines, "Zero axes must be skipped; positive eterna combines with max in Apothic format");
     }
 
     @Test
@@ -91,7 +90,7 @@ class RecipeInfoFormatterTest {
 
         assertEquals(List.of(
                 "Eterna: -1.5",
-                "Arcana: -7.5"
+                "Arcana: -7.5%"
         ), lines, "Negative contributions must flow through verbatim; max-eterna 0 must stay hidden");
     }
 
@@ -99,7 +98,7 @@ class RecipeInfoFormatterTest {
     void shelfStatLines_sightshelf_renders_clues_as_integer() {
         EnchantingStats sightshelf = new EnchantingStats(0F, 0F, 0F, 0F, 0F, 1);
 
-        assertEquals(List.of("Clues: 1"), RecipeInfoFormatter.shelfStatLines(sightshelf),
+        assertEquals(List.of("Clues: +1"), RecipeInfoFormatter.shelfStatLines(sightshelf),
                 "Clues is the only integer-typed stat — must render without a decimal point");
     }
 

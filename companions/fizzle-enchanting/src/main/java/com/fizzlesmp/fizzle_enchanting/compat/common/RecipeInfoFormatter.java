@@ -54,23 +54,24 @@ public final class RecipeInfoFormatter {
 
     public static List<String> shelfStatLines(EnchantingStats stats) {
         List<String> lines = new ArrayList<>();
-        if (stats.maxEterna() != 0F) {
-            lines.add("Max Eterna: " + formatFloat(stats.maxEterna()));
-        }
         if (stats.eterna() != 0F) {
-            lines.add("Eterna: " + formatFloat(stats.eterna()));
+            if (stats.eterna() > 0) {
+                lines.add("Eterna: +" + formatFloat(stats.eterna()) + " (Max " + formatFloat(stats.maxEterna()) + ")");
+            } else {
+                lines.add("Eterna: " + formatFloat(stats.eterna()));
+            }
         }
         if (stats.quanta() != 0F) {
-            lines.add("Quanta: " + formatFloat(stats.quanta()));
+            lines.add("Quanta: " + (stats.quanta() > 0 ? "+" : "") + formatFloat(stats.quanta()) + "%");
         }
         if (stats.arcana() != 0F) {
-            lines.add("Arcana: " + formatFloat(stats.arcana()));
+            lines.add("Arcana: " + (stats.arcana() > 0 ? "+" : "") + formatFloat(stats.arcana()) + "%");
         }
         if (stats.rectification() != 0F) {
-            lines.add("Rectification: " + formatFloat(stats.rectification()));
+            lines.add("Rectification: " + (stats.rectification() > 0 ? "+" : "") + formatFloat(stats.rectification()) + "%");
         }
         if (stats.clues() != 0) {
-            lines.add("Clues: " + stats.clues());
+            lines.add("Clues: " + (stats.clues() > 0 ? "+" : "") + stats.clues());
         }
         if (lines.isEmpty()) {
             lines.add("No stat contribution");
