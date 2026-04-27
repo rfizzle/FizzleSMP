@@ -463,12 +463,12 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 ### Minor
 
 ~~11. Arcana guaranteed picks loop fires at 99 (4th pick) — Apothic stops at 66 (3 picks)~~ — FIXED: loop capped at 66 to match Apothic
-12. Library extract produces books only (not direct item application like Apothic)
-13. Scrap Tome removes 1 random enchantment (not Apothic's "~half")
-14. Anvil repair uses iron blocks (Zenith approach) vs Apothic XP-only
-15. KeepNBT copies `ENCHANTMENTS` component only (not full NBT)
+~~12. Library extract produces books only (not direct item application like Apothic)~~ — INTENTIONAL: Zenith pattern; see Intentionally Different table
+~~13. Scrap Tome removes 1 random enchantment (not Apothic's "~half")~~ — INTENTIONAL: Zenith behavior; see Intentionally Different table
+~~14. Anvil repair uses iron blocks (Zenith approach) vs Apothic XP-only~~ — INTENTIONAL: Zenith behavior; see Intentionally Different table
+~~15. KeepNBT copies `ENCHANTMENTS` component only (not full NBT)~~ — INTENTIONAL: correct for 1.21.1 component model
 ~~16. DESIGN.md says Eterna 0-50 but code defaults to 0-100 — doc is stale~~ — FIXED: code default changed to 50
-17. Trinkets API wired but idle (all enchantments are JSON, no Java callers)
+~~17. Trinkets API wired but idle (all enchantments are JSON, no Java callers)~~ — INTENTIONAL: no-op integration point for future use
 
 ## INTENTIONALLY DIFFERENT (Design Divergences)
 
@@ -546,9 +546,9 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 
 #### Mechanical Decisions (needs design review)
 
-- [ ] 22. **XP charging model** — Fizzle currently deducts `slot + 1` levels (vanilla pattern). Apothic computes raw XP points via `MiscUtil.getExpCostForSlot` and charges actual experience points, making high-level enchanting significantly more expensive. Need to decide: keep vanilla level-cost simplicity, or adopt Apothic's raw-XP model for better progression gating? (See "Intentional Mechanical Differences" §1 below.)
+- [x] 22. **XP charging model** — KEPT AS-IS: Fizzle deducts level-based costs that scale with eterna (slot 2 = `round(eterna)` levels, e.g. 50 levels at max eterna). Apothic converts to raw XP points (exponentially more expensive at high levels). Fizzle's model already provides meaningful progression gating via vanilla's `onEnchantmentPerformed`. Documented in "Intentional Mechanical Differences" §1.
 
-- [ ] 23. **Rectification vs Stability semantics** — Fizzle uses continuous rectification (0–100%) that truncates the negative quanta tail. Apothic uses a boolean `stable` flag that disables quanta variance entirely. Current implementation is intentionally different, but the 7500% display bug (item 18) suggests the accumulation math may also need review. Decide whether rectification should hard-cap at 100% in `gatherStats()` or whether the unclamped sum is useful for anything. (See "Intentional Mechanical Differences" §3 below.)
+- [x] 23. **Rectification vs Stability semantics** — RESOLVED: Rectification is already clamped to `[0, 100]` in `EnchantingStatRegistry.gatherStatsFromOffsets()` (line 191). The 7500% display bug (item 18) was a tooltip formatting issue, not an accumulation bug. Continuous rectification model is intentionally different from Apothic's boolean `stable` flag.
 
 ---
 
