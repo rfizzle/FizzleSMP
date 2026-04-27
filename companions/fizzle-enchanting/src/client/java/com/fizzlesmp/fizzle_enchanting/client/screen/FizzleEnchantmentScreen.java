@@ -2,11 +2,13 @@ package com.fizzlesmp.fizzle_enchanting.client.screen;
 
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentLogic;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
+import com.fizzlesmp.fizzle_enchanting.enchanting.RealEnchantmentHelper;
 import com.fizzlesmp.fizzle_enchanting.enchanting.StatCollection;
 import com.fizzlesmp.fizzle_enchanting.enchanting.recipe.EnchantingRecipeRegistry;
 import com.fizzlesmp.fizzle_enchanting.net.CraftingResultEntry;
 import com.fizzlesmp.fizzle_enchanting.net.EnchantmentClue;
 import com.google.common.collect.Lists;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.EnchantmentNames;
@@ -15,12 +17,15 @@ import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FormattedText;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.EnchantmentMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -140,8 +145,6 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
             gfx.blit(TEXTURE, xCenter + 59, yCenter + 95, 0, 207,
                     (int) (this.arcana / 100F * 110), 5);
         }
-
-        renderLeftPanel(gfx);
 
         if (isInfoButtonVisible()) {
             int btnX = xCenter + 148;
@@ -280,50 +283,120 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
         }
 
         StatCollection stats = fizzleMenu.getLastStats();
-        if (isHovering(60, 76, 110, 5, mouseX, mouseY) && stats.eterna() > 0) {
-            List<Component> tipLines = Lists.newArrayList();
-            float displayMax = stats.maxEterna() > 0 ? stats.maxEterna() : ABSOLUTE_MAX_ETERNA;
-            tipLines.add(Component.literal(String.format("Eterna: %.1f / %.0f", stats.eterna(), displayMax))
-                    .withStyle(style -> style.withColor(0x3DB53D)));
-            tipLines.add(Component.translatable("gui.fizzle_enchanting.stat.eterna.desc")
-                    .withStyle(ChatFormatting.GRAY));
-            tipLines.add(Component.literal(String.format("Enchant Level: %d", Math.round(stats.eterna())))
-                    .withStyle(ChatFormatting.YELLOW));
-            gfx.renderComponentTooltip(this.font, tipLines, mouseX, mouseY);
-        } else if (isHovering(60, 86, 110, 5, mouseX, mouseY) && stats.quanta() > 0) {
-            List<Component> tipLines = Lists.newArrayList();
-            tipLines.add(Component.literal(String.format("Quanta: %.1f%%", stats.quanta()))
-                    .withStyle(style -> style.withColor(0xFC5454)));
-            tipLines.add(Component.translatable("gui.fizzle_enchanting.stat.quanta.desc")
-                    .withStyle(ChatFormatting.GRAY));
-            float rectFrac = stats.rectification() / 100F;
-            float lo = (rectFrac - 1F) * stats.quanta();
-            tipLines.add(Component.literal(String.format("Power Range: %.0f%% to +%.0f%%", lo, stats.quanta()))
-                    .withStyle(ChatFormatting.YELLOW));
-            if (stats.rectification() > 0) {
-                tipLines.add(Component.literal(String.format("Rectification: %.1f%%", stats.rectification()))
-                        .withStyle(ChatFormatting.AQUA));
+        if (isHovering(60, 76, 110, 5, mouseX, mouseY)) {
+            List<Component> list = Lists.newArrayList();
+            list.add(eternaLabel().append(Component.translatable("gui.fizzle_enchanting.stat.eterna.desc1")));
+            list.add(Component.translatable("gui.fizzle_enchanting.stat.eterna.desc2").withStyle(ChatFormatting.GRAY));
+            if (stats.eterna() > 0) {
+                float displayMax = stats.maxEterna() > 0 ? stats.maxEterna() : ABSOLUTE_MAX_ETERNA;
+                list.add(Component.literal(""));
+                list.add(Component.translatable("gui.fizzle_enchanting.stat.eterna.value",
+                        f(stats.eterna()), (int) displayMax).withStyle(ChatFormatting.GRAY));
             }
-            gfx.renderComponentTooltip(this.font, tipLines, mouseX, mouseY);
-        } else if (isHovering(60, 96, 110, 5, mouseX, mouseY) && stats.arcana() > 0) {
-            List<Component> tipLines = Lists.newArrayList();
-            tipLines.add(Component.literal(String.format("Arcana: %.1f%%", stats.arcana()))
-                    .withStyle(style -> style.withColor(0xA800A8)));
-            tipLines.add(Component.translatable("gui.fizzle_enchanting.stat.arcana.desc")
-                    .withStyle(ChatFormatting.GRAY));
-            int picks = countGuaranteedPicks(stats.arcana());
-            tipLines.add(Component.literal(String.format("Guaranteed Picks: %d", picks))
-                    .withStyle(ChatFormatting.YELLOW));
-            gfx.renderComponentTooltip(this.font, tipLines, mouseX, mouseY);
+            gfx.renderComponentTooltip(this.font, list, mouseX, mouseY);
+        }
+        else if (isHovering(60, 86, 110, 5, mouseX, mouseY)) {
+            List<Component> list = Lists.newArrayList();
+            list.add(quantaLabel().append(Component.translatable("gui.fizzle_enchanting.stat.quanta.desc1")));
+            list.add(Component.translatable("gui.fizzle_enchanting.stat.quanta.desc2").withStyle(ChatFormatting.GRAY));
+            list.add(rectLabel().append(Component.translatable("gui.fizzle_enchanting.stat.quanta.desc3").withStyle(ChatFormatting.GRAY)));
+            if (stats.quanta() > 0) {
+                list.add(CommonComponents.EMPTY);
+                list.add(Component.translatable("gui.fizzle_enchanting.stat.quanta.value",
+                        f(stats.quanta())).withStyle(ChatFormatting.GRAY));
+            }
+            gfx.renderComponentTooltip(this.font, list, mouseX, mouseY);
+            if (stats.quanta() > 0) {
+                list.clear();
+                list.add(Component.translatable("info.fizzle_enchanting.quanta_buff")
+                        .withStyle(ChatFormatting.UNDERLINE, ChatFormatting.RED));
+                list.add(Component.translatable("info.fizzle_enchanting.quanta_growth", f(stats.quanta()))
+                        .withStyle(ChatFormatting.BLUE));
+                drawOnLeft(gfx, list, this.topPos + 29);
+            }
+        }
+        else if (isHovering(60, 96, 110, 5, mouseX, mouseY)) {
+            List<Component> list = Lists.newArrayList();
+            PoseStack pose = gfx.pose();
+            pose.pushPose();
+            pose.translate(0, 0, 4);
+            list.add(arcanaLabel().append(Component.translatable("gui.fizzle_enchanting.stat.arcana.desc1")));
+            list.add(Component.translatable("gui.fizzle_enchanting.stat.arcana.desc2").withStyle(ChatFormatting.GRAY));
+            list.add(Component.translatable("gui.fizzle_enchanting.stat.arcana.desc3").withStyle(ChatFormatting.GRAY));
+            if (stats.arcana() > 0) {
+                list.add(Component.literal(""));
+                list.add(Component.translatable("gui.fizzle_enchanting.stat.arcana.value",
+                        f(stats.arcana())).withStyle(ChatFormatting.GOLD));
+            }
+            gfx.renderComponentTooltip(this.font, list, mouseX, mouseY);
+            pose.popPose();
+            if (stats.arcana() > 0) {
+                list.clear();
+                RealEnchantmentHelper.Arcana a = RealEnchantmentHelper.Arcana.getForThreshold(stats.arcana());
+                list.add(Component.translatable("info.fizzle_enchanting.arcana_bonus")
+                        .withStyle(ChatFormatting.UNDERLINE, ChatFormatting.DARK_PURPLE));
+                if (a != RealEnchantmentHelper.Arcana.EMPTY) {
+                    list.add(Component.translatable("info.fizzle_enchanting.weights_changed")
+                            .withStyle(ChatFormatting.BLUE));
+                }
+                int minEnchants = guaranteedPicks(stats.arcana());
+                if (minEnchants > 1) {
+                    list.add(Component.translatable("info.fizzle_enchanting.min_enchants", minEnchants)
+                            .withStyle(ChatFormatting.BLUE));
+                }
+                drawOnLeft(gfx, list, this.topPos + 29);
+                int offset = 20 + list.size() * this.font.lineHeight;
+                list.clear();
+                list.add(Component.translatable("info.fizzle_enchanting.rel_weights")
+                        .withStyle(ChatFormatting.UNDERLINE, ChatFormatting.YELLOW));
+                list.add(Component.translatable("info.fizzle_enchanting.weight",
+                        I18n.get("gui.fizzle_enchanting.enchant_info.rarity.common"), a.getRarities()[0])
+                        .withStyle(ChatFormatting.GRAY));
+                list.add(Component.translatable("info.fizzle_enchanting.weight",
+                        I18n.get("gui.fizzle_enchanting.enchant_info.rarity.uncommon"), a.getRarities()[1])
+                        .withStyle(ChatFormatting.GREEN));
+                list.add(Component.translatable("info.fizzle_enchanting.weight",
+                        I18n.get("gui.fizzle_enchanting.enchant_info.rarity.rare"), a.getRarities()[2])
+                        .withStyle(ChatFormatting.BLUE));
+                list.add(Component.translatable("info.fizzle_enchanting.weight",
+                        I18n.get("gui.fizzle_enchanting.enchant_info.rarity.very_rare"), a.getRarities()[3])
+                        .withStyle(ChatFormatting.GOLD));
+                drawOnLeft(gfx, list, this.topPos + 29 + offset);
+            }
+        }
+        else if (isInfoButtonVisible() && mouseX >= this.leftPos + 148 && mouseX < this.leftPos + 168
+                && mouseY >= this.topPos + 1 && mouseY < this.topPos + 13) {
+            gfx.renderComponentTooltip(this.font, Lists.newArrayList(
+                    Component.translatable("gui.fizzle_enchanting.enchant_info.info_button")),
+                    mouseX, mouseY);
         }
 
-        if (isInfoButtonVisible()) {
-            int btnX = this.leftPos + 148;
-            int btnY = this.topPos + 1;
-            if (mouseX >= btnX && mouseX < btnX + 20 && mouseY >= btnY && mouseY < btnY + 12) {
-                gfx.renderComponentTooltip(this.font, Lists.newArrayList(
-                        Component.translatable("gui.fizzle_enchanting.enchant_info.info_button")),
-                        mouseX, mouseY);
+        ItemStack enchanting = this.menu.getSlot(0).getItem();
+        if (!enchanting.isEmpty() && this.menu.costs[2] > 0) {
+            for (int slot = 0; slot < 3; slot++) {
+                if (isHovering(60, 14 + 19 * slot, 108, 18, mouseX, mouseY)) {
+                    List<Component> list = Lists.newArrayList();
+                    int level = this.menu.costs[slot];
+                    list.add(Component.translatable("info.fizzle_enchanting.ench_at", level)
+                            .withStyle(ChatFormatting.UNDERLINE, ChatFormatting.GREEN));
+                    list.add(Component.literal(""));
+                    int levelCost = slot + 1;
+                    list.add(Component.translatable("info.fizzle_enchanting.level_cost",
+                            Component.literal("" + levelCost).withStyle(ChatFormatting.GREEN)));
+                    float quantaFrac = stats.quanta() / 100F;
+                    float rectFrac = stats.rectification() / 100F;
+                    int minPow = Math.round(Mth.clamp(level - level * quantaFrac * (1F - rectFrac), 1, 200));
+                    int maxPow = Math.round(Mth.clamp(level + level * quantaFrac, 1, 200));
+                    list.add(Component.translatable("info.fizzle_enchanting.power_range",
+                            Component.literal("" + minPow).withStyle(ChatFormatting.DARK_RED),
+                            Component.literal("" + maxPow).withStyle(ChatFormatting.BLUE)));
+                    list.add(Component.translatable("info.fizzle_enchanting.item_ench",
+                            Component.literal("" + enchanting.getItem().getEnchantmentValue()).withStyle(ChatFormatting.GREEN)));
+                    list.add(Component.translatable("info.fizzle_enchanting.num_clues",
+                            Component.literal("" + (1 + stats.clues())).withStyle(ChatFormatting.DARK_AQUA)));
+                    drawOnLeft(gfx, list, this.topPos + 29);
+                    break;
+                }
             }
         }
     }
@@ -363,54 +436,63 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
-    private void renderLeftPanel(GuiGraphics gfx) {
-        if (fizzleMenu == null) return;
-        StatCollection stats = fizzleMenu.getLastStats();
-        if (stats.eterna() <= 0) return;
-
-        float rectFrac = stats.rectification() / 100F;
-        float powerLo = (rectFrac - 1F) * stats.quanta();
-        int picks = countGuaranteedPicks(stats.arcana());
-
-        String rectText = String.format("Rect: %.0f%%", stats.rectification());
-        String cluesText = String.format("Clues: %d", stats.clues());
-        String powerText = String.format("Pwr: %.0f%% to +%.0f%%", powerLo, stats.quanta());
-        String picksText = String.format("Picks: %d", picks);
-
-        int padding = 4;
-        int lineHeight = 10;
-        String[] textLines = {rectText, cluesText, powerText, picksText};
-        int maxTextWidth = 0;
-        for (String line : textLines) {
-            maxTextWidth = Math.max(maxTextWidth, this.font.width(line));
+    private void drawOnLeft(GuiGraphics gfx, List<Component> list, int y) {
+        if (list.isEmpty()) return;
+        int lineHeight = this.font.lineHeight;
+        int maxWidth = 0;
+        for (Component c : list) {
+            maxWidth = Math.max(maxWidth, this.font.width(c));
         }
-        int panelWidth = maxTextWidth + padding * 2;
-        int panelHeight = textLines.length * lineHeight + padding * 2 - 2;
+        int textHeight = list.size() * lineHeight;
+        int pad = 4;
+        int gap = 5;
+        int boxX = this.leftPos - maxWidth - pad * 2 - gap;
+        if (boxX < 0) return;
+        int boxY = y - pad;
+        int boxW = maxWidth + pad * 2;
+        int boxH = textHeight + pad * 2;
 
-        int panelX = this.leftPos - panelWidth - 4;
-        int panelY = this.topPos + 70;
-
-        if (panelX < 2) return;
-
-        gfx.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xC0100010);
-        gfx.renderOutline(panelX, panelY, panelWidth, panelHeight, 0xFF5A5A8A);
-
-        int y = panelY + padding;
-        gfx.drawString(this.font, rectText, panelX + padding, y, 0x55FFFF, false);
-        y += lineHeight;
-        gfx.drawString(this.font, cluesText, panelX + padding, y, 0x5555FF, false);
-        y += lineHeight;
-        gfx.drawString(this.font, powerText, panelX + padding, y, 0xFC5454, false);
-        y += lineHeight;
-        gfx.drawString(this.font, picksText, panelX + padding, y, 0xA800A8, false);
+        gfx.pose().pushPose();
+        gfx.pose().translate(0, 0, 10);
+        gfx.fill(boxX, boxY, boxX + boxW, boxY + boxH, 0xF0100010);
+        int c1 = 0x505000FF;
+        int c2 = 0x5028007F;
+        gfx.fillGradient(boxX, boxY + 1, boxX + 1, boxY + boxH - 1, c1, c2);
+        gfx.fillGradient(boxX + boxW - 1, boxY + 1, boxX + boxW, boxY + boxH - 1, c1, c2);
+        gfx.fill(boxX + 1, boxY, boxX + boxW - 1, boxY + 1, c1);
+        gfx.fill(boxX + 1, boxY + boxH - 1, boxX + boxW - 1, boxY + boxH, c2);
+        for (int i = 0; i < list.size(); i++) {
+            gfx.drawString(this.font, list.get(i), boxX + pad, y + i * lineHeight, 0xFFFFFF, true);
+        }
+        gfx.pose().popPose();
     }
 
-    private static int countGuaranteedPicks(float arcana) {
+    private static int guaranteedPicks(float arcana) {
         int picks = 0;
         for (int i = 0; i < 100; i += 33) {
             if (arcana >= i) picks++;
         }
         return picks;
+    }
+
+    private static MutableComponent eternaLabel() {
+        return Component.translatable("gui.fizzle_enchanting.enchant.eterna").withStyle(ChatFormatting.GREEN);
+    }
+
+    private static MutableComponent quantaLabel() {
+        return Component.translatable("gui.fizzle_enchanting.enchant.quanta").withStyle(ChatFormatting.RED);
+    }
+
+    private static MutableComponent arcanaLabel() {
+        return Component.translatable("gui.fizzle_enchanting.enchant.arcana").withStyle(ChatFormatting.DARK_PURPLE);
+    }
+
+    private static MutableComponent rectLabel() {
+        return Component.translatable("gui.fizzle_enchanting.stat.rectification").withStyle(ChatFormatting.AQUA);
+    }
+
+    private static String f(float f) {
+        return String.format("%.2f", f);
     }
 
     private Optional<CraftingResultEntry> craftingResult() {

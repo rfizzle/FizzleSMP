@@ -12,7 +12,7 @@
 | Phase | Area | Parity | Key Gaps |
 |-------|------|--------|----------|
 | 1 | Core Systems (Structure, Stats, Selection, Network) | ~95% | Step-ladder eterna accumulation absent; arcana 99 gives 4th guaranteed pick |
-| 2 | GUI & UX (Screen, Info Browser, Particles) | ~90% | No power range/enchantability/clue count in main screen slot tooltips |
+| 2 | GUI & UX (Screen, Info Browser, Particles) | ~95% | Minor: no item enchantability breakdown in arcana tooltip |
 | 3 | Blocks & Shelves (27 shelves, special shelves) | ~95% | Sculk ambient sounds dead code; 2 missing crafting recipes (sculk shelves) |
 | 4 | Recipes & Data-Driven Audit | ~90% | 16/20 infusion recipes (4 intentionally cut); KeepNBT copies enchantments only |
 | 5 | Library, Tomes & Anvil | ~85% | Library extract produces books only (not direct apply); 9 typed tomes cut; no tome tooltips |
@@ -75,16 +75,13 @@
 
 - [x] `FizzleEnchantmentScreen` extends `EnchantmentScreen`; custom GUI texture (197px height)
 - [x] Three stat bars at y=75,85,95; width=110px; smooth interpolation (0.1F up, 0.075F down)
-- [x] Stat bar tooltips show stat value + descriptive text + derived values (enchant level, power range, guaranteed picks)
-- [x] Left-side panel shows Rectification, Clues, Power Range, and Guaranteed Picks when shelves are active
+- [x] Stat bar tooltips match Apothic pattern: colored header + subtitle, gray description, derived values
+- [x] Hover-contextual `drawOnLeft` panels: quanta shows Quantic Warping; arcana shows Arcane Empowerments + rarity weight table
+- [x] Slot hover `drawOnLeft` panel: level cost, power range, item enchantability, clue count
 - [x] Enchantment slot hover shows clue enchantments; partial vs full clue toggle via `isClientCluesExhausted`
 - [x] Info button `[i]` at (148,1) opens `EnchantingInfoScreen`
 - [x] Infusion display in slot 2 (yellow underline result name + cost)
 - [x] "Infusion Failed" display (red text) when item matches recipe but stats insufficient
-- [~] XP cost shown in levels only (Apothic shows both points and levels)
-- [-] No power range display on main screen slot tooltips
-- [-] No item enchantability display
-- [-] No explicit clue count shown
 
 ### B. Enchantment Info Browser
 
@@ -442,8 +439,8 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 ### Functional
 
 2. **Step-ladder eterna accumulation absent** — flat sum clamped to highest maxEterna; low-tier shelves less strictly gated than Apothic
-3. ~~**Stat bar tooltips too terse**~~ — FIXED: enriched with descriptive text, derived values, and left-side panel for Rect/Clues/Power/Picks
-4. **No power range / enchantability / clue count** displayed on main enchanting screen
+3. ~~**Stat bar tooltips too terse**~~ — FIXED: Apothic-aligned tooltips with drawOnLeft panels (quanta warping, arcana rarity weights)
+4. ~~**No power range / enchantability / clue count**~~ — FIXED: slot hover drawOnLeft panel shows power range, item enchantability, and clue count
 5. ~~**Missing crafting recipes** — filtering shelf, treasure shelf, endshelf~~ — FIXED; echoing sculkshelf, soul_touched_sculkshelf still pending (see Tier 2 #8)
 6. **Sculk ambient sounds dead code** — `randomTicks()` set but `randomTick()` never overridden; config fields are unused
 7. **No tooltips on standalone items** — prismatic web, tomes, infused breath, warden tendril, music discs lack `appendHoverText()`
@@ -495,7 +492,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 ### Tier 2 — High Value / Medium Effort
 
 - [x] 4. Enrich stat bar tooltips with descriptive text + drawOnLeft side panels
-- [ ] 5. Add power range, item enchantability, and clue count to main screen tooltips
+- [x] 5. Add power range, item enchantability, and clue count to main screen slot tooltips (drawOnLeft panel)
 - [ ] 6. Implement sculk shelf ambient sounds (wire `randomTick()` to config fields)
 - [ ] 7. Add `appendHoverText()` to standalone items (tomes, prismatic web, etc.)
 - [ ] 8. Add remaining crafting recipes (echoing/soul_touched sculkshelf pending warden_tendril availability)
@@ -507,3 +504,13 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 - [ ] 11. Add configurable power functions (EvalEx or similar expression system — needs design review)
 - [ ] 12. Add inline enchantment descriptions client option
 - [ ] 13. Fix arcana guaranteed picks at 99 threshold (remove 4th pick to match Apothic, or keep as Fizzle-original — needs design review)
+
+---
+
+## Intentional Mechanical Differences from Apothic
+
+These are places where Fizzle's underlying enchanting system diverges from Apothic by design (or necessity). The GUI is aligned to Apothic's patterns but the display reflects Fizzle's actual mechanics.
+
+1. **XP charging** — Fizzle deducts `slot + 1` levels (vanilla pattern via `player.giveExperienceLevels`). Apothic computes raw XP points via `MiscUtil.getExpCostForSlot` and charges actual experience points. The slot hover panel shows "Level Cost" instead of Apothic's "Raw XP Cost: N (M Levels)".
+2. **Item enchantability does not contribute to arcana** — Apothic's `EnchantmentTableStats.Builder` starts with `arcana = itemEnch / 2F`, so higher-enchantability items get a natural arcana boost. Fizzle's `gatherStats` sums only shelf contributions. Apothic's arcana tooltip breaks this down into "Base Value" (shelves) + "Enchantability Bonus" (item) + "Total Value"; Fizzle shows only the total since the bonus doesn't exist.
+3. **Rectification vs Stability** — Apothic has a boolean `stable` flag (quanta variance disabled entirely). Fizzle has a continuous `rectification` stat (0–100%) that truncates the negative tail of quanta variance. The quanta tooltip shows "Rectification" instead of "Quantic Stability".
