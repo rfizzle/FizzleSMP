@@ -1,0 +1,41 @@
+{
+	"description": {
+		"translate": "enchantment.fizzle_enchanting.divinity",
+		"fallback": "Divinity"
+	},
+	"exclusive_set": "#minecraft:exclusive_set/damage",
+	"supported_items": "#minecraft:enchantable/sword",
+	"weight": 4,
+	"max_level": 5,
+	"min_cost": {
+		"base": 5,
+		"per_level_above_first": 8
+	},
+	"max_cost": {
+		"base": 25,
+		"per_level_above_first": 8
+	},
+	"anvil_cost": 2,
+	"slots": ["mainhand"],
+	"effects": {
+		"minecraft:damage": [
+			{
+				"requirements": {
+					"condition": "minecraft:entity_properties",
+					"entity": "this",
+					"predicate": {
+						"type": "#fizzle_enchanting:sensitive_to_divinity"
+					}
+				},
+				"effect": {
+					"type": "minecraft:add",
+					"value": {
+						"type": "minecraft:linear",
+						"base": 2.5,
+						"per_level_above_first": 2.5
+					}
+				}
+			}
+		]
+	}
+}

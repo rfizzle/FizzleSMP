@@ -378,6 +378,25 @@
     "enchantment.fizzle_enchanting.temptation": "Temptation",
     "enchantment.fizzle_enchanting.temptation.desc": "Farm animals follow you while holding this tool.",
 
+    "enchantment.fizzle_enchanting.certainty": "Certainty",
+    "enchantment.fizzle_enchanting.certainty.desc": "Increases damage to Ender mobs.",
+    "enchantment.fizzle_enchanting.sword/certainty.desc": "Increases damage to Ender mobs.",
+    "enchantment.fizzle_enchanting.divinity": "Divinity",
+    "enchantment.fizzle_enchanting.divinity.desc": "Increases damage to Nether mobs.",
+    "enchantment.fizzle_enchanting.sword/divinity.desc": "Increases damage to Nether mobs.",
+    "enchantment.fizzle_enchanting.vigilance": "Vigilance",
+    "enchantment.fizzle_enchanting.vigilance.desc": "Increases damage to Illagers.",
+    "enchantment.fizzle_enchanting.sword/vigilance.desc": "Increases damage to Illagers.",
+    "enchantment.fizzle_enchanting.oppression": "Oppression",
+    "enchantment.fizzle_enchanting.oppression.desc": "Inflicts slowness on hit.",
+    "enchantment.fizzle_enchanting.sword/oppression.desc": "Inflicts slowness on hit.",
+    "enchantment.fizzle_enchanting.ironclad": "Ironclad",
+    "enchantment.fizzle_enchanting.ironclad.desc": "Increases knockback resistance.",
+    "enchantment.fizzle_enchanting.armor/ironclad.desc": "Increases knockback resistance.",
+    "enchantment.fizzle_enchanting.magic_protection": "Magic Protection",
+    "enchantment.fizzle_enchanting.magic_protection.desc": "Reduces magic damage.",
+    "enchantment.fizzle_enchanting.armor/magic_protection.desc": "Reduces magic damage.",
+
     "death.attack.fizzle_enchanting.corrupted": "%1$s was consumed by a corrupted enchantment",
     "death.attack.fizzle_enchanting.corrupted.player": "%1$s was corrupted by %2$s"
 }

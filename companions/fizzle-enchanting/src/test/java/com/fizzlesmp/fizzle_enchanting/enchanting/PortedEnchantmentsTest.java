@@ -56,6 +56,8 @@ class PortedEnchantmentsTest {
      * inflating the port manifest.
      */
     private static final List<String> AUTHORED_NAMES = List.of(
+            "armor/ironclad.json",
+            "armor/magic_protection.json",
             "bag_of_souls.json",
             "berserkers_fury.json",
             "chromatic.json",
@@ -67,6 +69,10 @@ class PortedEnchantmentsTest {
             "scavenger.json",
             "shield_bash.json",
             "stable_footing.json",
+            "sword/certainty.json",
+            "sword/divinity.json",
+            "sword/oppression.json",
+            "sword/vigilance.json",
             "temptation.json");
 
     private static final int EXPECTED_PORT_COUNT = 50;
