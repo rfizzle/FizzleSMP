@@ -11,6 +11,7 @@ import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiInfoRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
+import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -37,13 +38,16 @@ import java.util.Map;
  */
 public final class EmiEnchantingPlugin implements EmiPlugin {
 
+    private static final EmiTexture MOD_ICON = new EmiTexture(
+            FizzleEnchanting.id("icon.png"), 0, 0, 16, 16, 128, 128, 128, 128);
+
     public static final EmiRecipeCategory SHELVES = new EmiRecipeCategory(
             FizzleEnchanting.id("shelves"),
-            EmiStack.of(Items.ENCHANTING_TABLE));
+            MOD_ICON);
 
     public static final EmiRecipeCategory TOMES = new EmiRecipeCategory(
             FizzleEnchanting.id("tomes"),
-            EmiStack.of(FizzleEnchantingRegistry.SCRAP_TOME));
+            MOD_ICON);
 
     @Override
     public void register(EmiRegistry registry) {

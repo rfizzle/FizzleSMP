@@ -1,7 +1,6 @@
 package com.fizzlesmp.fizzle_enchanting.compat.jei;
 
 import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
-import com.fizzlesmp.fizzle_enchanting.FizzleEnchantingRegistry;
 import com.fizzlesmp.fizzle_enchanting.compat.common.RecipeInfoFormatter;
 import com.fizzlesmp.fizzle_enchanting.compat.common.TableCraftingDisplay;
 import com.fizzlesmp.fizzle_enchanting.compat.common.TableCraftingDisplayExtractor;
@@ -10,10 +9,12 @@ import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantingStatRegistry;
 import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantingStats;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -55,16 +56,23 @@ public final class JeiEnchantingPlugin implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
+        IDrawable modIcon = new IDrawable() {
+            private static final ResourceLocation TEXTURE = FizzleEnchanting.id("icon.png");
+            @Override public int getWidth() { return 16; }
+            @Override public int getHeight() { return 16; }
+            @Override
+            public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
+                guiGraphics.blit(TEXTURE, xOffset, yOffset, 0, 0, 16, 16, 16, 16);
+            }
+        };
         registration.addRecipeCategories(new JeiEnchantingCategory(
-                registration.getJeiHelpers().getGuiHelper(),
                 JeiEnchantingRecipeTypes.SHELVES,
                 Component.translatable("jei.fizzle_enchanting.category.shelves"),
-                Items.ENCHANTING_TABLE));
+                modIcon));
         registration.addRecipeCategories(new JeiEnchantingCategory(
-                registration.getJeiHelpers().getGuiHelper(),
                 JeiEnchantingRecipeTypes.TOMES,
                 Component.translatable("jei.fizzle_enchanting.category.tomes"),
-                FizzleEnchantingRegistry.SCRAP_TOME));
+                modIcon));
     }
 
     @Override

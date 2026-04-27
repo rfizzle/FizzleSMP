@@ -55,12 +55,10 @@ public final class ReiEnchantingPlugin implements REIClientPlugin {
     public void registerCategories(CategoryRegistry registry) {
         registry.add(new ReiEnchantingCategory(
                 SHELVES_ID,
-                Component.translatable("rei.fizzle_enchanting.category.shelves"),
-                Items.ENCHANTING_TABLE));
+                Component.translatable("rei.fizzle_enchanting.category.shelves")));
         registry.add(new ReiEnchantingCategory(
                 TOMES_ID,
-                Component.translatable("rei.fizzle_enchanting.category.tomes"),
-                FizzleEnchantingRegistry.SCRAP_TOME));
+                Component.translatable("rei.fizzle_enchanting.category.tomes")));
 
         ItemStack table = new ItemStack(Items.ENCHANTING_TABLE);
         registry.addWorkstations(SHELVES_ID, EntryIngredients.of(table));

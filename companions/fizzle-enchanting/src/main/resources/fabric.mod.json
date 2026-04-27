@@ -7,7 +7,7 @@
     "authors": ["FizzleSMP"],
     "contact": {},
     "license": "MIT",
-    "icon": "",
+    "icon": "assets/fizzle_enchanting/icon.png",
     "environment": "*",
     "entrypoints": {
         "main": ["com.fizzlesmp.fizzle_enchanting.FizzleEnchanting"],

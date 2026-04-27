@@ -1,5 +1,6 @@
 package com.fizzlesmp.fizzle_enchanting.compat.rei;
 
+import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
 import com.fizzlesmp.fizzle_enchanting.compat.common.RecipeInfoFormatter;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -8,11 +9,10 @@ import me.shedaniel.rei.api.client.gui.widgets.Widget;
 import me.shedaniel.rei.api.client.gui.widgets.Widgets;
 import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
-import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,14 +33,17 @@ public final class ReiEnchantingCategory implements DisplayCategory<ReiEnchantin
     private static final int TEXT_X_OFFSET = 72;
     private static final int PADDING = 6;
 
+    private static final ResourceLocation ICON_TEXTURE = FizzleEnchanting.id("icon.png");
+    private static final Renderer MOD_ICON = (GuiGraphics graphics, Rectangle bounds, int mouseX, int mouseY, float delta) ->
+            graphics.blit(ICON_TEXTURE, bounds.x, bounds.y, 0, 0,
+                    bounds.width, bounds.height, bounds.width, bounds.height);
+
     private final CategoryIdentifier<ReiEnchantingDisplay> id;
     private final Component title;
-    private final ItemStack iconStack;
 
-    public ReiEnchantingCategory(CategoryIdentifier<ReiEnchantingDisplay> id, Component title, ItemLike icon) {
+    public ReiEnchantingCategory(CategoryIdentifier<ReiEnchantingDisplay> id, Component title) {
         this.id = id;
         this.title = title;
-        this.iconStack = new ItemStack(icon);
     }
 
     @Override
@@ -55,7 +58,7 @@ public final class ReiEnchantingCategory implements DisplayCategory<ReiEnchantin
 
     @Override
     public Renderer getIcon() {
-        return EntryStacks.of(iconStack);
+        return MOD_ICON;
     }
 
     @Override

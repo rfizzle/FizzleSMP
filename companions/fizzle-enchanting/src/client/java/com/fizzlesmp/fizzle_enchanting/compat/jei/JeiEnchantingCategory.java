@@ -3,8 +3,8 @@ package com.fizzlesmp.fizzle_enchanting.compat.jei;
 import com.fizzlesmp.fizzle_enchanting.compat.common.RecipeInfoFormatter;
 import com.fizzlesmp.fizzle_enchanting.compat.common.TableCraftingDisplay;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
-import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -14,7 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.ItemLike;
 
 import java.util.List;
 
@@ -36,13 +35,12 @@ public final class JeiEnchantingCategory extends AbstractRecipeCategory<TableCra
     private static final int TEXT_X = 72;
     private static final int MAX_LINES = 5;
 
-    public JeiEnchantingCategory(IGuiHelper guiHelper,
-                                 RecipeType<TableCraftingDisplay> recipeType,
+    public JeiEnchantingCategory(RecipeType<TableCraftingDisplay> recipeType,
                                  Component title,
-                                 ItemLike icon) {
+                                 IDrawable icon) {
         super(recipeType,
                 title,
-                guiHelper.createDrawableItemLike(icon),
+                icon,
                 WIDTH,
                 SLOT_ROW_HEIGHT + MAX_LINES * LINE_HEIGHT + PADDING);
     }
