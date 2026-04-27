@@ -51,7 +51,7 @@
 - [x] Slot levels: slot 2 = `round(eterna)`, slot 1 = 60-80%, slot 0 = 20-40% (matches Apothic)
 - [x] Quanta factor: truncated Gaussian `clamp(nextGaussian()/3, -1, 1) * quanta/100`
 - [x] Rectification truncates negative tail (at rect=100 equivalent to Apothic's "stable" mode)
-- [x] Power range 1-200 (`powerCap = maxEterna * 2`)
+- [x] Power range 1-200 (`powerCap = 200`, matching Apothic); power filtering uses `minPower <= power <= maxPower` (Apothic semantics)
 - [x] `Arcana` enum with 11 tiers matching Apothic values verbatim
 - [x] Guaranteed picks at arcana 0, 33, 66 — matches Apothic (3 picks max)
 - [x] Random additional enchantments with `randomBound = max(50, scaledLevel*1.15)`, `scaledLevel /= 2`
@@ -526,7 +526,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 
 - [x] 14. **Eterna bar max inconsistency** — FIXED: Added `maxEterna` to `StatsPayload` so the client receives the real shelf-derived max; bar fill now uses `maxEterna` from stats instead of hardcoded 100; fallback set to 50 matching config default.
 
-- [ ] 15. **Weak enchantments at max eterna (level 3 slot)** — With 50/50 eterna and a full shelf setup, the level 3 slot offers underwhelming enchantments (Silk Touch, Swift Sneak, Soul Speed I, Infinity, Respiration I). The selection algorithm's power range or quanta factor may not be scaling correctly relative to the Fizzle maxEterna=50 scale. Audit `EnchantmentSelectionAlgorithm` slot level computation, power range derivation (`powerCap = maxEterna * 2` → 100 when it should arguably reach 200 at max build), and compare against Apothic output at equivalent eterna fraction.
+- [x] 15. **Weak enchantments at max eterna (level 3 slot)** — FIXED: Two bugs in `RealEnchantmentHelper.getAvailableEnchantmentResults()`: (1) power filtering used `power >= maxPower(level)` instead of Apothic's `power <= maxPower(level)`, causing enchantments to always fall through to minimum level since `DefaultMaxPowerFunction` returns 200; (2) `powerCap` was `maxEterna * 2` (=100) instead of Apothic's hardcoded 200. Both corrected to match Apothic behavior.
 
 #### JADE / WTHIT Integration
 

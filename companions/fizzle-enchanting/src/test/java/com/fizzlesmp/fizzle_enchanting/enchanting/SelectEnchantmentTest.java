@@ -219,6 +219,45 @@ class SelectEnchantmentTest {
         assertTrue(sawLure, "rod-supported Lure must be reachable");
     }
 
+    // ---- Power-level selection (regression: power >= maxPower vs <= maxPower) ----
+
+    @Test
+    void highPower_selectsMaxEnchantmentLevel() {
+        // Fixture uses dynamicCost(1, 10): minCost(lvl) = 1 + 10*(lvl-1).
+        // Sharpness level 5: minCost = 41. Power=41 should yield level 5.
+        List<EnchantmentInstance> results = RealEnchantmentHelper.getAvailableEnchantmentResults(
+                41, sword(), registry, false, Set.of());
+        EnchantmentInstance sharpness = results.stream()
+                .filter(inst -> inst.enchantment.is(SHARPNESS))
+                .findFirst().orElse(null);
+        assertNotNull(sharpness, "Sharpness must be in candidate list at power=41");
+        assertEquals(5, sharpness.level, "Sharpness should be level 5 at power=41");
+    }
+
+    @Test
+    void midPower_selectsAppropriateEnchantmentLevel() {
+        // Sharpness level 4: minCost=31, level 5: minCost=41. Power=35 should yield level 4.
+        List<EnchantmentInstance> results = RealEnchantmentHelper.getAvailableEnchantmentResults(
+                35, sword(), registry, false, Set.of());
+        EnchantmentInstance sharpness = results.stream()
+                .filter(inst -> inst.enchantment.is(SHARPNESS))
+                .findFirst().orElse(null);
+        assertNotNull(sharpness, "Sharpness must be in candidate list at power=35");
+        assertEquals(4, sharpness.level, "Sharpness should be level 4 at power=35");
+    }
+
+    @Test
+    void lowPower_selectsMinimumEnchantmentLevel() {
+        // Sharpness level 1: minCost=1, level 2: minCost=11. Power=5 should yield level 1.
+        List<EnchantmentInstance> results = RealEnchantmentHelper.getAvailableEnchantmentResults(
+                5, sword(), registry, false, Set.of());
+        EnchantmentInstance sharpness = results.stream()
+                .filter(inst -> inst.enchantment.is(SHARPNESS))
+                .findFirst().orElse(null);
+        assertNotNull(sharpness, "Sharpness must be in candidate list at power=5");
+        assertEquals(1, sharpness.level, "Sharpness should be level 1 at power=5");
+    }
+
     // ---- Rarity bucket ----
 
     @Test

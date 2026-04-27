@@ -76,7 +76,7 @@ public final class RealEnchantmentHelper {
      *
      * <p>Quanta widens a symmetric random window around {@code level} via
      * {@link #getQuantaFactor}: the effective power becomes
-     * {@code clamp(round(level * (1 + factor)), 1, maxEterna*4)}, where {@code factor} is a
+     * {@code clamp(round(level * (1 + factor)), 1, 200)}, where {@code factor} is a
      * roughly-normal variate in {@code [-quanta/100, quanta/100]}. Rectification truncates the
      * lower tail — at {@code rectification=100} the factor is {@code >= 0} and outcomes are
      * monotonically {@code >= level}.
@@ -137,8 +137,7 @@ public final class RealEnchantmentHelper {
         }
 
         float quantaFactor = getQuantaFactor(rand, quanta, rectification);
-        int powerCap = resolveMaxEterna() * 2;
-        int scaledLevel = Mth.clamp(Math.round(level * (1F + quantaFactor)), 1, powerCap);
+        int scaledLevel = Mth.clamp(Math.round(level * (1F + quantaFactor)), 1, 200);
 
         Set<ResourceKey<Enchantment>> safeBlacklist = blacklist == null ? Set.of() : blacklist;
         List<EnchantmentInstance> candidates = getAvailableEnchantmentResults(
@@ -193,8 +192,8 @@ public final class RealEnchantmentHelper {
      * </ul>
      *
      * <p>For each surviving enchantment, the highest level whose cost window admits
-     * {@code power} is picked (matching Zenith's semantics: require
-     * {@code power >= minCost(L)} and either {@code power >= maxCost(L)} or {@code L} is the
+     * {@code power} is picked (matching Apothic's semantics: require
+     * {@code power >= minCost(L)} and either {@code power <= maxCost(L)} or {@code L} is the
      * minimum level).
      */
     public static List<EnchantmentInstance> getAvailableEnchantmentResults(
@@ -221,7 +220,7 @@ public final class RealEnchantmentHelper {
             EnchantmentInfo info = EnchantmentInfoRegistry.getInfo(holder);
             for (int lvl = info.getMaxLevel(); lvl > ench.getMinLevel() - 1; lvl--) {
                 if (power >= info.getMinPower(lvl)
-                        && (power >= info.getMaxPower(lvl) || lvl == ench.getMinLevel())) {
+                        && (power <= info.getMaxPower(lvl) || lvl == ench.getMinLevel())) {
                     list.add(new EnchantmentInstance(holder, lvl));
                     break;
                 }
