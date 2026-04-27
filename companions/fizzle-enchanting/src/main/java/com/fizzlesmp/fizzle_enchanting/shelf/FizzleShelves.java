@@ -174,8 +174,8 @@ public final class FizzleShelves {
                 theme);
     }
 
-    private static EnchantingShelfBlock sculkShelf(ParticleTheme theme) {
-        return new EnchantingShelfBlock(
+    private static SculkShelfBlock sculkShelf(ParticleTheme theme) {
+        return new SculkShelfBlock(
                 BlockBehaviour.Properties.of()
                         .mapColor(MapColor.COLOR_BLACK)
                         .sound(SoundType.STONE)

@@ -152,7 +152,7 @@ Non-shelf stat providers: Amethyst Cluster (+1.5 rect), Basic Skulls (+5 quanta)
 - [~] Filtering shelf stats are flat (JSON) regardless of book count — Apothic scales +0.5 eterna / +1 arcana per book
 - [x] **Treasure shelf**: `TreasureFlagSource` marker; no stat contribution; custom texture
 - [x] **Rectifier shelves (Fizzle-original)**: 3 tiers (10/15/25 rectification); all have recipes, models, textures
-- [~] **Sculk ambient**: `randomTicks()` set on block properties but `randomTick()` never overridden — config fields `sculkShelfShriekerChance` and `sculkParticleChance` are dead code
+- [x] **Sculk ambient**: `SculkShelfBlock` overrides `animateTick()` — plays `SCULK_CATALYST_BLOOM` sounds and spawns `SCULK_SOUL` particles using config fields `sculkShelfShriekerChance` and `sculkParticleChance`
 
 ### C. Shelf Gaps
 
@@ -294,7 +294,7 @@ All eterna thresholds scaled ~0.5× from Apothic (Fizzle maxE=50 vs Apothic maxE
 - [x] Server-to-client sync via `EnchantmentInfoPayload` on join + reload
 - [x] `/fizzleenchanting reload` command triggers config re-read + registry rebuild + client sync
 - [x] Client config: `display.showBookTooltips`, `display.overLeveledColor`
-- [~] Sculk config fields exist (`sculkShelfShriekerChance`, `sculkParticleChance`) but are dead code
+- [x] Sculk config fields (`sculkShelfShriekerChance`, `sculkParticleChance`) wired to `SculkShelfBlock.animateTick()`
 - [-] **No configurable power functions** — `PowerFunction` is sealed with 2 built-in implementations; no EvalEx expressions
 - [-] No inline enchantment descriptions client option
 
@@ -442,7 +442,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 3. ~~**Stat bar tooltips too terse**~~ — FIXED: Apothic-aligned tooltips with drawOnLeft panels (quanta warping, arcana rarity weights)
 4. ~~**No power range / enchantability / clue count**~~ — FIXED: slot hover drawOnLeft panel shows power range, item enchantability, and clue count
 5. ~~**Missing crafting recipes** — filtering shelf, treasure shelf, endshelf~~ — FIXED; echoing sculkshelf, soul_touched_sculkshelf still pending (see Tier 2 #8)
-6. **Sculk ambient sounds dead code** — `randomTicks()` set but `randomTick()` never overridden; config fields are unused
+~~6. **Sculk ambient sounds dead code**~~ — FIXED: `SculkShelfBlock.animateTick()` wires config fields to ambient sounds and particles
 7. **No tooltips on standalone items** — prismatic web, tomes, infused breath, warden tendril, music discs lack `appendHoverText()`
 8. **No configurable power functions** — sealed `PowerFunction` with 2 built-in implementations only
 9. **No inline enchantment descriptions** client option
@@ -493,7 +493,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 
 - [x] 4. Enrich stat bar tooltips with descriptive text + drawOnLeft side panels
 - [x] 5. Add power range, item enchantability, and clue count to main screen slot tooltips (drawOnLeft panel)
-- [ ] 6. Implement sculk shelf ambient sounds (wire `randomTick()` to config fields)
+- [x] 6. Implement sculk shelf ambient sounds (wire `randomTick()` to config fields)
 - [ ] 7. Add `appendHoverText()` to standalone items (tomes, prismatic web, etc.)
 - [ ] 8. Add remaining crafting recipes (echoing/soul_touched sculkshelf pending warden_tendril availability)
 
