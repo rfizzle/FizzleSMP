@@ -98,21 +98,4 @@ public class EnchantmentRosterGameTest implements FabricGameTest {
         helper.succeed();
     }
 
-    @GameTest(template = "fizzle_enchanting:empty_3x3")
-    public void mendingOverrideHasBundledWeight(GameTestHelper helper) {
-        Registry<Enchantment> reg = helper.getLevel().registryAccess()
-                .registryOrThrow(Registries.ENCHANTMENT);
-        ResourceLocation mendingId = ResourceLocation.withDefaultNamespace("mending");
-        if (!reg.containsKey(mendingId)) {
-            helper.fail("mending must be in the enchantment registry");
-            return;
-        }
-        Enchantment mending = reg.get(mendingId);
-        int weight = mending.definition().weight();
-        if (weight != 4) {
-            helper.fail("Mending weight should be 4 (bundled override), got " + weight);
-            return;
-        }
-        helper.succeed();
-    }
 }

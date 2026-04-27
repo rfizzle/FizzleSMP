@@ -29,7 +29,7 @@ public class AdvancementCodecGameTest implements FabricGameTest {
             "root", "stone_tier", "tier_three", "library", "ender_library",
             "tome_apprentice", "tome_master", "warden_tendril", "infused_breath", "apotheosis",
             "sculk_mastery", "stable_enchanting", "all_seeing", "curator", "treasure_seeker",
-            "web_spinner");
+            "web_spinner", "high_arcana", "high_quanta");
 
     @GameTest(template = "fizzle_enchanting:empty_3x3")
     public void advancementDirectoryShipsExpectedRoster(GameTestHelper helper) {

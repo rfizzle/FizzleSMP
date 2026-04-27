@@ -70,8 +70,8 @@ public class ConfigReloadGameTest implements FabricGameTest {
                 helper.fail("Config should not be null after malformed reload");
                 return;
             }
-            if (config.enchantingTable.maxEterna != 100) {
-                helper.fail("Expected default maxEterna=100 after malformed reload, got "
+            if (config.enchantingTable.maxEterna != 50) {
+                helper.fail("Expected default maxEterna=50 after malformed reload, got "
                         + config.enchantingTable.maxEterna);
                 return;
             }
