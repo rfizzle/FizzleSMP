@@ -141,6 +141,8 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
                     (int) (this.arcana / 100F * 110), 5);
         }
 
+        renderLeftPanel(gfx);
+
         if (isInfoButtonVisible()) {
             int btnX = xCenter + 148;
             int btnY = yCenter + 1;
@@ -279,17 +281,40 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
 
         StatCollection stats = fizzleMenu.getLastStats();
         if (isHovering(60, 76, 110, 5, mouseX, mouseY) && stats.eterna() > 0) {
-            gfx.renderComponentTooltip(this.font, Lists.newArrayList(
-                    Component.literal(String.format("Eterna: %.1f / %.0f", stats.eterna(), ABSOLUTE_MAX_ETERNA))),
-                    mouseX, mouseY);
+            List<Component> tipLines = Lists.newArrayList();
+            float displayMax = stats.maxEterna() > 0 ? stats.maxEterna() : ABSOLUTE_MAX_ETERNA;
+            tipLines.add(Component.literal(String.format("Eterna: %.1f / %.0f", stats.eterna(), displayMax))
+                    .withStyle(style -> style.withColor(0x3DB53D)));
+            tipLines.add(Component.translatable("gui.fizzle_enchanting.stat.eterna.desc")
+                    .withStyle(ChatFormatting.GRAY));
+            tipLines.add(Component.literal(String.format("Enchant Level: %d", Math.round(stats.eterna())))
+                    .withStyle(ChatFormatting.YELLOW));
+            gfx.renderComponentTooltip(this.font, tipLines, mouseX, mouseY);
         } else if (isHovering(60, 86, 110, 5, mouseX, mouseY) && stats.quanta() > 0) {
-            gfx.renderComponentTooltip(this.font, Lists.newArrayList(
-                    Component.literal(String.format("Quanta: %.1f%%", stats.quanta()))),
-                    mouseX, mouseY);
+            List<Component> tipLines = Lists.newArrayList();
+            tipLines.add(Component.literal(String.format("Quanta: %.1f%%", stats.quanta()))
+                    .withStyle(style -> style.withColor(0xFC5454)));
+            tipLines.add(Component.translatable("gui.fizzle_enchanting.stat.quanta.desc")
+                    .withStyle(ChatFormatting.GRAY));
+            float rectFrac = stats.rectification() / 100F;
+            float lo = (rectFrac - 1F) * stats.quanta();
+            tipLines.add(Component.literal(String.format("Power Range: %.0f%% to +%.0f%%", lo, stats.quanta()))
+                    .withStyle(ChatFormatting.YELLOW));
+            if (stats.rectification() > 0) {
+                tipLines.add(Component.literal(String.format("Rectification: %.1f%%", stats.rectification()))
+                        .withStyle(ChatFormatting.AQUA));
+            }
+            gfx.renderComponentTooltip(this.font, tipLines, mouseX, mouseY);
         } else if (isHovering(60, 96, 110, 5, mouseX, mouseY) && stats.arcana() > 0) {
-            gfx.renderComponentTooltip(this.font, Lists.newArrayList(
-                    Component.literal(String.format("Arcana: %.1f%%", stats.arcana()))),
-                    mouseX, mouseY);
+            List<Component> tipLines = Lists.newArrayList();
+            tipLines.add(Component.literal(String.format("Arcana: %.1f%%", stats.arcana()))
+                    .withStyle(style -> style.withColor(0xA800A8)));
+            tipLines.add(Component.translatable("gui.fizzle_enchanting.stat.arcana.desc")
+                    .withStyle(ChatFormatting.GRAY));
+            int picks = countGuaranteedPicks(stats.arcana());
+            tipLines.add(Component.literal(String.format("Guaranteed Picks: %d", picks))
+                    .withStyle(ChatFormatting.YELLOW));
+            gfx.renderComponentTooltip(this.font, tipLines, mouseX, mouseY);
         }
 
         if (isInfoButtonVisible()) {
@@ -336,6 +361,56 @@ public class FizzleEnchantmentScreen extends EnchantmentScreen {
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    private void renderLeftPanel(GuiGraphics gfx) {
+        if (fizzleMenu == null) return;
+        StatCollection stats = fizzleMenu.getLastStats();
+        if (stats.eterna() <= 0) return;
+
+        float rectFrac = stats.rectification() / 100F;
+        float powerLo = (rectFrac - 1F) * stats.quanta();
+        int picks = countGuaranteedPicks(stats.arcana());
+
+        String rectText = String.format("Rect: %.0f%%", stats.rectification());
+        String cluesText = String.format("Clues: %d", stats.clues());
+        String powerText = String.format("Pwr: %.0f%% to +%.0f%%", powerLo, stats.quanta());
+        String picksText = String.format("Picks: %d", picks);
+
+        int padding = 4;
+        int lineHeight = 10;
+        String[] textLines = {rectText, cluesText, powerText, picksText};
+        int maxTextWidth = 0;
+        for (String line : textLines) {
+            maxTextWidth = Math.max(maxTextWidth, this.font.width(line));
+        }
+        int panelWidth = maxTextWidth + padding * 2;
+        int panelHeight = textLines.length * lineHeight + padding * 2 - 2;
+
+        int panelX = this.leftPos - panelWidth - 4;
+        int panelY = this.topPos + 70;
+
+        if (panelX < 2) return;
+
+        gfx.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xC0100010);
+        gfx.renderOutline(panelX, panelY, panelWidth, panelHeight, 0xFF5A5A8A);
+
+        int y = panelY + padding;
+        gfx.drawString(this.font, rectText, panelX + padding, y, 0x55FFFF, false);
+        y += lineHeight;
+        gfx.drawString(this.font, cluesText, panelX + padding, y, 0x5555FF, false);
+        y += lineHeight;
+        gfx.drawString(this.font, powerText, panelX + padding, y, 0xFC5454, false);
+        y += lineHeight;
+        gfx.drawString(this.font, picksText, panelX + padding, y, 0xA800A8, false);
+    }
+
+    private static int countGuaranteedPicks(float arcana) {
+        int picks = 0;
+        for (int i = 0; i < 100; i += 33) {
+            if (arcana >= i) picks++;
+        }
+        return picks;
     }
 
     private Optional<CraftingResultEntry> craftingResult() {

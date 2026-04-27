@@ -318,5 +318,10 @@
     "gui.fizzle_enchanting.enchant_info.rarity.uncommon": "Uncommon",
     "gui.fizzle_enchanting.enchant_info.rarity.rare": "Rare",
     "gui.fizzle_enchanting.enchant_info.rarity.very_rare": "Very Rare",
-    "gui.fizzle_enchanting.enchant_info.info_button": "View all available enchantments"
+    "gui.fizzle_enchanting.enchant_info.info_button": "View all available enchantments",
+    "gui.fizzle_enchanting.stat.eterna.desc": "Controls the enchantment level",
+    "gui.fizzle_enchanting.stat.quanta.desc": "Adds variance to enchantment power",
+    "gui.fizzle_enchanting.stat.arcana.desc": "Biases toward rarer enchantments",
+    "gui.fizzle_enchanting.stat.rect.desc": "Limits negative power variance",
+    "gui.fizzle_enchanting.stat.clues.desc": "Reveals enchantments before enchanting"
 }

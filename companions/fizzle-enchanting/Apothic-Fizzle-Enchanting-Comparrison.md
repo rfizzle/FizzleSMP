@@ -12,7 +12,7 @@
 | Phase | Area | Parity | Key Gaps |
 |-------|------|--------|----------|
 | 1 | Core Systems (Structure, Stats, Selection, Network) | ~95% | Step-ladder eterna accumulation absent; arcana 99 gives 4th guaranteed pick |
-| 2 | GUI & UX (Screen, Info Browser, Particles) | ~85% | Stat bar tooltips too terse; no drawOnLeft side panels; no power range/enchantability in main screen |
+| 2 | GUI & UX (Screen, Info Browser, Particles) | ~90% | No power range/enchantability/clue count in main screen slot tooltips |
 | 3 | Blocks & Shelves (27 shelves, special shelves) | ~95% | Sculk ambient sounds dead code; 2 missing crafting recipes (sculk shelves) |
 | 4 | Recipes & Data-Driven Audit | ~90% | 16/20 infusion recipes (4 intentionally cut); KeepNBT copies enchantments only |
 | 5 | Library, Tomes & Anvil | ~85% | Library extract produces books only (not direct apply); 9 typed tomes cut; no tome tooltips |
@@ -75,8 +75,8 @@
 
 - [x] `FizzleEnchantmentScreen` extends `EnchantmentScreen`; custom GUI texture (197px height)
 - [x] Three stat bars at y=75,85,95; width=110px; smooth interpolation (0.1F up, 0.075F down)
-- [~] Stat bar tooltips show `Eterna: X.X / 100` etc. but **no descriptive text** explaining what the stat does
-- [-] **No `drawOnLeft` side-panel tooltips** for quanta buff percentage or arcana bonus breakdown
+- [x] Stat bar tooltips show stat value + descriptive text + derived values (enchant level, power range, guaranteed picks)
+- [x] Left-side panel shows Rectification, Clues, Power Range, and Guaranteed Picks when shelves are active
 - [x] Enchantment slot hover shows clue enchantments; partial vs full clue toggle via `isClientCluesExhausted`
 - [x] Info button `[i]` at (148,1) opens `EnchantingInfoScreen`
 - [x] Infusion display in slot 2 (yellow underline result name + cost)
@@ -442,7 +442,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 ### Functional
 
 2. **Step-ladder eterna accumulation absent** — flat sum clamped to highest maxEterna; low-tier shelves less strictly gated than Apothic
-3. **Stat bar tooltips too terse** — no descriptive text explaining what each stat does; no `drawOnLeft` side panels for quanta buff / arcana bonus breakdown
+3. ~~**Stat bar tooltips too terse**~~ — FIXED: enriched with descriptive text, derived values, and left-side panel for Rect/Clues/Power/Picks
 4. **No power range / enchantability / clue count** displayed on main enchanting screen
 5. ~~**Missing crafting recipes** — filtering shelf, treasure shelf, endshelf~~ — FIXED; echoing sculkshelf, soul_touched_sculkshelf still pending (see Tier 2 #8)
 6. **Sculk ambient sounds dead code** — `randomTicks()` set but `randomTick()` never overridden; config fields are unused
@@ -494,7 +494,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 
 ### Tier 2 — High Value / Medium Effort
 
-- [ ] 4. Enrich stat bar tooltips with descriptive text + drawOnLeft side panels
+- [x] 4. Enrich stat bar tooltips with descriptive text + drawOnLeft side panels
 - [ ] 5. Add power range, item enchantability, and clue count to main screen tooltips
 - [ ] 6. Implement sculk shelf ambient sounds (wire `randomTick()` to config fields)
 - [ ] 7. Add `appendHoverText()` to standalone items (tomes, prismatic web, etc.)
