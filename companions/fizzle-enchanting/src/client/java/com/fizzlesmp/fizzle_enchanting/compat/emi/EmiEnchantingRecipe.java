@@ -19,8 +19,8 @@ import java.util.List;
  *
  * <p>Layout:
  * <pre>
- *   [input] → [output]          (y = 0; 18-tall slot row)
- *   Eterna: N                   (y = 22+)
+ *   [input] → [output]     (y = 0; 18-tall slot row)
+ *   Eterna: N               (y = 22+, x = 0; full width)
  *   Quanta: N
  *   Arcana: N
  *   XP cost: L levels
@@ -59,14 +59,14 @@ public final class EmiEnchantingRecipe extends BasicEmiRecipe {
 
         int y = SLOT_ROW_HEIGHT;
         for (String raw : lines) {
-            widgets.addText(Component.literal(raw), 72, y, 0x404040, false);
+            widgets.addText(Component.literal(raw), 0, y, 0x404040, false);
             y += LINE_HEIGHT;
         }
         if (display.keepNbt()) {
             widgets.addText(
                     Component.translatable("emi.fizzle_enchanting.recipe.keep_nbt")
                             .withStyle(ChatFormatting.ITALIC),
-                    72, y, 0x555555, false);
+                    0, y, 0x555555, false);
         }
     }
 

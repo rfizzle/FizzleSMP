@@ -1,7 +1,6 @@
 package com.fizzlesmp.fizzle_enchanting.compat.emi;
 
 import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
-import com.fizzlesmp.fizzle_enchanting.FizzleEnchantingRegistry;
 import com.fizzlesmp.fizzle_enchanting.compat.common.RecipeInfoFormatter;
 import com.fizzlesmp.fizzle_enchanting.compat.common.TableCraftingDisplay;
 import com.fizzlesmp.fizzle_enchanting.compat.common.TableCraftingDisplayExtractor;
@@ -25,9 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * EMI integration entry point. Registers the two display categories ("Fizzle Enchanting —
- * Shelves" / "Fizzle Enchanting — Tomes") and populates them with the two shipped recipe types
- * plus per-shelf stat info panels (T-7.1.3).
+ * EMI integration entry point. Registers the "Infusions" display category and populates it with
+ * the two shipped recipe types plus per-shelf stat info panels (T-7.1.3).
  *
  * <p>This class only loads when EMI itself loads it (via the {@code emi} entry point in
  * {@code fabric.mod.json}), so the static EMI references here are safe even when EMI is absent
@@ -41,35 +39,20 @@ public final class EmiEnchantingPlugin implements EmiPlugin {
     private static final EmiTexture MOD_ICON = new EmiTexture(
             FizzleEnchanting.id("icon.png"), 0, 0, 16, 16, 128, 128, 128, 128);
 
-    public static final EmiRecipeCategory SHELVES = new EmiRecipeCategory(
-            FizzleEnchanting.id("shelves"),
-            MOD_ICON);
-
-    public static final EmiRecipeCategory TOMES = new EmiRecipeCategory(
-            FizzleEnchanting.id("tomes"),
+    public static final EmiRecipeCategory INFUSIONS = new EmiRecipeCategory(
+            FizzleEnchanting.id("infusions"),
             MOD_ICON);
 
     @Override
     public void register(EmiRegistry registry) {
-        registry.addCategory(SHELVES);
-        registry.addCategory(TOMES);
-
-        EmiIngredient table = EmiStack.of(Items.ENCHANTING_TABLE);
-        registry.addWorkstation(SHELVES, table);
-        registry.addWorkstation(TOMES, table);
+        registry.addCategory(INFUSIONS);
+        registry.addWorkstation(INFUSIONS, EmiStack.of(Items.ENCHANTING_TABLE));
 
         for (TableCraftingDisplay display : TableCraftingDisplayExtractor.extract(registry.getRecipeManager())) {
-            EmiRecipeCategory category = isTomeRecipe(display) ? TOMES : SHELVES;
-            registry.addRecipe(new EmiEnchantingRecipe(category, display));
+            registry.addRecipe(new EmiEnchantingRecipe(INFUSIONS, display));
         }
 
         registerShelfInfoPanels(registry);
-    }
-
-    private static boolean isTomeRecipe(TableCraftingDisplay display) {
-        return display.result().is(FizzleEnchantingRegistry.SCRAP_TOME)
-                || display.result().is(FizzleEnchantingRegistry.IMPROVED_SCRAP_TOME)
-                || display.result().is(FizzleEnchantingRegistry.EXTRACTION_TOME);
     }
 
     /**

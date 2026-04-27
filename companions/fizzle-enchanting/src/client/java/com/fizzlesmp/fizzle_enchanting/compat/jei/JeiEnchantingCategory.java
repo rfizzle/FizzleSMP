@@ -32,7 +32,7 @@ public final class JeiEnchantingCategory extends AbstractRecipeCategory<TableCra
     private static final int LINE_HEIGHT = 10;
     private static final int SLOT_ROW_HEIGHT = 22;
     private static final int PADDING = 4;
-    private static final int TEXT_X = 72;
+    private static final int TEXT_X = 0;
     private static final int MAX_LINES = 5;
 
     public JeiEnchantingCategory(RecipeType<TableCraftingDisplay> recipeType,

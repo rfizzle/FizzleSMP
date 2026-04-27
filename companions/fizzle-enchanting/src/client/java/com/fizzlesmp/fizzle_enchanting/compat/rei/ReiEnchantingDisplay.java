@@ -15,9 +15,8 @@ import java.util.Optional;
  * here so the REI plugin never touches the recipe types directly — that same record also feeds
  * the EMI plugin and the (upcoming) JEI plugin.
  *
- * <p>The category identifier is passed in rather than derived from the recipe so shelf-upgrade and
- * tome-crafting recipes can sort into their own tabs while sharing one display class. See
- * {@link ReiEnchantingPlugin#categoryFor(TableCraftingDisplay)}.
+ * <p>The category identifier is passed in at construction so the display class stays decoupled
+ * from the plugin's category setup.
  */
 public final class ReiEnchantingDisplay implements Display {
 

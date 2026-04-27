@@ -30,7 +30,7 @@ public final class ReiEnchantingCategory implements DisplayCategory<ReiEnchantin
 
     private static final int LINE_HEIGHT = 10;
     private static final int SLOT_ROW_HEIGHT = 22;
-    private static final int TEXT_X_OFFSET = 72;
+    private static final int TEXT_X_OFFSET = 0;
     private static final int PADDING = 6;
 
     private static final ResourceLocation ICON_TEXTURE = FizzleEnchanting.id("icon.png");
@@ -90,7 +90,7 @@ public final class ReiEnchantingCategory implements DisplayCategory<ReiEnchantin
                 display.source().maxRequirements(),
                 display.source().xpCost());
         int textX = origin.x + TEXT_X_OFFSET;
-        int y = origin.y;
+        int y = origin.y + SLOT_ROW_HEIGHT;
         for (String raw : lines) {
             widgets.add(Widgets.createLabel(new Point(textX, y), Component.literal(raw))
                     .leftAligned()

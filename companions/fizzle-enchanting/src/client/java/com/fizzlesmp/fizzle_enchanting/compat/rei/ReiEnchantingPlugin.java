@@ -1,7 +1,6 @@
 package com.fizzlesmp.fizzle_enchanting.compat.rei;
 
 import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
-import com.fizzlesmp.fizzle_enchanting.FizzleEnchantingRegistry;
 import com.fizzlesmp.fizzle_enchanting.compat.common.RecipeInfoFormatter;
 import com.fizzlesmp.fizzle_enchanting.compat.common.TableCraftingDisplay;
 import com.fizzlesmp.fizzle_enchanting.compat.common.TableCraftingDisplayExtractor;
@@ -26,9 +25,8 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.Map;
 
 /**
- * REI integration entry point. Mirrors the EMI plugin's two-category split so players on either
- * viewer see the same shape: a "Fizzle Enchanting — Shelves" tab for shelf-upgrade recipes and a
- * "Fizzle Enchanting — Tomes" tab for scrap/extraction variants.
+ * REI integration entry point. Mirrors the EMI plugin's single "Infusions" category and populates
+ * it from the shared {@link TableCraftingDisplayExtractor} plus per-shelf stat info panels.
  *
  * <p>Only loads when REI itself loads it (via the {@code rei_client} entry point in
  * {@code fabric.mod.json}), so the REI classes imported here are safe even when REI is absent —
@@ -40,11 +38,8 @@ import java.util.Map;
  */
 public final class ReiEnchantingPlugin implements REIClientPlugin {
 
-    public static final CategoryIdentifier<ReiEnchantingDisplay> SHELVES_ID =
-            CategoryIdentifier.of(FizzleEnchanting.MOD_ID, "shelves");
-
-    public static final CategoryIdentifier<ReiEnchantingDisplay> TOMES_ID =
-            CategoryIdentifier.of(FizzleEnchanting.MOD_ID, "tomes");
+    public static final CategoryIdentifier<ReiEnchantingDisplay> INFUSIONS_ID =
+            CategoryIdentifier.of(FizzleEnchanting.MOD_ID, "infusions");
 
     @Override
     public String getPluginProviderName() {
@@ -54,27 +49,20 @@ public final class ReiEnchantingPlugin implements REIClientPlugin {
     @Override
     public void registerCategories(CategoryRegistry registry) {
         registry.add(new ReiEnchantingCategory(
-                SHELVES_ID,
-                Component.translatable("rei.fizzle_enchanting.category.shelves")));
-        registry.add(new ReiEnchantingCategory(
-                TOMES_ID,
-                Component.translatable("rei.fizzle_enchanting.category.tomes")));
+                INFUSIONS_ID,
+                Component.translatable("rei.fizzle_enchanting.category.infusions")));
 
-        ItemStack table = new ItemStack(Items.ENCHANTING_TABLE);
-        registry.addWorkstations(SHELVES_ID, EntryIngredients.of(table));
-        registry.addWorkstations(TOMES_ID, EntryIngredients.of(table));
+        registry.addWorkstations(INFUSIONS_ID, EntryIngredients.of(new ItemStack(Items.ENCHANTING_TABLE)));
     }
 
     @Override
     public void registerDisplays(DisplayRegistry registry) {
         Minecraft client = Minecraft.getInstance();
         if (client == null || client.level == null) {
-            // REI registers displays on connect; skip gracefully before a world is joined — the
-            // next world load will re-register with live recipes.
             return;
         }
         for (TableCraftingDisplay display : TableCraftingDisplayExtractor.extract(client.level.getRecipeManager())) {
-            registry.add(new ReiEnchantingDisplay(display, categoryFor(display)));
+            registry.add(new ReiEnchantingDisplay(display, INFUSIONS_ID));
         }
 
         registerShelfInfoPanels(registry);
@@ -103,12 +91,4 @@ public final class ReiEnchantingPlugin implements REIClientPlugin {
         }
     }
 
-    static CategoryIdentifier<ReiEnchantingDisplay> categoryFor(TableCraftingDisplay display) {
-        if (display.result().is(FizzleEnchantingRegistry.SCRAP_TOME)
-                || display.result().is(FizzleEnchantingRegistry.IMPROVED_SCRAP_TOME)
-                || display.result().is(FizzleEnchantingRegistry.EXTRACTION_TOME)) {
-            return TOMES_ID;
-        }
-        return SHELVES_ID;
-    }
 }

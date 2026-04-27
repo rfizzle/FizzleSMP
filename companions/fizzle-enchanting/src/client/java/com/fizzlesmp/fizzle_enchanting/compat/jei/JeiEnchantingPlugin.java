@@ -4,7 +4,6 @@ import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
 import com.fizzlesmp.fizzle_enchanting.compat.common.RecipeInfoFormatter;
 import com.fizzlesmp.fizzle_enchanting.compat.common.TableCraftingDisplay;
 import com.fizzlesmp.fizzle_enchanting.compat.common.TableCraftingDisplayExtractor;
-import com.fizzlesmp.fizzle_enchanting.compat.common.TomeRecipeClassifier;
 import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantingStatRegistry;
 import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantingStats;
 import mezz.jei.api.IModPlugin;
@@ -25,15 +24,13 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
- * JEI integration entry point. Mirrors the EMI/REI plugin shape: two categories ("Fizzle
- * Enchanting — Shelves" / "Fizzle Enchanting — Tomes"), both populated from the shared
- * {@link TableCraftingDisplayExtractor}, plus one info page per shelf block drawn from
- * {@link EnchantingStatRegistry#blockEntries()}.
+ * JEI integration entry point. Mirrors the EMI/REI plugin's single "Infusions" category,
+ * populated from the shared {@link TableCraftingDisplayExtractor}, plus one info page per shelf
+ * block drawn from {@link EnchantingStatRegistry#blockEntries()}.
  *
  * <p>Discovered by JEI via the {@code jei_mod_plugin} entrypoint declared in
  * {@code fabric.mod.json}. The {@link JeiPlugin} annotation remains for cross-loader parity but
@@ -66,33 +63,20 @@ public final class JeiEnchantingPlugin implements IModPlugin {
             }
         };
         registration.addRecipeCategories(new JeiEnchantingCategory(
-                JeiEnchantingRecipeTypes.SHELVES,
-                Component.translatable("jei.fizzle_enchanting.category.shelves"),
-                modIcon));
-        registration.addRecipeCategories(new JeiEnchantingCategory(
-                JeiEnchantingRecipeTypes.TOMES,
-                Component.translatable("jei.fizzle_enchanting.category.tomes"),
+                JeiEnchantingRecipeTypes.INFUSIONS,
+                Component.translatable("jei.fizzle_enchanting.category.infusions"),
                 modIcon));
     }
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        List<TableCraftingDisplay> displays = extractDisplays();
-        List<TableCraftingDisplay> shelves = new ArrayList<>();
-        List<TableCraftingDisplay> tomes = new ArrayList<>();
-        for (TableCraftingDisplay display : displays) {
-            (TomeRecipeClassifier.isTomeRecipe(display) ? tomes : shelves).add(display);
-        }
-        registration.addRecipes(JeiEnchantingRecipeTypes.SHELVES, shelves);
-        registration.addRecipes(JeiEnchantingRecipeTypes.TOMES, tomes);
-
+        registration.addRecipes(JeiEnchantingRecipeTypes.INFUSIONS, extractDisplays());
         registerShelfInfoPanels(registration);
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        ItemStack table = new ItemStack(Items.ENCHANTING_TABLE);
-        registration.addRecipeCatalyst(table, JeiEnchantingRecipeTypes.SHELVES, JeiEnchantingRecipeTypes.TOMES);
+        registration.addRecipeCatalyst(new ItemStack(Items.ENCHANTING_TABLE), JeiEnchantingRecipeTypes.INFUSIONS);
     }
 
     /**

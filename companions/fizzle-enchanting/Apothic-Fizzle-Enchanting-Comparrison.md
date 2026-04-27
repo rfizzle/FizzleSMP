@@ -395,9 +395,9 @@ Fizzle: 6 mixins + 0 ASM. Apothic: 15+ mixins + 3 ASM coremods. Fizzle leverages
 
 | Mod | Plugin Classes | Features |
 |-----|---------------|----------|
-| EMI | `EmiEnchantingPlugin`, `EmiEnchantingRecipe` | 2 recipe categories (Shelves + Tomes), per-shelf info panels |
-| REI | `ReiEnchantingPlugin`, `ReiEnchantingCategory`, `ReiEnchantingDisplay` | 2 recipe categories, same layout |
-| JEI | `JeiEnchantingPlugin`, `JeiEnchantingCategory` | 2 recipe categories, same layout |
+| EMI | `EmiEnchantingPlugin`, `EmiEnchantingRecipe` | 1 "Infusions" category, per-shelf info panels |
+| REI | `ReiEnchantingPlugin`, `ReiEnchantingCategory`, `ReiEnchantingDisplay` | 1 "Infusions" category, same layout |
+| JEI | `JeiEnchantingPlugin`, `JeiEnchantingCategory` | 1 "Infusions" category, same layout |
 | Jade | `JadeEnchantingPlugin`, 3 providers | Enchanting table 5-axis stats + library enchant count + per-block stat contributions; vanilla "Ench Power" suppressed |
 | WTHIT | `WthitCommonPlugin`, `WthitClientPlugin`, 2 providers | Same as Jade; discovered via `waila_plugins.json` |
 | Trinkets | `AccessorySlotHelper`, `TrinketsCompat` | Slot enumeration + enchantment level query (wired but idle) |
@@ -542,7 +542,7 @@ Shared layer in `compat/common/`: `TableCraftingDisplayExtractor`, `TableCraftin
 
 - [x] 20. **"Fizzle Enchanting" label positioning inconsistent** — AUDITED: `EmiEnchantingRecipe.addWidgets()` adds no mod attribution label; `registerShelfInfoPanels()` uses plain `EmiInfoRecipe` with stat lines only. The color/style difference (red vs purple italic) is EMI's built-in mod attribution rendering, which varies by recipe display context — not controllable from our code. Removed duplicate EMI category lang keys (lines 77-78 duplicated lines 19-20 in `en_us.json`).
 
-- [ ] 21. **EMI shelf recipe category title overflow** — The category title "Fizzle Enchanting — Shelves" is too long and truncates to "Fizzle Enchanting — Shel..." in the EMI viewer. Shorten to something like "Shelf Upgrades" or "Enchanting Shelves". Also review the body layout — stat requirement lines (Eterna/Quanta/Arcana/XP cost) are cramped against the right edge.
+- [x] 21. **EMI shelf recipe category title overflow** — FIXED: Collapsed the two recipe viewer categories ("Shelves" / "Tomes") into a single "Infusions" category across all three viewers (EMI/REI/JEI). Moved stat-requirement text from x=72 (beside slots) to x=0 (below slots) so lines use the full recipe width instead of being cramped into 72px.
 
 #### Mechanical Decisions (needs design review)
 
