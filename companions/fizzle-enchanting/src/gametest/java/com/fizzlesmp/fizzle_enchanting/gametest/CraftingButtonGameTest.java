@@ -6,7 +6,11 @@ import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentLogic;
 import com.fizzlesmp.fizzle_enchanting.enchanting.FizzleEnchantmentMenu;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +18,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -257,6 +264,171 @@ public class CraftingButtonGameTest implements FabricGameTest {
         if (!BuiltInRegistries.ITEM.getKey(result.getItem()).equals(infusedId)) {
             helper.fail("Expected infused_hellshelf, got "
                     + BuiltInRegistries.ITEM.getKey(result.getItem()));
+            return;
+        }
+        helper.succeed();
+    }
+
+    /**
+     * S-6.3e — Library with Sharpness V infused into ender library via keep_nbt_enchanting recipe.
+     * Uses 7 echoing deepshelves + 6 endshelves + 4 draconic endshelves to hit the tight
+     * stat window (E=50, Q=45, A=100). Verifies enchantments are preserved on the output.
+     */
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9", timeoutTicks = 100)
+    public void keepNbtInfusionRetainsEnchantments(GameTestHelper helper) {
+        Block echoingDeepshelf = BuiltInRegistries.BLOCK.get(FizzleEnchanting.id("echoing_deepshelf"));
+        Block endshelf = BuiltInRegistries.BLOCK.get(FizzleEnchanting.id("endshelf"));
+        Block draconicEndshelf = BuiltInRegistries.BLOCK.get(FizzleEnchanting.id("draconic_endshelf"));
+        if (echoingDeepshelf == Blocks.AIR || endshelf == Blocks.AIR || draconicEndshelf == Blocks.AIR) {
+            helper.fail("Required shelf blocks not found in registry");
+            return;
+        }
+
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        int idx = 0;
+        for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+            Block shelf;
+            if (idx < 7) shelf = echoingDeepshelf;
+            else if (idx < 13) shelf = endshelf;
+            else if (idx < 17) shelf = draconicEndshelf;
+            else break;
+            helper.setBlock(TABLE_POS.offset(offset), shelf.defaultBlockState());
+            idx++;
+        }
+
+        Block libraryBlock = BuiltInRegistries.BLOCK.get(FizzleEnchanting.id("library"));
+        if (libraryBlock == Blocks.AIR) {
+            helper.fail("library block not found");
+            return;
+        }
+
+        Registry<Enchantment> enchReg = helper.getLevel().registryAccess()
+                .registryOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> sharpness = enchReg.getHolderOrThrow(Enchantments.SHARPNESS);
+        ItemStack libraryItem = new ItemStack(libraryBlock);
+        ItemEnchantments.Mutable mutable = new ItemEnchantments.Mutable(ItemEnchantments.EMPTY);
+        mutable.set(sharpness, 5);
+        libraryItem.set(DataComponents.ENCHANTMENTS, mutable.toImmutable());
+
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 50;
+        BlockPos absTable = helper.absolutePos(TABLE_POS);
+        FizzleEnchantmentMenu menu = new FizzleEnchantmentMenu(
+                1, player.getInventory(),
+                ContainerLevelAccess.create(helper.getLevel(), absTable));
+
+        menu.getSlot(0).set(libraryItem);
+        menu.getSlot(1).set(new ItemStack(Items.LAPIS_LAZULI, 64));
+
+        if (menu.currentRecipe().isEmpty()) {
+            helper.fail("Ender library recipe should match (E=50, Q=45, A=100). "
+                    + "Stats: costs=" + java.util.Arrays.toString(menu.costs));
+            return;
+        }
+
+        boolean clicked = menu.clickMenuButton(player, FizzleEnchantmentLogic.CRAFTING_SLOT);
+        if (!clicked) {
+            helper.fail("clickMenuButton(CRAFTING_SLOT) returned false for ender library upgrade");
+            return;
+        }
+
+        ItemStack result = menu.getSlot(0).getItem();
+        ResourceLocation enderLibId = FizzleEnchanting.id("ender_library");
+        if (!BuiltInRegistries.ITEM.getKey(result.getItem()).equals(enderLibId)) {
+            helper.fail("Expected ender_library, got "
+                    + BuiltInRegistries.ITEM.getKey(result.getItem()));
+            return;
+        }
+
+        ItemEnchantments resultEnch = result.get(DataComponents.ENCHANTMENTS);
+        if (resultEnch == null || resultEnch.isEmpty()) {
+            helper.fail("Ender library should retain enchantments from library input");
+            return;
+        }
+        if (resultEnch.getLevel(sharpness) != 5) {
+            helper.fail("Expected Sharpness V on ender library, got level "
+                    + resultEnch.getLevel(sharpness));
+            return;
+        }
+        helper.succeed();
+    }
+
+    /**
+     * S-6.3f — Infusion with 3 scrap_tomes consumes exactly 1, produces 4 improved_scrap_tomes
+     * in slot 0, and returns the 2 excess scrap_tomes to the player's inventory.
+     * Uses 7 echoing deepshelves + 3 endshelves (E=25, Q=30, A=100) to match the recipe
+     * (E≥22.5, Q∈[25,50], A≥35).
+     */
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9", timeoutTicks = 100)
+    public void infusionConsumesOneProducesCorrectCount(GameTestHelper helper) {
+        Block echoingDeepshelf = BuiltInRegistries.BLOCK.get(FizzleEnchanting.id("echoing_deepshelf"));
+        Block endshelf = BuiltInRegistries.BLOCK.get(FizzleEnchanting.id("endshelf"));
+        if (echoingDeepshelf == Blocks.AIR || endshelf == Blocks.AIR) {
+            helper.fail("Required shelf blocks not found in registry");
+            return;
+        }
+
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        int idx = 0;
+        for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+            Block shelf;
+            if (idx < 7) shelf = echoingDeepshelf;
+            else if (idx < 10) shelf = endshelf;
+            else break;
+            helper.setBlock(TABLE_POS.offset(offset), shelf.defaultBlockState());
+            idx++;
+        }
+
+        ResourceLocation scrapTomeId = FizzleEnchanting.id("scrap_tome");
+        ItemStack scrapTomes = new ItemStack(
+                BuiltInRegistries.ITEM.get(scrapTomeId), 3);
+        if (scrapTomes.isEmpty()) {
+            helper.fail("scrap_tome item not found in registry");
+            return;
+        }
+
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 30;
+        BlockPos absTable = helper.absolutePos(TABLE_POS);
+        FizzleEnchantmentMenu menu = new FizzleEnchantmentMenu(
+                1, player.getInventory(),
+                ContainerLevelAccess.create(helper.getLevel(), absTable));
+
+        menu.getSlot(0).set(scrapTomes);
+        menu.getSlot(1).set(new ItemStack(Items.LAPIS_LAZULI, 64));
+
+        if (menu.currentRecipe().isEmpty()) {
+            helper.fail("Improved scrap tome recipe should match (E=25, Q=30, A=100). "
+                    + "Stats: costs=" + java.util.Arrays.toString(menu.costs));
+            return;
+        }
+
+        boolean clicked = menu.clickMenuButton(player, FizzleEnchantmentLogic.CRAFTING_SLOT);
+        if (!clicked) {
+            helper.fail("clickMenuButton(CRAFTING_SLOT) returned false for scrap tome upgrade");
+            return;
+        }
+
+        ItemStack result = menu.getSlot(0).getItem();
+        ResourceLocation improvedId = FizzleEnchanting.id("improved_scrap_tome");
+        if (!BuiltInRegistries.ITEM.getKey(result.getItem()).equals(improvedId)) {
+            helper.fail("Expected improved_scrap_tome in slot 0, got "
+                    + BuiltInRegistries.ITEM.getKey(result.getItem()));
+            return;
+        }
+        if (result.getCount() != 4) {
+            helper.fail("Expected output count 4, got " + result.getCount());
+            return;
+        }
+
+        int excessFound = 0;
+        for (ItemStack invStack : player.getInventory().items) {
+            if (BuiltInRegistries.ITEM.getKey(invStack.getItem()).equals(scrapTomeId)) {
+                excessFound += invStack.getCount();
+            }
+        }
+        if (excessFound != 2) {
+            helper.fail("Expected 2 excess scrap_tomes in player inventory, found " + excessFound);
             return;
         }
         helper.succeed();

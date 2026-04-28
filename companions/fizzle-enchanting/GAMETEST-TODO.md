@@ -48,8 +48,8 @@ N/A — Typed tomes with right-click conversion were cut from the MVP (DESIGN.md
 - [x] S-6.3b — Item with stats below min: no infusion, normal enchant available
 - [x] S-6.3c — Item with stats above max: no infusion match
 - [x] S-6.3d — Shelf upgrade infusion (hellshelf at correct stats -> infused hellshelf)
-- [ ] S-6.3e — Keep-NBT infusion (library -> ender library retains stored data)
-- [ ] S-6.3f — Infusion consumes exactly 1 input and produces correct output count
+- [x] S-6.3e — Keep-NBT infusion (library -> ender library retains stored data)
+- [x] S-6.3f — Infusion consumes exactly 1 input and produces correct output count
 
 **File:** `src/gametest/java/.../gametest/CraftingButtonGameTest.java` (extend existing)
 
