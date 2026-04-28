@@ -88,12 +88,12 @@ Unit-level `gather_*` tests verify the math, but no T3 test places a specific sh
 - [x] S-2.2a — Single hellshelf at valid offset: eterna=3, quanta=18
 - [x] S-2.2b — 15 hellshelves: eterna = min(45, 15*3) = 45
 - [x] S-2.2c — 15 vanilla bookshelves + 1 hellshelf: eterna = 18 (step-ladder)
-- [ ] S-2.2d — Draconic endshelf alone: eterna=20, maxEterna=100
-- [ ] S-2.2e — Stoneshelf produces negative eterna and negative arcana
-- [ ] S-2.2f — Beeshelf produces quanta=100 and eterna=-30
-- [ ] S-2.2g — Melonshelf produces negative quanta and negative eterna
-- [ ] S-2.2h — Sightshelf contributes only clues (no eterna/quanta/arcana)
-- [ ] S-2.2i — Sightshelf_t2 contributes 2 clues
+- [x] S-2.2d — Draconic endshelf alone: eterna=20, maxEterna=100
+- [x] S-2.2e — Stoneshelf produces negative eterna and negative arcana
+- [x] S-2.2f — Beeshelf produces quanta=100 and eterna=-30
+- [x] S-2.2g — Melonshelf produces negative quanta and negative eterna
+- [x] S-2.2h — Sightshelf contributes only clues (no eterna/quanta/arcana)
+- [x] S-2.2i — Sightshelf_t2 contributes 2 clues
 
 ### S-2.4 Mixed Configurations
 - [ ] S-2.4a — Max eterna config: combination that reaches exactly 100

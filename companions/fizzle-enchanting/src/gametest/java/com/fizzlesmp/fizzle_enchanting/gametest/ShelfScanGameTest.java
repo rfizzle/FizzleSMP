@@ -258,6 +258,142 @@ public class ShelfScanGameTest implements FabricGameTest {
         helper.succeed();
     }
 
+    // --- S-2.2d: draconic endshelf → eterna=10, maxEterna=50 ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void draconicEndshelfProducesHighEternaAndMaxEterna(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        BlockPos offset = EnchantingTableBlock.BOOKSHELF_OFFSETS.get(0);
+        helper.setBlock(TABLE_POS.offset(offset), FizzleShelves.DRACONIC_ENDSHELF.defaultBlockState());
+
+        BlockPos absTablePos = helper.absolutePos(TABLE_POS);
+        StatCollection stats = EnchantingStatRegistry.gatherStats(helper.getLevel(), absTablePos);
+
+        if (Math.abs(stats.eterna() - 10F) > 1e-3) {
+            helper.fail("Expected eterna=10 for draconic endshelf, got " + stats.eterna());
+            return;
+        }
+        if (Math.abs(stats.maxEterna() - 50F) > 1e-3) {
+            helper.fail("Expected maxEterna=50 for draconic endshelf, got " + stats.maxEterna());
+            return;
+        }
+        helper.succeed();
+    }
+
+    // --- S-2.2e: stoneshelf → negative eterna/arcana clamped to 0 ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void stoneshelfNegativeStatsClamped(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        BlockPos offset = EnchantingTableBlock.BOOKSHELF_OFFSETS.get(0);
+        helper.setBlock(TABLE_POS.offset(offset), FizzleShelves.STONESHELF.defaultBlockState());
+
+        BlockPos absTablePos = helper.absolutePos(TABLE_POS);
+        StatCollection stats = EnchantingStatRegistry.gatherStats(helper.getLevel(), absTablePos);
+
+        if (Math.abs(stats.eterna()) > 1e-6) {
+            helper.fail("Expected eterna=0 (clamped from -1.5) for stoneshelf, got " + stats.eterna());
+            return;
+        }
+        if (Math.abs(stats.arcana()) > 1e-6) {
+            helper.fail("Expected arcana=0 (clamped from -7.5) for stoneshelf, got " + stats.arcana());
+            return;
+        }
+        helper.succeed();
+    }
+
+    // --- S-2.2f: beeshelf → quanta=100, eterna clamped to 0 ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void beeshelfMaxQuantaAndNegativeEterna(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        BlockPos offset = EnchantingTableBlock.BOOKSHELF_OFFSETS.get(0);
+        helper.setBlock(TABLE_POS.offset(offset), FizzleShelves.BEESHELF.defaultBlockState());
+
+        BlockPos absTablePos = helper.absolutePos(TABLE_POS);
+        StatCollection stats = EnchantingStatRegistry.gatherStats(helper.getLevel(), absTablePos);
+
+        if (Math.abs(stats.quanta() - 100F) > 1e-3) {
+            helper.fail("Expected quanta=100 for beeshelf, got " + stats.quanta());
+            return;
+        }
+        if (Math.abs(stats.eterna()) > 1e-6) {
+            helper.fail("Expected eterna=0 (clamped from -15) for beeshelf, got " + stats.eterna());
+            return;
+        }
+        helper.succeed();
+    }
+
+    // --- S-2.2g: melonshelf → negative quanta and eterna clamped to 0 ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void melonshelfNegativeQuantaAndEternaClamped(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        BlockPos offset = EnchantingTableBlock.BOOKSHELF_OFFSETS.get(0);
+        helper.setBlock(TABLE_POS.offset(offset), FizzleShelves.MELONSHELF.defaultBlockState());
+
+        BlockPos absTablePos = helper.absolutePos(TABLE_POS);
+        StatCollection stats = EnchantingStatRegistry.gatherStats(helper.getLevel(), absTablePos);
+
+        if (Math.abs(stats.eterna()) > 1e-6) {
+            helper.fail("Expected eterna=0 (clamped from -1) for melonshelf, got " + stats.eterna());
+            return;
+        }
+        if (Math.abs(stats.quanta()) > 1e-6) {
+            helper.fail("Expected quanta=0 (clamped from -10) for melonshelf, got " + stats.quanta());
+            return;
+        }
+        helper.succeed();
+    }
+
+    // --- S-2.2h: sightshelf → only clues, no eterna/quanta/arcana ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void sightshelfContributesOnlyClues(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        BlockPos offset = EnchantingTableBlock.BOOKSHELF_OFFSETS.get(0);
+        helper.setBlock(TABLE_POS.offset(offset), FizzleShelves.SIGHTSHELF.defaultBlockState());
+
+        BlockPos absTablePos = helper.absolutePos(TABLE_POS);
+        StatCollection stats = EnchantingStatRegistry.gatherStats(helper.getLevel(), absTablePos);
+
+        if (stats.clues() != 1) {
+            helper.fail("Expected clues=1 for sightshelf, got " + stats.clues());
+            return;
+        }
+        if (Math.abs(stats.eterna()) > 1e-6) {
+            helper.fail("Expected eterna=0 for sightshelf, got " + stats.eterna());
+            return;
+        }
+        if (Math.abs(stats.quanta()) > 1e-6) {
+            helper.fail("Expected quanta=0 for sightshelf, got " + stats.quanta());
+            return;
+        }
+        if (Math.abs(stats.arcana()) > 1e-6) {
+            helper.fail("Expected arcana=0 for sightshelf, got " + stats.arcana());
+            return;
+        }
+        helper.succeed();
+    }
+
+    // --- S-2.2i: sightshelf_t2 → 2 clues ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void sightshelfT2ContributesTwoClues(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        BlockPos offset = EnchantingTableBlock.BOOKSHELF_OFFSETS.get(0);
+        helper.setBlock(TABLE_POS.offset(offset), FizzleShelves.SIGHTSHELF_T2.defaultBlockState());
+
+        BlockPos absTablePos = helper.absolutePos(TABLE_POS);
+        StatCollection stats = EnchantingStatRegistry.gatherStats(helper.getLevel(), absTablePos);
+
+        if (stats.clues() != 2) {
+            helper.fail("Expected clues=2 for sightshelf_t2, got " + stats.clues());
+            return;
+        }
+        helper.succeed();
+    }
+
     // --- Helpers ---
 
     private static ItemStack enchantedBook(GameTestHelper helper, ResourceKey<Enchantment> key, int level) {
