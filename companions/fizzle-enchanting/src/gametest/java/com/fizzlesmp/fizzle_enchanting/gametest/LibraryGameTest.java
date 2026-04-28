@@ -18,7 +18,7 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -102,7 +102,7 @@ public class LibraryGameTest implements FabricGameTest {
                 .getBlockEntity(helper.absolutePos(LIB_POS));
         if (be == null) { helper.fail("BE not created"); return; }
 
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        Player player = helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
         EnchantmentLibraryMenu menu = new EnchantmentLibraryMenu(1, player.getInventory(), be);
 
         Registry<Enchantment> reg = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
@@ -193,7 +193,7 @@ public class LibraryGameTest implements FabricGameTest {
                 .getBlockEntity(helper.absolutePos(LIB_POS));
         if (be == null) { helper.fail("BE not created"); return; }
 
-        ServerPlayer player = helper.makeMockServerPlayerInLevel();
+        Player player = helper.makeMockPlayer(net.minecraft.world.level.GameType.SURVIVAL);
         EnchantmentLibraryMenu menu1 = new EnchantmentLibraryMenu(1, player.getInventory(), be);
         EnchantmentLibraryMenu menu2 = new EnchantmentLibraryMenu(2, player.getInventory(), be);
 
