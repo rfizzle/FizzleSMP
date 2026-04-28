@@ -32,11 +32,11 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 PROJECTS_ROOT="$(cd "${REPO_ROOT}/.." && pwd)"
-MOD_DIR="${REPO_ROOT}/companions/fizzle-enchanting"
+MOD_DIR="${REPO_ROOT}/companions/meridian"
 TODO_FILE="${MOD_DIR}/TODO.md"
 
-IMAGE_TAG="${IMAGE_TAG:-fizzle-enchanting-loop:latest}"
-GRADLE_VOLUME="${GRADLE_VOLUME:-fizzle-enchanting-gradle-cache}"
+IMAGE_TAG="${IMAGE_TAG:-meridian-loop:latest}"
+GRADLE_VOLUME="${GRADLE_VOLUME:-meridian-gradle-cache}"
 MAX_ITERATIONS="${MAX_ITERATIONS:-50}"
 LOG_DIR="${LOG_DIR:-${MOD_DIR}/.continue-enchanting-logs}"
 

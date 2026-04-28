@@ -3,7 +3,7 @@ set -euo pipefail
 
 usage() {
   echo "Usage: $0 <old-name> <new-name> [--regroup <old-group> <new-group>]"
-  echo "Example: $0 fizzle-enchanting meridian --regroup com.fizzlesmp com.rfizzle"
+  echo "Example: $0 old-mod-name new-mod-name --regroup com.oldgroup com.newgroup"
   exit 1
 }
 
@@ -76,8 +76,8 @@ OLD_GROUP_DIR="${OLD_GROUP//.//}"
 NEW_GROUP_DIR="${NEW_GROUP//.//}"
 
 for srcset in main client test gametest; do
-  OLD_PKG="$MOD_DIR/src/$srcset/java/${OLD_GROUP_DIR:-com/fizzlesmp}/$OLD_UNDER"
-  NEW_PKG="$MOD_DIR/src/$srcset/java/${OLD_GROUP_DIR:-com/fizzlesmp}/$NEW_UNDER"
+  OLD_PKG="$MOD_DIR/src/$srcset/java/${OLD_GROUP_DIR:-com/rfizzle}/$OLD_UNDER"
+  NEW_PKG="$MOD_DIR/src/$srcset/java/${OLD_GROUP_DIR:-com/rfizzle}/$NEW_UNDER"
   if [[ -d "$OLD_PKG" ]]; then
     git mv "$OLD_PKG" "$NEW_PKG"
     echo "  Renamed $srcset package"
@@ -127,8 +127,8 @@ done
 echo "Step 5: Bulk find-and-replace in file contents..."
 
 # Fully-qualified package references (longest pattern first)
-OLD_FQ="${OLD_GROUP:-com.fizzlesmp}.${OLD_UNDER}"
-NEW_FQ="${NEW_GROUP:-com.fizzlesmp}.${NEW_UNDER}"
+OLD_FQ="${OLD_GROUP:-com.rfizzle}.${OLD_UNDER}"
+NEW_FQ="${NEW_GROUP:-com.rfizzle}.${NEW_UNDER}"
 find "$MOD_DIR" -type f \( -name '*.java' -o -name '*.json' -o -name '*.gradle' -o -name '*.properties' -o -name '*.toml' -o -name '*.md' \) \
   -exec sed -i "s/${OLD_FQ//./\\.}/${NEW_FQ}/g" {} +
 echo "  Replaced fully-qualified package references"

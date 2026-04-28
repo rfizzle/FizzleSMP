@@ -57,7 +57,7 @@ for arg in "$@"; do
 done
 
 if [[ -z "$COMPANION" ]]; then
-    echo "Error: companion name required (e.g., fizzle-difficulty)"
+    echo "Error: companion name required (e.g., tribulation)"
     echo ""
     usage
     exit 1
