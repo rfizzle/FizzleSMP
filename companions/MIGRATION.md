@@ -10,7 +10,7 @@ spiritual predecessors without the `fizzle-` prefix.
 | `fizzle-enchanting` | `meridian` | `meridian` | Meridian | Apotheosis + Zenith |
 | `fizzle-difficulty` | `tribulation` | `tribulation` | Tribulation | HMIOT + RpgDifficulty |
 
-**Maven group stays:** `com.fizzlesmp` (unchanged).
+**Maven group:** `com.fizzlesmp` -> `com.rfizzle` (changed during migration).
 
 ---
 
@@ -421,18 +421,20 @@ After generating and downscaling to 16x16:
 
 ## Execution Checklist
 
-- [ ] Write `scripts/rename-companion.sh`
-- [ ] Run for `fizzle-enchanting` -> `meridian`
-- [ ] Run for `fizzle-difficulty` -> `tribulation`
-- [ ] Update display names and descriptions in both `fabric.mod.json`
-- [ ] Update `companions/README.md` prose
-- [ ] Clean and rebuild both mods
-- [ ] Re-run datagen for meridian
-- [ ] Run unit tests for both mods
-- [ ] Run gametests for both mods
-- [ ] Create icons for both mods
-- [ ] Set `"icon"` field in both `fabric.mod.json`
+- [x] Write `scripts/rename-companion.sh`
+- [x] Run for `fizzle-enchanting` -> `meridian`
+- [x] Run for `fizzle-difficulty` -> `tribulation`
+- [x] Update display names and descriptions in both `fabric.mod.json`
+- [x] Update `companions/README.md` prose
+- [x] Clean and rebuild both mods
+- [x] Re-run datagen for meridian
+- [x] Run unit tests for both mods
+- [x] Run gametests for both mods
+- [x] Create icons for both mods
+- [x] Set `"icon"` field in both `fabric.mod.json`
 - [ ] Register creative tab icons in code
-- [ ] Update `CLAUDE.md` if it references old names
-- [ ] Update any memory files in `.claude/projects/` referencing old names
-- [ ] Single commit: `refactor(companions): rename fizzle-enchanting to meridian, fizzle-difficulty to tribulation`
+- [x] Update `CLAUDE.md` if it references old names
+- [x] Update any memory files in `.claude/projects/` referencing old names
+- [x] ~~Single commit~~ Split across 3 commits (meridian rename, tribulation rename, script cleanup)
+- [x] Regroup `com.fizzlesmp` -> `com.rfizzle` (added during migration)
+- [x] Phase 3 skipped — mods not yet deployed to a live world
