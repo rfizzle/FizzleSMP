@@ -80,7 +80,7 @@ class RecipeInfoFormatterTest {
         assertEquals(List.of(
                 "Eterna: +1.5 (Max 22.5)",
                 "Quanta: +3%"
-        ), lines, "Zero axes must be skipped; positive eterna combines with max in Apothic format");
+        ), lines, "Zero axes must be skipped; positive eterna combines with max in Zenith format");
     }
 
     @Test

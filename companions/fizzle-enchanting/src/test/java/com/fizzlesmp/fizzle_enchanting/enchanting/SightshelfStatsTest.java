@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * T-3.3.1 — sightshelf and sightshelf_t2 contribute clues only. Their shipped JSONs omit
  * {@code maxEterna}, which the codec zero-fills, so placing a sightshelf beside lower-tier
  * stone shelves does not raise the enchanting ceiling by itself. Stacking two sightshelf_t2s
- * adds four raw clues; the aggregator passes them through unbounded (matching Apothic's
+ * adds four raw clues; the aggregator passes them through unbounded (matching Zenith's
  * behavior where clue count has no ceiling).
  */
 class SightshelfStatsTest {

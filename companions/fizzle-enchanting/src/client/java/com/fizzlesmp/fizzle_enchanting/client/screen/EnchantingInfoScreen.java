@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 
 /**
  * Enchantment info browser screen, opened from the enchanting table GUI's info button.
- * Design follows Apothic-Enchanting's EnchantingInfoScreen: 240x170 panel with slot tabs,
+ * Design follows Zenith's EnchantingInfoScreen: 240x170 panel with slot tabs,
  * a scrollable enchantment list, a power slider, and an arcana weight table.
  */
 public class EnchantingInfoScreen extends Screen {

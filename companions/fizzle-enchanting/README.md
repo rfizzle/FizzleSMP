@@ -156,13 +156,7 @@ See the full annotated reference: **[Configuration Guide](docs/CONFIG.md)**
 
 ## Credits & Attribution
 
-Meridian is a clean-room 1.21.1 Fabric rewrite inspired by and building on the work of several projects:
-
-### [Apotheosis](https://www.curseforge.com/minecraft/mc-mods/apotheosis) — Shadows_of_Fire
-The original enchanting module design: stat-driven table, shelf blocks, enchantment library, anvil interactions, and tome system. Apotheosis is a Forge/NeoForge mod and the foundational inspiration for Meridian's mechanics. Textures are reused with credit under Apotheosis's asset license.
-
-### [Zenith](https://www.curseforge.com/minecraft/mc-mods/zenith) — bageldotjpg
-The 1.20.1 Fabric port of Apotheosis. Zenith's stat schema, shelf roster, recipe shapes, and texture pipeline were the direct reference for Meridian's implementation. All code is a fresh 1.21.1 rewrite — no Zenith source was copied — but the design debt is substantial.
+Meridian is a clean-room 1.21.1 Fabric rewrite based on [Zenith](https://www.curseforge.com/minecraft/mc-mods/zenith) by bageldotjpg — the 1.20.1 Fabric port of [Apotheosis](https://www.curseforge.com/minecraft/mc-mods/apotheosis) by Shadows_of_Fire. Zenith's stat schema, shelf roster, recipe shapes, and texture pipeline were the direct reference for Meridian's implementation. All code is a fresh 1.21.1 rewrite — no Zenith source was copied. The original enchanting module concepts (stat-driven table, shelf blocks, enchantment library, anvil interactions, and tome system) trace back to Apotheosis on Forge/NeoForge.
 
 ### [NeoEnchant+](https://www.curseforge.com/minecraft/mc-mods/neoenchant) — Hardel
 49 of Meridian's enchantments are data-only namespace rewrites of NeoEnchant+ v5.14.0's JSON definitions. NeoEnchant+ is licensed under **CC BY-NC-SA 4.0**.
@@ -178,5 +172,8 @@ Bag of Souls enchantment concept originates from the Prominence 2 modpack.
 ## License
 
 - **Code:** MIT
-- **Textures:** Reused from Apotheosis (via Zenith) under Apotheosis's separate asset license (`LICENSE_ASSETS`).
+- **Textures:** Sourced from Zenith (originally Apotheosis).
 - **Enchantment data (49 of 68):** Ported from NeoEnchant+ under **CC BY-NC-SA 4.0**.
+- **Enchantment data (12 of 68):** Ported from Zenith (originally Apotheosis).
+- **Enchantment data (6 of 68):** Inspired by Enchantology designs, implemented as pure JSON.
+- **Enchantment data (1 of 68):** Bag of Souls concept from Prominence 2.

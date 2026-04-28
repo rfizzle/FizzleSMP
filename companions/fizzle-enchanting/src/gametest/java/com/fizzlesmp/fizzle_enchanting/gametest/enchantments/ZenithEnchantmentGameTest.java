@@ -21,7 +21,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ApothicEnchantmentGameTest implements FabricGameTest {
+public class ZenithEnchantmentGameTest implements FabricGameTest {
 
     private Holder<Enchantment> lookup(GameTestHelper helper, String id) {
         Registry<Enchantment> reg = helper.getLevel().registryAccess()
@@ -32,7 +32,7 @@ public class ApothicEnchantmentGameTest implements FabricGameTest {
     // --- Definition sweep ---
 
     @GameTest(template = "fizzle_enchanting:empty_3x3")
-    public void allApothicDefinitionsValid(GameTestHelper helper) {
+    public void allZenithDefinitionsValid(GameTestHelper helper) {
         record Expected(String id, int maxLevel, int weight) {}
         List<Expected> enchants = List.of(
                 new Expected("bag_of_souls", 3, 2),

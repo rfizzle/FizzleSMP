@@ -13,7 +13,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
  * {@code enchantmentOverrides} section (server-side) or from an
  * {@link com.fizzlesmp.fizzle_enchanting.net.EnchantmentInfoPayload} (client-side).
  *
- * <p>Mirrors Apothic-Enchanting's {@code EnchantmentInfo} record with the same fields
+ * <p>Mirrors Zenith's {@code EnchantmentInfo} record with the same fields
  * and power function model.
  */
 public record EnchantmentInfo(

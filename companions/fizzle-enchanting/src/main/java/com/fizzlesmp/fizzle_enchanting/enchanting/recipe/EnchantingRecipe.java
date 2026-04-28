@@ -85,7 +85,7 @@ public class EnchantingRecipe implements Recipe<SingleRecipeInput> {
     /**
      * Returns the XP level cost to perform this infusion. If the recipe specifies an explicit
      * {@code xp_cost}, that value is used. Otherwise, derives the cost from the recipe's eterna
-     * requirement — matching Apothic Enchanting's slot-2 behavior where the level cost equals
+     * requirement — matching Zenith's slot-2 behavior where the level cost equals
      * {@code Math.round(eterna)}.
      */
     public int getEffectiveXpCost() {

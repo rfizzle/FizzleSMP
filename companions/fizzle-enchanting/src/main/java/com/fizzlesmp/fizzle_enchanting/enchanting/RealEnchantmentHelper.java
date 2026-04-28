@@ -192,7 +192,7 @@ public final class RealEnchantmentHelper {
      * </ul>
      *
      * <p>For each surviving enchantment, the highest level whose cost window admits
-     * {@code power} is picked (matching Apothic's semantics: require
+     * {@code power} is picked (matching Zenith's semantics: require
      * {@code power >= minCost(L)} and either {@code power <= maxCost(L)} or {@code L} is the
      * minimum level).
      */

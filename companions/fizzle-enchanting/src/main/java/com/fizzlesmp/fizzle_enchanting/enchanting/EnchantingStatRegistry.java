@@ -51,7 +51,7 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
     /** Vanilla-shelf safety net: applied when a block is in the vanilla power-provider tag but absent from the datapack registry. */
     public static final EnchantingStats VANILLA_FALLBACK = new EnchantingStats(15F, 1F, 0F, 0F, 0F, 0);
 
-    /** Hard ceiling on gathered clues. Matches Apothic's cap — beyond 3 the UI is already saturated. */
+    /** Hard ceiling on gathered clues. Matches Zenith's cap — beyond 3 the UI is already saturated. */
     public static final int MAX_CLUES = 3;
 
     private static final String RESOURCE_DIR = "enchanting_stats";
@@ -85,7 +85,7 @@ public final class EnchantingStatRegistry implements SimpleSynchronousResourceRe
      * {@link BlockTags#ENCHANTMENT_POWER_TRANSMITTER} contribute zero, matching vanilla's
      * {@link EnchantingTableBlock#isValidBookShelf} line-of-sight rule.
      *
-     * <p>Eterna uses <b>step-ladder accumulation</b> (matching Apothic): contributions are
+     * <p>Eterna uses <b>step-ladder accumulation</b> (matching Zenith): contributions are
      * grouped by {@code maxEterna}, sorted ascending, and each group's running total is capped
      * at that tier's ceiling. This prevents low-tier shelf overflow from carrying into higher
      * tiers. Groups with {@code maxEterna <= 0} add eterna directly without capping.
