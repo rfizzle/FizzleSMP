@@ -121,4 +121,144 @@ public class CraftingButtonGameTest implements FabricGameTest {
         }
         helper.succeed();
     }
+
+    /**
+     * S-6.3b — Seashelf with only 3 endshelves (E=7.5) does not reach the infused_seashelf
+     * recipe minimum (E≥22.5). Verifies that no crafting recipe matches.
+     */
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9", timeoutTicks = 100)
+    public void statsBelowMinNoInfusion(GameTestHelper helper) {
+        Block endshelf = BuiltInRegistries.BLOCK.get(FizzleEnchanting.id("endshelf"));
+        if (endshelf == Blocks.AIR) {
+            helper.fail("endshelf block not found in registry");
+            return;
+        }
+
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        int placed = 0;
+        for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+            helper.setBlock(TABLE_POS.offset(offset), endshelf.defaultBlockState());
+            placed++;
+            if (placed >= 3) break;
+        }
+
+        Block seashelfBlock = BuiltInRegistries.BLOCK.get(FizzleEnchanting.id("seashelf"));
+        if (seashelfBlock == Blocks.AIR) {
+            helper.fail("seashelf block not found");
+            return;
+        }
+
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 30;
+        BlockPos absTable = helper.absolutePos(TABLE_POS);
+        FizzleEnchantmentMenu menu = new FizzleEnchantmentMenu(
+                1, player.getInventory(),
+                ContainerLevelAccess.create(helper.getLevel(), absTable));
+
+        menu.getSlot(0).set(new ItemStack(seashelfBlock));
+        menu.getSlot(1).set(new ItemStack(Items.LAPIS_LAZULI, 64));
+
+        if (menu.currentRecipe().isPresent()) {
+            helper.fail("With 3 endshelves (E=7.5), seashelf infusion should not match "
+                    + "(requires E>=22.5). Stats: costs=" + java.util.Arrays.toString(menu.costs));
+            return;
+        }
+        helper.succeed();
+    }
+
+    /**
+     * S-6.3c — Carrot with 5 endshelves (E=12.5) exceeds the golden_carrot recipe's
+     * max_requirements (E≤10). Verifies that no crafting recipe matches.
+     */
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9", timeoutTicks = 100)
+    public void statsAboveMaxNoInfusion(GameTestHelper helper) {
+        Block endshelf = BuiltInRegistries.BLOCK.get(FizzleEnchanting.id("endshelf"));
+        if (endshelf == Blocks.AIR) {
+            helper.fail("endshelf block not found in registry");
+            return;
+        }
+
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        int placed = 0;
+        for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+            helper.setBlock(TABLE_POS.offset(offset), endshelf.defaultBlockState());
+            placed++;
+            if (placed >= 5) break;
+        }
+
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 30;
+        BlockPos absTable = helper.absolutePos(TABLE_POS);
+        FizzleEnchantmentMenu menu = new FizzleEnchantmentMenu(
+                1, player.getInventory(),
+                ContainerLevelAccess.create(helper.getLevel(), absTable));
+
+        menu.getSlot(0).set(new ItemStack(Items.CARROT));
+        menu.getSlot(1).set(new ItemStack(Items.LAPIS_LAZULI, 64));
+
+        if (menu.currentRecipe().isPresent()) {
+            helper.fail("With 5 endshelves (E=12.5), golden carrot infusion should not match "
+                    + "(max_requirements E=10). Stats: costs=" + java.util.Arrays.toString(menu.costs));
+            return;
+        }
+        helper.succeed();
+    }
+
+    /**
+     * S-6.3d — Hellshelf with 10 endshelves (E=25, Q=65, A=50) meets the infused_hellshelf
+     * recipe thresholds (E≥22.5, Q≥30, A≥0). Clicking the crafting button produces infused_hellshelf.
+     */
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9", timeoutTicks = 100)
+    public void shelfUpgradeHellshelfToInfused(GameTestHelper helper) {
+        Block endshelf = BuiltInRegistries.BLOCK.get(FizzleEnchanting.id("endshelf"));
+        if (endshelf == Blocks.AIR) {
+            helper.fail("endshelf block not found in registry");
+            return;
+        }
+
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        int placed = 0;
+        for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+            helper.setBlock(TABLE_POS.offset(offset), endshelf.defaultBlockState());
+            placed++;
+            if (placed >= 10) break;
+        }
+
+        Block hellshelfBlock = BuiltInRegistries.BLOCK.get(FizzleEnchanting.id("hellshelf"));
+        if (hellshelfBlock == Blocks.AIR) {
+            helper.fail("hellshelf block not found");
+            return;
+        }
+
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 30;
+        BlockPos absTable = helper.absolutePos(TABLE_POS);
+        FizzleEnchantmentMenu menu = new FizzleEnchantmentMenu(
+                1, player.getInventory(),
+                ContainerLevelAccess.create(helper.getLevel(), absTable));
+
+        menu.getSlot(0).set(new ItemStack(hellshelfBlock));
+        menu.getSlot(1).set(new ItemStack(Items.LAPIS_LAZULI, 64));
+
+        if (menu.currentRecipe().isEmpty()) {
+            helper.fail("Hellshelf recipe should match with 10 endshelves (E=25, Q=65, A=50). "
+                    + "Stats: costs=" + java.util.Arrays.toString(menu.costs));
+            return;
+        }
+
+        boolean clicked = menu.clickMenuButton(player, FizzleEnchantmentLogic.CRAFTING_SLOT);
+        if (!clicked) {
+            helper.fail("clickMenuButton(CRAFTING_SLOT) returned false for hellshelf upgrade");
+            return;
+        }
+
+        ItemStack result = menu.getSlot(0).getItem();
+        ResourceLocation infusedId = FizzleEnchanting.id("infused_hellshelf");
+        if (!BuiltInRegistries.ITEM.getKey(result.getItem()).equals(infusedId)) {
+            helper.fail("Expected infused_hellshelf, got "
+                    + BuiltInRegistries.ITEM.getKey(result.getItem()));
+            return;
+        }
+        helper.succeed();
+    }
 }
