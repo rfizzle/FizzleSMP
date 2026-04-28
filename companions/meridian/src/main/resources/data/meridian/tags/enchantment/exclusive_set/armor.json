@@ -1,0 +1,8 @@
+{
+    "values": [
+        "meridian:armor/lifeplus",
+        "meridian:armor/fury",
+        "minecraft:protection"
+    ],
+    "replace": false
+}

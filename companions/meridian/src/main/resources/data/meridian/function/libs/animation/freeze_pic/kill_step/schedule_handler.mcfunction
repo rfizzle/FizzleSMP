@@ -1,0 +1,2 @@
+execute store result score #global meridian.gametime run time query gametime
+execute as @e[type=block_display,tag=meridian.block_display.freezing,scores={meridian.animation_state=2}] run function meridian:libs/animation/freeze_pic/kill_step/entry

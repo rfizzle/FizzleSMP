@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "fizzle_enchanting:block/sightshelf_t2_top",
-    "side": "fizzle_enchanting:block/sightshelf_t2"
-  }
-}

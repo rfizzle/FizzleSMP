@@ -1,0 +1,20 @@
+{
+	"description": {
+		"translate": "enchantment.meridian.berserkers_fury",
+		"fallback": "Berserker's Fury"
+	},
+	"supported_items": "#minecraft:enchantable/chest_armor",
+	"weight": 1,
+	"max_level": 3,
+	"min_cost": {
+		"base": 50,
+		"per_level_above_first": 40
+	},
+	"max_cost": {
+		"base": 200,
+		"per_level_above_first": 0
+	},
+	"anvil_cost": 8,
+	"slots": ["chest"],
+	"effects": {}
+}

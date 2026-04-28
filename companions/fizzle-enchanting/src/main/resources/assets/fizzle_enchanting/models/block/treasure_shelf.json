@@ -1,7 +1,0 @@
-{
-  "parent": "block/cube_column",
-  "textures": {
-    "end": "fizzle_enchanting:block/treasure_shelf_top",
-    "side": "fizzle_enchanting:block/treasure_shelf_side"
-  }
-}

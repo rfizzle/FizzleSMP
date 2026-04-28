@@ -17,7 +17,7 @@ All companion mods live under `companions/<mod-name>/` as standalone Gradle proj
 
 ### Package Structure
 ```
-com.fizzlesmp.<modid>/
+com.rfizzle.<modid>/
 ├── <ModName>.java              # ModInitializer entrypoint
 ├── config/                     # Configuration classes
 ├── command/                    # Command registration
@@ -121,7 +121,7 @@ ServerTickEvents.END_SERVER_TICK.register(server -> {
 
 ### Test Organization
 ```
-src/test/java/com/fizzlesmp/<modid>/
+src/test/java/com/rfizzle/<modid>/
 ├── config/         # Config load/save/validation tests
 ├── scaling/        # Formula and calculation tests
 └── ...
@@ -144,7 +144,7 @@ src/test/java/com/fizzlesmp/<modid>/
     "version": "${version}",
     "environment": "*",
     "entrypoints": {
-        "main": ["com.fizzlesmp.<modid>.<ModName>"]
+        "main": ["com.rfizzle.<modid>.<ModName>"]
     },
     "depends": {
         "fabricloader": ">=0.19.2",

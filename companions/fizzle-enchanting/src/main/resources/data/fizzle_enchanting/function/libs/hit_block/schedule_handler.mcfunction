@@ -1,1 +1,0 @@
-execute as @e[tag=fizzle_enchanting.libs.hit_block] run function fizzle_enchanting:libs/hit_block/kill

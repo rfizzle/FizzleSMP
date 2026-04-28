@@ -1,1 +1,0 @@
-execute as @e[type=arrow,tag=fizzle_enchanting.rebound] at @s run function fizzle_enchanting:actions/rebound/optimization

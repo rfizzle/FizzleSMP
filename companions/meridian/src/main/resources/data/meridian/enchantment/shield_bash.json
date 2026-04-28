@@ -1,0 +1,47 @@
+{
+	"description": {
+		"translate": "enchantment.meridian.shield_bash",
+		"fallback": "Shield Bash"
+	},
+	"supported_items": "#minecraft:enchantable/weapon",
+	"weight": 2,
+	"max_level": 4,
+	"min_cost": {
+		"base": 1,
+		"per_level_above_first": 17
+	},
+	"max_cost": {
+		"base": 41,
+		"per_level_above_first": 17
+	},
+	"anvil_cost": 4,
+	"slots": ["mainhand"],
+	"effects": {
+		"minecraft:damage": [
+			{
+				"effect": {
+					"type": "minecraft:add",
+					"value": {
+						"type": "minecraft:linear",
+						"base": 3.5,
+						"per_level_above_first": 3.5
+					}
+				}
+			}
+		],
+		"minecraft:post_attack": [
+			{
+				"affected": "attacker",
+				"enchanted": "attacker",
+				"effect": {
+					"type": "minecraft:damage_item",
+					"amount": {
+						"type": "minecraft:linear",
+						"base": 19,
+						"per_level_above_first": -1
+					}
+				}
+			}
+		]
+	}
+}

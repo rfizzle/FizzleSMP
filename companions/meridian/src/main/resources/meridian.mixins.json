@@ -1,0 +1,23 @@
+{
+    "required": true,
+    "minVersion": "0.8",
+    "package": "com.rfizzle.meridian.mixin",
+    "compatibilityLevel": "JAVA_21",
+    "mixins": [
+        "AnvilMenuAccessor",
+        "AnvilMenuMixin",
+        "EnchantmentMenuAccessor",
+        "EnchantmentMixin",
+        "EnchantmentTableBlockMixin",
+        "ItemMixin",
+        "LivingEntityHealMixin",
+        "LivingEntityLootInvoker",
+        "PlayerMixin",
+        "SheepMixin",
+        "TemptGoalMixin"
+    ],
+    "client": [],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

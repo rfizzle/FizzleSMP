@@ -1,0 +1,30 @@
+{
+	"description": {
+		"translate": "enchantment.meridian.vein_miner",
+		"fallback": "Vein Miner"
+	},
+	"exclusive_set": "#meridian:exclusive_set/mining",
+	"supported_items": "#meridian:enchantable/pickaxes",
+	"weight": 2,
+	"max_level": 1,
+	"min_cost": {
+		"base": 15,
+		"per_level_above_first": 9
+	},
+	"max_cost": {
+		"base": 65,
+		"per_level_above_first": 9
+	},
+	"anvil_cost": 4,
+	"slots": ["mainhand"],
+	"effects": {
+		"minecraft:hit_block": [
+			{
+				"effect": {
+					"type": "minecraft:run_function",
+					"function": "meridian:actions/vein_miner/place_hit_block_marker"
+				}
+			}
+		]
+	}
+}

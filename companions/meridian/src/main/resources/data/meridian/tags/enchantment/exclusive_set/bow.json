@@ -1,0 +1,11 @@
+{
+    "values": [
+        "meridian:bow/breezing_arrow",
+        "meridian:bow/explosive_arrow",
+        "meridian:bow/storm_arrow",
+        "meridian:bow/echo_shot",
+        "meridian:bow/eternal_frost",
+        "minecraft:quick_charge"
+    ],
+    "replace": false
+}

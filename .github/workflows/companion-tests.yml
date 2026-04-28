@@ -4,22 +4,22 @@ on:
   push:
     branches: [master]
     paths:
-      - 'companions/fizzle-enchanting/**'
+      - 'companions/meridian/**'
       - '.github/workflows/companion-tests.yml'
   pull_request:
     paths:
-      - 'companions/fizzle-enchanting/**'
+      - 'companions/meridian/**'
       - '.github/workflows/companion-tests.yml'
   workflow_dispatch:
 
 jobs:
-  fizzle-enchanting:
-    name: fizzle-enchanting (test + runGametest)
+  meridian:
+    name: meridian (test + runGametest)
     runs-on: ubuntu-latest
     timeout-minutes: 30
     defaults:
       run:
-        working-directory: companions/fizzle-enchanting
+        working-directory: companions/meridian
     steps:
       - uses: actions/checkout@v4
 
@@ -34,7 +34,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-          key: gradle-${{ runner.os }}-${{ hashFiles('companions/fizzle-enchanting/**/*.gradle*', 'companions/fizzle-enchanting/gradle/wrapper/gradle-wrapper.properties') }}
+          key: gradle-${{ runner.os }}-${{ hashFiles('companions/meridian/**/*.gradle*', 'companions/meridian/gradle/wrapper/gradle-wrapper.properties') }}
           restore-keys: |
             gradle-${{ runner.os }}-
 
@@ -48,15 +48,15 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: fizzle-enchanting-junit
+          name: meridian-junit
           path: |
-            companions/fizzle-enchanting/build/test-results/test/*.xml
-            companions/fizzle-enchanting/build/junit-gametest.xml
-            companions/fizzle-enchanting/build/reports/tests/test/
+            companions/meridian/build/test-results/test/*.xml
+            companions/meridian/build/junit-gametest.xml
+            companions/meridian/build/reports/tests/test/
 
       - name: Upload gametest crash reports on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: fizzle-enchanting-crash-reports
-          path: companions/fizzle-enchanting/build/gametest/crash-reports/
+          name: meridian-crash-reports
+          path: companions/meridian/build/gametest/crash-reports/

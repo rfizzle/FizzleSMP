@@ -1,0 +1,33 @@
+{
+	"description": {
+		"translate": "enchantment.meridian.ironclad",
+		"fallback": "Ironclad"
+	},
+	"supported_items": "#minecraft:enchantable/armor",
+	"weight": 6,
+	"max_level": 3,
+	"min_cost": {
+		"base": 9,
+		"per_level_above_first": 9
+	},
+	"max_cost": {
+		"base": 21,
+		"per_level_above_first": 11
+	},
+	"anvil_cost": 1,
+	"slots": ["armor"],
+	"effects": {
+		"minecraft:attributes": [
+			{
+				"id": "minecraft:enchantment.ironclad",
+				"attribute": "minecraft:generic.knockback_resistance",
+				"amount": {
+					"type": "minecraft:linear",
+					"base": 0.15,
+					"per_level_above_first": 0.1
+				},
+				"operation": "add_value"
+			}
+		]
+	}
+}

@@ -10,7 +10,7 @@ The user is writing, modifying, or migrating tests in a companion Fabric mod und
 The companion mods shipped with two incompatible test bootstrapping patterns:
 
 - **fizzle-difficulty** — pure JUnit 5 tests, no Minecraft classes referenced. Works fine.
-- **fizzle-enchanting** — uses `Bootstrap.bootStrap()` plus reflection to unfreeze `BuiltInRegistries` (`MappedRegistry.frozen` / `unregisteredIntrusiveHolders`), plus `forkEvery = 1` to avoid cross-test contamination. This is brittle and slow.
+- **meridian** — uses `Bootstrap.bootStrap()` plus reflection to unfreeze `BuiltInRegistries` (`MappedRegistry.frozen` / `unregisteredIntrusiveHolders`), plus `forkEvery = 1` to avoid cross-test contamination. This is brittle and slow.
 
 The target is **`fabric-loader-junit`** for anything that needs a vanilla registry, mixin, or AW (with an explicit `Bootstrap.bootStrap()` in `@BeforeAll` — see below), and **Fabric Gametest** for anything that needs a real `Level` or the mod's own registered content. The `unfreeze`-reflection pattern must not be used in new code.
 
@@ -28,7 +28,7 @@ Ask these in order and stop at the first "yes":
 
 3. **Everything else** (vanilla registries, enchantments, payload codecs, mixin accessors, AW-widened members) → **Tier 2: `fabric-loader-junit`** + explicit `@BeforeAll Bootstrap.bootStrap()`. Knot applies mixins/AWs; bootstrap populates the vanilla registries; you don't need the unfreeze reflection or `forkEvery` (the latter was only there because the old pattern latched state for the JVM's lifetime — with Knot + bootstrap, read-only tests are safe to share a JVM).
 
-If the test needs to see the **mod's own registered content** (e.g. `FizzleEnchantingRegistry.EXTRACTION_TOME` in `BuiltInRegistries.ITEM`), there is no clean Tier 2 path — fabric-loader-junit does not run `onInitialize`, `Bootstrap.bootStrap()` freezes the registries, and registering post-freeze is the prohibited pattern. Push that test to Tier 3.
+If the test needs to see the **mod's own registered content** (e.g. `MeridianRegistry.EXTRACTION_TOME` in `BuiltInRegistries.ITEM`), there is no clean Tier 2 path — fabric-loader-junit does not run `onInitialize`, `Bootstrap.bootStrap()` freezes the registries, and registering post-freeze is the prohibited pattern. Push that test to Tier 3.
 
 Write the tier into a `// Tier: N` comment at the top of every new test file — readers should not have to infer it.
 
@@ -83,15 +83,15 @@ Leave `useJUnitPlatform()` in place.
 Verify with:
 
 ```bash
-./gradlew :companions:<mod>:dependencies --configuration testRuntimeClasspath | grep fabric-loader-junit
-./gradlew :companions:<mod>:test                       # should still pass before you add a Tier 2 test
+./gradlew dependencies --configuration testRuntimeClasspath | grep fabric-loader-junit
+./gradlew test                       # should still pass before you add a Tier 2 test
 ```
 
 ### Test template
 
 ```java
 // Tier: 2 (fabric-loader-junit)
-package com.fizzlesmp.<modid>.<area>;
+package com.rfizzle.<modid>.<area>;
 
 import net.minecraft.SharedConstants;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -131,23 +131,23 @@ class ExampleTest {
 
 `ScalingEngineAttributeBridgeTest` (in fizzle-difficulty) proves the pure-math `ScalingEngine.computeAttributeFactor` result actually lands as the expected `getMaxHealth()` when applied to a real vanilla `AttributeMap`. That's the Tier 2 sweet spot: integration between computed values and vanilla attribute math, without booting a world.
 
-### Migration recipe (for each `fizzle-enchanting` test file)
+### Migration recipe (for each `meridian` test file)
 
 Work file-by-file, but commit **per mod** not per file (see "scope" rule below).
 
 **First classify the test:**
 - Does it only *read* vanilla content (items, enchantments, attributes)? → Migrate to Tier 2 + `Bootstrap.bootStrap()`. The unfreeze helpers and `register()` call go away.
-- Does it *register* mod content via `FizzleEnchantingRegistry.register()` or similar? → Can't migrate cleanly; leave on the old pattern and revisit as a Tier 3 gametest.
+- Does it *register* mod content via `MeridianRegistry.register()` or similar? → Can't migrate cleanly; leave on the old pattern and revisit as a Tier 3 gametest.
 
 For readable-by-Tier-2 test files:
 
 1. **Keep `@BeforeAll` — but simplify it** to just `SharedConstants.tryDetectVersion(); Bootstrap.bootStrap();`. Everything else goes.
 2. **Delete `unfreeze` / `unfreezeIntrusive` helpers** — only needed to register mod content, which Tier 2 can't support.
-3. **Delete any explicit `FizzleEnchantingRegistry.register()` call** — if a test needed it, that test belongs in Tier 3, not Tier 2.
+3. **Delete any explicit `MeridianRegistry.register()` call** — if a test needed it, that test belongs in Tier 3, not Tier 2.
 4. **Delete the `Field`, `IdentityHashMap` imports** that came with the reflection.
 5. **Delete any `@BeforeAll` that builds a synthetic enchantment registry via reflection** — the real `BuiltInRegistries.ENCHANTMENT` is populated by `Bootstrap.bootStrap()` (vanilla enchantments) or the loaded data pack (datapack ones). For a specific enchantment use `BuiltInRegistries.ENCHANTMENT.getHolder(Enchantments.SHARPNESS).orElseThrow()`.
 6. **Leave the `@Test` bodies unchanged.** Only setup is changing; assertion semantics must be byte-identical.
-7. **Run `./gradlew :companions:<mod>:test --tests '<fully.qualified.TestName>'`** after each file. If it passes, move to the next. If it fails, stop and diagnose.
+7. **Run `./gradlew test --tests '<fully.qualified.TestName>'`** after each file. If it passes, move to the next. If it fails, stop and diagnose.
 
 Do **not** combine migration with test logic changes. A migration commit should only change setup boilerplate; reviewers must trust that no assertion was softened.
 
@@ -164,7 +164,7 @@ static void bootstrap() throws Exception {
     unfreezeIntrusive(BuiltInRegistries.ITEM);
     unfreezeIntrusive(BuiltInRegistries.BLOCK_ENTITY_TYPE);
     unfreeze(BuiltInRegistries.MENU);
-    FizzleEnchantingRegistry.register();
+    MeridianRegistry.register();
     BuiltInRegistries.BLOCK.freeze();
     BuiltInRegistries.ITEM.freeze();
     BuiltInRegistries.MENU.freeze();
@@ -232,8 +232,8 @@ Register the gametest class via a `fabric-gametest` entrypoint in `src/main/reso
 
 ```json
 "entrypoints": {
-    "main": ["com.fizzlesmp.<modid>.<Mod>"],
-    "fabric-gametest": ["com.fizzlesmp.<modid>.gametest.<SomeGameTest>"]
+    "main": ["com.rfizzle.<modid>.<Mod>"],
+    "fabric-gametest": ["com.rfizzle.<modid>.gametest.<SomeGameTest>"]
 }
 ```
 
@@ -243,7 +243,7 @@ The entrypoint only fires under `-Dfabric-api.gametest`, so declaring it in prod
 
 ```java
 // Tier: 3 (Fabric Gametest)
-package com.fizzlesmp.<modid>.gametest;
+package com.rfizzle.<modid>.gametest;
 
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
@@ -252,7 +252,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.level.block.Blocks;
 
 public class AnvilFlowGameTest implements FabricGameTest {
-    @GameTest(template = "fizzle_enchanting:empty_3x3")
+    @GameTest(template = "meridian:empty_3x3")
     public void placeAndBreakAnvil(GameTestHelper helper) {
         BlockPos pos = new BlockPos(1, 2, 1);
         helper.setBlock(pos, Blocks.ANVIL);
@@ -304,14 +304,14 @@ Safe across tests: Minecraft's `GameTestServer` runs the whole batch on the main
 
 **4. Synchronous vs deferred assertions.** `helper.succeedWhen(() -> { ... })` polls the lambda every tick until it passes or the test times out; assertions *inside* the lambda run at tick boundaries. Assertions *outside* `succeedWhen` run immediately on the calling thread. For state that's ready before `spawn*` returns (like `ENTITY_LOAD`-applied attributes), either works. For state that needs a tick — AI pathing, projectile flight, block entity logic — put the assertion inside `succeedWhen`.
 
-### Menu-flow sketch (fizzle-enchanting's shape)
+### Menu-flow sketch (meridian's shape)
 
-> **Unverified recipe.** I haven't run this against fizzle-enchanting's actual menu — the outline reflects the public API for 1.21.1 Fabric menus, but expect to adapt slot indices and the use-block call to the specific mod.
+> **Unverified recipe.** I haven't run this against meridian's actual menu — the outline reflects the public API for 1.21.1 Fabric menus, but expect to adapt slot indices and the use-block call to the specific mod.
 
 For tests that need to exercise a block-backed menu end-to-end (anvil flow, enchanting table, beacon UI), the shape is:
 
 ```java
-@GameTest(template = "fizzle_enchanting:empty_3x3")
+@GameTest(template = "meridian:empty_3x3")
 public void anvilFlow_inputAndMaterial_producesExpectedResult(GameTestHelper helper) {
     // 1. Place the block and teleport a player next to it.
     BlockPos blockLocal = new BlockPos(1, 1, 1);
@@ -347,7 +347,7 @@ helper.getBlockEntity(blockLocal) instanceof SomeBlockEntity be;
 be.setChanged();
 ```
 
-Run the single test first with `./gradlew :companions:<mod>:runGametest --tests 'fizzle_enchanting:empty_3x3'` (Fabric gametest filters by template ID, not class name) and iterate on slot indices until the assertions pass.
+Run the single test first with `./gradlew runGametest --tests 'meridian:empty_3x3'` (Fabric gametest filters by template ID, not class name) and iterate on slot indices until the assertions pass.
 
 ### Template location
 
@@ -377,7 +377,7 @@ A minimal 3×3×3 empty-air-over-stone template (a single file covers almost eve
 ### Running
 
 ```bash
-./gradlew :companions:<mod>:runGametest
+./gradlew runGametest
 ```
 
 On success you'll see `All N required tests passed :)` in the log. The `junit-gametest.xml` report lands in `build/` and can be wired into CI. On failure, Minecraft writes a crash report under `build/gametest/crash-reports/`.
@@ -389,7 +389,7 @@ On success you'll see `All N required tests passed :)` in the log. The `junit-ga
 - Build wiring: `companions/fizzle-difficulty/build.gradle` (sourceSet, configurations, loom run, evaluation order).
 - Entrypoint: `companions/fizzle-difficulty/src/main/resources/fabric.mod.json`.
 - Template: `companions/fizzle-difficulty/src/main/resources/data/fizzle_difficulty/gametest/structure/empty_3x3.snbt`.
-- Tests: `companions/fizzle-difficulty/src/gametest/java/com/fizzlesmp/fizzle_difficulty/gametest/MobScalingGameTest.java` — includes the mock-player teleport, the config-isolation try/finally, and a parametrized helper invoked by 5 breakpoint tests.
+- Tests: `companions/fizzle-difficulty/src/gametest/java/com/rfizzle/fizzle_difficulty/gametest/MobScalingGameTest.java` — includes the mock-player teleport, the config-isolation try/finally, and a parametrized helper invoked by 5 breakpoint tests.
 
 Copy the build.gradle wiring from there when setting up a new mod's Tier 3.
 
@@ -401,8 +401,8 @@ Copy the build.gradle wiring from there when setting up a new mod's Tier 3.
 
 ## Scope — one mod per session, one commit per mod
 
-- **Do not** half-migrate a mod. If `fizzle-enchanting` is the target, every test in that mod is either already Tier 1 (leave alone) or becomes Tier 2. Mixed states (some files using `Bootstrap.bootStrap()`, some using fabric-loader-junit) will fail unpredictably because `forkEvery = 1` would need to stay for the unconverted files while being wrong for the new ones.
-- **Do** commit the migration as a single `refactor(test)` commit per mod. Example: `refactor(test): migrate fizzle-enchanting to fabric-loader-junit`. The diff should be almost entirely deletions.
+- **Do not** half-migrate a mod. If `meridian` is the target, every test in that mod is either already Tier 1 (leave alone) or becomes Tier 2. Mixed states (some files using `Bootstrap.bootStrap()`, some using fabric-loader-junit) will fail unpredictably because `forkEvery = 1` would need to stay for the unconverted files while being wrong for the new ones.
+- **Do** commit the migration as a single `refactor(test)` commit per mod. Example: `refactor(test): migrate meridian to fabric-loader-junit`. The diff should be almost entirely deletions.
 - **Do not** bundle migration with new test additions, bug fixes, or assertion changes. Review trust depends on that separation.
 
 ## Verification — before declaring the migration done
@@ -410,9 +410,9 @@ Copy the build.gradle wiring from there when setting up a new mod's Tier 3.
 Run in order:
 
 ```bash
-./gradlew :companions:<mod>:test                    # all existing tests must pass
-./gradlew :companions:<mod>:test --rerun-tasks      # no flakiness from cached state
-./gradlew :companions:<mod>:build                   # full build still green
+./gradlew test                    # all existing tests must pass
+./gradlew test --rerun-tasks      # no flakiness from cached state
+./gradlew build                   # full build still green
 ```
 
 Report the test count before and after. It must not decrease — if a test was deleted as "no longer needed," that requires a separate commit and justification.
@@ -436,4 +436,4 @@ Follow the migration recipe exactly. Do not rewrite the test structure, rename m
 1. Run the decision tree. Commit to a tier before writing any code.
 2. Put the `// Tier: N` comment at the top.
 3. Use the matching template. If Tier 2, the test file has no `@BeforeAll` — delete the template's placeholder rather than filling it in.
-4. Run the single test with `./gradlew :companions:<mod>:test --tests '<fully.qualified.TestName>'` before claiming it passes.
+4. Run the single test with `./gradlew test --tests '<fully.qualified.TestName>'` before claiming it passes.

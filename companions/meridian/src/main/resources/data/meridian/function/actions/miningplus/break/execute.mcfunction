@@ -1,0 +1,13 @@
+
+#> meridian:hit_block/miningplus/break/up_down
+#
+# @within		meridian:hit_block/miningplus/break/east_west
+#				meridian:hit_block/miningplus/break/north_south
+#				meridian:hit_block/miningplus/break/up_down
+# @executed		as the player breaking the block & at a block in the 3x3 area (except middle)
+# @description	Try to mine the block with the player's main hand
+#
+
+execute if block ~ ~ ~ #meridian:miningplus run return fail
+loot spawn ~ ~ ~ mine ~ ~ ~ mainhand
+setblock ~ ~ ~ air

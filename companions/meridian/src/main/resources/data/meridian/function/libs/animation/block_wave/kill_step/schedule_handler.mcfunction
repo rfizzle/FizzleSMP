@@ -1,0 +1,2 @@
+execute store result score #global meridian.gametime run time query gametime
+execute as @e[type=item_display,tag=meridian.item_display.teluric,scores={meridian.animation_state=2}] run function meridian:libs/animation/block_wave/kill_step/entry

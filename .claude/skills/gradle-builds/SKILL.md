@@ -27,7 +27,7 @@ Gradle builds and tests in the companion mods are slow (compilation, bootstrap, 
 
 ```bash
 # Use a generous timeout (up to 10 minutes) for slow builds
-./gradlew :companions:<mod>:test 2>&1
+./gradlew test 2>&1
 ```
 
 Set `timeout: 600000` on the Bash call if the build may take several minutes.
@@ -36,7 +36,7 @@ Set `timeout: 600000` on the Bash call if the build may take several minutes.
 
 ```bash
 # Run in background, get notified when done
-./gradlew :companions:<mod>:test 2>&1 | tee /tmp/<mod>-test-output.txt
+./gradlew test 2>&1 | tee /tmp/<mod>-test-output.txt
 ```
 
 Use `run_in_background: true` on the Bash call. When notified of completion, `Read` the full output file.
@@ -68,19 +68,19 @@ Always run from the repo root. Use the fully-qualified task path:
 
 ```bash
 # Build
-./gradlew :companions:<mod>:build 2>&1
+./gradlew build 2>&1
 
 # Test (unit + fabric-loader-junit)
-./gradlew :companions:<mod>:test 2>&1
+./gradlew test 2>&1
 
 # Gametest (needs a server spin-up — slower)
-./gradlew :companions:<mod>:runGametest 2>&1
+./gradlew runGametest 2>&1
 
 # Single test class
-./gradlew :companions:<mod>:test --tests "com.fizzlesmp.<modid>.SomeTest" 2>&1
+./gradlew test --tests "com.rfizzle.<modid>.SomeTest" 2>&1
 
 # Clean + build (when class files are stale)
-./gradlew :companions:<mod>:clean :companions:<mod>:build 2>&1
+./gradlew clean build 2>&1
 ```
 
 ### 6. When a build fails
@@ -96,7 +96,7 @@ Always run from the repo root. Use the fully-qualified task path:
 When in doubt about build duration, always tee:
 
 ```bash
-./gradlew :companions:<mod>:test 2>&1 | tee /tmp/<mod>-test-output.txt
+./gradlew test 2>&1 | tee /tmp/<mod>-test-output.txt
 ```
 
 This way even if the Bash call times out or output is truncated, the full log is on disk and readable via `Read`.
