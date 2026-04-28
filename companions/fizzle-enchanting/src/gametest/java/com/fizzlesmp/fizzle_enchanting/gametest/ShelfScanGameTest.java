@@ -5,6 +5,7 @@ import com.fizzlesmp.fizzle_enchanting.FizzleEnchantingRegistry;
 import com.fizzlesmp.fizzle_enchanting.enchanting.EnchantingStatRegistry;
 import com.fizzlesmp.fizzle_enchanting.enchanting.StatCollection;
 import com.fizzlesmp.fizzle_enchanting.shelf.FilteringShelfBlockEntity;
+import com.fizzlesmp.fizzle_enchanting.shelf.FizzleShelves;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -22,6 +23,7 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.EnchantingTableBlock;
 
+import java.util.List;
 import java.util.Set;
 
 public class ShelfScanGameTest implements FabricGameTest {
@@ -146,6 +148,111 @@ public class ShelfScanGameTest implements FabricGameTest {
         StatCollection without = EnchantingStatRegistry.gatherStats(helper.getLevel(), absTablePos);
         if (without.treasureAllowed()) {
             helper.fail("After removing treasure shelf, treasureAllowed should be false");
+            return;
+        }
+        helper.succeed();
+    }
+
+    // --- S-2.1a: no shelves → zero raw stats ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void noShelvesProducesZeroStats(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+
+        BlockPos absTablePos = helper.absolutePos(TABLE_POS);
+        StatCollection stats = EnchantingStatRegistry.gatherStats(helper.getLevel(), absTablePos);
+
+        if (Math.abs(stats.eterna()) > 1e-6) {
+            helper.fail("Expected eterna=0 with no shelves, got " + stats.eterna());
+            return;
+        }
+        if (Math.abs(stats.quanta()) > 1e-6) {
+            helper.fail("Expected quanta=0 with no shelves, got " + stats.quanta());
+            return;
+        }
+        if (Math.abs(stats.arcana()) > 1e-6) {
+            helper.fail("Expected arcana=0 with no shelves, got " + stats.arcana());
+            return;
+        }
+        if (stats.clues() != 0) {
+            helper.fail("Expected clues=0 with no shelves, got " + stats.clues());
+            return;
+        }
+        helper.succeed();
+    }
+
+    // --- S-2.2a: single hellshelf → eterna=1.5, quanta=3 ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void singleHellshelfProducesCorrectStats(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        BlockPos offset = EnchantingTableBlock.BOOKSHELF_OFFSETS.get(0);
+        helper.setBlock(TABLE_POS.offset(offset), FizzleShelves.HELLSHELF.defaultBlockState());
+
+        BlockPos absTablePos = helper.absolutePos(TABLE_POS);
+        StatCollection stats = EnchantingStatRegistry.gatherStats(helper.getLevel(), absTablePos);
+
+        if (Math.abs(stats.eterna() - 1.5F) > 1e-3) {
+            helper.fail("Expected eterna=1.5 for single hellshelf, got " + stats.eterna());
+            return;
+        }
+        if (Math.abs(stats.quanta() - 3F) > 1e-3) {
+            helper.fail("Expected quanta=3 for single hellshelf, got " + stats.quanta());
+            return;
+        }
+        if (Math.abs(stats.maxEterna() - 22.5F) > 1e-3) {
+            helper.fail("Expected maxEterna=22.5 for hellshelf, got " + stats.maxEterna());
+            return;
+        }
+        helper.succeed();
+    }
+
+    // --- S-2.2b: 15 hellshelves → eterna capped at maxEterna=22.5 ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void fifteenHellshelvesCapEternaAtMaxEterna(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        List<BlockPos> offsets = EnchantingTableBlock.BOOKSHELF_OFFSETS;
+        for (int i = 0; i < 15 && i < offsets.size(); i++) {
+            helper.setBlock(TABLE_POS.offset(offsets.get(i)), FizzleShelves.HELLSHELF.defaultBlockState());
+        }
+
+        BlockPos absTablePos = helper.absolutePos(TABLE_POS);
+        StatCollection stats = EnchantingStatRegistry.gatherStats(helper.getLevel(), absTablePos);
+
+        if (Math.abs(stats.eterna() - 22.5F) > 1e-3) {
+            helper.fail("Expected eterna=22.5 for 15 hellshelves (15×1.5 capped at maxE=22.5), got " + stats.eterna());
+            return;
+        }
+        if (Math.abs(stats.quanta() - 45F) > 1e-3) {
+            helper.fail("Expected quanta=45 for 15 hellshelves (15×3), got " + stats.quanta());
+            return;
+        }
+        helper.succeed();
+    }
+
+    // --- S-2.2c: 15 vanilla bookshelves + 1 hellshelf → step-ladder eterna ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void vanillaPlusHellshelfUsesStepLadderEterna(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        List<BlockPos> offsets = EnchantingTableBlock.BOOKSHELF_OFFSETS;
+        for (int i = 0; i < 15 && i < offsets.size(); i++) {
+            helper.setBlock(TABLE_POS.offset(offsets.get(i)), Blocks.BOOKSHELF.defaultBlockState());
+        }
+        helper.setBlock(TABLE_POS.offset(offsets.get(15)), FizzleShelves.HELLSHELF.defaultBlockState());
+
+        BlockPos absTablePos = helper.absolutePos(TABLE_POS);
+        StatCollection stats = EnchantingStatRegistry.gatherStats(helper.getLevel(), absTablePos);
+
+        // Step-ladder: vanilla tier (maxE=15): min(15, 15×1) = 15
+        //              hellshelf tier (maxE=22.5): min(22.5, 15 + 1.5) = 16.5
+        if (Math.abs(stats.eterna() - 16.5F) > 1e-3) {
+            helper.fail("Expected eterna=16.5 (step-ladder: 15 vanilla + 1 hellshelf), got " + stats.eterna());
+            return;
+        }
+        if (Math.abs(stats.quanta() - 3F) > 1e-3) {
+            helper.fail("Expected quanta=3 (1 hellshelf contribution), got " + stats.quanta());
             return;
         }
         helper.succeed();

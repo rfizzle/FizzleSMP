@@ -81,13 +81,13 @@ Core deposit/extract/persist/hopper tests exist. These edge cases are missing.
 Unit-level `gather_*` tests verify the math, but no T3 test places a specific shelf and asserts exact stat values against the JSON definitions.
 
 ### S-2.1 Vanilla Baseline
-- [ ] S-2.1a — Enchanting table with no shelves: eterna=0, quanta=15, arcana=itemEnch/2
-- [ ] S-2.1c — 32 vanilla bookshelves (all offsets filled): eterna still capped at 15
+- [x] S-2.1a — Enchanting table with no shelves: eterna=0, quanta=15, arcana=itemEnch/2
+- [x] S-2.1c — 32 vanilla bookshelves (all offsets filled): eterna still capped at 15
 
 ### S-2.2 Custom Shelf Stats
-- [ ] S-2.2a — Single hellshelf at valid offset: eterna=3, quanta=18
-- [ ] S-2.2b — 15 hellshelves: eterna = min(45, 15*3) = 45
-- [ ] S-2.2c — 15 vanilla bookshelves + 1 hellshelf: eterna = 18 (step-ladder)
+- [x] S-2.2a — Single hellshelf at valid offset: eterna=3, quanta=18
+- [x] S-2.2b — 15 hellshelves: eterna = min(45, 15*3) = 45
+- [x] S-2.2c — 15 vanilla bookshelves + 1 hellshelf: eterna = 18 (step-ladder)
 - [ ] S-2.2d — Draconic endshelf alone: eterna=20, maxEterna=100
 - [ ] S-2.2e — Stoneshelf produces negative eterna and negative arcana
 - [ ] S-2.2f — Beeshelf produces quanta=100 and eterna=-30
