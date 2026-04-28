@@ -96,8 +96,8 @@ Unit-level `gather_*` tests verify the math, but no T3 test places a specific sh
 - [x] S-2.2i — Sightshelf_t2 contributes 2 clues
 
 ### S-2.4 Mixed Configurations
-- [ ] S-2.4a — Max eterna config: combination that reaches exactly 100
-- [ ] S-2.4d — All-negative shelf setup: eterna floors at 0 (not negative)
+- [x] S-2.4a — Max eterna config: combination that reaches exactly 100
+- [x] S-2.4d — All-negative shelf setup: eterna floors at 0 (not negative)
 
 **File:** `src/gametest/java/.../gametest/ShelfScanGameTest.java` (extend existing)
 

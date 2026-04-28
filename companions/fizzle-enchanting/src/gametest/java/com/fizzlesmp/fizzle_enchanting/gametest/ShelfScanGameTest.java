@@ -394,6 +394,72 @@ public class ShelfScanGameTest implements FabricGameTest {
         helper.succeed();
     }
 
+    // --- S-2.4a: multi-tier step-ladder reaching max eterna ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void multiTierStepLadderReachesMaxEterna(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        List<BlockPos> offsets = EnchantingTableBlock.BOOKSHELF_OFFSETS;
+        int idx = 0;
+        // Tier 1: 15 hellshelves (maxE=22.5, e=1.5 each → sum=22.5, capped at 22.5)
+        for (int i = 0; i < 15; i++) {
+            helper.setBlock(TABLE_POS.offset(offsets.get(idx++)), FizzleShelves.HELLSHELF.defaultBlockState());
+        }
+        // Tier 2: 15 endshelves (maxE=45, e=2.5 each → sum=37.5, running 22.5+37.5=60 capped at 45)
+        for (int i = 0; i < 15; i++) {
+            helper.setBlock(TABLE_POS.offset(offsets.get(idx++)), FizzleShelves.ENDSHELF.defaultBlockState());
+        }
+        // Tier 3: 1 draconic endshelf (maxE=50, e=10, running 45+10=55 capped at 50)
+        helper.setBlock(TABLE_POS.offset(offsets.get(idx++)), FizzleShelves.DRACONIC_ENDSHELF.defaultBlockState());
+        // Uses 31 of 32 offsets
+
+        BlockPos absTablePos = helper.absolutePos(TABLE_POS);
+        StatCollection stats = EnchantingStatRegistry.gatherStats(helper.getLevel(), absTablePos);
+
+        // Step-ladder: min(22.5, 22.5)=22.5 → min(45, 60)=45 → min(50, 55)=50
+        if (Math.abs(stats.eterna() - 50F) > 1e-3) {
+            helper.fail("Expected eterna=50 (max achievable via step-ladder), got " + stats.eterna());
+            return;
+        }
+        if (Math.abs(stats.maxEterna() - 50F) > 1e-3) {
+            helper.fail("Expected maxEterna=50 (draconic endshelf ceiling), got " + stats.maxEterna());
+            return;
+        }
+        helper.succeed();
+    }
+
+    // --- S-2.4d: all-negative shelves → eterna floors at 0 ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void allNegativeShelvesFloorEternaAtZero(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        List<BlockPos> offsets = EnchantingTableBlock.BOOKSHELF_OFFSETS;
+        // 2 stoneshelves (e=-1.5, maxE=0) + 1 beeshelf (e=-15, maxE=0)
+        helper.setBlock(TABLE_POS.offset(offsets.get(0)), FizzleShelves.STONESHELF.defaultBlockState());
+        helper.setBlock(TABLE_POS.offset(offsets.get(1)), FizzleShelves.STONESHELF.defaultBlockState());
+        helper.setBlock(TABLE_POS.offset(offsets.get(2)), FizzleShelves.BEESHELF.defaultBlockState());
+
+        BlockPos absTablePos = helper.absolutePos(TABLE_POS);
+        StatCollection stats = EnchantingStatRegistry.gatherStats(helper.getLevel(), absTablePos);
+
+        // Raw eterna: -1.5 + -1.5 + -15 = -18, clamped to 0
+        if (Math.abs(stats.eterna()) > 1e-6) {
+            helper.fail("Expected eterna=0 (floored from -18), got " + stats.eterna());
+            return;
+        }
+        // quanta: 0 + 0 + 100 = 100 (beeshelf contributes 100)
+        if (Math.abs(stats.quanta() - 100F) > 1e-3) {
+            helper.fail("Expected quanta=100 (beeshelf), got " + stats.quanta());
+            return;
+        }
+        // arcana: -7.5 + -7.5 + 0 = -15, clamped to 0
+        if (Math.abs(stats.arcana()) > 1e-6) {
+            helper.fail("Expected arcana=0 (floored from -15), got " + stats.arcana());
+            return;
+        }
+        helper.succeed();
+    }
+
     // --- Helpers ---
 
     private static ItemStack enchantedBook(GameTestHelper helper, ResourceKey<Enchantment> key, int level) {
