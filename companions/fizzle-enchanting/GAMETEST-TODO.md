@@ -32,10 +32,10 @@ N/A — Typed tomes with right-click conversion were cut from the MVP (DESIGN.md
 - [x] S-5.2d — Successful enchant consumes correct lapis and XP
 
 ### S-5.3 Enchanting Results
-- [ ] S-5.3a — Diamond sword at eterna=30: receives at least 1 enchantment from sword pool
-- [ ] S-5.3b — Book at eterna=30: receives at least 1 enchantment
-- [ ] S-5.3c — Item with 0 enchantability: no enchantment options available
-- [ ] S-5.3d — After enchanting, item has enchantments and costs are reset
+- [x] S-5.3a — Diamond sword at eterna=30: receives at least 1 enchantment from sword pool
+- [x] S-5.3b — Book at eterna=30: receives at least 1 enchantment
+- [x] S-5.3c — Item with 0 enchantability: no enchantment options available
+- [x] S-5.3d — After enchanting, item has enchantments and costs are reset
 
 **File:** `src/gametest/java/.../gametest/MenuEndToEndGameTest.java` (extend existing)
 

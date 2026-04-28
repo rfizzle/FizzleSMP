@@ -336,4 +336,139 @@ public class MenuEndToEndGameTest implements FabricGameTest {
 
         helper.succeed();
     }
+
+    // --- S-5.3a: Diamond sword receives at least 1 enchantment ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void diamondSwordReceivesEnchantment(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+            helper.setBlock(TABLE_POS.offset(offset), Blocks.BOOKSHELF.defaultBlockState());
+        }
+
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 30;
+        BlockPos absTable = helper.absolutePos(TABLE_POS);
+        FizzleEnchantmentMenu menu = new FizzleEnchantmentMenu(
+                1, player.getInventory(),
+                ContainerLevelAccess.create(helper.getLevel(), absTable));
+
+        menu.getSlot(0).set(new ItemStack(Items.DIAMOND_SWORD));
+        menu.getSlot(1).set(new ItemStack(Items.LAPIS_LAZULI, 64));
+
+        menu.clickMenuButton(player, 0);
+
+        ItemStack result = menu.getSlot(0).getItem();
+        if (!result.isEnchanted()) {
+            helper.fail("Diamond sword should have at least 1 enchantment after enchanting");
+            return;
+        }
+        if (!result.is(Items.DIAMOND_SWORD)) {
+            helper.fail("Result should still be a diamond sword, got " + result.getItem());
+            return;
+        }
+
+        helper.succeed();
+    }
+
+    // --- S-5.3b: Book receives at least 1 enchantment (becomes enchanted book) ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void bookReceivesEnchantment(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+            helper.setBlock(TABLE_POS.offset(offset), Blocks.BOOKSHELF.defaultBlockState());
+        }
+
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 30;
+        BlockPos absTable = helper.absolutePos(TABLE_POS);
+        FizzleEnchantmentMenu menu = new FizzleEnchantmentMenu(
+                1, player.getInventory(),
+                ContainerLevelAccess.create(helper.getLevel(), absTable));
+
+        menu.getSlot(0).set(new ItemStack(Items.BOOK));
+        menu.getSlot(1).set(new ItemStack(Items.LAPIS_LAZULI, 64));
+
+        menu.clickMenuButton(player, 0);
+
+        ItemStack result = menu.getSlot(0).getItem();
+        if (!result.is(Items.ENCHANTED_BOOK)) {
+            helper.fail("Book should become an enchanted book after enchanting, got " + result.getItem());
+            return;
+        }
+
+        helper.succeed();
+    }
+
+    // --- S-5.3c: Item with 0 enchantability: no enchantment options ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void nonEnchantableItemHasNoCosts(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+            helper.setBlock(TABLE_POS.offset(offset), Blocks.BOOKSHELF.defaultBlockState());
+        }
+
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 30;
+        BlockPos absTable = helper.absolutePos(TABLE_POS);
+        FizzleEnchantmentMenu menu = new FizzleEnchantmentMenu(
+                1, player.getInventory(),
+                ContainerLevelAccess.create(helper.getLevel(), absTable));
+
+        menu.getSlot(0).set(new ItemStack(Items.STICK));
+        menu.getSlot(1).set(new ItemStack(Items.LAPIS_LAZULI, 64));
+
+        boolean allZero = menu.costs[0] == 0 && menu.costs[1] == 0 && menu.costs[2] == 0;
+        if (!allZero) {
+            helper.fail("Non-enchantable item should have all costs=0, got ["
+                    + menu.costs[0] + ", " + menu.costs[1] + ", " + menu.costs[2] + "]");
+            return;
+        }
+
+        helper.succeed();
+    }
+
+    // --- S-5.3d: After enchanting, item has enchantments and costs are reset ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void costsResetAfterEnchanting(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+            helper.setBlock(TABLE_POS.offset(offset), Blocks.BOOKSHELF.defaultBlockState());
+        }
+
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 30;
+        BlockPos absTable = helper.absolutePos(TABLE_POS);
+        FizzleEnchantmentMenu menu = new FizzleEnchantmentMenu(
+                1, player.getInventory(),
+                ContainerLevelAccess.create(helper.getLevel(), absTable));
+
+        menu.getSlot(0).set(new ItemStack(Items.DIAMOND_SWORD));
+        menu.getSlot(1).set(new ItemStack(Items.LAPIS_LAZULI, 64));
+
+        if (menu.costs[0] <= 0) {
+            helper.fail("Cost should be > 0 before enchanting");
+            return;
+        }
+
+        menu.clickMenuButton(player, 0);
+
+        ItemStack result = menu.getSlot(0).getItem();
+        if (!result.isEnchanted()) {
+            helper.fail("Sword should be enchanted");
+            return;
+        }
+
+        boolean allZero = menu.costs[0] == 0 && menu.costs[1] == 0 && menu.costs[2] == 0;
+        if (!allZero) {
+            helper.fail("Costs should reset to 0 after enchanting (item is already enchanted), got ["
+                    + menu.costs[0] + ", " + menu.costs[1] + ", " + menu.costs[2] + "]");
+            return;
+        }
+
+        helper.succeed();
+    }
 }
