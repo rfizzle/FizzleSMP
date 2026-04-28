@@ -108,11 +108,11 @@ Unit-level `gather_*` tests verify the math, but no T3 test places a specific sh
 Unit tests cover selection math. These T3 tests validate pool filtering works end-to-end in a real world.
 
 ### S-4.2 Pool Filtering
-- [ ] S-4.2a — Only IN_ENCHANTING_TABLE enchantments appear when treasure=false
-- [ ] S-4.2b — TREASURE enchantments appear when treasure=true
-- [ ] S-4.2c — Blacklisted enchantments never appear in selection (100 rolls, verify absence)
-- [ ] S-4.2d — Enchantments already on item are excluded from pool
-- [ ] S-4.2e — Only enchantments valid for item type appear (sword gets sword enchants, not bow)
+- [x] S-4.2a — Only IN_ENCHANTING_TABLE enchantments appear when treasure=false
+- [x] S-4.2b — TREASURE enchantments appear when treasure=true
+- [x] S-4.2c — Blacklisted enchantments never appear in selection (100 rolls, verify absence)
+- [x] S-4.2d — Enchantments already on item are excluded from pool
+- [x] S-4.2e — Only enchantments valid for item type appear (sword gets sword enchants, not bow)
 
 **File:** `src/gametest/java/.../gametest/EnchantmentSelectionGameTest.java` (new)
 

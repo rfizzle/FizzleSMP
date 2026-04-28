@@ -44,7 +44,8 @@
             "com.fizzlesmp.fizzle_enchanting.gametest.enchantments.MaceEnchantmentGameTest",
             "com.fizzlesmp.fizzle_enchanting.gametest.enchantments.ToolEnchantmentGameTest",
             "com.fizzlesmp.fizzle_enchanting.gametest.enchantments.MountedEnchantmentGameTest",
-            "com.fizzlesmp.fizzle_enchanting.gametest.enchantments.CurseEnchantmentGameTest"
+            "com.fizzlesmp.fizzle_enchanting.gametest.enchantments.CurseEnchantmentGameTest",
+            "com.fizzlesmp.fizzle_enchanting.gametest.EnchantmentSelectionGameTest"
         ],
         "emi": ["com.fizzlesmp.fizzle_enchanting.compat.emi.EmiEnchantingPlugin"],
         "rei_client": ["com.fizzlesmp.fizzle_enchanting.compat.rei.ReiEnchantingPlugin"],
