@@ -1,0 +1,1 @@
+execute positioned ~ ~0.25 ~ run function fizzle_enchanting:libs/animation/freeze_pic/start
