@@ -8,12 +8,15 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,16 +42,37 @@ public class MaceEnchantmentGameTest implements FabricGameTest {
         Mob mob = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
         mob.setItemSlot(EquipmentSlot.MAINHAND, mace);
 
-        helper.runAfterDelay(1, () -> {
+        helper.runAfterDelay(2, () -> {
+            ServerLevel level = helper.getLevel();
+            DamageSource lightningDmg = level.damageSources().lightningBolt();
+
+            ItemStack held = mob.getItemBySlot(EquipmentSlot.MAINHAND);
+            if (held.isEmpty()) {
+                helper.fail("Mob mainhand is empty after setItemSlot");
+                return;
+            }
+            if (!held.isEnchanted()) {
+                helper.fail("Mob mainhand item has no enchantments");
+                return;
+            }
+
+            boolean isImmune = EnchantmentHelper.isImmuneToDamage(level, mob, lightningDmg);
+            if (!isImmune) {
+                boolean invulnerable = mob.isInvulnerableTo(lightningDmg);
+                helper.fail("isImmuneToDamage=false, isInvulnerableTo=" + invulnerable
+                        + ", item=" + held + ", enchants=" + held.getEnchantments());
+                return;
+            }
+
             float healthBefore = mob.getHealth();
-            mob.hurt(helper.getLevel().damageSources().lightningBolt(), 10.0f);
+            mob.hurt(lightningDmg, 10.0f);
 
             helper.runAfterDelay(1, () -> {
                 float healthAfter = mob.getHealth();
                 if (healthAfter >= healthBefore) {
                     helper.succeed();
                 } else {
-                    helper.fail("Striker should grant lightning immunity. Health before: " + healthBefore + ", after: " + healthAfter);
+                    helper.fail("Damage went through despite isImmuneToDamage=true. Before: " + healthBefore + ", after: " + healthAfter);
                 }
             });
         });
