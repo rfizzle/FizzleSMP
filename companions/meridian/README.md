@@ -138,9 +138,6 @@ See the full annotated reference: **[Configuration Guide](docs/CONFIG.md)**
 | Command | Permission | Description |
 |---------|-----------|-------------|
 | `/meridian reload` | 2 | Reload config from disk |
-| `/meridian stats <player>` | 0 | Show stats of the enchanting table the player is looking at |
-| `/meridian library <player> dump` | 2 | Dump point contents of a library block |
-| `/meridian give-tome <player> <type>` | 2 | Give a tome item (debug/testing) |
 
 ---
 

@@ -118,12 +118,12 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
 
     /** Alias for vanilla's private {@code enchantSlots} — slot 0 and slot 1 share this container. */
     private Container enchantSlots() {
-        return ((EnchantmentMenuAccessor) this).fizzleEnchanting$getEnchantSlots();
+        return ((EnchantmentMenuAccessor) this).meridian$getEnchantSlots();
     }
 
     /** Alias for vanilla's private {@link RandomSource} — shared across slot recomputes. */
     private RandomSource random() {
-        return ((EnchantmentMenuAccessor) this).fizzleEnchanting$getRandom();
+        return ((EnchantmentMenuAccessor) this).meridian$getRandom();
     }
 
     public StatCollection getLastStats() {

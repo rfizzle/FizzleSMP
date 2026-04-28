@@ -17,7 +17,7 @@ Annotated reference for `config/meridian.json`. This is the operator-facing tuni
   "configVersion": 1,
   "enchantingTable": {
     "allowTreasureWithoutShelf": false,
-    "maxEterna": 100,
+    "maxEterna": 50,
     "showLevelIndicator": true,
     "globalMinEnchantability": 1
   },
@@ -46,7 +46,8 @@ Annotated reference for `config/meridian.json`. This is the operator-facing tuni
   },
   "display": {
     "showBookTooltips": true,
-    "overLeveledColor": "#FF6600"
+    "overLeveledColor": "#FF6600",
+    "enableInlineEnchDescs": false
   },
   "enchantmentOverrides": {}
 }
@@ -69,7 +70,7 @@ Example — vanilla-lite server that skips the treasure-shelf progression:
 "enchantingTable": { "allowTreasureWithoutShelf": true }
 ```
 
-### `maxEterna` *(int, default `100`)*
+### `maxEterna` *(int, default `50`)*
 
 Hard cap on the aggregated Eterna across all in-range shelves, regardless of individual shelf `maxEterna` contributions. The table also clamps each shelf's `maxEterna` contribution to this value at aggregation time.
 
@@ -223,6 +224,15 @@ Hex color applied to enchantment names whose level exceeds the vanilla maximum (
 Example — electric cyan instead of the default orange:
 ```json
 "display": { "overLeveledColor": "#00E5FF" }
+```
+
+### `enableInlineEnchDescs` *(boolean, default `false`)*
+
+When `true`, each enchantment line in an item's tooltip (e.g. "Sharpness V") is followed by the enchantment's description text rendered in dark gray (pulled from the `enchantment.meridian.<id>.desc` lang keys). When `false`, only the enchantment name and level are shown — vanilla behavior.
+
+Example — enable inline descriptions:
+```json
+"display": { "enableInlineEnchDescs": true }
 ```
 
 ## `enchantmentOverrides`

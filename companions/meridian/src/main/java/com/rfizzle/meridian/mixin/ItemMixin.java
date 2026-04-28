@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ItemMixin {
 
     @Inject(method = "getEnchantmentValue", at = @At("RETURN"), cancellable = true)
-    private void fizzleEnchanting$overrideEnchantmentValue(CallbackInfoReturnable<Integer> cir) {
+    private void meridian$overrideEnchantmentValue(CallbackInfoReturnable<Integer> cir) {
         if (cir.getReturnValueI() > 0) return;
         MeridianConfig config = Meridian.getConfig();
         if (config != null && config.enchantingTable.globalMinEnchantability > 0) {

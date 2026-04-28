@@ -184,14 +184,6 @@ public class MeridianConfig {
         return value;
     }
 
-    private static double clampPositive(String name, double value) {
-        if (value <= 0) {
-            Meridian.LOGGER.warn("clamped {} from {} to {}", name, value, 1.0);
-            return 1.0;
-        }
-        return value;
-    }
-
     private static double clampUnit(String name, double value) {
         if (value < 0) {
             Meridian.LOGGER.warn("clamped {} from {} to {}", name, value, 0.0);

@@ -10,7 +10,6 @@ End-to-end checklist for verifying a Meridian build before tagging a release. Wa
 - [ ] `config/meridian.json` is generated on first launch with `configVersion: 1`. Delete it and reboot to confirm regeneration.
 - [ ] Server log shows `Meridian initialized` and **no** `clamped …` warnings on the default file.
 - [ ] `/meridian reload` (op) replies with the `command.meridian.reload.ok` translation.
-- [ ] `/meridian stats <self>`, `/meridian library <self> dump`, `/meridian give-tome <self> scrap` parse and execute (stubs reply, but the surface must be live).
 
 ## 1. Shelf roster — craft every tier
 

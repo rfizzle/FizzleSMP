@@ -164,7 +164,7 @@ class AnvilMenuMixinTest {
                 setsCost = true;
             }
             if (insn.getOpcode() == Opcodes.INVOKEINTERFACE
-                    && "fizzleEnchanting$setRepairItemCountCost".equals(call.name)) {
+                    && "meridian$setRepairItemCountCost".equals(call.name)) {
                 setsRepairCount = true;
             }
         }

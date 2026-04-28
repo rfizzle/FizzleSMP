@@ -50,7 +50,7 @@ class EnchantmentMenuAccessorTest {
     private static final String ACCESSOR_DESC =
             Type.getDescriptor(org.spongepowered.asm.mixin.gen.Accessor.class);
     private static final String TARGET_INTERNAL_NAME = Type.getInternalName(EnchantmentMenu.class);
-    private static final String MODID_PREFIX = "fizzleEnchanting$";
+    private static final String MODID_PREFIX = "meridian$";
 
     /** field name → expected accessor return type. */
     private static final Map<String, Class<?>> EXPECTED_FIELDS = new HashMap<>();

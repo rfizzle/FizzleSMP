@@ -27,17 +27,17 @@ public abstract class SheepMixin {
     public abstract void setSheared(boolean sheared);
 
     @Unique
-    private DyeColor fizzle$originalColor;
+    private DyeColor meridian$originalColor;
 
     @Inject(method = "mobInteract",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/world/entity/animal/Sheep;shear(Lnet/minecraft/sounds/SoundSource;)V"))
-    private void fizzle$preShear(Player player, InteractionHand hand,
+    private void meridian$preShear(Player player, InteractionHand hand,
                                  CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack shears = player.getItemInHand(hand);
-        fizzle$originalColor = this.getColor();
+        meridian$originalColor = this.getColor();
 
-        if (EnchantmentEffects.getEnchantmentLevel(shears, "chromatic") > 0) {
+        if (EnchantmentEffects.getEnchantmentLevel(shears, EnchantmentEffects.CHROMATIC) > 0) {
             DyeColor randomColor = DyeColor.byId(player.getRandom().nextInt(16));
             this.setColor(randomColor);
         }
@@ -47,17 +47,17 @@ public abstract class SheepMixin {
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/world/entity/animal/Sheep;shear(Lnet/minecraft/sounds/SoundSource;)V",
                     shift = At.Shift.AFTER))
-    private void fizzle$postShear(Player player, InteractionHand hand,
+    private void meridian$postShear(Player player, InteractionHand hand,
                                   CallbackInfoReturnable<InteractionResult> cir) {
         Sheep self = (Sheep) (Object) this;
         ItemStack shears = player.getItemInHand(hand);
 
-        if (fizzle$originalColor != null) {
-            this.setColor(fizzle$originalColor);
-            fizzle$originalColor = null;
+        if (meridian$originalColor != null) {
+            this.setColor(meridian$originalColor);
+            meridian$originalColor = null;
         }
 
-        int growthLevel = EnchantmentEffects.getEnchantmentLevel(shears, "growth_serum");
+        int growthLevel = EnchantmentEffects.getEnchantmentLevel(shears, EnchantmentEffects.GROWTH_SERUM);
         if (growthLevel > 0 && self.getRandom().nextFloat() < 0.5f) {
             this.setSheared(false);
         }

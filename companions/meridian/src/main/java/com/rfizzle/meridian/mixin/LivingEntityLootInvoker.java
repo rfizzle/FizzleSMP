@@ -8,5 +8,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin(LivingEntity.class)
 public interface LivingEntityLootInvoker {
     @Invoker("dropFromLootTable")
-    void fizzle$invokeDropFromLootTable(DamageSource source, boolean hitByPlayer);
+    void meridian$invokeDropFromLootTable(DamageSource source, boolean hitByPlayer);
 }

@@ -58,7 +58,7 @@ public final class EnchantmentEffectHandler {
     private static void handleReflectiveDefenses(LivingEntity entity, DamageSource source,
                                                   float blockedAmount) {
         ItemStack useItem = entity.getUseItem();
-        int level = EnchantmentEffects.getEnchantmentLevel(useItem, "reflective_defenses");
+        int level = EnchantmentEffects.getEnchantmentLevel(useItem, EnchantmentEffects.REFLECTIVE_DEFENSES);
         if (level <= 0) return;
 
         Entity attacker = source.getDirectEntity();
@@ -76,7 +76,7 @@ public final class EnchantmentEffectHandler {
     }
 
     private static void handleRebounding(LivingEntity entity, DamageSource source) {
-        int level = EnchantmentEffects.getEquippedLevel(entity, "rebounding",
+        int level = EnchantmentEffects.getEquippedLevel(entity, EnchantmentEffects.REBOUNDING,
                 EquipmentSlot.CHEST, EquipmentSlot.LEGS);
         if (level <= 0) return;
 
@@ -97,7 +97,7 @@ public final class EnchantmentEffectHandler {
     }
 
     private static void handleBerserkersFury(LivingEntity entity) {
-        int level = EnchantmentEffects.getEquippedLevel(entity, "berserkers_fury", EquipmentSlot.CHEST);
+        int level = EnchantmentEffects.getEquippedLevel(entity, EnchantmentEffects.BERSERKERS_FURY, EquipmentSlot.CHEST);
         if (level <= 0) return;
 
         long currentTick = entity.level().getGameTime();
@@ -135,7 +135,7 @@ public final class EnchantmentEffectHandler {
         Entity killer = source.getEntity();
         if (!(killer instanceof LivingEntity livingKiller)) return;
 
-        int level = EnchantmentEffects.getEnchantmentLevel(livingKiller.getMainHandItem(), "scavenger");
+        int level = EnchantmentEffects.getEnchantmentLevel(livingKiller.getMainHandItem(), EnchantmentEffects.SCAVENGER);
         if (level <= 0) return;
 
         float chance = 0.025f * level;
@@ -144,6 +144,6 @@ public final class EnchantmentEffectHandler {
         if (entity.level().isClientSide()) return;
 
         boolean hitByPlayer = entity.getKillCredit() != null;
-        ((LivingEntityLootInvoker) entity).fizzle$invokeDropFromLootTable(source, hitByPlayer);
+        ((LivingEntityLootInvoker) entity).meridian$invokeDropFromLootTable(source, hitByPlayer);
     }
 }

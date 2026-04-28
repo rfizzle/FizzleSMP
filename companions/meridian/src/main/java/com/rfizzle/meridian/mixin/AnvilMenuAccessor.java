@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
  * handler claims an output: the {@code cost} {@link DataSlot} (XP charge) and the
  * {@code repairItemCountCost} counter (right-slot consumption count).
  *
- * <p>Method names are prefixed with {@code fizzleEnchanting$} per /dev-companion's mixin rules —
+ * <p>Method names are prefixed with {@code meridian$} per /dev-companion's mixin rules —
  * the explicit {@link Accessor#value()} tells Mixin which field to bind, since the prefixed name
  * is otherwise unparseable as a getter/setter.
  */
@@ -19,11 +19,11 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface AnvilMenuAccessor {
 
     @Accessor("cost")
-    DataSlot fizzleEnchanting$getCost();
+    DataSlot meridian$getCost();
 
     @Accessor("repairItemCountCost")
-    int fizzleEnchanting$getRepairItemCountCost();
+    int meridian$getRepairItemCountCost();
 
     @Accessor("repairItemCountCost")
-    void fizzleEnchanting$setRepairItemCountCost(int value);
+    void meridian$setRepairItemCountCost(int value);
 }

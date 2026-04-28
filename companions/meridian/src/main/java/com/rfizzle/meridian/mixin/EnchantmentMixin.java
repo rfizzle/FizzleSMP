@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EnchantmentMixin {
 
     @Inject(method = "getMaxLevel", at = @At("RETURN"), cancellable = true)
-    private void fizzleEnchanting$overrideMaxLevel(CallbackInfoReturnable<Integer> cir) {
+    private void meridian$overrideMaxLevel(CallbackInfoReturnable<Integer> cir) {
         EnchantmentInfo info = EnchantmentInfoRegistry.getInfoByInstance((Enchantment) (Object) this);
         if (info != null) {
             int configured = info.getMaxLevel();
@@ -30,7 +30,7 @@ public class EnchantmentMixin {
     }
 
     @Inject(method = "getFullname", at = @At("RETURN"))
-    private static void fizzleEnchanting$applyOverLevelColor(
+    private static void meridian$applyOverLevelColor(
             Holder<Enchantment> enchantment, int level, CallbackInfoReturnable<Component> cir) {
         if (enchantment.is(EnchantmentTags.CURSE)) return;
         int vanillaMax = enchantment.value().definition().maxLevel();

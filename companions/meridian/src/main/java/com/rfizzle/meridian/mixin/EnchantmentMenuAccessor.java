@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
  * stat-aware slot recomputation: the input+lapis {@link Container}, the per-menu
  * {@link RandomSource}, and the {@link DataSlot} carrying the enchantment seed.
  *
- * <p>Method names are prefixed with {@code fizzleEnchanting$} per /dev-companion's mixin rules —
+ * <p>Method names are prefixed with {@code meridian$} per /dev-companion's mixin rules —
  * the explicit {@link Accessor#value()} tells Mixin which field to bind (the prefixed name is
  * otherwise unparseable as a getter).
  */
@@ -21,11 +21,11 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface EnchantmentMenuAccessor {
 
     @Accessor("enchantSlots")
-    Container fizzleEnchanting$getEnchantSlots();
+    Container meridian$getEnchantSlots();
 
     @Accessor("random")
-    RandomSource fizzleEnchanting$getRandom();
+    RandomSource meridian$getRandom();
 
     @Accessor("enchantmentSeed")
-    DataSlot fizzleEnchanting$getEnchantmentSeed();
+    DataSlot meridian$getEnchantmentSeed();
 }

@@ -16,7 +16,7 @@ import java.util.List;
 public abstract class LivingEntityHealMixin {
 
     @ModifyVariable(method = "heal", at = @At("HEAD"), argsOnly = true)
-    private float fizzle$lifeMending(float amount) {
+    private float meridian$lifeMending(float amount) {
         LivingEntity self = (LivingEntity) (Object) this;
         if (self.level().isClientSide() || amount <= 0) return amount;
 
@@ -26,7 +26,7 @@ public abstract class LivingEntityHealMixin {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             ItemStack stack = self.getItemBySlot(slot);
             if (stack.isDamaged()) {
-                int level = EnchantmentEffects.getEnchantmentLevel(stack, "life_mending");
+                int level = EnchantmentEffects.getEnchantmentLevel(stack, EnchantmentEffects.LIFE_MENDING);
                 if (level > 0) {
                     candidates.add(slot);
                     levels.add(level);

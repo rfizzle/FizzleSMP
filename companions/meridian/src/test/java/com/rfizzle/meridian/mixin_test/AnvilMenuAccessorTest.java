@@ -44,7 +44,7 @@ class AnvilMenuAccessorTest {
     private static final String ACCESSOR_DESC =
             Type.getDescriptor(org.spongepowered.asm.mixin.gen.Accessor.class);
     private static final String TARGET_INTERNAL_NAME = Type.getInternalName(AnvilMenu.class);
-    private static final String MODID_PREFIX = "fizzleEnchanting$";
+    private static final String MODID_PREFIX = "meridian$";
 
     /** field name → expected field type. */
     private static final Map<String, Class<?>> EXPECTED_FIELDS = new HashMap<>();

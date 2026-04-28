@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 abstract class EnchantmentTableBlockMixin {
 
     @Inject(method = "getMenuProvider", at = @At("HEAD"), cancellable = true)
-    private void fizzleEnchanting$menuProvider(
+    private void meridian$menuProvider(
             BlockState state, Level level, BlockPos pos,
             CallbackInfoReturnable<MenuProvider> cir) {
         cir.setReturnValue(new SimpleMenuProvider(
@@ -32,7 +32,7 @@ abstract class EnchantmentTableBlockMixin {
     }
 
     @Inject(method = "animateTick", at = @At("HEAD"), cancellable = true)
-    private void fizzleEnchanting$animateTick(
+    private void meridian$animateTick(
             BlockState state, Level level, BlockPos pos, RandomSource random,
             CallbackInfo ci) {
         ci.cancel();

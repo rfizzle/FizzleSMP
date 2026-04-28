@@ -53,17 +53,17 @@ abstract class AnvilMenuMixin extends ItemCombinerMenu {
      */
     @Unique
     @Nullable
-    private AnvilResult fizzleEnchanting$pendingResult;
+    private AnvilResult meridian$pendingResult;
 
     /**
      * Guard flag set during {@code onTake} to suppress re-entrant dispatch. Vanilla's
      * {@code onTake} clears input slots via {@code inputSlots.setItem}, which synchronously
      * triggers {@code slotsChanged} → {@code createResult} → our RETURN hook. Without this
-     * guard, that re-entrant call would null out {@link #fizzleEnchanting$pendingResult}
+     * guard, that re-entrant call would null out {@link #meridian$pendingResult}
      * before the {@code onTake} TAIL hook can consume the {@code leftReplacement}.
      */
     @Unique
-    private boolean fizzleEnchanting$takingResult;
+    private boolean meridian$takingResult;
 
     private AnvilMenuMixin(
             @Nullable MenuType<?> type, int containerId, Inventory inv, ContainerLevelAccess access) {
@@ -71,41 +71,41 @@ abstract class AnvilMenuMixin extends ItemCombinerMenu {
     }
 
     @Inject(method = "createResult", at = @At("RETURN"))
-    private void fizzleEnchanting$dispatch(CallbackInfo ci) {
-        if (this.fizzleEnchanting$takingResult) return;
+    private void meridian$dispatch(CallbackInfo ci) {
+        if (this.meridian$takingResult) return;
 
         AnvilMenu self = (AnvilMenu) (Object) this;
         AnvilMenuAccessor accessor = (AnvilMenuAccessor) (Object) this;
         ItemStack left = this.inputSlots.getItem(0);
         ItemStack right = this.inputSlots.getItem(1);
         Player player = this.player;
-        int currentCost = accessor.fizzleEnchanting$getCost().get();
+        int currentCost = accessor.meridian$getCost().get();
 
         Optional<AnvilResult> result =
                 AnvilDispatcher.handle(self, left, right, player, currentCost);
         if (result.isEmpty()) {
-            this.fizzleEnchanting$pendingResult = null;
+            this.meridian$pendingResult = null;
             return;
         }
         AnvilResult r = result.get();
-        this.fizzleEnchanting$pendingResult = r;
+        this.meridian$pendingResult = r;
 
         this.resultSlots.setItem(0, r.output());
-        accessor.fizzleEnchanting$getCost().set(r.xpCost());
-        accessor.fizzleEnchanting$setRepairItemCountCost(r.rightConsumed());
+        accessor.meridian$getCost().set(r.xpCost());
+        accessor.meridian$setRepairItemCountCost(r.rightConsumed());
         self.broadcastChanges();
     }
 
     @Inject(method = "onTake", at = @At("HEAD"))
-    private void fizzleEnchanting$beginTake(Player player, ItemStack stack, CallbackInfo ci) {
-        this.fizzleEnchanting$takingResult = true;
+    private void meridian$beginTake(Player player, ItemStack stack, CallbackInfo ci) {
+        this.meridian$takingResult = true;
     }
 
     @Inject(method = "onTake", at = @At("TAIL"))
-    private void fizzleEnchanting$restoreLeft(Player player, ItemStack stack, CallbackInfo ci) {
-        this.fizzleEnchanting$takingResult = false;
-        AnvilResult pending = this.fizzleEnchanting$pendingResult;
-        this.fizzleEnchanting$pendingResult = null;
+    private void meridian$restoreLeft(Player player, ItemStack stack, CallbackInfo ci) {
+        this.meridian$takingResult = false;
+        AnvilResult pending = this.meridian$pendingResult;
+        this.meridian$pendingResult = null;
         if (pending == null) return;
         ItemStack replacement = pending.leftReplacement();
         if (replacement == null || replacement.isEmpty()) return;

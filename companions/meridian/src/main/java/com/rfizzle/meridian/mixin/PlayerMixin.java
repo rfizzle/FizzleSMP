@@ -13,10 +13,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class PlayerMixin {
 
     @Inject(method = "getDestroySpeed", at = @At("RETURN"), cancellable = true)
-    private void fizzle$stableFooting(BlockState state, CallbackInfoReturnable<Float> cir) {
+    private void meridian$stableFooting(BlockState state, CallbackInfoReturnable<Float> cir) {
         Player self = (Player) (Object) this;
         if (!self.onGround()) {
-            if (EnchantmentEffects.getEquippedLevel(self, "stable_footing", EquipmentSlot.FEET) > 0) {
+            if (EnchantmentEffects.getEquippedLevel(self, EnchantmentEffects.STABLE_FOOTING, EquipmentSlot.FEET) > 0) {
                 cir.setReturnValue(cir.getReturnValue() * 5.0F);
             }
         }

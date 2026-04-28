@@ -94,8 +94,6 @@ class MeridianCommandTest {
     void reload_atPerm0_fails() {
         Predicate<CommandSourceStack> requires = getRequirement("reload");
 
-        // At perm 0, the requires predicate filters the node out of the dispatch tree
-        // (Brigadier surfaces this as a parse/permission failure at the client).
         assertFalse(requires.test(stubSource(0)));
     }
 
@@ -116,123 +114,6 @@ class MeridianCommandTest {
         assertTranslationKey(sinkMessage.get().get(), MeridianCommand.RELOAD_ERROR_KEY);
     }
 
-    // ---- Stub subcommands: dispatcher surface ----
-
-    @Test
-    void register_addsStatsSubcommandWithPlayerArgument() {
-        CommandDispatcher<CommandSourceStack> dispatcher = new CommandDispatcher<>();
-        MeridianCommand.register(dispatcher);
-
-        CommandNode<CommandSourceStack> stats = rootOf(dispatcher).getChild("stats");
-        assertNotNull(stats, "stats subcommand should be registered");
-        CommandNode<CommandSourceStack> playerArg = stats.getChild("player");
-        assertNotNull(playerArg, "stats should take a <player> argument");
-        assertNotNull(playerArg.getCommand(), "stats <player> should have an executor");
-    }
-
-    @Test
-    void stats_isOpenToAllPerms() {
-        Predicate<CommandSourceStack> requires = getRequirement("stats");
-        assertTrue(requires.test(stubSource(0)), "stats is perm 0 (self-service lookup)");
-        assertTrue(requires.test(stubSource(2)), "stats must still accept ops");
-    }
-
-    @Test
-    void register_addsLibraryDumpSubcommand() {
-        CommandDispatcher<CommandSourceStack> dispatcher = new CommandDispatcher<>();
-        MeridianCommand.register(dispatcher);
-
-        CommandNode<CommandSourceStack> library = rootOf(dispatcher).getChild("library");
-        assertNotNull(library, "library subcommand should be registered");
-        CommandNode<CommandSourceStack> playerArg = library.getChild("player");
-        assertNotNull(playerArg, "library should take a <player> argument");
-        CommandNode<CommandSourceStack> dump = playerArg.getChild("dump");
-        assertNotNull(dump, "library <player> dump literal should be registered");
-        assertNotNull(dump.getCommand(), "library <player> dump should have an executor");
-    }
-
-    @Test
-    void library_requiresPerm2() {
-        Predicate<CommandSourceStack> requires = getRequirement("library");
-        assertFalse(requires.test(stubSource(0)));
-        assertFalse(requires.test(stubSource(1)));
-        assertTrue(requires.test(stubSource(2)));
-    }
-
-    @Test
-    void register_addsGiveTomeWithThreeLiteralTypes() {
-        CommandDispatcher<CommandSourceStack> dispatcher = new CommandDispatcher<>();
-        MeridianCommand.register(dispatcher);
-
-        CommandNode<CommandSourceStack> giveTome = rootOf(dispatcher).getChild("give-tome");
-        assertNotNull(giveTome, "give-tome subcommand should be registered");
-        CommandNode<CommandSourceStack> playerArg = giveTome.getChild("player");
-        assertNotNull(playerArg, "give-tome should take a <player> argument");
-
-        for (String type : new String[]{
-                MeridianCommand.TOME_SCRAP,
-                MeridianCommand.TOME_IMPROVED_SCRAP,
-                MeridianCommand.TOME_EXTRACTION}) {
-            CommandNode<CommandSourceStack> typeNode = playerArg.getChild(type);
-            assertNotNull(typeNode, "give-tome <player> " + type + " literal should be registered");
-            assertNotNull(typeNode.getCommand(), "give-tome <player> " + type + " should have an executor");
-        }
-    }
-
-    @Test
-    void giveTome_requiresPerm2() {
-        Predicate<CommandSourceStack> requires = getRequirement("give-tome");
-        assertFalse(requires.test(stubSource(0)));
-        assertFalse(requires.test(stubSource(1)));
-        assertTrue(requires.test(stubSource(2)));
-    }
-
-    // ---- Stub subcommands: pure cores ----
-
-    @Test
-    void runStatsStub_returnsSuccessAndEmitsPlaceholder() {
-        AtomicReference<Supplier<Component>> message = new AtomicReference<>();
-
-        int result = MeridianCommand.runStatsStub("Alice", message::set);
-
-        assertEquals(Command.SINGLE_SUCCESS, result);
-        Component reply = message.get().get();
-        assertTranslationKey(reply, MeridianCommand.STATS_STUB_KEY);
-        assertTrue(translationArgs(reply)[0] instanceof String s && s.equals("Alice"),
-                "stats placeholder should interpolate the target player's name");
-    }
-
-    @Test
-    void runLibraryDumpStub_returnsSuccessAndEmitsPlaceholder() {
-        AtomicReference<Supplier<Component>> message = new AtomicReference<>();
-
-        int result = MeridianCommand.runLibraryDumpStub("Bob", message::set);
-
-        assertEquals(Command.SINGLE_SUCCESS, result);
-        Component reply = message.get().get();
-        assertTranslationKey(reply, MeridianCommand.LIBRARY_DUMP_STUB_KEY);
-        assertTrue(translationArgs(reply)[0] instanceof String s && s.equals("Bob"));
-    }
-
-    @Test
-    void runGiveTomeStub_returnsSuccessAndEmitsPlaceholder() {
-        for (String type : new String[]{
-                MeridianCommand.TOME_SCRAP,
-                MeridianCommand.TOME_IMPROVED_SCRAP,
-                MeridianCommand.TOME_EXTRACTION}) {
-            AtomicReference<Supplier<Component>> message = new AtomicReference<>();
-
-            int result = MeridianCommand.runGiveTomeStub("Carol", type, message::set);
-
-            assertEquals(Command.SINGLE_SUCCESS, result, "give-tome stub for " + type + " should succeed");
-            Component reply = message.get().get();
-            assertTranslationKey(reply, MeridianCommand.GIVE_TOME_STUB_KEY);
-            Object[] args = translationArgs(reply);
-            assertEquals("Carol", args[0], "first arg should be player name");
-            assertEquals(type, args[1], "second arg should be tome type literal");
-        }
-    }
-
     // ---- helpers ----
 
     private static CommandNode<CommandSourceStack> rootOf(CommandDispatcher<CommandSourceStack> dispatcher) {
@@ -249,13 +130,6 @@ class MeridianCommandTest {
         return node.getRequirement();
     }
 
-    /**
-     * Minimal permission-checking stand-in. The full {@link CommandSourceStack}
-     * requires a live server + level, which {@code fabric-loader-junit} is not
-     * wired in for. The reload requires predicate only calls
-     * {@code hasPermission(int)}, so a subclass that stubs just that method is
-     * enough to exercise the gate.
-     */
     private static CommandSourceStack stubSource(int permissionLevel) {
         return new CommandSourceStack(
                 null, null, null, null,
@@ -273,11 +147,5 @@ class MeridianCommandTest {
                 "expected translatable component, got " + component.getContents().getClass());
         TranslatableContents contents = (TranslatableContents) component.getContents();
         assertEquals(expectedKey, contents.getKey());
-    }
-
-    private static Object[] translationArgs(Component component) {
-        assertTrue(component.getContents() instanceof TranslatableContents,
-                "expected translatable component, got " + component.getContents().getClass());
-        return ((TranslatableContents) component.getContents()).getArgs();
     }
 }
