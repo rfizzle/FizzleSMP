@@ -60,17 +60,17 @@ N/A — Typed tomes with right-click conversion were cut from the MVP (DESIGN.md
 Core deposit/extract/persist/hopper tests exist. These edge cases are missing.
 
 ### S-7.2 Deposit Edge Cases
-- [ ] S-7.2e — Deposit overflow: points capped at library maxPoints (no negative wrap)
-- [ ] S-7.2h — Deposit updates maxLevel to highest ever seen (III then V -> maxLevel=5)
-- [ ] S-7.2i — Deposit V then III: maxLevel stays 5 (doesn't downgrade)
+- [x] S-7.2e — Deposit overflow: points capped at library maxPoints (no negative wrap)
+- [x] S-7.2h — Deposit updates maxLevel to highest ever seen (III then V -> maxLevel=5)
+- [x] S-7.2i — Deposit V then III: maxLevel stays 5 (doesn't downgrade)
 
 ### S-7.3 Extract Edge Cases
-- [ ] S-7.3b — Extract onto sword with Sharpness I, requesting III: cost = points(3) - points(1)
-- [ ] S-7.3f — Extract same level as current level: no-op (no change, no cost)
+- [x] S-7.3b — Extract onto sword with Sharpness I, requesting III: cost = points(3) - points(1)
+- [x] S-7.3f — Extract same level as current level: no-op (no change, no cost)
 
 ### S-7.4 Library Tier Boundaries
-- [ ] S-7.4c — Basic library truncates deposited level > 16 to 16
-- [ ] S-7.4d — Ender library accepts levels up to 31
+- [x] S-7.4c — Basic library truncates deposited level > 16 to 16
+- [x] S-7.4d — Ender library accepts levels up to 31
 
 **File:** `src/gametest/java/.../gametest/LibraryGameTest.java` (extend existing)
 

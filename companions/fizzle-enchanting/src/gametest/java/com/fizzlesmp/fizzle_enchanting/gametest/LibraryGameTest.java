@@ -4,6 +4,7 @@ package com.fizzlesmp.fizzle_enchanting.gametest;
 import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
 import com.fizzlesmp.fizzle_enchanting.FizzleEnchantingRegistry;
 import com.fizzlesmp.fizzle_enchanting.library.BasicLibraryBlockEntity;
+import com.fizzlesmp.fizzle_enchanting.library.EnchantmentLibraryBlockEntity;
 import com.fizzlesmp.fizzle_enchanting.library.EnchantmentLibraryMenu;
 import com.fizzlesmp.fizzle_enchanting.library.EnderLibraryBlockEntity;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
@@ -198,6 +199,204 @@ public class LibraryGameTest implements FabricGameTest {
 
         menu1.removed(player);
         menu2.removed(player);
+        helper.succeed();
+    }
+
+    // --- S-7.2 Deposit Edge Cases ---
+
+    @GameTest(template = "fizzle_enchanting:empty_3x3")
+    public void depositOverflowCapsAtMaxPoints(GameTestHelper helper) {
+        helper.setBlock(LIB_POS, FizzleEnchantingRegistry.BASIC_LIBRARY.defaultBlockState());
+        BasicLibraryBlockEntity be = (BasicLibraryBlockEntity) helper.getLevel()
+                .getBlockEntity(helper.absolutePos(LIB_POS));
+        if (be == null) { helper.fail("BE not created"); return; }
+
+        Registry<Enchantment> reg = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        ResourceKey<Enchantment> key = Enchantments.SHARPNESS;
+
+        be.depositBook(enchantedBook(reg, Enchantments.SHARPNESS, 16));
+        be.depositBook(enchantedBook(reg, Enchantments.SHARPNESS, 16));
+        be.depositBook(enchantedBook(reg, Enchantments.SHARPNESS, 16));
+
+        int pts = be.getPoints().getInt(key);
+        if (pts != BasicLibraryBlockEntity.MAX_POINTS) {
+            helper.fail("Points should cap at maxPoints (" + BasicLibraryBlockEntity.MAX_POINTS
+                    + "), got " + pts);
+            return;
+        }
+        if (pts < 0) {
+            helper.fail("Points wrapped negative: " + pts);
+            return;
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "fizzle_enchanting:empty_3x3")
+    public void depositUpdatesMaxLevelToHighest(GameTestHelper helper) {
+        helper.setBlock(LIB_POS, FizzleEnchantingRegistry.BASIC_LIBRARY.defaultBlockState());
+        BasicLibraryBlockEntity be = (BasicLibraryBlockEntity) helper.getLevel()
+                .getBlockEntity(helper.absolutePos(LIB_POS));
+        if (be == null) { helper.fail("BE not created"); return; }
+
+        Registry<Enchantment> reg = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        ResourceKey<Enchantment> key = Enchantments.SHARPNESS;
+
+        be.depositBook(enchantedBook(reg, Enchantments.SHARPNESS, 3));
+        if (be.getMaxLevels().getInt(key) != 3) {
+            helper.fail("maxLevel should be 3 after depositing III, got " + be.getMaxLevels().getInt(key));
+            return;
+        }
+
+        be.depositBook(enchantedBook(reg, Enchantments.SHARPNESS, 5));
+        if (be.getMaxLevels().getInt(key) != 5) {
+            helper.fail("maxLevel should update to 5 after depositing V, got " + be.getMaxLevels().getInt(key));
+            return;
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "fizzle_enchanting:empty_3x3")
+    public void depositLowerLevelDoesNotDowngradeMaxLevel(GameTestHelper helper) {
+        helper.setBlock(LIB_POS, FizzleEnchantingRegistry.BASIC_LIBRARY.defaultBlockState());
+        BasicLibraryBlockEntity be = (BasicLibraryBlockEntity) helper.getLevel()
+                .getBlockEntity(helper.absolutePos(LIB_POS));
+        if (be == null) { helper.fail("BE not created"); return; }
+
+        Registry<Enchantment> reg = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        ResourceKey<Enchantment> key = Enchantments.SHARPNESS;
+
+        be.depositBook(enchantedBook(reg, Enchantments.SHARPNESS, 5));
+        if (be.getMaxLevels().getInt(key) != 5) {
+            helper.fail("maxLevel should be 5 after depositing V, got " + be.getMaxLevels().getInt(key));
+            return;
+        }
+
+        be.depositBook(enchantedBook(reg, Enchantments.SHARPNESS, 3));
+        if (be.getMaxLevels().getInt(key) != 5) {
+            helper.fail("maxLevel should stay 5 after depositing III, got " + be.getMaxLevels().getInt(key));
+            return;
+        }
+        helper.succeed();
+    }
+
+    // --- S-7.3 Extract Edge Cases ---
+
+    @GameTest(template = "fizzle_enchanting:empty_3x3")
+    public void extractUpgradeCostsOnlyDelta(GameTestHelper helper) {
+        helper.setBlock(LIB_POS, FizzleEnchantingRegistry.BASIC_LIBRARY.defaultBlockState());
+        BasicLibraryBlockEntity be = (BasicLibraryBlockEntity) helper.getLevel()
+                .getBlockEntity(helper.absolutePos(LIB_POS));
+        if (be == null) { helper.fail("BE not created"); return; }
+
+        Registry<Enchantment> reg = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        ResourceKey<Enchantment> key = Enchantments.SHARPNESS;
+
+        be.depositBook(enchantedBook(reg, Enchantments.SHARPNESS, 5));
+        int pointsBefore = be.getPoints().getInt(key);
+
+        int expectedCost = EnchantmentLibraryBlockEntity.points(3) - EnchantmentLibraryBlockEntity.points(1);
+        boolean extracted = be.extract(key, 3, 1);
+        if (!extracted) {
+            helper.fail("extract(target=3, cur=1) should succeed");
+            return;
+        }
+        int pointsAfter = be.getPoints().getInt(key);
+        int actualCost = pointsBefore - pointsAfter;
+        if (actualCost != expectedCost) {
+            helper.fail("Upgrade cost should be points(3)-points(1)=" + expectedCost
+                    + ", got " + actualCost);
+            return;
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "fizzle_enchanting:empty_3x3")
+    public void extractSameLevelIsNoOp(GameTestHelper helper) {
+        helper.setBlock(LIB_POS, FizzleEnchantingRegistry.BASIC_LIBRARY.defaultBlockState());
+        BasicLibraryBlockEntity be = (BasicLibraryBlockEntity) helper.getLevel()
+                .getBlockEntity(helper.absolutePos(LIB_POS));
+        if (be == null) { helper.fail("BE not created"); return; }
+
+        Registry<Enchantment> reg = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        ResourceKey<Enchantment> key = Enchantments.SHARPNESS;
+
+        be.depositBook(enchantedBook(reg, Enchantments.SHARPNESS, 3));
+        int pointsBefore = be.getPoints().getInt(key);
+
+        boolean canExtract = be.canExtract(key, 3, 3);
+        if (canExtract) {
+            helper.fail("canExtract(target=3, cur=3) should return false");
+            return;
+        }
+
+        boolean extracted = be.extract(key, 3, 3);
+        if (extracted) {
+            helper.fail("extract(target=3, cur=3) should return false (no-op)");
+            return;
+        }
+        int pointsAfter = be.getPoints().getInt(key);
+        if (pointsAfter != pointsBefore) {
+            helper.fail("Points should be unchanged after no-op extract, was " + pointsBefore
+                    + " now " + pointsAfter);
+            return;
+        }
+        helper.succeed();
+    }
+
+    // --- S-7.4 Library Tier Boundaries ---
+
+    @GameTest(template = "fizzle_enchanting:empty_3x3")
+    public void basicLibraryTruncatesLevelAbove16(GameTestHelper helper) {
+        helper.setBlock(LIB_POS, FizzleEnchantingRegistry.BASIC_LIBRARY.defaultBlockState());
+        BasicLibraryBlockEntity be = (BasicLibraryBlockEntity) helper.getLevel()
+                .getBlockEntity(helper.absolutePos(LIB_POS));
+        if (be == null) { helper.fail("BE not created"); return; }
+
+        Registry<Enchantment> reg = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        ResourceKey<Enchantment> key = Enchantments.SHARPNESS;
+
+        be.depositBook(enchantedBook(reg, Enchantments.SHARPNESS, 20));
+        int maxLvl = be.getMaxLevels().getInt(key);
+        if (maxLvl != 16) {
+            helper.fail("Basic library should truncate deposited level 20 to 16, got " + maxLvl);
+            return;
+        }
+        helper.succeed();
+    }
+
+    @GameTest(template = "fizzle_enchanting:empty_3x3")
+    public void enderLibraryAcceptsLevelsUpTo31(GameTestHelper helper) {
+        helper.setBlock(LIB_POS, FizzleEnchantingRegistry.ENDER_LIBRARY.defaultBlockState());
+        BlockEntity rawBe = helper.getLevel().getBlockEntity(helper.absolutePos(LIB_POS));
+        if (!(rawBe instanceof EnderLibraryBlockEntity be)) {
+            helper.fail("Expected EnderLibraryBlockEntity, got "
+                    + (rawBe == null ? "null" : rawBe.getClass().getSimpleName()));
+            return;
+        }
+
+        Registry<Enchantment> reg = helper.getLevel().registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        ResourceKey<Enchantment> key = Enchantments.SHARPNESS;
+
+        be.depositBook(enchantedBook(reg, Enchantments.SHARPNESS, 25));
+        int maxLvl = be.getMaxLevels().getInt(key);
+        if (maxLvl != 25) {
+            helper.fail("Ender library should accept level 25, got " + maxLvl);
+            return;
+        }
+
+        be.depositBook(enchantedBook(reg, Enchantments.SHARPNESS, 31));
+        maxLvl = be.getMaxLevels().getInt(key);
+        if (maxLvl != 31) {
+            helper.fail("Ender library should accept level 31, got " + maxLvl);
+            return;
+        }
+
+        be.depositBook(enchantedBook(reg, Enchantments.SHARPNESS, 35));
+        maxLvl = be.getMaxLevels().getInt(key);
+        if (maxLvl != 31) {
+            helper.fail("Ender library should truncate level 35 to 31, got " + maxLvl);
+            return;
+        }
         helper.succeed();
     }
 
