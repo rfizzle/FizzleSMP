@@ -12,6 +12,7 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -107,6 +108,45 @@ public class SwordEnchantmentGameTest implements FabricGameTest {
                 helper.succeed();
             } else {
                 helper.fail("Last Hope should deal lethal damage (21470000). Victim health: " + victim.getHealth());
+            }
+        });
+    }
+
+    // --- S-10.2e: Scavenger extra loot ---
+
+    @GameTest(template = "fizzle_enchanting:empty_3x3", timeoutTicks = 200)
+    public void scavengerProducesExtraLootOnKill(GameTestHelper helper) {
+        Holder<Enchantment> ench = lookup(helper, "scavenger");
+        if (ench == null) { helper.fail("scavenger not in registry"); return; }
+
+        // Level 40: chance = 0.025 * 40 = 1.0, guaranteed extra loot roll per kill
+        ItemStack sword = new ItemStack(Items.DIAMOND_SWORD);
+        sword.enchant(ench, 40);
+
+        Mob attacker = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 1));
+        attacker.setItemSlot(EquipmentSlot.MAINHAND, sword);
+
+        for (int i = 0; i < 30; i++) {
+            Mob victim = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 1, 2));
+            victim.setHealth(1F);
+            attacker.doHurtTarget(victim);
+        }
+
+        helper.runAfterDelay(5, () -> {
+            // 30 kills × 2 rolls each (normal + scavenger) = 60 rolls; mean ~60 rotten flesh.
+            // Without Scavenger, only 30 rolls → mean ~30. Threshold 40 separates the cases
+            // with <0.01% false-negative and ~1% false-positive.
+            int totalFlesh = helper.getEntities(EntityType.ITEM).stream()
+                    .map(e -> ((ItemEntity) e).getItem())
+                    .filter(s -> s.is(Items.ROTTEN_FLESH))
+                    .mapToInt(ItemStack::getCount)
+                    .sum();
+
+            if (totalFlesh >= 40) {
+                helper.succeed();
+            } else {
+                helper.fail("Expected >=40 rotten flesh from 30 Scavenger-40 kills (got "
+                        + totalFlesh + "); extra loot may not be firing");
             }
         });
     }

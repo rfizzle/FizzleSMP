@@ -122,9 +122,9 @@ Unit tests cover selection math. These T3 tests validate pool filtering works en
 
 Registration and definition tests exist. These behavioral tests verify actual in-world effects.
 
-- [ ] S-10.2e — Scavenger: kill mob -> extra loot roll occurs (statistical)
-- [ ] S-10.2i — Nature's Blessing: right-click crop with hoe advances growth stage
-- [ ] S-10.2j — Nature's Blessing: right-click non-crop has no effect
+- [x] S-10.2e — Scavenger: kill mob -> extra loot roll occurs (statistical)
+- [ ] S-10.2i — Nature's Blessing: right-click crop with hoe advances growth stage *(BLOCKED: enchantment cut from MVP)*
+- [ ] S-10.2j — Nature's Blessing: right-click non-crop has no effect *(BLOCKED: enchantment cut from MVP)*
 
 
 **File:** `src/gametest/java/.../gametest/enchantments/` (extend existing per-category files)
