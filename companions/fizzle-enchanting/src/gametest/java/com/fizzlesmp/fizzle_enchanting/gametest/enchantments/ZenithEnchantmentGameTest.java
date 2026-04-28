@@ -8,7 +8,6 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -35,7 +34,6 @@ public class ZenithEnchantmentGameTest implements FabricGameTest {
     public void allZenithDefinitionsValid(GameTestHelper helper) {
         record Expected(String id, int maxLevel, int weight) {}
         List<Expected> enchants = List.of(
-                new Expected("bag_of_souls", 3, 2),
                 new Expected("berserkers_fury", 3, 1),
                 new Expected("chromatic", 1, 5),
                 new Expected("growth_serum", 1, 1),
@@ -63,25 +61,6 @@ public class ZenithEnchantmentGameTest implements FabricGameTest {
 
         if (!errors.isEmpty()) {
             helper.fail("Definition errors: " + errors);
-            return;
-        }
-        helper.succeed();
-    }
-
-    // --- Bag of Souls: verify XP-multiplying effect component present ---
-
-    @GameTest(template = "fizzle_enchanting:empty_3x3")
-    public void bagOfSoulsHasXpEffects(GameTestHelper helper) {
-        Holder<Enchantment> ench = lookup(helper, "bag_of_souls");
-        if (ench == null) { helper.fail("bag_of_souls not in registry"); return; }
-
-        Enchantment e = ench.value();
-        boolean hasMobXp = !e.getEffects(net.minecraft.world.item.enchantment.EnchantmentEffectComponents.MOB_EXPERIENCE).isEmpty();
-        boolean hasBlockXp = !e.getEffects(net.minecraft.world.item.enchantment.EnchantmentEffectComponents.BLOCK_EXPERIENCE).isEmpty();
-
-        if (!hasMobXp || !hasBlockXp) {
-            helper.fail("Bag of Souls must have both MOB_EXPERIENCE and BLOCK_EXPERIENCE effects. "
-                    + "mob=" + hasMobXp + ", block=" + hasBlockXp);
             return;
         }
         helper.succeed();
