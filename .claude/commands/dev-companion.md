@@ -29,7 +29,7 @@ com.rfizzle.<modid>/
 
 ### Naming
 - Classes suffixed by type: `ZombieScalingHandler`, `DifficultyConfig`, `ScaleCommand`
-- Mod ID: lowercase, underscores only (e.g., `fizzle_difficulty`)
+- Mod ID: lowercase, underscores only (e.g., `tribulation`)
 - Constants: `public static final` in the main mod class for MOD_ID and LOGGER
 - Attribute modifier IDs: `Identifier.of(MOD_ID, "descriptive_name")`
 

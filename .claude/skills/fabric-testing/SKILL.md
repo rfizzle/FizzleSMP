@@ -9,7 +9,7 @@ The user is writing, modifying, or migrating tests in a companion Fabric mod und
 
 The companion mods shipped with two incompatible test bootstrapping patterns:
 
-- **fizzle-difficulty** — pure JUnit 5 tests, no Minecraft classes referenced. Works fine.
+- **tribulation** — pure JUnit 5 tests, no Minecraft classes referenced. Works fine.
 - **meridian** — uses `Bootstrap.bootStrap()` plus reflection to unfreeze `BuiltInRegistries` (`MappedRegistry.frozen` / `unregisteredIntrusiveHolders`), plus `forkEvery = 1` to avoid cross-test contamination. This is brittle and slow.
 
 The target is **`fabric-loader-junit`** for anything that needs a vanilla registry, mixin, or AW (with an explicit `Bootstrap.bootStrap()` in `@BeforeAll` — see below), and **Fabric Gametest** for anything that needs a real `Level` or the mod's own registered content. The `unfreeze`-reflection pattern must not be used in new code.
@@ -129,7 +129,7 @@ class ExampleTest {
 
 ### Real example: math-to-AttributeMap bridge
 
-`ScalingEngineAttributeBridgeTest` (in fizzle-difficulty) proves the pure-math `ScalingEngine.computeAttributeFactor` result actually lands as the expected `getMaxHealth()` when applied to a real vanilla `AttributeMap`. That's the Tier 2 sweet spot: integration between computed values and vanilla attribute math, without booting a world.
+`ScalingEngineAttributeBridgeTest` (in tribulation) proves the pure-math `ScalingEngine.computeAttributeFactor` result actually lands as the expected `getMaxHealth()` when applied to a real vanilla `AttributeMap`. That's the Tier 2 sweet spot: integration between computed values and vanilla attribute math, without booting a world.
 
 ### Migration recipe (for each `meridian` test file)
 
@@ -266,7 +266,7 @@ Import `net.minecraft.gametest.framework.GameTest` (vanilla) for the annotation;
 
 ### Runtime patterns you'll hit
 
-These aren't obvious from the API surface — working them out cost multiple failing runs during the fizzle-difficulty rollout.
+These aren't obvious from the API surface — working them out cost multiple failing runs during the tribulation rollout.
 
 **1. Mock player positioning.** `helper.makeMockServerPlayerInLevel()` places the player near the level's (0,0,0), not inside the test region. Each gametest runs at a randomized far-out position, so any test that relies on a `ServerPlayer` being in range — `level.getNearestPlayer(mob, range)`, `level.players().stream().filter(...)`, player-triggered block interactions — has to teleport the player into the test region first:
 
@@ -384,12 +384,12 @@ On success you'll see `All N required tests passed :)` in the log. The `junit-ga
 
 ### Working reference in this repo
 
-`companions/fizzle-difficulty/src/gametest/` has a working Tier 3 suite exercising every piece discussed above:
+`companions/tribulation/src/gametest/` has a working Tier 3 suite exercising every piece discussed above:
 
-- Build wiring: `companions/fizzle-difficulty/build.gradle` (sourceSet, configurations, loom run, evaluation order).
-- Entrypoint: `companions/fizzle-difficulty/src/main/resources/fabric.mod.json`.
-- Template: `companions/fizzle-difficulty/src/main/resources/data/fizzle_difficulty/gametest/structure/empty_3x3.snbt`.
-- Tests: `companions/fizzle-difficulty/src/gametest/java/com/rfizzle/fizzle_difficulty/gametest/MobScalingGameTest.java` — includes the mock-player teleport, the config-isolation try/finally, and a parametrized helper invoked by 5 breakpoint tests.
+- Build wiring: `companions/tribulation/build.gradle` (sourceSet, configurations, loom run, evaluation order).
+- Entrypoint: `companions/tribulation/src/main/resources/fabric.mod.json`.
+- Template: `companions/tribulation/src/main/resources/data/tribulation/gametest/structure/empty_3x3.snbt`.
+- Tests: `companions/tribulation/src/gametest/java/com/rfizzle/tribulation/gametest/MobScalingGameTest.java` — includes the mock-player teleport, the config-isolation try/finally, and a parametrized helper invoked by 5 breakpoint tests.
 
 Copy the build.gradle wiring from there when setting up a new mod's Tier 3.
 

@@ -1,0 +1,10 @@
+{
+    "item.tribulation.shatter_shard": "Shatter Shard",
+    "item.tribulation.shatter_shard.tooltip": "Right-click to lower your difficulty level.",
+    "item.tribulation.shatter_shard.used": "Difficulty %s \u2192 %s",
+    "item.tribulation.shatter_shard.at_floor": "Already at minimum difficulty (level %s)",
+    "itemGroup.tribulation.main": "Tribulation",
+    "message.tribulation.level_up": "Your difficulty has risen to level %s.",
+    "message.tribulation.level_up_tier": "Your difficulty has risen to level %s (Tier %s).",
+    "message.tribulation.level_max": "You have reached the maximum difficulty level."
+}

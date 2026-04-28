@@ -1,0 +1,25 @@
+{
+    "schemaVersion": 1,
+    "id": "tribulation",
+    "version": "${version}",
+    "name": "Tribulation",
+    "description": "Unified mob scaling system for FizzleSMP — replaces HMIOT and RpgDifficulty with formula-driven time, distance, and height scaling.",
+    "authors": ["FizzleSMP"],
+    "contact": {},
+    "license": "All-Rights-Reserved",
+    "icon": "assets/tribulation/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "main": ["com.rfizzle.tribulation.Tribulation"],
+        "fabric-gametest": ["com.rfizzle.tribulation.gametest.MobScalingGameTest"]
+    },
+    "mixins": [
+        "tribulation.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=0.16.10",
+        "minecraft": "~1.21.1",
+        "java": ">=21",
+        "fabric-api": "*"
+    }
+}
