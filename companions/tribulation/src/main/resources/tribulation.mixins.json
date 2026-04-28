@@ -4,7 +4,10 @@
     "package": "com.rfizzle.tribulation.mixin",
     "compatibilityLevel": "JAVA_21",
     "mixins": [
-        "LivingEntityExperienceMixin"
+        "CreeperAccessor",
+        "HuskAbilityMixin",
+        "LivingEntityExperienceMixin",
+        "MobAbilityMixin"
     ],
     "injectors": {
         "defaultRequire": 1

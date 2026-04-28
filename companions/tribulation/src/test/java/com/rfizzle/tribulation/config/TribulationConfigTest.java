@@ -206,8 +206,7 @@ class TribulationConfigTest {
                   },
                   "statCaps": {
                     "maxFactorHealth": -2.0
-                  },
-                  "creeperExplosionFactor": -3.0
+                  }
                 }
                 """);
 
@@ -217,7 +216,6 @@ class TribulationConfigTest {
         assertEquals(0.0, loaded.scaling.get("zombie").damageRate);
         assertEquals(0.0, loaded.scaling.get("zombie").armorRate);
         assertEquals(0.0, loaded.statCaps.maxFactorHealth);
-        assertEquals(0.0, loaded.creeperExplosionFactor);
     }
 
     @Test

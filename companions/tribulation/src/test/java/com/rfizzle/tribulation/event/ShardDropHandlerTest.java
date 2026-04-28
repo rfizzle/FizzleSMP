@@ -2,6 +2,7 @@
 package com.rfizzle.tribulation.event;
 
 import com.rfizzle.tribulation.config.TribulationConfig;
+import com.rfizzle.tribulation.testutil.FixedRandom;
 import net.minecraft.util.RandomSource;
 import org.junit.jupiter.api.Test;
 
@@ -85,28 +86,4 @@ class ShardDropHandlerTest {
         assertFalse(ShardDropHandler.shouldDrop(50, cfg, fixedDouble(0.5)));
     }
 
-    /**
-     * Tiny deterministic RandomSource — only {@code nextDouble} is used by the
-     * handler, everything else throws to catch accidental usage.
-     */
-    private static final class FixedRandom implements RandomSource {
-        private final double value;
-
-        FixedRandom(double value) {
-            this.value = value;
-        }
-
-        @Override public RandomSource fork() { return this; }
-        @Override public net.minecraft.world.level.levelgen.PositionalRandomFactory forkPositional() {
-            throw new UnsupportedOperationException();
-        }
-        @Override public void setSeed(long seed) {}
-        @Override public int nextInt() { throw new UnsupportedOperationException(); }
-        @Override public int nextInt(int bound) { throw new UnsupportedOperationException(); }
-        @Override public long nextLong() { throw new UnsupportedOperationException(); }
-        @Override public boolean nextBoolean() { throw new UnsupportedOperationException(); }
-        @Override public float nextFloat() { return (float) value; }
-        @Override public double nextDouble() { return value; }
-        @Override public double nextGaussian() { throw new UnsupportedOperationException(); }
-    }
 }

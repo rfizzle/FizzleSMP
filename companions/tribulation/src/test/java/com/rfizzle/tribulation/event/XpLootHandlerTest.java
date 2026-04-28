@@ -3,8 +3,9 @@ package com.rfizzle.tribulation.event;
 
 import com.rfizzle.tribulation.config.TribulationConfig;
 import com.rfizzle.tribulation.config.TribulationConfig.XpAndLoot;
+import com.rfizzle.tribulation.testutil.FixedRandom;
+import com.rfizzle.tribulation.testutil.ThrowingRandom;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.levelgen.PositionalRandomFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -171,36 +172,4 @@ class XpLootHandlerTest {
         return new FixedRandom(value);
     }
 
-    private static final class FixedRandom implements RandomSource {
-        private final double value;
-
-        FixedRandom(double value) {
-            this.value = value;
-        }
-
-        @Override public RandomSource fork() { return this; }
-        @Override public PositionalRandomFactory forkPositional() { throw new UnsupportedOperationException(); }
-        @Override public void setSeed(long seed) {}
-        @Override public int nextInt() { throw new UnsupportedOperationException(); }
-        @Override public int nextInt(int bound) { throw new UnsupportedOperationException(); }
-        @Override public long nextLong() { throw new UnsupportedOperationException(); }
-        @Override public boolean nextBoolean() { throw new UnsupportedOperationException(); }
-        @Override public float nextFloat() { return (float) value; }
-        @Override public double nextDouble() { return value; }
-        @Override public double nextGaussian() { throw new UnsupportedOperationException(); }
-    }
-
-    /** RandomSource that fails any call — proves the short-circuit paths don't roll. */
-    private static final class ThrowingRandom implements RandomSource {
-        @Override public RandomSource fork() { return this; }
-        @Override public PositionalRandomFactory forkPositional() { throw new UnsupportedOperationException(); }
-        @Override public void setSeed(long seed) {}
-        @Override public int nextInt() { throw new AssertionError("unexpected nextInt"); }
-        @Override public int nextInt(int bound) { throw new AssertionError("unexpected nextInt(bound)"); }
-        @Override public long nextLong() { throw new AssertionError("unexpected nextLong"); }
-        @Override public boolean nextBoolean() { throw new AssertionError("unexpected nextBoolean"); }
-        @Override public float nextFloat() { throw new AssertionError("unexpected nextFloat"); }
-        @Override public double nextDouble() { throw new AssertionError("unexpected nextDouble"); }
-        @Override public double nextGaussian() { throw new AssertionError("unexpected nextGaussian"); }
-    }
 }

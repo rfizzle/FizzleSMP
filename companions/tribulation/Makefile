@@ -20,7 +20,7 @@ build:
 	$(GRADLE) build
 
 jar: build
-	@ls -1 build/libs/fizzle-difficulty-*.jar 2>/dev/null | grep -Ev -- '-(sources|dev|javadoc)\.jar$$' | head -1
+	@ls -1 build/libs/tribulation-*.jar 2>/dev/null | grep -Ev -- '-(sources|dev|javadoc)\.jar$$' | head -1
 
 test:
 	$(GRADLE) test
@@ -46,4 +46,4 @@ version:
 
 release:
 	@test -n "$(BUMP)" || (echo "Usage: make release BUMP=patch|minor|major [NO_PUSH=1]" && exit 1)
-	@../../scripts/companion-release.sh fizzle-difficulty $(BUMP) $(if $(NO_PUSH),--no-push,)
+	@../../scripts/companion-release.sh tribulation $(BUMP) $(if $(NO_PUSH),--no-push,)

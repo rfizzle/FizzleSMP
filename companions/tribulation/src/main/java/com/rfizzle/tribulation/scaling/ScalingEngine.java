@@ -270,7 +270,7 @@ public final class ScalingEngine {
 
     public static boolean isOverworld(ServerLevel world) {
         ResourceKey<Level> dim = world.dimension();
-        return dim == Level.OVERWORLD || (dim != null && Level.OVERWORLD.equals(dim));
+        return dim == Level.OVERWORLD;
     }
 
     public static boolean distanceAppliesInDimension(ServerLevel world, DistanceScaling cfg) {

@@ -41,7 +41,6 @@ public class TribulationConfig {
     public StatCaps statCaps = new StatCaps();
     public DeathRelief deathRelief = new DeathRelief();
     public Shards shards = new Shards();
-    public double creeperExplosionFactor = 1.0;
     public Map<String, MobScaling> scaling = defaultScaling();
     public UnlistedHostileMobs unlistedHostileMobs = new UnlistedHostileMobs();
     public SpecialZombies specialZombies = new SpecialZombies();
@@ -263,8 +262,6 @@ public class TribulationConfig {
             shards.shardPower = 0;
         }
         shards.dropChance = clampUnit("shards.dropChance", shards.dropChance);
-
-        creeperExplosionFactor = clampNonNegative("creeperExplosionFactor", creeperExplosionFactor);
 
         for (Map.Entry<String, MobScaling> entry : scaling.entrySet()) {
             clampMobScaling("scaling." + entry.getKey(), entry.getValue());
@@ -560,13 +557,24 @@ public class TribulationConfig {
     }
 
     public static class Abilities {
-        public boolean endermiteTeleport = true;
-        public boolean caveSpiderWebs = true;
-        public boolean silverfishSpread = true;
+        public boolean zombieReinforcements = true;
+        public boolean zombieDoorBreaking = true;
+        public boolean zombieSprinting = true;
+        public boolean creeperShorterFuse = true;
+        public boolean creeperCharged = true;
         public boolean skeletonSwordSwitch = true;
-        public boolean zombifiedPiglinAnger = true;
-        public boolean creeperFuse = true;
-        public boolean creeperExplosion = true;
+        public boolean skeletonFlameArrows = true;
+        public boolean spiderWebPlacing = true;
         public boolean spiderCropTrample = true;
+        public boolean spiderLeapAttack = true;
+        public boolean huskHunger = true;
+        public boolean witherSkeletonSprint = true;
+        public boolean witherSkeletonFireAspect = true;
+        public boolean drownedTrident = true;
+        public boolean hoglinKnockbackResist = true;
+        public boolean zoglinFireResist = true;
+        public boolean vindicatorResistance = true;
+        public boolean zombifiedPiglinAggro = true;
+        public boolean piglinCrossbow = true;
     }
 }

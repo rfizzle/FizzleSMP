@@ -2,7 +2,10 @@ package com.rfizzle.tribulation.ability;
 
 import com.rfizzle.tribulation.Tribulation;
 import com.rfizzle.tribulation.config.TribulationConfig;
+import com.rfizzle.tribulation.mixin.CreeperAccessor;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -13,30 +16,34 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.Enchantments;
 
 /**
  * Applies tier-based abilities to scaled mobs after the {@link
- * com.rfizzle.tribulation.scaling.ScalingEngine} has set stat
- * modifiers. Each ability is expressed as a namespaced attribute modifier, an
- * infinite-duration status effect, a vanilla setter, or an equipment change
- * — all of which persist in the mob's own NBT, so abilities survive save/load
- * without extra tracking.
+ * com.rfizzle.tribulation.scaling.ScalingEngine} has set stat modifiers. Each
+ * ability is expressed as a namespaced attribute modifier, an infinite-duration
+ * status effect, a vanilla setter, an equipment change, a scoreboard tag
+ * (for mixin-driven on-hit abilities), or a goal injection — all of which
+ * persist in the mob's own NBT so abilities survive save/load without extra
+ * tracking.
  *
- * <p>Only abilities that can be implemented without mixins live here.
- * Abilities that require behavioral changes to AI goals, projectile effects,
- * or packet-level tweaks (spider webs, silverfish spread, creeper fuse,
- * bogged poison arrows, etc.) are deferred to the mixin-based follow-up
- * under the same task in TODO.md. Deferred abilities are noted inline so the
- * gap is easy to audit.
+ * <p>Every ability checks its corresponding toggle in
+ * {@link TribulationConfig.Abilities} before applying. Server admins can
+ * disable any individual ability without affecting the rest.
  */
 public final class AbilityManager {
     private static final double ZOMBIE_REINFORCEMENT_BONUS = 0.10;
     private static final double SPRINT_SPEED_BONUS = 0.15;
     private static final double HOGLIN_KB_BONUS = 0.5;
     private static final double ZOMBIFIED_PIGLIN_AGGRO_BONUS = 0.5;
+    private static final int CREEPER_SHORT_FUSE_TICKS = 15;
+    private static final float CREEPER_CHARGED_CHANCE = 0.25f;
+    private static final double SPIDER_LEAP_BONUS = 0.5;
 
     private AbilityManager() {}
 
@@ -53,105 +60,177 @@ public final class AbilityManager {
         if (mob == null || cfg == null || mobKey == null || tier <= 0) return;
         try {
             switch (mobKey) {
-                case "zombie" -> applyZombieAbilities(mob, tier);
-                case "drowned" -> applyDrownedAbilities(mob, tier);
-                case "zombified_piglin" -> applyZombifiedPiglinAbilities(mob, tier);
-                case "hoglin" -> applyHoglinAbilities(mob, tier);
-                case "zoglin" -> applyZoglinAbilities(mob, tier);
-                case "vindicator" -> applyVindicatorAbilities(mob, tier);
-                case "wither_skeleton" -> applyWitherSkeletonAbilities(mob, tier);
-                case "piglin" -> applyPiglinAbilities(mob, tier);
-                default -> {
-                    // Remaining mob abilities (skeleton, creeper, spider, cave_spider,
-                    // endermite, silverfish, husk, stray, pillager, witch, guardian,
-                    // ravager, bogged) require mixins — tracked in TODO Task 7 follow-up.
-                }
+                case "zombie" -> applyZombieAbilities(mob, tier, cfg);
+                case "skeleton" -> applySkeletonAbilities(mob, tier, cfg);
+                case "creeper" -> applyCreeperAbilities(mob, tier, cfg);
+                case "spider" -> applySpiderAbilities(mob, tier, cfg);
+                case "cave_spider" -> applyCaveSpiderAbilities(mob, tier, cfg);
+                case "husk" -> applyHuskAbilities(mob, tier, cfg);
+                case "drowned" -> applyDrownedAbilities(mob, tier, cfg);
+                case "zombified_piglin" -> applyZombifiedPiglinAbilities(mob, tier, cfg);
+                case "hoglin" -> applyHoglinAbilities(mob, tier, cfg);
+                case "zoglin" -> applyZoglinAbilities(mob, tier, cfg);
+                case "vindicator" -> applyVindicatorAbilities(mob, tier, cfg);
+                case "wither_skeleton" -> applyWitherSkeletonAbilities(mob, tier, cfg);
+                case "piglin" -> applyPiglinAbilities(mob, tier, cfg);
+                default -> {}
             }
         } catch (Exception e) {
             Tribulation.LOGGER.warn("Failed applying abilities to {} tier {}", mobKey, tier, e);
         }
     }
 
-    private static void applyZombieAbilities(Mob mob, int tier) {
-        // T1: reinforcement calls — raise base chance of summoning backup on damage.
-        if (tier >= 1) {
+    // ---- Zombie ----
+
+    private static void applyZombieAbilities(Mob mob, int tier, TribulationConfig cfg) {
+        if (tier >= 1 && cfg.abilities.zombieReinforcements) {
             addAttributeModifier(mob, Attributes.SPAWN_REINFORCEMENTS_CHANCE,
                     abilityId("zombie_reinforcements"), ZOMBIE_REINFORCEMENT_BONUS,
                     AttributeModifier.Operation.ADD_VALUE);
         }
-        // T3: break doors — vanilla AI goal swap. All wood door types are broken.
-        if (tier >= 3 && mob instanceof Zombie zombie) {
+        if (tier >= 3 && cfg.abilities.zombieDoorBreaking && mob instanceof Zombie zombie) {
             zombie.setCanBreakDoors(true);
         }
-        // T5: sprint at target — permanent speed boost on top of time-axis scaling.
-        if (tier >= 5) {
+        if (tier >= 5 && cfg.abilities.zombieSprinting) {
             addAttributeModifier(mob, Attributes.MOVEMENT_SPEED,
                     abilityId("zombie_sprint"), SPRINT_SPEED_BONUS,
                     AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
         }
     }
 
-    private static void applyDrownedAbilities(Mob mob, int tier) {
-        // T2: trident upgrade — fill empty mainhand with a trident so ranged
-        // drowned are guaranteed at high difficulty. Existing weapons and
-        // nautilus shells are left alone.
-        if (tier >= 2 && mob.getMainHandItem().isEmpty()) {
+    // ---- Creeper ----
+
+    private static void applyCreeperAbilities(Mob mob, int tier, TribulationConfig cfg) {
+        if (!(mob instanceof Creeper creeper)) return;
+        if (tier >= 1 && cfg.abilities.creeperShorterFuse) {
+            ((CreeperAccessor) creeper).tribulation$setMaxSwell(CREEPER_SHORT_FUSE_TICKS);
+        }
+        if (tier >= 5 && cfg.abilities.creeperCharged) {
+            if (mob.getRandom().nextFloat() < CREEPER_CHARGED_CHANCE) {
+                creeper.getEntityData().set(CreeperAccessor.tribulation$getDataIsPowered(), true);
+            }
+        }
+    }
+
+    // ---- Skeleton ----
+
+    private static void applySkeletonAbilities(Mob mob, int tier, TribulationConfig cfg) {
+        if (tier >= 2 && cfg.abilities.skeletonSwordSwitch) {
+            ItemStack current = mob.getMainHandItem();
+            if (current.is(Items.BOW)) {
+                mob.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.STONE_SWORD));
+            }
+        }
+        if (tier >= 4 && cfg.abilities.skeletonFlameArrows) {
+            applyInfiniteEffect(mob, MobEffects.FIRE_RESISTANCE, 0);
+            mob.setRemainingFireTicks(Integer.MAX_VALUE);
+        }
+    }
+
+    // ---- Spider ----
+
+    private static void applySpiderAbilities(Mob mob, int tier, TribulationConfig cfg) {
+        if (tier >= 2 && cfg.abilities.spiderWebPlacing) {
+            mob.addTag("tribulation_web");
+        }
+        if (tier >= 3 && cfg.abilities.spiderCropTrample) {
+            mob.addTag("tribulation_crop_trample");
+        }
+        if (tier >= 5 && cfg.abilities.spiderLeapAttack) {
+            addAttributeModifier(mob, Attributes.JUMP_STRENGTH,
+                    abilityId("spider_leap"), SPIDER_LEAP_BONUS,
+                    AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
+        }
+    }
+
+    // ---- Cave Spider ----
+
+    private static void applyCaveSpiderAbilities(Mob mob, int tier, TribulationConfig cfg) {
+        if (tier >= 2 && cfg.abilities.spiderWebPlacing) {
+            mob.addTag("tribulation_web");
+        }
+    }
+
+    // ---- Husk ----
+
+    private static void applyHuskAbilities(Mob mob, int tier, TribulationConfig cfg) {
+        if (tier >= 4 && cfg.abilities.huskHunger) {
+            mob.addTag("tribulation_hunger2");
+        }
+    }
+
+    // ---- Drowned ----
+
+    private static void applyDrownedAbilities(Mob mob, int tier, TribulationConfig cfg) {
+        if (tier >= 2 && cfg.abilities.drownedTrident && mob.getMainHandItem().isEmpty()) {
             mob.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.TRIDENT));
         }
     }
 
-    private static void applyZombifiedPiglinAbilities(Mob mob, int tier) {
-        // T5: group aggro — expand follow range so one angered piglin pulls in
-        // nearby kin. Easier anger (T1) requires mixin and is deferred.
-        if (tier >= 5) {
+    // ---- Zombified Piglin ----
+
+    private static void applyZombifiedPiglinAbilities(Mob mob, int tier, TribulationConfig cfg) {
+        if (tier >= 5 && cfg.abilities.zombifiedPiglinAggro) {
             addAttributeModifier(mob, Attributes.FOLLOW_RANGE,
                     abilityId("zombified_piglin_aggro"), ZOMBIFIED_PIGLIN_AGGRO_BONUS,
                     AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
         }
     }
 
-    private static void applyHoglinAbilities(Mob mob, int tier) {
-        // T1: knockback resistance — harder to combo-punch off cliffs.
-        if (tier >= 1) {
+    // ---- Hoglin ----
+
+    private static void applyHoglinAbilities(Mob mob, int tier, TribulationConfig cfg) {
+        if (tier >= 1 && cfg.abilities.hoglinKnockbackResist) {
             addAttributeModifier(mob, Attributes.KNOCKBACK_RESISTANCE,
                     abilityId("hoglin_kb_resist"), HOGLIN_KB_BONUS,
                     AttributeModifier.Operation.ADD_VALUE);
         }
     }
 
-    private static void applyZoglinAbilities(Mob mob, int tier) {
-        // T3: fire resistance — infinite-duration effect survives save/load.
-        if (tier >= 3) {
+    // ---- Zoglin ----
+
+    private static void applyZoglinAbilities(Mob mob, int tier, TribulationConfig cfg) {
+        if (tier >= 3 && cfg.abilities.zoglinFireResist) {
             applyInfiniteEffect(mob, MobEffects.FIRE_RESISTANCE, 0);
         }
     }
 
-    private static void applyVindicatorAbilities(Mob mob, int tier) {
-        // T4: resistance I — cuts incoming damage by 20%.
-        if (tier >= 4) {
+    // ---- Vindicator ----
+
+    private static void applyVindicatorAbilities(Mob mob, int tier, TribulationConfig cfg) {
+        if (tier >= 4 && cfg.abilities.vindicatorResistance) {
             applyInfiniteEffect(mob, MobEffects.DAMAGE_RESISTANCE, 0);
         }
     }
 
-    private static void applyWitherSkeletonAbilities(Mob mob, int tier) {
-        // T3: sprint — passive speed boost. Fire aspect (T4) is deferred —
-        // adding enchantments in 1.21.1 requires registry access that isn't
-        // convenient here without a small helper in a later task.
-        if (tier >= 3) {
+    // ---- Wither Skeleton ----
+
+    private static void applyWitherSkeletonAbilities(Mob mob, int tier, TribulationConfig cfg) {
+        if (tier >= 3 && cfg.abilities.witherSkeletonSprint) {
             addAttributeModifier(mob, Attributes.MOVEMENT_SPEED,
                     abilityId("wither_skeleton_sprint"), SPRINT_SPEED_BONUS,
                     AttributeModifier.Operation.ADD_MULTIPLIED_BASE);
         }
+        if (tier >= 4 && cfg.abilities.witherSkeletonFireAspect) {
+            ItemStack mainHand = mob.getMainHandItem();
+            if (!mainHand.isEmpty()) {
+                HolderLookup.RegistryLookup<Enchantment> lookup =
+                        mob.registryAccess().lookupOrThrow(Registries.ENCHANTMENT);
+                lookup.get(Enchantments.FIRE_ASPECT).ifPresent(holder ->
+                        mainHand.enchant(holder, 1));
+            }
+        }
     }
 
-    private static void applyPiglinAbilities(Mob mob, int tier) {
-        // T2: better gear — equip a crossbow if the piglin spawned unarmed.
-        // Don't overwrite an existing weapon — piglins naturally spawn with
-        // gold swords sometimes, which we want to keep.
-        if (tier >= 2 && mob.getMainHandItem().isEmpty()) {
+    // ---- Piglin ----
+
+    private static void applyPiglinAbilities(Mob mob, int tier, TribulationConfig cfg) {
+        if (tier >= 2 && cfg.abilities.piglinCrossbow && mob.getMainHandItem().isEmpty()) {
             mob.setItemSlot(EquipmentSlot.MAINHAND, new ItemStack(Items.CROSSBOW));
         }
     }
+
+    // ---- Helpers ----
 
     private static void addAttributeModifier(Mob mob, Holder<Attribute> attr, ResourceLocation id, double amount, AttributeModifier.Operation op) {
         AttributeInstance inst = mob.getAttribute(attr);

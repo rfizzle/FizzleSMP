@@ -64,15 +64,15 @@ Speed and follow range scale through playtime only — distance and height affec
 
 ### Tier-Gated Abilities
 
-5 tiers unlock special mob abilities as the nearest player's level increases:
+5 tiers unlock special mob abilities as the nearest player's level increases. Each ability can be individually toggled in the `abilities` config section.
 
-| Tier | Level | Examples |
-|------|-------|---------|
+| Tier | Level | Abilities |
+|------|-------|-----------|
 | 1 | 50 | Zombie reinforcements, Creeper shorter fuse, Hoglin knockback resist |
-| 2 | 100 | Skeleton sword switch, Spider web placing, Drowned trident upgrade |
-| 3 | 150 | Zombie door-breaking, Spider crop trampling, Wither Skeleton sprint |
-| 4 | 200 | Skeleton flame arrows, Husk Hunger II, Wither Skeleton fire aspect |
-| 5 | 250 | Zombie sprinting, Creeper charged chance, Spider leap attack |
+| 2 | 100 | Skeleton sword switch, Spider/Cave Spider web placing, Drowned trident upgrade, Piglin crossbow |
+| 3 | 150 | Zombie door-breaking, Spider crop trampling, Wither Skeleton sprint, Zoglin fire resistance |
+| 4 | 200 | Skeleton flame arrows, Husk Hunger II, Wither Skeleton fire aspect, Vindicator damage resistance |
+| 5 | 250 | Zombie sprinting, Creeper charged chance (25%), Spider leap attack, Zombified Piglin aggro range |
 
 ### Special Zombie Variants
 
@@ -116,7 +116,7 @@ Scaled mobs drop bonus XP proportional to their difficulty (up to 2x, configurab
 
 ### Setup
 
-Drop the jar into the `mods/` directory on both server and client. The mod must be present on **both sides** — it uses `TrackedData` for Big Zombie rendering on the client.
+Drop the jar into the `mods/` directory on both server and client. The mod must be present on **both sides** — it registers custom items and a creative tab that the client needs.
 
 ---
 
@@ -134,7 +134,7 @@ Key config sections:
 | `heightScaling` | Baseline Y, step size, rate, cap, directional toggles, dimension exclusion |
 | `statCaps` | Global caps per attribute (prevents extreme stacking across all axes) |
 | `deathRelief` | Enable, amount, cooldown, minimum level floor |
-| `shards` | Enable, drop level, power, drop chance, side effects, glow carriers |
+| `shards` | Enable, drop level, power, drop chance, side effects |
 | `scaling` | Per-mob attribute rates and caps (keyed by entity path or full ID) |
 | `unlistedHostileMobs` | Fallback scaling for modded hostile mobs |
 | `specialZombies` | Big/Speed zombie variant chances and stat adjustments |
