@@ -5,12 +5,16 @@ import com.fizzlesmp.fizzle_enchanting.FizzleEnchanting;
 import com.fizzlesmp.fizzle_enchanting.FizzleEnchantingRegistry;
 import com.fizzlesmp.fizzle_enchanting.event.WardenLootHandler;
 import net.fabricmc.fabric.api.gametest.v1.FabricGameTest;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Rarity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
 
 public class SpecialtyMaterialsGameTest implements FabricGameTest {
 
@@ -70,5 +74,27 @@ public class SpecialtyMaterialsGameTest implements FabricGameTest {
             return;
         }
         helper.succeed();
+    }
+
+    // --- TEST-5.4-T3d: Warden kill drops tendril via loot table modifier ---
+
+    @GameTest(template = "fizzle_enchanting:empty_3x3", timeoutTicks = 100)
+    public void wardenDropsTendrilOnKill(GameTestHelper helper) {
+        Warden warden = helper.spawnWithNoFreeWill(EntityType.WARDEN, new BlockPos(1, 1, 1));
+        warden.hurt(helper.getLevel().damageSources().genericKill(), Float.MAX_VALUE);
+
+        helper.runAfterDelay(10, () -> {
+            long tendrilCount = helper.getEntities(EntityType.ITEM).stream()
+                    .map(e -> ((ItemEntity) e).getItem())
+                    .filter(s -> s.is(FizzleEnchantingRegistry.WARDEN_TENDRIL))
+                    .count();
+
+            if (tendrilCount >= 1) {
+                helper.succeed();
+            } else {
+                helper.fail("Expected at least 1 warden_tendril drop (config.warden.tendrilDropChance defaults to 1.0), got "
+                        + tendrilCount);
+            }
+        });
     }
 }

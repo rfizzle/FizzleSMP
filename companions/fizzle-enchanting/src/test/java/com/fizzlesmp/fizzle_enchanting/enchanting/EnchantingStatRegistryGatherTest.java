@@ -312,15 +312,15 @@ class EnchantingStatRegistryGatherTest {
     }
 
     @Test
-    void gather_singleShelfWithHighClues_passesThrough() {
+    void gather_singleShelfWithHighClues_clampedToMax() {
         EnchantingStatRegistry reg = new EnchantingStatRegistry();
         EnchantingStats overclued = new EnchantingStats(0F, 0F, 0F, 0F, 0F, 5);
 
         StatCollection result = reg.gatherStatsFromOffsets(
                 List.of(new BlockPos(0, 0, 0)), pos -> overclued);
 
-        assertEquals(5, result.clues(),
-                "clues are unbounded — a shelf with clues=5 passes through without clamping");
+        assertEquals(EnchantingStatRegistry.MAX_CLUES, result.clues(),
+                "clues exceeding MAX_CLUES are clamped to the cap");
     }
 
     @Test
