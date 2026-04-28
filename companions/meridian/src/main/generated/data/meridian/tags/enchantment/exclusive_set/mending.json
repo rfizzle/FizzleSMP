@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "meridian:life_mending",
+      "required": false
+    },
+    {
+      "id": "minecraft:mending",
+      "required": false
+    }
+  ]
+}

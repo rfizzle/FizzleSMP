@@ -1,0 +1,28 @@
+{
+  "values": [
+    {
+      "id": "meridian:bow/breezing_arrow",
+      "required": false
+    },
+    {
+      "id": "meridian:bow/explosive_arrow",
+      "required": false
+    },
+    {
+      "id": "meridian:bow/storm_arrow",
+      "required": false
+    },
+    {
+      "id": "meridian:bow/echo_shot",
+      "required": false
+    },
+    {
+      "id": "meridian:bow/eternal_frost",
+      "required": false
+    },
+    {
+      "id": "minecraft:quick_charge",
+      "required": false
+    }
+  ]
+}

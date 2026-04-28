@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "meridian:leggings/oversize",
+      "required": false
+    },
+    {
+      "id": "meridian:leggings/dwarfed",
+      "required": false
+    }
+  ]
+}

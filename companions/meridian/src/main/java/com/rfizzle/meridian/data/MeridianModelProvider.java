@@ -63,17 +63,6 @@ public class MeridianModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerators gens) {
-        // Shelf BlockItems get parented item models for free via FabricModelProvider's auto pipeline
-        // (see ModelProviderMixin#filterItemsForProcessingMod) — nothing to do here for them.
-        //
-        // Generated flat item models for the specialty materials and tomes land alongside their
-        // item registrations in Epics 4–5. When those items exist, drop them in here:
-        //   gens.generateFlatItem(MeridianItems.INFUSED_BREATH, ModelTemplates.FLAT_ITEM);
-        //   gens.generateFlatItem(MeridianItems.WARDEN_TENDRIL, ModelTemplates.FLAT_ITEM);
-        //   gens.generateFlatItem(MeridianItems.PRISMATIC_WEB, ModelTemplates.FLAT_ITEM);
-        //   gens.generateFlatItem(MeridianItems.SCRAP_TOME, ModelTemplates.FLAT_ITEM);
-        //   gens.generateFlatItem(MeridianItems.IMPROVED_SCRAP_TOME, ModelTemplates.FLAT_ITEM);
-        //   gens.generateFlatItem(MeridianItems.EXTRACTION_TOME, ModelTemplates.FLAT_ITEM);
     }
 
     /**

@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "meridian:sword/attack_speed",
+      "required": false
+    },
+    {
+      "id": "meridian:sword/reach",
+      "required": false
+    },
+    {
+      "id": "meridian:sword/dimensional_hit",
+      "required": false
+    }
+  ]
+}

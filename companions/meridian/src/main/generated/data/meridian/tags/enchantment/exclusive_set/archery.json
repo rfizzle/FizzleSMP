@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "meridian:bow/rebound",
+      "required": false
+    },
+    {
+      "id": "minecraft:quick_charge",
+      "required": false
+    },
+    {
+      "id": "minecraft:multishot",
+      "required": false
+    },
+    {
+      "id": "minecraft:piercing",
+      "required": false
+    }
+  ]
+}

@@ -36,7 +36,7 @@ public class ModMenuIntegration implements ModMenuApi {
             tableCategory.addEntry(entry.startIntSlider(
                             Component.translatable("config.meridian.max_eterna"),
                             current.enchantingTable.maxEterna, 1, 100)
-                    .setDefaultValue(100)
+                    .setDefaultValue(50)
                     .setSaveConsumer(v -> current.enchantingTable.maxEterna = v)
                     .build());
             tableCategory.addEntry(entry.startBooleanToggle(

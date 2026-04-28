@@ -1,23 +1,14 @@
 // Tier: 2 (fabric-loader-junit)
 package com.rfizzle.meridian.anvil;
 
-import com.mojang.serialization.Lifecycle;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.RegistrationInfo;
-import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.tags.EnchantmentTags;
-import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -26,10 +17,10 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.rfizzle.meridian.TestRegistryFixture.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -143,7 +134,7 @@ class PrismaticWebCurseLogicTest {
     }
 
     private static void buildRegistry() {
-        MappedRegistry<Enchantment> reg = new MappedRegistry<>(Registries.ENCHANTMENT, Lifecycle.stable());
+        MappedRegistry<Enchantment> reg = newRegistry();
         HolderSet<Item> swordItems = itemHolderSet(Items.DIAMOND_SWORD);
 
         sharpnessHolder = register(reg, SHARPNESS, synthetic(swordItems, 10, 5));
@@ -154,32 +145,5 @@ class PrismaticWebCurseLogicTest {
                 EnchantmentTags.CURSE, List.of(vanishingHolder, bindingHolder)
         ));
         reg.freeze();
-    }
-
-    private static Holder.Reference<Enchantment> register(
-            MappedRegistry<Enchantment> reg, ResourceKey<Enchantment> key, Enchantment ench) {
-        return reg.register(key, ench, RegistrationInfo.BUILT_IN);
-    }
-
-    private static ResourceKey<Enchantment> key(String path) {
-        return ResourceKey.create(Registries.ENCHANTMENT,
-                ResourceLocation.fromNamespaceAndPath("minecraft", path));
-    }
-
-    private static HolderSet<Item> itemHolderSet(Item... items) {
-        List<Holder<Item>> holders = new ArrayList<>(items.length);
-        for (Item item : items) {
-            holders.add(BuiltInRegistries.ITEM.wrapAsHolder(item));
-        }
-        return HolderSet.direct(holders);
-    }
-
-    private static Enchantment synthetic(HolderSet<Item> supportedItems, int weight, int maxLevel) {
-        return new Enchantment(
-                Component.literal("test"),
-                Enchantment.definition(supportedItems, weight, maxLevel,
-                        Enchantment.dynamicCost(1, 10), Enchantment.dynamicCost(51, 10),
-                        1, EquipmentSlotGroup.ANY),
-                HolderSet.empty(), DataComponentMap.EMPTY);
     }
 }

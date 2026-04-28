@@ -10,5 +10,10 @@ public class MeridianDataGenerator implements DataGeneratorEntrypoint {
         pack.addProvider(MeridianModelProvider::new);
         pack.addProvider(MeridianBlockLootTableProvider::new);
         pack.addProvider(MeridianRecipeProvider::new);
+        MeridianBlockTagProvider blockTags = pack.addProvider(MeridianBlockTagProvider::new);
+        pack.addProvider((output, registries) -> new MeridianItemTagProvider(output, registries, blockTags));
+        pack.addProvider(MeridianEnchantmentTagProvider::new);
+        pack.addProvider(MeridianEntityTypeTagProvider::new);
+        pack.addProvider(MeridianDamageTypeTagProvider::new);
     }
 }

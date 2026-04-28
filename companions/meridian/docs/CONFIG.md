@@ -277,6 +277,23 @@ Hard ceiling applied after both `maxLevel` and `maxLootLevel`. If set, the effec
 
 - **Clamp (when not -1):** `[1, 127]`.
 
+### `minPowerFunction` *(object, optional)*
+
+Custom power function overriding the enchantment's minimum power curve. Controls the lowest enchanting-power value at which each level of the enchantment becomes selectable. When absent or `null`, vanilla behavior applies.
+
+Supported `type` values:
+- `"default"` — vanilla behavior (min-cost extrapolation from the enchantment definition). This is the fallback when an invalid type is supplied.
+- `"linear"` — `base + perLevel * level`. Uses the `base` and `perLevel` fields.
+- `"fixed"` — constant `value` regardless of level. Uses the `value` field.
+
+Validation: `type` must be one of `default`, `linear`, `fixed`; invalid values are reset to `"default"` and warned.
+
+### `maxPowerFunction` *(object, optional)*
+
+Custom power function overriding the enchantment's maximum power curve. Controls the highest enchanting-power value at which each level of the enchantment remains selectable. When absent or `null`, vanilla behavior applies (200 ceiling or max-cost extrapolation).
+
+Same `type` values and validation as `minPowerFunction`.
+
 Example — raise Sharpness to 10 at the table, cap loot at 7, hard-cap at 10:
 ```json
 "enchantmentOverrides": {
@@ -288,6 +305,17 @@ Example — allow Mending to roll up to level 3 at the table (for faster repair)
 ```json
 "enchantmentOverrides": {
   "minecraft:mending": { "maxLevel": 3, "maxLootLevel": -1, "levelCap": -1 }
+}
+```
+
+Example — custom power curve for Sharpness (linear min, fixed max):
+```json
+"enchantmentOverrides": {
+  "minecraft:sharpness": {
+    "maxLevel": 10,
+    "minPowerFunction": { "type": "linear", "base": 1, "perLevel": 11 },
+    "maxPowerFunction": { "type": "linear", "base": 21, "perLevel": 11 }
+  }
 }
 ```
 

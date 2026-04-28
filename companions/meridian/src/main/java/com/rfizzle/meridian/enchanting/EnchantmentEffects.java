@@ -23,7 +23,7 @@ public final class EnchantmentEffects {
     private EnchantmentEffects() {}
 
     public static int getEnchantmentLevel(ItemStack stack, ResourceKey<Enchantment> key) {
-        if (stack.isEmpty()) return 0;
+        if (stack == null || stack.isEmpty()) return 0;
         for (var entry : stack.getEnchantments().entrySet()) {
             if (entry.getKey().is(key)) {
                 return entry.getIntValue();

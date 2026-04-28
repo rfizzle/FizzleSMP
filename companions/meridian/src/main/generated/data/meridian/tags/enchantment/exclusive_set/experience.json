@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "meridian:sword/xp_boost",
+      "required": false
+    },
+    {
+      "id": "minecraft:mending",
+      "required": false
+    }
+  ]
+}

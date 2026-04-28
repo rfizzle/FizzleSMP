@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "minecraft:wind_burst",
+      "required": false
+    },
+    {
+      "id": "meridian:mace/teluric_wave",
+      "required": false
+    }
+  ]
+}

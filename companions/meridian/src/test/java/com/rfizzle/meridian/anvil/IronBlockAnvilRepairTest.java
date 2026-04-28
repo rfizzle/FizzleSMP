@@ -2,22 +2,13 @@
 package com.rfizzle.meridian.anvil;
 
 import com.rfizzle.meridian.config.MeridianConfig;
-import com.mojang.serialization.Lifecycle;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderSet;
 import net.minecraft.core.MappedRegistry;
-import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
-import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.Bootstrap;
-import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -26,9 +17,9 @@ import net.minecraft.world.item.enchantment.ItemEnchantments;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Optional;
 
+import static com.rfizzle.meridian.TestRegistryFixture.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -53,9 +44,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 class IronBlockAnvilRepairTest {
 
-    private static final ResourceKey<Enchantment> SHARPNESS = ResourceKey.create(
-            Registries.ENCHANTMENT,
-            ResourceLocation.fromNamespaceAndPath("minecraft", "sharpness"));
+    private static final ResourceKey<Enchantment> SHARPNESS = key("sharpness");
 
     private final IronBlockAnvilRepairHandler handler =
             new IronBlockAnvilRepairHandler(IronBlockAnvilRepairTest::defaultConfig);
@@ -194,23 +183,8 @@ class IronBlockAnvilRepairTest {
     }
 
     private static Registry<Enchantment> buildSyntheticEnchantmentRegistry() {
-        MappedRegistry<Enchantment> reg = new MappedRegistry<>(Registries.ENCHANTMENT, Lifecycle.stable());
-        reg.register(SHARPNESS, synthetic(), RegistrationInfo.BUILT_IN);
+        MappedRegistry<Enchantment> reg = newRegistry();
+        register(reg, SHARPNESS, synthetic());
         return reg.freeze();
-    }
-
-    private static Enchantment synthetic() {
-        HolderSet<Item> any = HolderSet.direct(List.of(
-                BuiltInRegistries.ITEM.wrapAsHolder(Items.DIAMOND_SWORD)));
-        Enchantment.EnchantmentDefinition def = Enchantment.definition(
-                any, 1, 1,
-                Enchantment.dynamicCost(1, 10),
-                Enchantment.dynamicCost(51, 10),
-                1, EquipmentSlotGroup.ANY);
-        return new Enchantment(
-                Component.literal("test"),
-                def,
-                HolderSet.empty(),
-                DataComponentMap.EMPTY);
     }
 }

@@ -125,14 +125,13 @@ Requires a real Ancient City and Survival mode. Skip without a generated city.
 ## 8. Foreign-enchant rolls — Mending + Soulbound
 
 ### 8.1 Mending
-- [ ] With `config.foreignEnchantments.applyBundledOverrides: true` (default) and a Treasure Shelf in range, roll the table 50× on a netherite pickaxe → Mending appears at least once (raised weight via the bundled override; treasure-shelf gate still respected).
+- [ ] With a Treasure Shelf in range, roll the table 50× on a netherite pickaxe → Mending appears at least once (treasure-shelf gate respected).
 - [ ] Remove the Treasure Shelf → Mending stops appearing in previews.
 - [ ] Set `config.enchantingTable.allowTreasureWithoutShelf: true`, reload → Mending appears even without the treasure shelf.
 
 ### 8.2 Soulbound (yigd)
 - [ ] **Skip if [You're in Grave Danger](https://modrinth.com/mod/yigd) is not installed in this dev environment.**
-- [ ] With yigd present and a Treasure Shelf in range, roll on a chestplate → Soulbound appears (override raised it from `weight: 0`).
-- [ ] Override-disable test: set `config.foreignEnchantments.applyBundledOverrides: false`, reload, restart server → Soulbound stops rolling (upstream `weight: 0` restored via the built-in resource pack flip — see `docs/FOREIGN_ENCHANT_OVERRIDES.md`).
+- [ ] With yigd present and a Treasure Shelf in range, roll on a chestplate → Soulbound appears (per-enchantment override raised it from `weight: 0`).
 
 ## 9. Authored enchants (Zenith ports)
 

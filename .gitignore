@@ -18,6 +18,8 @@ build/
 # unignore it explicitly so override JSONs (e.g. mending.json) can be tracked.
 !companions/*/src/main/resources/data/minecraft/
 !companions/*/src/main/resources/data/minecraft/**
+!companions/*/src/main/generated/data/minecraft/
+!companions/*/src/main/generated/data/minecraft/**
 !companions/*/src/main/resources/resourcepacks/*/data/minecraft/
 !companions/*/src/main/resources/resourcepacks/*/data/minecraft/**
 !companions/*/src/test/resources/data/minecraft/

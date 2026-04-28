@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "minecraft:channeling",
+      "required": false
+    },
+    {
+      "id": "meridian:trident/gungnir_breath",
+      "required": false
+    }
+  ]
+}

@@ -348,13 +348,6 @@ public class MeridianEnchantmentMenu extends EnchantmentMenu {
         this.currentRecipe = Optional.empty();
     }
 
-    private void sendEmptyPayloads() {
-        broadcastStats(StatCollection.EMPTY);
-        for (int slot = 0; slot < MeridianEnchantmentLogic.PREVIEW_SLOTS; slot++) {
-            broadcastClues(slot, List.of(), true);
-        }
-    }
-
     private void broadcastStats(StatCollection stats) {
         if (!(playerInventory.player instanceof ServerPlayer sp)) {
             return;

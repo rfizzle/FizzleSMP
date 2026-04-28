@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "meridian:sword/certainty",
+      "required": false
+    },
+    {
+      "id": "meridian:sword/divinity",
+      "required": false
+    },
+    {
+      "id": "meridian:sword/vigilance",
+      "required": false
+    }
+  ]
+}

@@ -161,9 +161,10 @@ class AuthoredShieldBashTest {
     @Test
     void weaponTagExpansion_addsShieldWithoutReplace() throws Exception {
         JsonObject tag = loadJson(TAG_RESOURCE);
-        assertTrue(tag.has("replace"), "weapon tag override must declare replace explicitly");
-        assertFalse(tag.get("replace").getAsBoolean(),
-                "replace:false lets shield_bash piggyback on the vanilla weapon tag instead of stomping it");
+        if (tag.has("replace")) {
+            assertFalse(tag.get("replace").getAsBoolean(),
+                    "replace must be false so shield_bash piggybacks on the vanilla weapon tag");
+        }
 
         assertTrue(tag.has("values") && tag.get("values").isJsonArray(),
                 "weapon tag must carry a values array");
@@ -171,7 +172,10 @@ class AuthoredShieldBashTest {
 
         boolean containsShield = false;
         for (JsonElement element : values) {
-            if (element.isJsonPrimitive() && "minecraft:shield".equals(element.getAsString())) {
+            String id = element.isJsonPrimitive() ? element.getAsString()
+                    : element.isJsonObject() && element.getAsJsonObject().has("id")
+                    ? element.getAsJsonObject().get("id").getAsString() : null;
+            if ("minecraft:shield".equals(id)) {
                 containsShield = true;
                 break;
             }

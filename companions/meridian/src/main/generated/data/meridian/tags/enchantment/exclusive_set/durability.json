@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "meridian:durability/curse_of_breaking",
+      "required": false
+    },
+    {
+      "id": "minecraft:mending",
+      "required": false
+    },
+    {
+      "id": "minecraft:unbreaking",
+      "required": false
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "values": [
+    {
+      "id": "meridian:armor/magic_protection",
+      "required": false
+    }
+  ]
+}

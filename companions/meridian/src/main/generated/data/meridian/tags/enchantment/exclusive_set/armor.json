@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "meridian:armor/lifeplus",
+      "required": false
+    },
+    {
+      "id": "meridian:armor/fury",
+      "required": false
+    },
+    {
+      "id": "minecraft:protection",
+      "required": false
+    }
+  ]
+}

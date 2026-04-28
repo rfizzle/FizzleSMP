@@ -1,0 +1,32 @@
+{
+  "values": [
+    {
+      "id": "meridian:sword/pull",
+      "required": false
+    },
+    {
+      "id": "meridian:sword/life_steal",
+      "required": false
+    },
+    {
+      "id": "meridian:sword/fear",
+      "required": false
+    },
+    {
+      "id": "meridian:sword/tears_of_asflors",
+      "required": false
+    },
+    {
+      "id": "meridian:sword/last_hope",
+      "required": false
+    },
+    {
+      "id": "meridian:sword/critical",
+      "required": false
+    },
+    {
+      "id": "meridian:sword/death_touch",
+      "required": false
+    }
+  ]
+}

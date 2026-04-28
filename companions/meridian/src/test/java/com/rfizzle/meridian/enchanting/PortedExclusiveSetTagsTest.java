@@ -97,9 +97,13 @@ class PortedExclusiveSetTagsTest {
         JsonArray arr = obj.getAsJsonArray("values");
         List<String> out = new ArrayList<>(arr.size());
         for (JsonElement e : arr) {
-            assertTrue(e.isJsonPrimitive() && e.getAsJsonPrimitive().isString(),
-                    file.getFileName() + " entries must be strings");
-            out.add(e.getAsString());
+            if (e.isJsonPrimitive() && e.getAsJsonPrimitive().isString()) {
+                out.add(e.getAsString());
+            } else if (e.isJsonObject() && e.getAsJsonObject().has("id")) {
+                out.add(e.getAsJsonObject().get("id").getAsString());
+            } else {
+                throw new AssertionError(file.getFileName() + " entry must be a string or {\"id\":...} object: " + e);
+            }
         }
         return out;
     }
