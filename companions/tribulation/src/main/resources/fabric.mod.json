@@ -4,7 +4,7 @@
     "version": "${version}",
     "name": "Tribulation",
     "description": "Unified mob scaling system for FizzleSMP — replaces HMIOT and RpgDifficulty with formula-driven time, distance, and height scaling.",
-    "authors": ["FizzleSMP"],
+    "authors": ["rfizzle"],
     "contact": {},
     "license": "MIT",
     "icon": "assets/tribulation/icon.png",
