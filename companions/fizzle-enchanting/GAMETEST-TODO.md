@@ -26,10 +26,10 @@ N/A — Typed tomes with right-click conversion were cut from the MVP (DESIGN.md
 - [x] S-5.1d — Costs array has 3 entries corresponding to 3 enchanting slots
 
 ### S-5.2 Lapis & XP Requirements
-- [ ] S-5.2a — Slot 0 costs 1 lapis, slot 1 costs 2, slot 2 costs 3
-- [ ] S-5.2b — Cannot enchant without sufficient lapis
-- [ ] S-5.2c — Cannot enchant without sufficient player XP levels
-- [ ] S-5.2d — Successful enchant consumes correct lapis and XP
+- [x] S-5.2a — Slot 0 costs 1 lapis, slot 1 costs 2, slot 2 costs 3
+- [x] S-5.2b — Cannot enchant without sufficient lapis
+- [x] S-5.2c — Cannot enchant without sufficient player XP levels
+- [x] S-5.2d — Successful enchant consumes correct lapis and XP
 
 ### S-5.3 Enchanting Results
 - [ ] S-5.3a — Diamond sword at eterna=30: receives at least 1 enchantment from sword pool

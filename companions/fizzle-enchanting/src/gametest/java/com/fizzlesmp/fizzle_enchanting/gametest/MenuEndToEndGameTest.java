@@ -196,4 +196,144 @@ public class MenuEndToEndGameTest implements FabricGameTest {
         }
         helper.succeed();
     }
+
+    // --- S-5.2a: Slot 0 costs 1 lapis, slot 1 costs 2, slot 2 costs 3 ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void lapisCostMatchesSlotIndex(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+            helper.setBlock(TABLE_POS.offset(offset), Blocks.BOOKSHELF.defaultBlockState());
+        }
+
+        for (int slot = 0; slot < 3; slot++) {
+            Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+            player.experienceLevel = 30;
+            BlockPos absTable = helper.absolutePos(TABLE_POS);
+            FizzleEnchantmentMenu menu = new FizzleEnchantmentMenu(
+                    1, player.getInventory(),
+                    ContainerLevelAccess.create(helper.getLevel(), absTable));
+
+            menu.getSlot(0).set(new ItemStack(Items.DIAMOND_SWORD));
+            menu.getSlot(1).set(new ItemStack(Items.LAPIS_LAZULI, 64));
+
+            if (menu.costs[slot] <= 0) {
+                helper.fail("Slot " + slot + " cost should be > 0 with 15 bookshelves");
+                return;
+            }
+
+            int lapisBefore = menu.getSlot(1).getItem().getCount();
+            boolean clicked = menu.clickMenuButton(player, slot);
+            if (!clicked) {
+                helper.fail("clickMenuButton(" + slot + ") returned false");
+                return;
+            }
+            int lapisAfter = menu.getSlot(1).getItem().getCount();
+            int consumed = lapisBefore - lapisAfter;
+            int expected = slot + 1;
+            if (consumed != expected) {
+                helper.fail("Slot " + slot + " should consume " + expected + " lapis, consumed " + consumed);
+                return;
+            }
+        }
+
+        helper.succeed();
+    }
+
+    // --- S-5.2b: Cannot enchant without sufficient lapis ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void cannotEnchantWithoutLapis(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+            helper.setBlock(TABLE_POS.offset(offset), Blocks.BOOKSHELF.defaultBlockState());
+        }
+
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 30;
+        BlockPos absTable = helper.absolutePos(TABLE_POS);
+        FizzleEnchantmentMenu menu = new FizzleEnchantmentMenu(
+                1, player.getInventory(),
+                ContainerLevelAccess.create(helper.getLevel(), absTable));
+
+        menu.getSlot(0).set(new ItemStack(Items.DIAMOND_SWORD));
+
+        boolean clicked = menu.clickMenuButton(player, 0);
+        if (clicked) {
+            helper.fail("Enchanting should fail with no lapis in slot 1");
+            return;
+        }
+
+        helper.succeed();
+    }
+
+    // --- S-5.2c: Cannot enchant without sufficient player XP levels ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void cannotEnchantWithoutXp(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+            helper.setBlock(TABLE_POS.offset(offset), Blocks.BOOKSHELF.defaultBlockState());
+        }
+
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 0;
+        BlockPos absTable = helper.absolutePos(TABLE_POS);
+        FizzleEnchantmentMenu menu = new FizzleEnchantmentMenu(
+                1, player.getInventory(),
+                ContainerLevelAccess.create(helper.getLevel(), absTable));
+
+        menu.getSlot(0).set(new ItemStack(Items.DIAMOND_SWORD));
+        menu.getSlot(1).set(new ItemStack(Items.LAPIS_LAZULI, 64));
+
+        boolean clicked = menu.clickMenuButton(player, 0);
+        if (clicked) {
+            helper.fail("Enchanting should fail with 0 XP levels");
+            return;
+        }
+
+        helper.succeed();
+    }
+
+    // --- S-5.2d: Successful enchant consumes correct lapis and XP ---
+
+    @GameTest(template = "fizzle_enchanting:shelf_scan_9x4x9")
+    public void enchantConsumesCorrectLapisAndXp(GameTestHelper helper) {
+        helper.setBlock(TABLE_POS, Blocks.ENCHANTING_TABLE.defaultBlockState());
+        for (BlockPos offset : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+            helper.setBlock(TABLE_POS.offset(offset), Blocks.BOOKSHELF.defaultBlockState());
+        }
+
+        Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+        player.experienceLevel = 30;
+        BlockPos absTable = helper.absolutePos(TABLE_POS);
+        FizzleEnchantmentMenu menu = new FizzleEnchantmentMenu(
+                1, player.getInventory(),
+                ContainerLevelAccess.create(helper.getLevel(), absTable));
+
+        menu.getSlot(0).set(new ItemStack(Items.DIAMOND_SWORD));
+        menu.getSlot(1).set(new ItemStack(Items.LAPIS_LAZULI, 64));
+
+        int lapisBefore = menu.getSlot(1).getItem().getCount();
+        int xpBefore = player.experienceLevel;
+        boolean clicked = menu.clickMenuButton(player, 0);
+        if (!clicked) {
+            helper.fail("clickMenuButton(0) returned false");
+            return;
+        }
+
+        int lapisConsumed = lapisBefore - menu.getSlot(1).getItem().getCount();
+        if (lapisConsumed != 1) {
+            helper.fail("Slot 0 should consume exactly 1 lapis, consumed " + lapisConsumed);
+            return;
+        }
+
+        int xpConsumed = xpBefore - player.experienceLevel;
+        if (xpConsumed != 1) {
+            helper.fail("Slot 0 should consume exactly 1 XP level, consumed " + xpConsumed);
+            return;
+        }
+
+        helper.succeed();
+    }
 }
