@@ -88,6 +88,7 @@ public class MobScalingGameTest implements FabricGameTest {
      * on the main server thread, so the enable/spawn/restore sequence is atomic
      * with respect to any other test's spawn call.
      */
+    @SuppressWarnings("removal")
     private void assertTimeAxisHp(GameTestHelper helper, int playerLevel, float expectedMaxHp) {
         ServerPlayer player = helper.makeMockServerPlayerInLevel();
         // makeMockServerPlayerInLevel places the player near (0,0,0) of the level.
