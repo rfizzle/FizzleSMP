@@ -3,6 +3,9 @@ package com.rfizzle.tribulation.config;
 import com.rfizzle.tribulation.Tribulation;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.resources.ResourceLocation;
@@ -10,7 +13,6 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.monster.Monster;
 
 import java.io.IOException;
-import java.io.Reader;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -61,16 +63,40 @@ public class TribulationConfig {
             config.save(path);
             return config;
         }
-        try (Reader reader = Files.newBufferedReader(path)) {
-            TribulationConfig config = GSON.fromJson(reader, TribulationConfig.class);
-            if (config == null) {
+        try {
+            String content = Files.readString(path);
+            if (content.isBlank()) {
                 Tribulation.LOGGER.warn("Config file at {} was empty; using defaults", path);
+                TribulationConfig fresh = new TribulationConfig();
+                fresh.save(path);
+                return fresh;
+            }
+
+            JsonElement element = JsonParser.parseString(content);
+            if (element == null || element.isJsonNull() || !element.isJsonObject()) {
+                Tribulation.LOGGER.warn("Config file at {} is not a JSON object; using defaults", path);
+                TribulationConfig fresh = new TribulationConfig();
+                fresh.save(path);
+                return fresh;
+            }
+
+            JsonObject raw = element.getAsJsonObject();
+            boolean migrated = ConfigMigrator.migrate(raw);
+
+            TribulationConfig config = GSON.fromJson(raw, TribulationConfig.class);
+            if (config == null) {
+                Tribulation.LOGGER.warn("Config at {} deserialized to null; using defaults", path);
                 TribulationConfig fresh = new TribulationConfig();
                 fresh.save(path);
                 return fresh;
             }
             config.fillDefaults();
             config.validate();
+
+            if (migrated) {
+                config.save(path);
+            }
+
             return config;
         } catch (JsonSyntaxException e) {
             Tribulation.LOGGER.error("Failed to parse config at {}; using defaults (existing file left untouched)", path, e);
