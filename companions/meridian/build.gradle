@@ -301,8 +301,9 @@ java {
 }
 
 jar {
+    def baseName = project.archives_base_name
     from("LICENSE") {
-        rename { "${it}_${project.archives_base_name}" }
+        rename { "${it}_${baseName}" }
     }
     exclude ".gitkeep"
 }
