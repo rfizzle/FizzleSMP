@@ -3,11 +3,14 @@ package com.rfizzle.tribulation.config;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -15,6 +18,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TribulationConfigTest {
+
+    static Stream<String> mobKeys() {
+        return Stream.of(TribulationConfig.MOB_KEYS);
+    }
 
     @Test
     void defaultConfig_hasValidValues() {
@@ -52,21 +59,23 @@ class TribulationConfigTest {
     @Test
     void defaultConfig_populatesAllMobScalingEntries() {
         TribulationConfig cfg = new TribulationConfig();
-
         assertEquals(TribulationConfig.MOB_KEYS.length, cfg.scaling.size());
         assertEquals(TribulationConfig.MOB_KEYS.length, cfg.mobToggles.size());
+    }
 
-        for (String key : TribulationConfig.MOB_KEYS) {
-            TribulationConfig.MobScaling m = cfg.scaling.get(key);
-            assertNotNull(m, "missing scaling for " + key);
-            assertTrue(m.healthRate >= 0 && m.healthCap > 0, "bad health for " + key);
-            assertTrue(m.damageRate >= 0 && m.damageCap > 0, "bad damage for " + key);
-            assertTrue(m.speedRate >= 0 && m.speedCap >= 0, "bad speed for " + key);
-            assertTrue(m.followRangeRate >= 0 && m.followRangeCap >= 0, "bad followRange for " + key);
-            assertTrue(m.armorRate >= 0 && m.armorCap >= 0, "bad armor for " + key);
-            assertTrue(m.toughnessRate >= 0 && m.toughnessCap >= 0, "bad toughness for " + key);
-            assertTrue(cfg.mobToggles.getOrDefault(key, Boolean.FALSE), "toggle for " + key + " should default true");
-        }
+    @ParameterizedTest
+    @MethodSource("mobKeys")
+    void defaultScaling_hasValidRatesAndCaps(String key) {
+        TribulationConfig cfg = new TribulationConfig();
+        TribulationConfig.MobScaling m = cfg.scaling.get(key);
+        assertNotNull(m, "missing scaling for " + key);
+        assertTrue(m.healthRate >= 0 && m.healthCap > 0, "bad health");
+        assertTrue(m.damageRate >= 0 && m.damageCap > 0, "bad damage");
+        assertTrue(m.speedRate >= 0 && m.speedCap >= 0, "bad speed");
+        assertTrue(m.followRangeRate >= 0 && m.followRangeCap >= 0, "bad followRange");
+        assertTrue(m.armorRate >= 0 && m.armorCap >= 0, "bad armor");
+        assertTrue(m.toughnessRate >= 0 && m.toughnessCap >= 0, "bad toughness");
+        assertTrue(cfg.mobToggles.getOrDefault(key, Boolean.FALSE), "toggle should default true");
     }
 
     @Test
@@ -354,74 +363,69 @@ class TribulationConfigTest {
     }
 
     @Test
-    void defaultScaling_perMobRolesAreTuned() {
+    void defaultScaling_speedRolesAreTuned() {
         TribulationConfig cfg = new TribulationConfig();
         Map<String, TribulationConfig.MobScaling> s = cfg.scaling;
 
-        // Spider & friends scale speed faster than zombies.
         assertTrue(s.get("spider").speedRate > s.get("zombie").speedRate,
                 "spider should scale speed faster than zombie");
         assertTrue(s.get("cave_spider").speedRate > s.get("zombie").speedRate,
                 "cave spider should scale speed faster than zombie");
         assertTrue(s.get("endermite").speedRate >= s.get("spider").speedRate,
                 "endermite should scale speed at least as fast as spider");
+    }
 
-        // Ravager is the tankiest mob — highest health scaling.
-        double ravagerHealth = s.get("ravager").healthRate;
-        for (String key : TribulationConfig.MOB_KEYS) {
-            if (key.equals("ravager")) continue;
-            assertTrue(ravagerHealth >= s.get(key).healthRate,
-                    "ravager health rate should be >= " + key);
-        }
+    @ParameterizedTest
+    @MethodSource("mobKeys")
+    void defaultScaling_ravagerHasHighestHealthRate(String key) {
+        TribulationConfig cfg = new TribulationConfig();
+        double ravagerHealth = cfg.scaling.get("ravager").healthRate;
+        assertTrue(ravagerHealth >= cfg.scaling.get(key).healthRate,
+                "ravager health rate should be >= " + key);
+    }
 
-        // Vindicator is the heaviest melee hitter.
-        double vindicatorDamage = s.get("vindicator").damageRate;
-        for (String key : TribulationConfig.MOB_KEYS) {
-            if (key.equals("vindicator")) continue;
-            assertTrue(vindicatorDamage >= s.get(key).damageRate,
-                    "vindicator damage rate should be >= " + key);
-        }
+    @ParameterizedTest
+    @MethodSource("mobKeys")
+    void defaultScaling_vindicatorHasHighestDamageRate(String key) {
+        TribulationConfig cfg = new TribulationConfig();
+        double vindicatorDamage = cfg.scaling.get("vindicator").damageRate;
+        assertTrue(vindicatorDamage >= cfg.scaling.get(key).damageRate,
+                "vindicator damage rate should be >= " + key);
+    }
 
-        // Endermite & silverfish have trivial HP pools vs. the reference zombie.
+    @Test
+    void defaultScaling_miscRoleInvariants() {
+        TribulationConfig cfg = new TribulationConfig();
+        Map<String, TribulationConfig.MobScaling> s = cfg.scaling;
+
         assertTrue(s.get("endermite").healthRate < s.get("zombie").healthRate);
         assertTrue(s.get("silverfish").healthRate < s.get("zombie").healthRate);
-
-        // Creeper has low direct health scaling — its threat is the explosion.
         assertTrue(s.get("creeper").healthRate < s.get("zombie").healthRate);
 
-        // Armorless mobs (endermite, silverfish) have zero armor scaling so we
-        // don't accidentally give them unreachable armor via modifiers.
         assertEquals(0.0, s.get("endermite").armorRate);
         assertEquals(0.0, s.get("endermite").armorCap);
         assertEquals(0.0, s.get("silverfish").armorRate);
         assertEquals(0.0, s.get("silverfish").armorCap);
 
-        // Husk & wither skeleton are tougher than their baseline counterparts.
         assertTrue(s.get("husk").healthRate > s.get("zombie").healthRate);
         assertTrue(s.get("wither_skeleton").healthRate > s.get("skeleton").healthRate);
 
-        // Bogged mirrors skeleton — same rates.
         assertEquals(s.get("skeleton").healthRate, s.get("bogged").healthRate);
         assertEquals(s.get("skeleton").damageRate, s.get("bogged").damageRate);
     }
 
-    @Test
-    void defaultScaling_capsMatchRatesAtMaxLevel() {
-        // Each mob's cap should equal its rate * maxLevel (DESIGN.md invariant: the
-        // per-attribute cap is reached exactly at the documented max level). This
-        // catches copy-paste errors where a rate or cap drifts out of sync.
+    @ParameterizedTest
+    @MethodSource("mobKeys")
+    void defaultScaling_capsMatchRatesAtMaxLevel(String key) {
         TribulationConfig cfg = new TribulationConfig();
         int maxLevel = cfg.general.maxLevel;
-
-        for (String key : TribulationConfig.MOB_KEYS) {
-            TribulationConfig.MobScaling m = cfg.scaling.get(key);
-            assertEquals(m.healthRate * maxLevel, m.healthCap, 1e-9,
-                    key + ": healthCap should equal healthRate * maxLevel");
-            assertEquals(m.damageRate * maxLevel, m.damageCap, 1e-9,
-                    key + ": damageCap should equal damageRate * maxLevel");
-            assertEquals(m.speedRate * maxLevel, m.speedCap, 1e-9,
-                    key + ": speedCap should equal speedRate * maxLevel");
-        }
+        TribulationConfig.MobScaling m = cfg.scaling.get(key);
+        assertEquals(m.healthRate * maxLevel, m.healthCap, 1e-9,
+                "healthCap should equal healthRate * maxLevel");
+        assertEquals(m.damageRate * maxLevel, m.damageCap, 1e-9,
+                "damageCap should equal damageRate * maxLevel");
+        assertEquals(m.speedRate * maxLevel, m.speedCap, 1e-9,
+                "speedCap should equal speedRate * maxLevel");
     }
 
     @Test

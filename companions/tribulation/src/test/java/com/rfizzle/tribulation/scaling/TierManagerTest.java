@@ -3,6 +3,8 @@ package com.rfizzle.tribulation.scaling;
 
 import com.rfizzle.tribulation.config.TribulationConfig.Tiers;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -11,20 +13,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 class TierManagerTest {
 
-    @Test
-    void defaultTiers_thresholdsMatchDesign() {
-        Tiers t = new Tiers();
-        assertEquals(0, TierManager.getTier(0, t));
-        assertEquals(0, TierManager.getTier(49, t));
-        assertEquals(1, TierManager.getTier(50, t));
-        assertEquals(1, TierManager.getTier(99, t));
-        assertEquals(2, TierManager.getTier(100, t));
-        assertEquals(2, TierManager.getTier(149, t));
-        assertEquals(3, TierManager.getTier(150, t));
-        assertEquals(3, TierManager.getTier(199, t));
-        assertEquals(4, TierManager.getTier(200, t));
-        assertEquals(4, TierManager.getTier(249, t));
-        assertEquals(5, TierManager.getTier(250, t));
+    @ParameterizedTest
+    @CsvSource({
+            "0, 0", "49, 0",
+            "50, 1", "99, 1",
+            "100, 2", "149, 2",
+            "150, 3", "199, 3",
+            "200, 4", "249, 4",
+            "250, 5"
+    })
+    void defaultTiers_thresholdsMatchDesign(int level, int expectedTier) {
+        assertEquals(expectedTier, TierManager.getTier(level, new Tiers()));
     }
 
     @Test
@@ -64,25 +63,26 @@ class TierManagerTest {
         assertEquals(5, TierManager.getTier(9999, t));
     }
 
-    @Test
-    void boundaryConditions_respectsInclusiveThreshold() {
-        Tiers t = new Tiers();
-        assertEquals(0, TierManager.getTier(t.tier1 - 1, t));
-        assertEquals(1, TierManager.getTier(t.tier1, t));
-        assertEquals(1, TierManager.getTier(t.tier2 - 1, t));
-        assertEquals(2, TierManager.getTier(t.tier2, t));
-        assertEquals(4, TierManager.getTier(t.tier5 - 1, t));
-        assertEquals(5, TierManager.getTier(t.tier5, t));
+    @ParameterizedTest
+    @CsvSource({
+            "49, 0",
+            "50, 1",
+            "99, 1",
+            "100, 2",
+            "249, 4",
+            "250, 5"
+    })
+    void boundaryConditions_respectsInclusiveThreshold(int level, int expectedTier) {
+        assertEquals(expectedTier, TierManager.getTier(level, new Tiers()));
     }
 
-    @Test
-    void scalingEngineComputeTier_delegates() {
-        // ScalingEngine should remain backwards-compatible — callers that
-        // used the old compute function should get the same answers.
+    @ParameterizedTest
+    @CsvSource({
+            "0", "25", "50", "75", "100", "125", "150",
+            "175", "200", "225", "250", "275", "300"
+    })
+    void scalingEngineComputeTier_delegates(int level) {
         Tiers t = new Tiers();
-        for (int level = 0; level <= 300; level += 25) {
-            assertEquals(TierManager.getTier(level, t), ScalingEngine.computeTier(level, t),
-                    "mismatch at level " + level);
-        }
+        assertEquals(TierManager.getTier(level, t), ScalingEngine.computeTier(level, t));
     }
 }

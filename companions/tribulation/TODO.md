@@ -1,16 +1,12 @@
 # Tribulation - Future Work
 
-## 1. @ParameterizedTest Adoption
+## ~~1. @ParameterizedTest Adoption~~ (Done)
 
-The test suite currently uses `for` loops to iterate over all 21 mob keys (e.g., `defaultScaling_capsMatchRatesAtMaxLevel` loops over `MOB_KEYS` and asserts inside the loop). A failure reports as a single test with a message like "mismatch at key ravager" rather than 21 individually reported results. JUnit 5 parameterized tests would give per-case failure reporting and clearer test names in IDE runners and CI output.
-
-### Proposals
-
-- **`TribulationConfigTest` - mob scaling validation**: Convert the `MOB_KEYS` loops in `defaultConfig_populatesAllMobScalingEntries`, `defaultScaling_perMobRolesAreTuned`, and `defaultScaling_capsMatchRatesAtMaxLevel` to `@ParameterizedTest` with `@MethodSource` providing each of the 21 mob keys. Each mob becomes its own test case: `capsMatchRatesAtMaxLevel[zombie]`, `capsMatchRatesAtMaxLevel[ravager]`, etc.
-- **`TierManagerTest` - tier boundary tests**: The level-to-tier mappings in `defaultTiers_thresholdsMatchDesign` and `boundaryConditions_respectsInclusiveThreshold` are natural candidates for `@CsvSource` with `level, expectedTier` pairs (e.g., `"0, 0"`, `"49, 0"`, `"50, 1"`, `"250, 5"`).
-- **`ScalingEngineTest` - per-attribute classification**: The `classification_addValueAttributesArmorAndToughness` and `classification_positionScaledSubsetExcludesSpeedAndFollowRange` tests check each of the 6 attribute constants individually. These could use `@EnumSource` or `@MethodSource` providing attribute key + expected boolean pairs.
-- **`ScalingEngineTest` - per-attribute rate/cap lookups**: The `computeAttributeFactor` tests for health, speed, follow range, armor, and toughness each test a single attribute. A `@MethodSource` supplying `(attributeKey, level, distanceFactor, heightFactor, expectedTimeFactor, expectedDistanceFactor, expectedHeightFactor)` tuples would consolidate them and make it trivial to add coverage for new attributes.
-- **Dependency**: Add `junit-jupiter-params` to `build.gradle`. The artifact is already part of the `junit-bom:5.10.2` platform declaration, so only an explicit `testImplementation "org.junit.jupiter:junit-jupiter-params"` line is needed (no version required).
+Completed. All loop-based tests converted to `@ParameterizedTest`:
+- `TribulationConfigTest`: mob scaling validation (`@MethodSource`), ravager/vindicator supremacy checks (`@MethodSource`), caps-match-rates (`@MethodSource`)
+- `TierManagerTest`: tier thresholds, boundary conditions, delegation (`@CsvSource`)
+- `ScalingEngineTest`: attribute classification, tier thresholds (`@CsvSource`)
+- `junit-jupiter-params` added to `build.gradle`
 
 ## 2. Mod Compatibility Integrations
 

@@ -3,6 +3,8 @@ package com.rfizzle.tribulation.scaling;
 
 import com.rfizzle.tribulation.config.TribulationConfig;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -280,18 +282,16 @@ class ScalingEngineTest {
 
     // ---- Tier ----
 
-    @Test
-    void computeTier_thresholdsProduceExpectedRanges() {
-        TribulationConfig.Tiers t = new TribulationConfig.Tiers();
-        assertEquals(0, ScalingEngine.computeTier(0, t));
-        assertEquals(0, ScalingEngine.computeTier(49, t));
-        assertEquals(1, ScalingEngine.computeTier(50, t));
-        assertEquals(1, ScalingEngine.computeTier(99, t));
-        assertEquals(2, ScalingEngine.computeTier(100, t));
-        assertEquals(3, ScalingEngine.computeTier(150, t));
-        assertEquals(4, ScalingEngine.computeTier(200, t));
-        assertEquals(5, ScalingEngine.computeTier(250, t));
-        assertEquals(5, ScalingEngine.computeTier(9999, t));
+    @ParameterizedTest
+    @CsvSource({
+            "0, 0", "49, 0",
+            "50, 1", "99, 1",
+            "100, 2", "150, 3",
+            "200, 4", "250, 5",
+            "9999, 5"
+    })
+    void computeTier_thresholdsProduceExpectedRanges(int level, int expectedTier) {
+        assertEquals(expectedTier, ScalingEngine.computeTier(level, new TribulationConfig.Tiers()));
     }
 
     @Test
@@ -316,22 +316,29 @@ class ScalingEngineTest {
         assertEquals("tribulation:height_damage", ScalingEngine.modifierId("height", "damage").toString());
     }
 
-    @Test
-    void classification_addValueAttributesArmorAndToughness() {
-        assertTrue(ScalingEngine.usesAddValue(ScalingEngine.ATTR_ARMOR));
-        assertTrue(ScalingEngine.usesAddValue(ScalingEngine.ATTR_TOUGHNESS));
-        assertEquals(false, ScalingEngine.usesAddValue(ScalingEngine.ATTR_HEALTH));
-        assertEquals(false, ScalingEngine.usesAddValue(ScalingEngine.ATTR_DAMAGE));
-        assertEquals(false, ScalingEngine.usesAddValue(ScalingEngine.ATTR_SPEED));
+    @ParameterizedTest
+    @CsvSource({
+            "armor, true",
+            "toughness, true",
+            "health, false",
+            "damage, false",
+            "speed, false",
+            "follow_range, false"
+    })
+    void classification_addValueAttributes(String attribute, boolean expected) {
+        assertEquals(expected, ScalingEngine.usesAddValue(attribute));
     }
 
-    @Test
-    void classification_positionScaledSubsetExcludesSpeedAndFollowRange() {
-        assertTrue(ScalingEngine.isPositionScaled(ScalingEngine.ATTR_HEALTH));
-        assertTrue(ScalingEngine.isPositionScaled(ScalingEngine.ATTR_DAMAGE));
-        assertTrue(ScalingEngine.isPositionScaled(ScalingEngine.ATTR_ARMOR));
-        assertTrue(ScalingEngine.isPositionScaled(ScalingEngine.ATTR_TOUGHNESS));
-        assertEquals(false, ScalingEngine.isPositionScaled(ScalingEngine.ATTR_SPEED));
-        assertEquals(false, ScalingEngine.isPositionScaled(ScalingEngine.ATTR_FOLLOW_RANGE));
+    @ParameterizedTest
+    @CsvSource({
+            "health, true",
+            "damage, true",
+            "armor, true",
+            "toughness, true",
+            "speed, false",
+            "follow_range, false"
+    })
+    void classification_positionScaledSubset(String attribute, boolean expected) {
+        assertEquals(expected, ScalingEngine.isPositionScaled(attribute));
     }
 }
