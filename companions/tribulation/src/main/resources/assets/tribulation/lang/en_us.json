@@ -128,5 +128,28 @@
     "config.tribulation.xp_and_loot.max_xp_factor": "Max XP Factor",
     "config.tribulation.xp_and_loot.drop_more_loot": "Drop More Loot",
     "config.tribulation.xp_and_loot.more_loot_chance": "More Loot Chance per Level",
-    "config.tribulation.xp_and_loot.max_loot_chance": "Max Loot Chance"
+    "config.tribulation.xp_and_loot.max_loot_chance": "Max Loot Chance",
+
+    "config.tribulation.category.hardcore_hearts": "Hardcore Hearts",
+    "config.tribulation.hardcore_hearts.enabled": "Enabled",
+    "config.tribulation.hardcore_hearts.hearts_lost_per_death": "Hearts Lost per Death (half-hearts)",
+    "config.tribulation.hardcore_hearts.minimum_hearts": "Minimum Hearts (half-hearts)",
+    "config.tribulation.hardcore_hearts.hearts_restored_per_fragment": "Hearts Restored per Fragment",
+
+    "config.tribulation.category.soul_inventory": "Soul Inventory",
+    "config.tribulation.soul_inventory.enabled": "Enabled",
+    "config.tribulation.soul_inventory.soulbound_enchantment": "Soulbound Enchantment ID",
+    "config.tribulation.soul_inventory.destroy_xp": "Destroy XP on Death",
+    "config.tribulation.soul_inventory.respect_keep_inventory": "Respect keepInventory Gamerule",
+
+    "item.tribulation.heart_fragment": "Heart Fragment",
+    "item.tribulation.heart_fragment.tooltip": "Right-click to restore a lost heart.",
+    "item.tribulation.heart_fragment.used": "Restored %s hearts (%s/%s max HP)",
+    "item.tribulation.heart_fragment.full": "You have not lost any hearts.",
+
+    "enchantment.tribulation.soulbound": "Soulbound",
+    "enchantment.tribulation.soulbound.desc": "Item is kept on death when Soul Inventory is active.",
+
+    "message.tribulation.heart_lost": "You lost a heart. (%s/%s remaining)",
+    "message.tribulation.heart_lost_floor": "You are at minimum hearts."
 }

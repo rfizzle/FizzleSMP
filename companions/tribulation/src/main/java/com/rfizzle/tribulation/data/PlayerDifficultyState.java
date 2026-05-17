@@ -25,6 +25,7 @@ public class PlayerDifficultyState extends SavedData {
     private static final String NBT_LEVEL_KEY = "Level";
     private static final String NBT_TICK_KEY = "Tick";
     private static final String NBT_LAST_DEATH_TICK_KEY = "LastDeathTick";
+    private static final String NBT_HEARTS_LOST_KEY = "HeartsLost";
 
     public static final SavedData.Factory<PlayerDifficultyState> FACTORY = new SavedData.Factory<>(
             PlayerDifficultyState::new,
@@ -177,6 +178,57 @@ public class PlayerDifficultyState extends SavedData {
         return newLevel;
     }
 
+    public int getHeartsLost(UUID uuid) {
+        return getPlayerData(uuid).heartsLost;
+    }
+
+    /**
+     * Increment the player's heart penalty by {@code amount} half-hearts,
+     * floored so that the player retains at least {@code minimumHearts}
+     * half-hearts of max HP (vanilla baseline is 20). Returns the new total
+     * {@code heartsLost} value.
+     */
+    public int addHeartsLost(UUID uuid, int amount, int minimumHearts) {
+        if (amount <= 0) return getPlayerData(uuid).heartsLost;
+        PlayerData pd = getPlayerData(uuid);
+        int maxPenalty = Math.max(0, 20 - Math.max(1, minimumHearts));
+        int newHeartsLost = Math.min(maxPenalty, pd.heartsLost + amount);
+        if (newHeartsLost != pd.heartsLost) {
+            pd.heartsLost = newHeartsLost;
+            setDirty();
+        }
+        return pd.heartsLost;
+    }
+
+    /**
+     * Restore up to {@code amount} half-hearts, reducing the penalty towards 0.
+     * Returns the new {@code heartsLost} value.
+     */
+    public int restoreHearts(UUID uuid, int amount) {
+        if (amount <= 0) return getPlayerData(uuid).heartsLost;
+        PlayerData pd = getPlayerData(uuid);
+        int newHeartsLost = Math.max(0, pd.heartsLost - amount);
+        if (newHeartsLost != pd.heartsLost) {
+            pd.heartsLost = newHeartsLost;
+            setDirty();
+        }
+        return pd.heartsLost;
+    }
+
+    /**
+     * Clear all heart penalties for the player. Returns the previous
+     * {@code heartsLost} value.
+     */
+    public int resetHearts(UUID uuid) {
+        PlayerData pd = getPlayerData(uuid);
+        int prev = pd.heartsLost;
+        if (pd.heartsLost != 0) {
+            pd.heartsLost = 0;
+            setDirty();
+        }
+        return prev;
+    }
+
     /**
      * Advance a raw {@link PlayerData} by {@code amount} ticks. Returns the
      * number of level boundaries crossed (0 when only the tick counter moved,
@@ -214,6 +266,7 @@ public class PlayerDifficultyState extends SavedData {
             playerTag.putInt(NBT_LEVEL_KEY, entry.getValue().level);
             playerTag.putInt(NBT_TICK_KEY, entry.getValue().tickCounter);
             playerTag.putLong(NBT_LAST_DEATH_TICK_KEY, entry.getValue().lastDeathTick);
+            playerTag.putInt(NBT_HEARTS_LOST_KEY, entry.getValue().heartsLost);
             list.add(playerTag);
         }
         tag.put(NBT_PLAYERS_KEY, list);
@@ -244,6 +297,7 @@ public class PlayerDifficultyState extends SavedData {
             pd.lastDeathTick = playerTag.contains(NBT_LAST_DEATH_TICK_KEY)
                     ? playerTag.getLong(NBT_LAST_DEATH_TICK_KEY)
                     : NEVER_DIED;
+            pd.heartsLost = Math.max(0, playerTag.getInt(NBT_HEARTS_LOST_KEY));
             state.data.put(uuid, pd);
         }
         return state;
@@ -253,6 +307,7 @@ public class PlayerDifficultyState extends SavedData {
         public int level;
         public int tickCounter;
         public long lastDeathTick = NEVER_DIED;
+        public int heartsLost;
 
         public PlayerData() {}
     }

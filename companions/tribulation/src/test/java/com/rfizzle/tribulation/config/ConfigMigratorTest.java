@@ -12,6 +12,7 @@ import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConfigMigratorTest {
@@ -129,5 +130,81 @@ class ConfigMigratorTest {
         TribulationConfig cfg = new TribulationConfig();
         assertEquals(ConfigMigrator.CURRENT_VERSION, cfg.configVersion,
                 "TribulationConfig.configVersion default must match ConfigMigrator.CURRENT_VERSION");
+    }
+
+    @Test
+    void migrate_v1ToV2_addsHardcoreHeartsAndSoulInventory() {
+        JsonObject json = new JsonObject();
+        json.addProperty("configVersion", 1);
+        json.add("general", new JsonObject());
+
+        assertTrue(ConfigMigrator.migrate(json));
+
+        assertTrue(json.has("hardcoreHearts"), "hardcoreHearts section must be added");
+        assertTrue(json.get("hardcoreHearts").isJsonObject());
+        assertTrue(json.has("soulInventory"), "soulInventory section must be added");
+        assertTrue(json.get("soulInventory").isJsonObject());
+        assertEquals(ConfigMigrator.CURRENT_VERSION, json.get("configVersion").getAsInt());
+    }
+
+    @Test
+    void migrate_v1ToV2_doesNotOverwriteExistingSections() {
+        JsonObject json = new JsonObject();
+        json.addProperty("configVersion", 1);
+        JsonObject existingHearts = new JsonObject();
+        existingHearts.addProperty("enabled", true);
+        json.add("hardcoreHearts", existingHearts);
+
+        assertTrue(ConfigMigrator.migrate(json));
+
+        assertTrue(json.getAsJsonObject("hardcoreHearts").get("enabled").getAsBoolean(),
+                "pre-existing hardcoreHearts content must be preserved");
+        assertTrue(json.has("soulInventory"));
+    }
+
+    @Test
+    void migrate_v2_isIdempotent() {
+        JsonObject json = new JsonObject();
+        json.addProperty("configVersion", 2);
+        json.add("hardcoreHearts", new JsonObject());
+        json.add("soulInventory", new JsonObject());
+
+        assertFalse(ConfigMigrator.migrate(json));
+        assertEquals(2, json.get("configVersion").getAsInt());
+    }
+
+    @Test
+    void migrate_v0ToV2_runsBothMigrations() {
+        JsonObject json = new JsonObject();
+        // No configVersion → version 0
+
+        assertTrue(ConfigMigrator.migrate(json));
+
+        assertEquals(ConfigMigrator.CURRENT_VERSION, json.get("configVersion").getAsInt());
+        assertTrue(json.has("hardcoreHearts"));
+        assertTrue(json.has("soulInventory"));
+    }
+
+    @Test
+    void load_v1File_migratesAndAddsNewSections(@TempDir Path tmp) throws IOException {
+        Path path = tmp.resolve("tribulation.json");
+        Files.writeString(path, """
+                {
+                  "configVersion": 1,
+                  "general": { "maxLevel": 200 }
+                }
+                """);
+
+        TribulationConfig loaded = TribulationConfig.load(path);
+
+        assertEquals(200, loaded.general.maxLevel);
+        assertNotNull(loaded.hardcoreHearts);
+        assertNotNull(loaded.soulInventory);
+        assertFalse(loaded.hardcoreHearts.enabled);
+        assertFalse(loaded.soulInventory.enabled);
+
+        String saved = Files.readString(path);
+        JsonObject savedJson = JsonParser.parseString(saved).getAsJsonObject();
+        assertEquals(ConfigMigrator.CURRENT_VERSION, savedJson.get("configVersion").getAsInt());
     }
 }

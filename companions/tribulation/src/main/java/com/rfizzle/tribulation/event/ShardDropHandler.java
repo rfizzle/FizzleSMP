@@ -75,6 +75,7 @@ public final class ShardDropHandler {
         return random.nextDouble() < cfg.dropChance;
     }
 
+
     /**
      * Resolve the {@link ServerPlayer} credited with the kill. Prefers
      * {@link LivingEntity#getKillCredit()} (handles arrow/trident kills) and
@@ -100,4 +101,5 @@ public final class ShardDropHandler {
         dropped.setDefaultPickUpDelay();
         world.addFreshEntity(dropped);
     }
+
 }

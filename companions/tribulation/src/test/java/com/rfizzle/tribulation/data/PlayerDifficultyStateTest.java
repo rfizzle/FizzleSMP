@@ -1,6 +1,7 @@
 // Tier: 1 (pure JUnit)
 package com.rfizzle.tribulation.data;
 
+import net.minecraft.nbt.CompoundTag;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -490,5 +491,182 @@ class PlayerDifficultyStateTest {
         UUID uuid = UUID.randomUUID();
         state.getPlayerData(uuid).tickCounter = 1234;
         assertEquals(1234, state.getTickCounter(uuid));
+    }
+
+    // ---- heartsLost (Hardcore Hearts persistence) ----
+
+    @Test
+    void newPlayerData_hasZeroHeartsLost() {
+        PlayerDifficultyState.PlayerData pd = new PlayerDifficultyState.PlayerData();
+        assertEquals(0, pd.heartsLost);
+    }
+
+    @Test
+    void getHeartsLost_defaultsToZero() {
+        PlayerDifficultyState state = new PlayerDifficultyState();
+        UUID uuid = UUID.randomUUID();
+        assertEquals(0, state.getHeartsLost(uuid));
+    }
+
+    @Test
+    void addHeartsLost_incrementsAndMarksDirty() {
+        PlayerDifficultyState state = new PlayerDifficultyState();
+        UUID uuid = UUID.randomUUID();
+        int result = state.addHeartsLost(uuid, 2, 2);
+        assertEquals(2, result);
+        assertEquals(2, state.getHeartsLost(uuid));
+        assertTrue(state.isDirty());
+    }
+
+    @Test
+    void addHeartsLost_floorsAtMinimumHearts() {
+        PlayerDifficultyState state = new PlayerDifficultyState();
+        UUID uuid = UUID.randomUUID();
+        // minimumHearts=2 means maxPenalty = 20 - 2 = 18
+        int result = state.addHeartsLost(uuid, 50, 2);
+        assertEquals(18, result);
+        assertEquals(18, state.getHeartsLost(uuid));
+    }
+
+    @Test
+    void addHeartsLost_accumulatesAcrossCalls() {
+        PlayerDifficultyState state = new PlayerDifficultyState();
+        UUID uuid = UUID.randomUUID();
+        state.addHeartsLost(uuid, 4, 2);
+        state.addHeartsLost(uuid, 4, 2);
+        assertEquals(8, state.getHeartsLost(uuid));
+    }
+
+    @Test
+    void addHeartsLost_zeroAmount_isNoop() {
+        PlayerDifficultyState state = new PlayerDifficultyState();
+        UUID uuid = UUID.randomUUID();
+        state.getPlayerData(uuid).heartsLost = 4;
+        int result = state.addHeartsLost(uuid, 0, 2);
+        assertEquals(4, result);
+        assertFalse(state.isDirty());
+    }
+
+    @Test
+    void addHeartsLost_negativeAmount_isNoop() {
+        PlayerDifficultyState state = new PlayerDifficultyState();
+        UUID uuid = UUID.randomUUID();
+        state.getPlayerData(uuid).heartsLost = 4;
+        int result = state.addHeartsLost(uuid, -3, 2);
+        assertEquals(4, result);
+        assertFalse(state.isDirty());
+    }
+
+    @Test
+    void restoreHearts_reducesHeartsLostAndMarksDirty() {
+        PlayerDifficultyState state = new PlayerDifficultyState();
+        UUID uuid = UUID.randomUUID();
+        state.getPlayerData(uuid).heartsLost = 10;
+        int result = state.restoreHearts(uuid, 4);
+        assertEquals(6, result);
+        assertEquals(6, state.getHeartsLost(uuid));
+        assertTrue(state.isDirty());
+    }
+
+    @Test
+    void restoreHearts_floorsAtZero() {
+        PlayerDifficultyState state = new PlayerDifficultyState();
+        UUID uuid = UUID.randomUUID();
+        state.getPlayerData(uuid).heartsLost = 3;
+        int result = state.restoreHearts(uuid, 10);
+        assertEquals(0, result);
+        assertEquals(0, state.getHeartsLost(uuid));
+    }
+
+    @Test
+    void restoreHearts_zeroAmount_isNoop() {
+        PlayerDifficultyState state = new PlayerDifficultyState();
+        UUID uuid = UUID.randomUUID();
+        state.getPlayerData(uuid).heartsLost = 5;
+        int result = state.restoreHearts(uuid, 0);
+        assertEquals(5, result);
+        assertFalse(state.isDirty());
+    }
+
+    @Test
+    void restoreHearts_whenAlreadyZero_isNoop() {
+        PlayerDifficultyState state = new PlayerDifficultyState();
+        UUID uuid = UUID.randomUUID();
+        int result = state.restoreHearts(uuid, 5);
+        assertEquals(0, result);
+        assertFalse(state.isDirty());
+    }
+
+    @Test
+    void resetHearts_clearsPenaltyAndMarksDirty() {
+        PlayerDifficultyState state = new PlayerDifficultyState();
+        UUID uuid = UUID.randomUUID();
+        state.getPlayerData(uuid).heartsLost = 8;
+        int prev = state.resetHearts(uuid);
+        assertEquals(8, prev);
+        assertEquals(0, state.getHeartsLost(uuid));
+        assertTrue(state.isDirty());
+    }
+
+    @Test
+    void resetHearts_noopWhenAlreadyZero() {
+        PlayerDifficultyState state = new PlayerDifficultyState();
+        UUID uuid = UUID.randomUUID();
+        state.getPlayerData(uuid); // ensure entry
+        int prev = state.resetHearts(uuid);
+        assertEquals(0, prev);
+        assertFalse(state.isDirty());
+    }
+
+    @Test
+    void heartsLost_independentOfLevelAndTickCounter() {
+        PlayerDifficultyState state = new PlayerDifficultyState();
+        UUID uuid = UUID.randomUUID();
+        state.getPlayerData(uuid).level = 100;
+        state.getPlayerData(uuid).tickCounter = 50_000;
+        state.addHeartsLost(uuid, 6, 2);
+        assertEquals(100, state.getLevel(uuid));
+        assertEquals(50_000, state.getTickCounter(uuid));
+        assertEquals(6, state.getHeartsLost(uuid));
+    }
+
+    // ---- NBT serialization round-trip ----
+
+    @Test
+    void nbt_roundTrip_preservesHeartsLost() {
+        PlayerDifficultyState state = new PlayerDifficultyState();
+        UUID uuid = UUID.randomUUID();
+        state.getPlayerData(uuid).level = 42;
+        state.getPlayerData(uuid).heartsLost = 8;
+        state.getPlayerData(uuid).tickCounter = 1000;
+
+        CompoundTag tag = state.save(new CompoundTag(), null);
+        PlayerDifficultyState loaded = PlayerDifficultyState.load(tag, null);
+
+        assertEquals(42, loaded.getLevel(uuid));
+        assertEquals(8, loaded.getHeartsLost(uuid));
+        assertEquals(1000, loaded.getTickCounter(uuid));
+    }
+
+    @Test
+    void nbt_backwardCompat_missingHeartsLostDefaultsToZero() {
+        // Simulate an old save file that doesn't have the HeartsLost key
+        CompoundTag tag = new CompoundTag();
+        net.minecraft.nbt.ListTag list = new net.minecraft.nbt.ListTag();
+        CompoundTag playerTag = new CompoundTag();
+        UUID uuid = UUID.randomUUID();
+        playerTag.putUUID("UUID", uuid);
+        playerTag.putInt("Level", 10);
+        playerTag.putInt("Tick", 500);
+        playerTag.putLong("LastDeathTick", 12345L);
+        // No HeartsLost key
+        list.add(playerTag);
+        tag.put("Players", list);
+
+        PlayerDifficultyState loaded = PlayerDifficultyState.load(tag, null);
+
+        assertEquals(10, loaded.getLevel(uuid));
+        assertEquals(500, loaded.getTickCounter(uuid));
+        assertEquals(0, loaded.getHeartsLost(uuid));
     }
 }

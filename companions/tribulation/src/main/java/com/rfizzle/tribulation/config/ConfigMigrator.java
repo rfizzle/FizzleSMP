@@ -21,7 +21,7 @@ import com.rfizzle.tribulation.Tribulation;
  */
 final class ConfigMigrator {
 
-    static final int CURRENT_VERSION = 1;
+    static final int CURRENT_VERSION = 2;
 
     @FunctionalInterface
     interface Migration {
@@ -38,7 +38,16 @@ final class ConfigMigrator {
             // structurally identical to v1; fillDefaults() handles any
             // missing fields. This migration exists so the infrastructure
             // is exercised on first load of a version-0 file.
-            json -> {}
+            json -> {},
+            // v1 → v2: add hardcoreHearts and soulInventory sections.
+            json -> {
+                if (!json.has("hardcoreHearts")) {
+                    json.add("hardcoreHearts", new JsonObject());
+                }
+                if (!json.has("soulInventory")) {
+                    json.add("soulInventory", new JsonObject());
+                }
+            }
     };
 
     private ConfigMigrator() {}

@@ -32,6 +32,8 @@ public class ModMenuIntegration implements ModMenuApi {
             addMobToggles(builder, entry, current);
             addDeathRelief(builder, entry, current);
             addShards(builder, entry, current);
+            addHardcoreHearts(builder, entry, current);
+            addSoulInventory(builder, entry, current);
             addSpecialZombies(builder, entry, current);
             addBosses(builder, entry, current);
             addXpAndLoot(builder, entry, current);
@@ -370,6 +372,66 @@ public class ModMenuIntegration implements ModMenuApi {
                         config.shards.sideEffects)
                 .setDefaultValue(true)
                 .setSaveConsumer(v -> config.shards.sideEffects = v)
+                .build());
+    }
+
+    private static void addHardcoreHearts(ConfigBuilder builder, ConfigEntryBuilder entry, TribulationConfig config) {
+        ConfigCategory cat = builder.getOrCreateCategory(
+                Component.translatable("config.tribulation.category.hardcore_hearts"));
+        TribulationConfig.HardcoreHearts hh = config.hardcoreHearts;
+        cat.addEntry(entry.startBooleanToggle(
+                        Component.translatable("config.tribulation.hardcore_hearts.enabled"),
+                        hh.enabled)
+                .setDefaultValue(false)
+                .setSaveConsumer(v -> hh.enabled = v)
+                .build());
+        cat.addEntry(entry.startIntField(
+                        Component.translatable("config.tribulation.hardcore_hearts.hearts_lost_per_death"),
+                        hh.heartsLostPerDeath)
+                .setDefaultValue(2).setMin(1).setMax(20)
+                .setSaveConsumer(v -> hh.heartsLostPerDeath = v)
+                .build());
+        cat.addEntry(entry.startIntField(
+                        Component.translatable("config.tribulation.hardcore_hearts.minimum_hearts"),
+                        hh.minimumHearts)
+                .setDefaultValue(2).setMin(1).setMax(20)
+                .setSaveConsumer(v -> hh.minimumHearts = v)
+                .build());
+        cat.addEntry(entry.startIntField(
+                        Component.translatable("config.tribulation.hardcore_hearts.hearts_restored_per_fragment"),
+                        hh.heartsRestoredPerFragment)
+                .setDefaultValue(2).setMin(1).setMax(20)
+                .setSaveConsumer(v -> hh.heartsRestoredPerFragment = v)
+                .build());
+    }
+
+    private static void addSoulInventory(ConfigBuilder builder, ConfigEntryBuilder entry, TribulationConfig config) {
+        ConfigCategory cat = builder.getOrCreateCategory(
+                Component.translatable("config.tribulation.category.soul_inventory"));
+        TribulationConfig.SoulInventory si = config.soulInventory;
+        cat.addEntry(entry.startBooleanToggle(
+                        Component.translatable("config.tribulation.soul_inventory.enabled"),
+                        si.enabled)
+                .setDefaultValue(false)
+                .setSaveConsumer(v -> si.enabled = v)
+                .build());
+        cat.addEntry(entry.startStrField(
+                        Component.translatable("config.tribulation.soul_inventory.soulbound_enchantment"),
+                        si.soulboundEnchantment)
+                .setDefaultValue("tribulation:soulbound")
+                .setSaveConsumer(v -> si.soulboundEnchantment = v)
+                .build());
+        cat.addEntry(entry.startBooleanToggle(
+                        Component.translatable("config.tribulation.soul_inventory.destroy_xp"),
+                        si.destroyXp)
+                .setDefaultValue(false)
+                .setSaveConsumer(v -> si.destroyXp = v)
+                .build());
+        cat.addEntry(entry.startBooleanToggle(
+                        Component.translatable("config.tribulation.soul_inventory.respect_keep_inventory"),
+                        si.respectKeepInventory)
+                .setDefaultValue(true)
+                .setSaveConsumer(v -> si.respectKeepInventory = v)
                 .build());
     }
 

@@ -7,7 +7,8 @@
         "CreeperAccessor",
         "HuskAbilityMixin",
         "LivingEntityExperienceMixin",
-        "MobAbilityMixin"
+        "MobAbilityMixin",
+        "SoulInventoryMixin"
     ],
     "injectors": {
         "defaultRequire": 1

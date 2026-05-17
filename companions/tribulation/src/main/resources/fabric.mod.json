@@ -11,7 +11,10 @@
     "environment": "*",
     "entrypoints": {
         "main": ["com.rfizzle.tribulation.Tribulation"],
-        "fabric-gametest": ["com.rfizzle.tribulation.gametest.MobScalingGameTest"],
+        "fabric-gametest": [
+            "com.rfizzle.tribulation.gametest.MobScalingGameTest",
+            "com.rfizzle.tribulation.gametest.DeathPenaltiesGameTest"
+        ],
         "modmenu": ["com.rfizzle.tribulation.compat.modmenu.ModMenuIntegration"],
         "jade": ["com.rfizzle.tribulation.compat.jade.JadeTribulationPlugin"],
         "emi": ["com.rfizzle.tribulation.compat.emi.EmiShardPlugin"],

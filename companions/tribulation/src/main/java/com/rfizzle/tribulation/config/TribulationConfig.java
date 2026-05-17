@@ -35,7 +35,7 @@ public class TribulationConfig {
             "hoglin", "zoglin", "ravager", "piglin", "zombified_piglin", "bogged"
     };
 
-    public int configVersion = 1;
+    public int configVersion = 2;
     public General general = new General();
     public TimeScaling timeScaling = new TimeScaling();
     public DistanceScaling distanceScaling = new DistanceScaling();
@@ -43,6 +43,8 @@ public class TribulationConfig {
     public StatCaps statCaps = new StatCaps();
     public DeathRelief deathRelief = new DeathRelief();
     public Shards shards = new Shards();
+    public HardcoreHearts hardcoreHearts = new HardcoreHearts();
+    public SoulInventory soulInventory = new SoulInventory();
     public Map<String, MobScaling> scaling = defaultScaling();
     public UnlistedHostileMobs unlistedHostileMobs = new UnlistedHostileMobs();
     public SpecialZombies specialZombies = new SpecialZombies();
@@ -202,6 +204,8 @@ public class TribulationConfig {
         if (statCaps == null) statCaps = new StatCaps();
         if (deathRelief == null) deathRelief = new DeathRelief();
         if (shards == null) shards = new Shards();
+        if (hardcoreHearts == null) hardcoreHearts = new HardcoreHearts();
+        if (soulInventory == null) soulInventory = new SoulInventory();
         if (specialZombies == null) specialZombies = new SpecialZombies();
         if (bosses == null) bosses = new Bosses();
         if (xpAndLoot == null) xpAndLoot = new XpAndLoot();
@@ -289,6 +293,30 @@ public class TribulationConfig {
         }
         shards.dropChance = clampUnit("shards.dropChance", shards.dropChance);
 
+        if (hardcoreHearts.heartsLostPerDeath < 1) {
+            Tribulation.LOGGER.warn("hardcoreHearts.heartsLostPerDeath must be >= 1, got {}; clamped to 1", hardcoreHearts.heartsLostPerDeath);
+            hardcoreHearts.heartsLostPerDeath = 1;
+        }
+        if (hardcoreHearts.heartsLostPerDeath > 20) {
+            Tribulation.LOGGER.warn("hardcoreHearts.heartsLostPerDeath must be <= 20, got {}; clamped to 20", hardcoreHearts.heartsLostPerDeath);
+            hardcoreHearts.heartsLostPerDeath = 20;
+        }
+        if (hardcoreHearts.minimumHearts < 1) {
+            Tribulation.LOGGER.warn("hardcoreHearts.minimumHearts must be >= 1, got {}; clamped to 1", hardcoreHearts.minimumHearts);
+            hardcoreHearts.minimumHearts = 1;
+        }
+        if (hardcoreHearts.minimumHearts > 20) {
+            Tribulation.LOGGER.warn("hardcoreHearts.minimumHearts must be <= 20, got {}; clamped to 20", hardcoreHearts.minimumHearts);
+            hardcoreHearts.minimumHearts = 20;
+        }
+        if (hardcoreHearts.heartsRestoredPerFragment < 1) {
+            Tribulation.LOGGER.warn("hardcoreHearts.heartsRestoredPerFragment must be >= 1, got {}; clamped to 1", hardcoreHearts.heartsRestoredPerFragment);
+            hardcoreHearts.heartsRestoredPerFragment = 1;
+        }
+        if (hardcoreHearts.heartsRestoredPerFragment > 20) {
+            Tribulation.LOGGER.warn("hardcoreHearts.heartsRestoredPerFragment must be <= 20, got {}; clamped to 20", hardcoreHearts.heartsRestoredPerFragment);
+            hardcoreHearts.heartsRestoredPerFragment = 20;
+        }
         for (Map.Entry<String, MobScaling> entry : scaling.entrySet()) {
             clampMobScaling("scaling." + entry.getKey(), entry.getValue());
         }
@@ -482,6 +510,20 @@ public class TribulationConfig {
         public int shardPower = 5;
         public double dropChance = 0.005;
         public boolean sideEffects = true;
+    }
+
+    public static class HardcoreHearts {
+        public boolean enabled = false;
+        public int heartsLostPerDeath = 2;
+        public int minimumHearts = 2;
+        public int heartsRestoredPerFragment = 2;
+    }
+
+    public static class SoulInventory {
+        public boolean enabled = false;
+        public String soulboundEnchantment = "tribulation:soulbound";
+        public boolean destroyXp = false;
+        public boolean respectKeepInventory = true;
     }
 
     public static class MobScaling {

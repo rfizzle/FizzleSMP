@@ -101,7 +101,7 @@ class TribulationCommandTest {
     @Test
     void formatPlayerInfo_showsNameLevelTierAndProgress() {
         TribulationConfig cfg = new TribulationConfig();
-        List<String> lines = TribulationCommand.formatPlayerInfo("Alice", 5, 0, cfg);
+        List<String> lines = TribulationCommand.formatPlayerInfo("Alice", 5, 0, 0, cfg);
         String joined = String.join("\n", lines);
         assertTrue(joined.contains("Alice"), "includes player name");
         assertTrue(joined.contains("Level: 5 / " + cfg.general.maxLevel), "shows level / max level");
@@ -115,7 +115,7 @@ class TribulationCommandTest {
         TribulationConfig cfg = new TribulationConfig();
         // Halfway through a one-hour level @ 20 tps → 30 minutes remaining.
         int halfway = cfg.general.levelUpTicks / 2;
-        List<String> lines = TribulationCommand.formatPlayerInfo("Bob", 10, halfway, cfg);
+        List<String> lines = TribulationCommand.formatPlayerInfo("Bob", 10, halfway, 0, cfg);
         String joined = String.join("\n", lines);
         assertTrue(joined.contains("30m"), "remaining time rendered as duration: " + joined);
     }
@@ -123,7 +123,7 @@ class TribulationCommandTest {
     @Test
     void formatPlayerInfo_atMaxLevelOmitsProgress() {
         TribulationConfig cfg = new TribulationConfig();
-        List<String> lines = TribulationCommand.formatPlayerInfo("Carol", cfg.general.maxLevel, 0, cfg);
+        List<String> lines = TribulationCommand.formatPlayerInfo("Carol", cfg.general.maxLevel, 0, 0, cfg);
         String joined = String.join("\n", lines);
         assertTrue(joined.contains("max level reached"));
         assertFalse(joined.contains("until next level"));
@@ -154,5 +154,70 @@ class TribulationCommandTest {
     @Test
     void inspectRange_isPositive() {
         assertTrue(TribulationCommand.INSPECT_RANGE > 0);
+    }
+
+    // ---- formatPlayerInfo with hearts ----
+
+    @Test
+    void formatPlayerInfo_showsHeartsWhenEnabledAndLost() {
+        TribulationConfig cfg = new TribulationConfig();
+        cfg.hardcoreHearts.enabled = true;
+        List<String> lines = TribulationCommand.formatPlayerInfo("Dave", 10, 0, 6, cfg);
+        String joined = String.join("\n", lines);
+        assertTrue(joined.contains("Hearts:"), "shows hearts line when penalty exists");
+        assertTrue(joined.contains("14/20"), "shows reduced max HP");
+        assertTrue(joined.contains("6 half-hearts lost"), "shows amount lost");
+    }
+
+    @Test
+    void formatPlayerInfo_omitsHeartsWhenDisabled() {
+        TribulationConfig cfg = new TribulationConfig();
+        cfg.hardcoreHearts.enabled = false;
+        List<String> lines = TribulationCommand.formatPlayerInfo("Eve", 10, 0, 6, cfg);
+        String joined = String.join("\n", lines);
+        assertFalse(joined.contains("Hearts:"), "no hearts line when feature disabled");
+    }
+
+    @Test
+    void formatPlayerInfo_omitsHeartsWhenNoneLost() {
+        TribulationConfig cfg = new TribulationConfig();
+        cfg.hardcoreHearts.enabled = true;
+        List<String> lines = TribulationCommand.formatPlayerInfo("Frank", 10, 0, 0, cfg);
+        String joined = String.join("\n", lines);
+        assertFalse(joined.contains("Hearts:"), "no hearts line when no penalty");
+    }
+
+    // ---- formatConfigSummary with new features ----
+
+    @Test
+    void formatConfigSummary_includesHardcoreHeartsAndSoulInventory() {
+        TribulationConfig cfg = new TribulationConfig();
+        List<String> lines = TribulationCommand.formatConfigSummary(cfg);
+        String joined = String.join("\n", lines);
+        assertTrue(joined.contains("Hardcore Hearts:"), "shows hardcore hearts");
+        assertTrue(joined.contains("Soul Inventory:"), "shows soul inventory");
+        assertTrue(joined.contains("off"), "features disabled by default");
+    }
+
+    @Test
+    void formatConfigSummary_hardcoreHeartsShowsParams() {
+        TribulationConfig cfg = new TribulationConfig();
+        cfg.hardcoreHearts.enabled = true;
+        cfg.hardcoreHearts.heartsLostPerDeath = 4;
+        List<String> lines = TribulationCommand.formatConfigSummary(cfg);
+        String joined = String.join("\n", lines);
+        assertTrue(joined.contains("Hardcore Hearts: on"), "shows enabled state");
+        assertTrue(joined.contains("-4/death"), "shows hearts lost per death");
+    }
+
+    @Test
+    void formatConfigSummary_soulInventoryShowsEnchantId() {
+        TribulationConfig cfg = new TribulationConfig();
+        cfg.soulInventory.enabled = true;
+        cfg.soulInventory.soulboundEnchantment = "meridian:tether";
+        List<String> lines = TribulationCommand.formatConfigSummary(cfg);
+        String joined = String.join("\n", lines);
+        assertTrue(joined.contains("Soul Inventory: on"), "shows enabled state");
+        assertTrue(joined.contains("enchant=meridian:tether"), "shows enchantment ID");
     }
 }

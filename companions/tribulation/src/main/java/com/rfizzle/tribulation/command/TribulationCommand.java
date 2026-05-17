@@ -4,7 +4,9 @@ import com.rfizzle.tribulation.Tribulation;
 import com.rfizzle.tribulation.config.TribulationConfig;
 import com.rfizzle.tribulation.config.TribulationConfig.MobScaling;
 import com.rfizzle.tribulation.data.PlayerDifficultyState;
+import com.rfizzle.tribulation.event.HardcoreHeartsHandler;
 import com.rfizzle.tribulation.event.MobScalingHandler;
+import com.rfizzle.tribulation.event.SoulInventoryHandler;
 import com.rfizzle.tribulation.event.ZombieVariantHandler;
 import com.rfizzle.tribulation.scaling.BossScalingEngine;
 import com.rfizzle.tribulation.scaling.ScalingEngine;
@@ -84,6 +86,20 @@ public final class TribulationCommand {
                         .then(Commands.literal("inspect")
                                 .requires(src -> src.hasPermission(2))
                                 .executes(TribulationCommand::runInspect))
+                        .then(Commands.literal("hearts")
+                                .executes(TribulationCommand::runHeartsSelf)
+                                .then(Commands.argument("player", EntityArgument.player())
+                                        .requires(src -> src.hasPermission(2))
+                                        .executes(TribulationCommand::runHearts)
+                                        .then(Commands.literal("restore")
+                                                .then(Commands.argument("amount", IntegerArgumentType.integer(1))
+                                                        .executes(TribulationCommand::runHeartsRestore)))
+                                        .then(Commands.literal("reset")
+                                                .executes(TribulationCommand::runHeartsReset))))
+                        .then(Commands.literal("inventory")
+                                .requires(src -> src.hasPermission(2))
+                                .then(Commands.argument("player", EntityArgument.player())
+                                        .executes(TribulationCommand::runInventory)))
         );
     }
 
@@ -164,6 +180,7 @@ public final class TribulationCommand {
                 player.getGameProfile().getName(),
                 state.getLevel(uuid),
                 state.getTickCounter(uuid),
+                state.getHeartsLost(uuid),
                 cfg)) {
             src.sendSuccess(() -> Component.literal(line), false);
         }
@@ -228,6 +245,80 @@ public final class TribulationCommand {
         for (String line : formatInspect(mob)) {
             src.sendSuccess(() -> Component.literal(line), false);
         }
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int runHeartsSelf(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        CommandSourceStack src = ctx.getSource();
+        ServerPlayer player = src.getPlayerOrException();
+        TribulationConfig cfg = Tribulation.getConfig();
+        if (cfg == null || !cfg.hardcoreHearts.enabled) {
+            src.sendFailure(Component.literal("Hardcore Hearts is disabled"));
+            return 0;
+        }
+        PlayerDifficultyState state = PlayerDifficultyState.getOrCreate(src.getServer());
+        int heartsLost = state.getHeartsLost(player.getUUID());
+        int currentMax = 20 - heartsLost;
+        if (heartsLost == 0) {
+            src.sendSuccess(() -> Component.literal("You have not lost any hearts."), false);
+        } else {
+            src.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
+                    "You have lost %d half-hearts (%d/%d max HP)",
+                    heartsLost, currentMax, 20)), false);
+        }
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int runHearts(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
+        CommandSourceStack src = ctx.getSource();
+        PlayerDifficultyState state = PlayerDifficultyState.getOrCreate(src.getServer());
+        int heartsLost = state.getHeartsLost(target.getUUID());
+        int currentMax = 20 - heartsLost;
+        src.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
+                "%s has lost %d half-hearts (%d/%d max HP)",
+                target.getGameProfile().getName(), heartsLost, currentMax, 20)), false);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int runHeartsRestore(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
+        int amount = IntegerArgumentType.getInteger(ctx, "amount");
+        CommandSourceStack src = ctx.getSource();
+        PlayerDifficultyState state = PlayerDifficultyState.getOrCreate(src.getServer());
+        int before = state.getHeartsLost(target.getUUID());
+        int after = state.restoreHearts(target.getUUID(), amount);
+        HardcoreHeartsHandler.applyModifier(target);
+        src.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
+                "Restored %d half-hearts for %s (%d → %d lost)",
+                before - after, target.getGameProfile().getName(), before, after)), true);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int runHeartsReset(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
+        CommandSourceStack src = ctx.getSource();
+        PlayerDifficultyState state = PlayerDifficultyState.getOrCreate(src.getServer());
+        int prev = state.resetHearts(target.getUUID());
+        HardcoreHeartsHandler.applyModifier(target);
+        src.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
+                "Cleared heart penalty for %s (was %d half-hearts lost)",
+                target.getGameProfile().getName(), prev)), true);
+        return Command.SINGLE_SUCCESS;
+    }
+
+    private static int runInventory(CommandContext<CommandSourceStack> ctx) throws CommandSyntaxException {
+        ServerPlayer target = EntityArgument.getPlayer(ctx, "player");
+        CommandSourceStack src = ctx.getSource();
+        TribulationConfig cfg = Tribulation.getConfig();
+        if (cfg == null || !cfg.soulInventory.enabled) {
+            src.sendFailure(Component.literal("Soul Inventory is disabled"));
+            return 0;
+        }
+        int count = SoulInventoryHandler.countSoulboundItems(target);
+        src.sendSuccess(() -> Component.literal(String.format(Locale.ROOT,
+                "%s has %d soulbound item(s)",
+                target.getGameProfile().getName(), count)), false);
         return Command.SINGLE_SUCCESS;
     }
 
@@ -304,6 +395,18 @@ public final class TribulationCommand {
                 "Tiers: 1≥%d, 2≥%d, 3≥%d, 4≥%d, 5≥%d",
                 cfg.tiers.tier1, cfg.tiers.tier2, cfg.tiers.tier3,
                 cfg.tiers.tier4, cfg.tiers.tier5));
+        lines.add(String.format(Locale.ROOT,
+                "Hardcore Hearts: %s (-%d/death, min %d, +%d/fragment)",
+                onOff(cfg.hardcoreHearts.enabled),
+                cfg.hardcoreHearts.heartsLostPerDeath,
+                cfg.hardcoreHearts.minimumHearts,
+                cfg.hardcoreHearts.heartsRestoredPerFragment));
+        lines.add(String.format(Locale.ROOT,
+                "Soul Inventory: %s (enchant=%s, destroyXP=%s, keepInventory=%s)",
+                onOff(cfg.soulInventory.enabled),
+                cfg.soulInventory.soulboundEnchantment,
+                onOff(cfg.soulInventory.destroyXp),
+                onOff(cfg.soulInventory.respectKeepInventory)));
         return lines;
     }
 
@@ -312,7 +415,7 @@ public final class TribulationCommand {
      * the next level. Inputs are primitives so this stays pure and testable
      * without a {@link ServerPlayer} or a live {@link PlayerDifficultyState}.
      */
-    static List<String> formatPlayerInfo(String name, int level, int tickCounter, TribulationConfig cfg) {
+    static List<String> formatPlayerInfo(String name, int level, int tickCounter, int heartsLost, TribulationConfig cfg) {
         List<String> lines = new ArrayList<>();
         int maxLevel = Math.max(1, cfg.general.maxLevel);
         int levelUpTicks = Math.max(1, cfg.general.levelUpTicks);
@@ -328,6 +431,12 @@ public final class TribulationCommand {
             lines.add(String.format(Locale.ROOT,
                     "Progress: %d / %d ticks (%s until next level)",
                     Math.max(0, tickCounter), levelUpTicks, formatTicksAsDuration(remaining)));
+        }
+        if (cfg.hardcoreHearts.enabled && heartsLost > 0) {
+            int currentMax = 20 - heartsLost;
+            lines.add(String.format(Locale.ROOT,
+                    "Hearts: %d/%d max HP (%d half-hearts lost)",
+                    currentMax, 20, heartsLost));
         }
         return lines;
     }

@@ -4,8 +4,10 @@ import com.rfizzle.tribulation.command.TribulationCommand;
 import com.rfizzle.tribulation.config.TribulationConfig;
 import com.rfizzle.tribulation.data.PlayerDifficultyState;
 import com.rfizzle.tribulation.event.DeathReliefHandler;
+import com.rfizzle.tribulation.event.HardcoreHeartsHandler;
 import com.rfizzle.tribulation.event.MobScalingHandler;
 import com.rfizzle.tribulation.event.ShardDropHandler;
+import com.rfizzle.tribulation.event.SoulInventoryHandler;
 import com.rfizzle.tribulation.event.XpLootHandler;
 import com.rfizzle.tribulation.item.TribulationItems;
 import com.rfizzle.tribulation.scaling.TierManager;
@@ -34,6 +36,8 @@ public class Tribulation implements ModInitializer {
         registerTickHandler();
         MobScalingHandler.register();
         DeathReliefHandler.register();
+        HardcoreHeartsHandler.register();
+        SoulInventoryHandler.register();
         ShardDropHandler.register();
         XpLootHandler.register();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->

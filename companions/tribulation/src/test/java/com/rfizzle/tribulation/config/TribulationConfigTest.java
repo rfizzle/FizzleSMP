@@ -521,4 +521,115 @@ class TribulationConfigTest {
             assertTrue(toggles.containsKey(key), "default mob toggle missing: " + key);
         }
     }
+
+    @Test
+    void defaultConfig_hardcoreHeartsHasValidDefaults() {
+        TribulationConfig cfg = new TribulationConfig();
+        assertNotNull(cfg.hardcoreHearts);
+        assertFalse(cfg.hardcoreHearts.enabled);
+        assertEquals(2, cfg.hardcoreHearts.heartsLostPerDeath);
+        assertEquals(2, cfg.hardcoreHearts.minimumHearts);
+        assertEquals(2, cfg.hardcoreHearts.heartsRestoredPerFragment);
+    }
+
+    @Test
+    void defaultConfig_soulInventoryHasValidDefaults() {
+        TribulationConfig cfg = new TribulationConfig();
+        assertNotNull(cfg.soulInventory);
+        assertFalse(cfg.soulInventory.enabled);
+        assertEquals("tribulation:soulbound", cfg.soulInventory.soulboundEnchantment);
+        assertFalse(cfg.soulInventory.destroyXp);
+        assertTrue(cfg.soulInventory.respectKeepInventory);
+    }
+
+    @Test
+    void load_missingHardcoreHearts_fillsDefaults(@TempDir Path tmp) throws IOException {
+        Path path = tmp.resolve("tribulation.json");
+        Files.writeString(path, "{}");
+
+        TribulationConfig loaded = TribulationConfig.load(path);
+
+        assertNotNull(loaded.hardcoreHearts);
+        assertFalse(loaded.hardcoreHearts.enabled);
+        assertEquals(2, loaded.hardcoreHearts.heartsLostPerDeath);
+    }
+
+    @Test
+    void load_missingSoulInventory_fillsDefaults(@TempDir Path tmp) throws IOException {
+        Path path = tmp.resolve("tribulation.json");
+        Files.writeString(path, "{}");
+
+        TribulationConfig loaded = TribulationConfig.load(path);
+
+        assertNotNull(loaded.soulInventory);
+        assertFalse(loaded.soulInventory.enabled);
+        assertEquals("tribulation:soulbound", loaded.soulInventory.soulboundEnchantment);
+    }
+
+    @Test
+    void load_hardcoreHearts_heartsLostPerDeath_clampedToRange(@TempDir Path tmp) throws IOException {
+        Path tooLow = tmp.resolve("low.json");
+        Files.writeString(tooLow, """
+                { "hardcoreHearts": { "heartsLostPerDeath": 0 } }
+                """);
+        assertEquals(1, TribulationConfig.load(tooLow).hardcoreHearts.heartsLostPerDeath);
+
+        Path tooHigh = tmp.resolve("high.json");
+        Files.writeString(tooHigh, """
+                { "hardcoreHearts": { "heartsLostPerDeath": 99 } }
+                """);
+        assertEquals(20, TribulationConfig.load(tooHigh).hardcoreHearts.heartsLostPerDeath);
+    }
+
+    @Test
+    void load_hardcoreHearts_minimumHearts_clampedToRange(@TempDir Path tmp) throws IOException {
+        Path tooLow = tmp.resolve("low.json");
+        Files.writeString(tooLow, """
+                { "hardcoreHearts": { "minimumHearts": -5 } }
+                """);
+        assertEquals(1, TribulationConfig.load(tooLow).hardcoreHearts.minimumHearts);
+
+        Path tooHigh = tmp.resolve("high.json");
+        Files.writeString(tooHigh, """
+                { "hardcoreHearts": { "minimumHearts": 50 } }
+                """);
+        assertEquals(20, TribulationConfig.load(tooHigh).hardcoreHearts.minimumHearts);
+    }
+
+    @Test
+    void load_hardcoreHearts_heartsRestoredPerFragment_clampedToRange(@TempDir Path tmp) throws IOException {
+        Path tooLow = tmp.resolve("low.json");
+        Files.writeString(tooLow, """
+                { "hardcoreHearts": { "heartsRestoredPerFragment": 0 } }
+                """);
+        assertEquals(1, TribulationConfig.load(tooLow).hardcoreHearts.heartsRestoredPerFragment);
+
+        Path tooHigh = tmp.resolve("high.json");
+        Files.writeString(tooHigh, """
+                { "hardcoreHearts": { "heartsRestoredPerFragment": 25 } }
+                """);
+        assertEquals(20, TribulationConfig.load(tooHigh).hardcoreHearts.heartsRestoredPerFragment);
+    }
+
+    @Test
+    void roundTrip_hardcoreHeartsAndSoulInventory_preserveValues(@TempDir Path tmp) {
+        Path path = tmp.resolve("tribulation.json");
+        TribulationConfig original = new TribulationConfig();
+        original.hardcoreHearts.enabled = true;
+        original.hardcoreHearts.heartsLostPerDeath = 4;
+        original.hardcoreHearts.minimumHearts = 6;
+        original.soulInventory.enabled = true;
+        original.soulInventory.soulboundEnchantment = "meridian:tether";
+        original.soulInventory.destroyXp = true;
+        original.save(path);
+
+        TribulationConfig reloaded = TribulationConfig.load(path);
+
+        assertTrue(reloaded.hardcoreHearts.enabled);
+        assertEquals(4, reloaded.hardcoreHearts.heartsLostPerDeath);
+        assertEquals(6, reloaded.hardcoreHearts.minimumHearts);
+        assertTrue(reloaded.soulInventory.enabled);
+        assertEquals("meridian:tether", reloaded.soulInventory.soulboundEnchantment);
+        assertTrue(reloaded.soulInventory.destroyXp);
+    }
 }

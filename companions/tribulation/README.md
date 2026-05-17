@@ -95,6 +95,25 @@ Losing 2 levels per death (configurable) prevents frustration spirals. Has a 5-m
 
 Rare mob drops (0.5% chance, starting at player level 25) that reduce the user's level by 5 on right-click. Applies mild debuffs (Slowness II, Mining Fatigue II, Weakness II for 10 seconds).
 
+### Hardcore Hearts (opt-in)
+
+On each death, the player permanently loses max health (2 half-hearts by default). Hearts can be restored by consuming a **Heart Fragment** — crafted from 4 Shatter Shards + 1 Golden Apple. The penalty is tracked per-player and persists across restarts.
+
+- Configurable loss per death, minimum hearts floor, and restoration amount
+- Attribute modifier on `generic.max_health` — re-applied on respawn and login
+- Any player can check their status with `/tribulation hearts`; admins can restore or reset via `/tribulation hearts <player> restore|reset`
+- Disabled by default — enable via `hardcoreHearts.enabled` in the config
+
+### Soul Inventory (opt-in)
+
+On death, the player's inventory is **destroyed** instead of dropped — unless an item is enchanted with **Soulbound**. Soulbound items stay in the same slot after respawn; everything else is voided.
+
+- `tribulation:soulbound` enchantment ships as a built-in fallback (treasure-only, max level 1, incompatible with Vanishing Curse)
+- The `soulboundEnchantment` config field accepts any enchantment ID (e.g., `meridian:tether`) — swap in an external mod's enchantment without code changes
+- Optional `destroyXp` flag also voids XP on death
+- Respects the `keepInventory` gamerule by default (configurable)
+- Disabled by default — enable via `soulInventory.enabled` in the config
+
 ### Modded Mob Support
 
 Unlisted hostile mobs (any `Monster` subclass not in the vanilla allowlist) receive conservative health-and-damage-only scaling by default. Per-mod opt-out via `excludedNamespaces`, or hand-tune any specific entity ID via the `scaling` map.
@@ -135,6 +154,8 @@ Key config sections:
 | `statCaps` | Global caps per attribute (prevents extreme stacking across all axes) |
 | `deathRelief` | Enable, amount, cooldown, minimum level floor |
 | `shards` | Enable, drop level, power, drop chance, side effects |
+| `hardcoreHearts` | Enable, hearts lost per death, minimum hearts, hearts restored per fragment |
+| `soulInventory` | Enable, soulbound enchantment ID, destroy XP, respect keepInventory |
 | `scaling` | Per-mob attribute rates and caps (keyed by entity path or full ID) |
 | `unlistedHostileMobs` | Fallback scaling for modded hostile mobs |
 | `specialZombies` | Big/Speed zombie variant chances and stat adjustments |
@@ -151,6 +172,7 @@ Key config sections:
 | Command | Permission | Description |
 |---------|-----------|-------------|
 | `/tribulation info` | 0 | Show your own level, tier, and progress to next level |
+| `/tribulation hearts` | 0 | Show your own heart penalty status |
 | `/tribulation level <player>` | 2 | Admin lookup of another player's level and progress |
 | `/tribulation config` | 2 | Show the full scaling config summary |
 | `/tribulation set <player> <level>` | 2 | Set a player's level |
@@ -158,6 +180,10 @@ Key config sections:
 | `/tribulation reload` | 2 | Reload config from disk |
 | `/tribulation debug <player>` | 2 | Show all three axis factors for a player's current position |
 | `/tribulation inspect` | 2 | Show scaling details for the mob you're looking at |
+| `/tribulation hearts <player>` | 2 | Show a player's heart penalty |
+| `/tribulation hearts <player> restore <amount>` | 2 | Restore half-hearts for a player |
+| `/tribulation hearts <player> reset` | 2 | Clear all heart penalties for a player |
+| `/tribulation inventory <player>` | 2 | Count soulbound items in a player's inventory |
 
 ---
 
@@ -186,6 +212,7 @@ Key config sections:
 | Modded mob fallback | None | All MobEntity (including passive) | Hostile-only (health + damage) |
 | Attribute strategy | Varies | `setBaseValue()` | Namespaced `EntityAttributeModifier` |
 | Shard side effects | Wild chaos (vex spawns, terrain grief) | N/A | Mild debuffs only |
+| Death penalties | Not supported | Not supported | Opt-in: permanent heart loss + inventory voiding |
 
 ---
 
