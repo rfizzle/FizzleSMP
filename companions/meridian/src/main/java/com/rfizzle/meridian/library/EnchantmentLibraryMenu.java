@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.library;
 
 import com.rfizzle.meridian.MeridianRegistry;
+import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -237,6 +238,7 @@ public class EnchantmentLibraryMenu extends AbstractContainerMenu {
      */
     boolean attemptExtract(Holder<Enchantment> holder, boolean shift) {
         if (tile == null) return false;
+        if (!EnchantmentInfoRegistry.getInfo(holder).enabled()) return false;
         ResourceKey<Enchantment> key = holder.unwrapKey().orElse(null);
         if (key == null) return false;
         ItemStack outSlot = ioInv.getItem(EXTRACT_SLOT);

@@ -37,7 +37,7 @@ public abstract class SheepMixin {
         ItemStack shears = player.getItemInHand(hand);
         meridian$originalColor = this.getColor();
 
-        if (EnchantmentEffects.getEnchantmentLevel(shears, EnchantmentEffects.CHROMATIC) > 0) {
+        if (EnchantmentEffects.getEnchantmentLevel(shears, EnchantmentEffects.PRISMATIC) > 0) {
             DyeColor randomColor = DyeColor.byId(player.getRandom().nextInt(16));
             this.setColor(randomColor);
         }
@@ -57,7 +57,7 @@ public abstract class SheepMixin {
             meridian$originalColor = null;
         }
 
-        int growthLevel = EnchantmentEffects.getEnchantmentLevel(shears, EnchantmentEffects.GROWTH_SERUM);
+        int growthLevel = EnchantmentEffects.getEnchantmentLevel(shears, EnchantmentEffects.RENEWAL);
         if (growthLevel > 0 && self.getRandom().nextFloat() < 0.5f) {
             this.setSheared(false);
         }

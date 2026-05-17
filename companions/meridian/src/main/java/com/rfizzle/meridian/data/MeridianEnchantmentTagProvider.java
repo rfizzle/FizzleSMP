@@ -15,117 +15,86 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 public class MeridianEnchantmentTagProvider extends FabricTagProvider.EnchantmentTagProvider {
 
-    private static final TagKey<Enchantment> EXCLUSIVE_ARCHERY = exclusiveSet("archery");
-    private static final TagKey<Enchantment> EXCLUSIVE_ARMOR = exclusiveSet("armor");
-    private static final TagKey<Enchantment> EXCLUSIVE_ASPECT = exclusiveSet("aspect");
-    private static final TagKey<Enchantment> EXCLUSIVE_BOW = exclusiveSet("bow");
-    private static final TagKey<Enchantment> EXCLUSIVE_DURABILITY = exclusiveSet("durability");
-    private static final TagKey<Enchantment> EXCLUSIVE_EXPERIENCE = exclusiveSet("experience");
-    private static final TagKey<Enchantment> EXCLUSIVE_MACE = exclusiveSet("mace");
-    private static final TagKey<Enchantment> EXCLUSIVE_MENDING = exclusiveSet("mending");
-    private static final TagKey<Enchantment> EXCLUSIVE_MINING = exclusiveSet("mining");
-    private static final TagKey<Enchantment> EXCLUSIVE_SIZE = exclusiveSet("size");
-    private static final TagKey<Enchantment> EXCLUSIVE_SWORD_ATTRIBUTE = exclusiveSet("sword_attribute");
-    private static final TagKey<Enchantment> EXCLUSIVE_SWORD_EFFECT = exclusiveSet("sword_effect");
-    private static final TagKey<Enchantment> EXCLUSIVE_SWORD_EXP = exclusiveSet("sword_exp");
-    private static final TagKey<Enchantment> EXCLUSIVE_TRIDENT = exclusiveSet("trident");
+    private static final TagKey<Enchantment> MACE_EXCLUSIVE = TagKey.create(
+            Registries.ENCHANTMENT, ResourceLocation.withDefaultNamespace("exclusive_set/mace"));
 
     public MeridianEnchantmentTagProvider(FabricDataOutput output,
                                           CompletableFuture<HolderLookup.Provider> registryLookup) {
         super(output, registryLookup);
     }
 
+    private static final TagKey<Enchantment> ASPECT_EXCLUSIVE = TagKey.create(
+            Registries.ENCHANTMENT, Meridian.id("exclusive_set/aspect"));
+    private static final TagKey<Enchantment> ARROW_IMPACT_EXCLUSIVE = TagKey.create(
+            Registries.ENCHANTMENT, Meridian.id("exclusive_set/arrow_impact"));
+    private static final TagKey<Enchantment> SIZE_EXCLUSIVE = TagKey.create(
+            Registries.ENCHANTMENT, Meridian.id("exclusive_set/size"));
+    private static final TagKey<Enchantment> MINING_EXCLUSIVE = TagKey.create(
+            Registries.ENCHANTMENT, Meridian.id("exclusive_set/mining"));
+    private static final TagKey<Enchantment> GLASS_CANNON_EXCLUSIVE = TagKey.create(
+            Registries.ENCHANTMENT, Meridian.id("exclusive_set/glass_cannon"));
+    private static final TagKey<Enchantment> MENDING_EXCLUSIVE = TagKey.create(
+            Registries.ENCHANTMENT, Meridian.id("exclusive_set/mending"));
+
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
-        addExclusiveSets();
         appendVanillaTags();
+        addMeridianExclusiveSets();
     }
 
-    private void addExclusiveSets() {
-        getOrCreateTagBuilder(EXCLUSIVE_ARCHERY)
-                .addOptional(Meridian.id("bow/rebound"))
-                .addOptional(mc("quick_charge"))
-                .addOptional(mc("multishot"))
-                .addOptional(mc("piercing"));
+    private void addMeridianExclusiveSets() {
+        getOrCreateTagBuilder(ASPECT_EXCLUSIVE)
+                .addOptional(Meridian.id("blight"))
+                .addOptional(Meridian.id("decay"))
+                .addOptional(Meridian.id("shackle"))
+                .addOptional(Meridian.id("nightfall"))
+                .addOptional(mc("fire_aspect"));
 
-        getOrCreateTagBuilder(EXCLUSIVE_ARMOR)
-                .addOptional(Meridian.id("armor/lifeplus"))
-                .addOptional(Meridian.id("armor/fury"))
-                .addOptional(mc("protection"));
+        getOrCreateTagBuilder(ARROW_IMPACT_EXCLUSIVE)
+                .addOptional(Meridian.id("gale_shot"))
+                .addOptional(Meridian.id("resonance"))
+                .addOptional(Meridian.id("permafrost"))
+                .addOptional(Meridian.id("detonation"))
+                .addOptional(Meridian.id("stormcall"));
 
-        getOrCreateTagBuilder(EXCLUSIVE_ASPECT)
-                .addOptional(mc("fire_aspect"))
-                .addOptional(Meridian.id("sword/poison_aspect"))
-                .addOptional(Meridian.id("sword/oppression"));
+        getOrCreateTagBuilder(SIZE_EXCLUSIVE)
+                .addOptional(Meridian.id("diminish"))
+                .addOptional(Meridian.id("colossus"));
 
-        getOrCreateTagBuilder(EXCLUSIVE_BOW)
-                .addOptional(Meridian.id("bow/breezing_arrow"))
-                .addOptional(Meridian.id("bow/explosive_arrow"))
-                .addOptional(Meridian.id("bow/storm_arrow"))
-                .addOptional(Meridian.id("bow/echo_shot"))
-                .addOptional(Meridian.id("bow/eternal_frost"))
-                .addOptional(mc("quick_charge"));
+        getOrCreateTagBuilder(MINING_EXCLUSIVE)
+                .addOptional(Meridian.id("excavate"))
+                .addOptional(Meridian.id("prospect"));
 
-        getOrCreateTagBuilder(EXCLUSIVE_DURABILITY)
-                .addOptional(Meridian.id("durability/curse_of_breaking"))
-                .addOptional(mc("mending"))
-                .addOptional(mc("unbreaking"));
+        getOrCreateTagBuilder(GLASS_CANNON_EXCLUSIVE)
+                .addOptional(Meridian.id("bloodrage"))
+                .addOptional(Meridian.id("reckless"));
 
-        getOrCreateTagBuilder(EXCLUSIVE_EXPERIENCE)
-                .addOptional(Meridian.id("sword/xp_boost"))
+        getOrCreateTagBuilder(MENDING_EXCLUSIVE)
+                .addOptional(Meridian.id("vital_mend"))
                 .addOptional(mc("mending"));
-
-        getOrCreateTagBuilder(EXCLUSIVE_MACE)
-                .addOptional(mc("wind_burst"))
-                .addOptional(Meridian.id("mace/teluric_wave"));
-
-        getOrCreateTagBuilder(EXCLUSIVE_MENDING)
-                .addOptional(Meridian.id("life_mending"))
-                .addOptional(mc("mending"));
-
-        getOrCreateTagBuilder(EXCLUSIVE_MINING)
-                .addOptional(Meridian.id("pickaxe/vein_miner"))
-                .addOptional(Meridian.id("tools/miningplus"));
-
-        getOrCreateTagBuilder(EXCLUSIVE_SIZE)
-                .addOptional(Meridian.id("leggings/oversize"))
-                .addOptional(Meridian.id("leggings/dwarfed"));
-
-        getOrCreateTagBuilder(EXCLUSIVE_SWORD_ATTRIBUTE)
-                .addOptional(Meridian.id("sword/attack_speed"))
-                .addOptional(Meridian.id("sword/reach"))
-                .addOptional(Meridian.id("sword/dimensional_hit"));
-
-        getOrCreateTagBuilder(EXCLUSIVE_SWORD_EFFECT)
-                .addOptional(Meridian.id("sword/pull"))
-                .addOptional(Meridian.id("sword/life_steal"))
-                .addOptional(Meridian.id("sword/fear"))
-                .addOptional(Meridian.id("sword/tears_of_asflors"))
-                .addOptional(Meridian.id("sword/last_hope"))
-                .addOptional(Meridian.id("sword/critical"))
-                .addOptional(Meridian.id("sword/death_touch"));
-
-        getOrCreateTagBuilder(EXCLUSIVE_SWORD_EXP)
-                .addOptional(Meridian.id("sword/xp_boost"))
-                .addOptional(mc("mending"));
-
-        getOrCreateTagBuilder(EXCLUSIVE_TRIDENT)
-                .addOptional(mc("channeling"))
-                .addOptional(Meridian.id("trident/gungnir_breath"));
     }
 
     private void appendVanillaTags() {
-        getOrCreateTagBuilder(EnchantmentTags.ARMOR_EXCLUSIVE)
-                .addOptional(Meridian.id("armor/magic_protection"));
-
         getOrCreateTagBuilder(EnchantmentTags.DAMAGE_EXCLUSIVE)
-                .addOptional(Meridian.id("sword/certainty"))
-                .addOptional(Meridian.id("sword/divinity"))
-                .addOptional(Meridian.id("sword/vigilance"));
-    }
+                .addOptional(Meridian.id("voidbane"))
+                .addOptional(Meridian.id("sanctify"))
+                .addOptional(Meridian.id("sentinel"))
+                .addOptional(Meridian.id("rift_strike"))
+                .addOptional(Meridian.id("keen_edge"));
 
-    private static TagKey<Enchantment> exclusiveSet(String name) {
-        return TagKey.create(Registries.ENCHANTMENT, Meridian.id("exclusive_set/" + name));
+        getOrCreateTagBuilder(EnchantmentTags.ARMOR_EXCLUSIVE)
+                .addOptional(Meridian.id("spellguard"));
+
+        getOrCreateTagBuilder(EnchantmentTags.BOOTS_EXCLUSIVE)
+                .addOptional(Meridian.id("cinderwalk"));
+
+        getOrCreateTagBuilder(MACE_EXCLUSIVE)
+                .addOptional(mc("density"))
+                .addOptional(mc("breach"))
+                .addOptional(mc("wind_burst"))
+                .addOptional(Meridian.id("tempest"))
+                .addOptional(Meridian.id("seismic_slam"))
+                .addOptional(Meridian.id("updraft"));
     }
 
     private static ResourceLocation mc(String path) {

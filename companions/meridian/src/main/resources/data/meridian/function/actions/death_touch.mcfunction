@@ -1,1 +1,0 @@
-effect give @s minecraft:darkness 10 0 true

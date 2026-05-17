@@ -7,7 +7,12 @@ import com.rfizzle.meridian.advancement.ModTriggers;
 import com.rfizzle.meridian.enchanting.EnchantingStatRegistry;
 import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import com.rfizzle.meridian.enchanting.recipe.EnchantingRecipeRegistry;
+import com.rfizzle.meridian.event.ArmorTickHandler;
+import com.rfizzle.meridian.event.AurifyHandler;
 import com.rfizzle.meridian.event.EnchantmentEffectHandler;
+import com.rfizzle.meridian.event.MountedEnchantmentHandler;
+import com.rfizzle.meridian.event.TetherHandler;
+import com.rfizzle.meridian.event.ToolEnchantmentHandler;
 import com.rfizzle.meridian.event.WardenLootHandler;
 import com.rfizzle.meridian.net.EnchantmentInfoPayload;
 import com.rfizzle.meridian.net.MeridianNetworking;
@@ -45,6 +50,11 @@ public class Meridian implements ModInitializer {
         MeridianAnvilHandlers.register();
         WardenLootHandler.register();
         EnchantmentEffectHandler.register();
+        ArmorTickHandler.register();
+        ToolEnchantmentHandler.register();
+        MountedEnchantmentHandler.register();
+        TetherHandler.register();
+        AurifyHandler.register();
         MeridianNetworking.registerPayloads();
         registerLifecycleEvents();
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) ->

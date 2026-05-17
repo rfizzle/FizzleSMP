@@ -237,7 +237,7 @@ Example — enable inline descriptions:
 
 ## `enchantmentOverrides`
 
-Per-enchantment configuration overrides. Keys are fully-qualified enchantment IDs (e.g. `"minecraft:sharpness"`, `"meridian:vein_miner"`). Each entry is an object with three optional fields; use `-1` on any field to keep the vanilla default.
+Per-enchantment configuration overrides. Keys are fully-qualified enchantment IDs (e.g. `"minecraft:sharpness"`, `"meridian:tempo"`). Each entry is an object with optional fields; use `-1` on numeric fields to keep the vanilla default.
 
 These overrides are merged with vanilla defaults at server start and after datapack reload. The resulting `EnchantmentInfo` records are synced to clients via `EnchantmentInfoPayload` on join and reload, and enforced at the `Enchantment` class level via a mixin on `getMaxLevel()`.
 
@@ -246,15 +246,36 @@ These overrides are merged with vanilla defaults at server start and after datap
 ```json
 "enchantmentOverrides": {
   "minecraft:sharpness": {
+    "enabled": true,
     "maxLevel": 10,
     "maxLootLevel": 7,
     "levelCap": 10
   },
-  "minecraft:mending": {
-    "maxLevel": 3,
-    "maxLootLevel": -1,
-    "levelCap": -1
+  "meridian:snare": {
+    "enabled": false
   }
+}
+```
+
+### `enabled` *(boolean, default `true`)*
+
+Master toggle for the enchantment. When `false`:
+
+- The enchantment does not appear in the enchanting table.
+- The enchantment does not roll in loot tables or villager trades.
+- Existing items keep their enchantment data (no data loss), but the enchantment has no effect while disabled.
+- The enchantment is hidden from tooltip display and the enchantment glint is suppressed if it is the item's only enchantment.
+- The Enchantment Library blocks extraction and new deposits of the disabled enchantment.
+- The Enchanting Info Screen omits it from the browser list.
+
+The `enabled` state is synced to clients via `EnchantmentInfoPayload` on join and after `/meridian reload`. No server restart is required to toggle an enchantment on or off.
+
+Example — disable economy-warping enchantments:
+```json
+"enchantmentOverrides": {
+  "meridian:snare": { "enabled": false },
+  "meridian:aurify": { "enabled": false },
+  "meridian:plunder": { "enabled": false }
 }
 ```
 
@@ -337,6 +358,7 @@ Example — custom power curve for Sharpness (linear min, fixed max):
 | `warden.tendrilDropChance` | `clampUnit` (0–1) |
 | `warden.tendrilLootingBonus` | `clampUnit` (0–1) |
 | `display.overLeveledColor` | regex `^#[0-9A-Fa-f]{6}$`; on mismatch, fall back to `#FF6600` |
+| `enchantmentOverrides.*.enabled` | boolean; defaults to `true` when absent |
 | `enchantmentOverrides.*.maxLevel` | skip if `-1`; otherwise clamp to `[1, 127]` |
 | `enchantmentOverrides.*.maxLootLevel` | skip if `-1`; otherwise clamp to `[1, 127]` |
 | `enchantmentOverrides.*.levelCap` | skip if `-1`; otherwise clamp to `[1, 127]` |

@@ -218,6 +218,9 @@ public final class RealEnchantmentHelper {
                 continue;
             }
             EnchantmentInfo info = EnchantmentInfoRegistry.getInfo(holder);
+            if (!info.enabled()) {
+                continue;
+            }
             for (int lvl = info.getMaxLevel(); lvl > ench.getMinLevel() - 1; lvl--) {
                 if (power >= info.getMinPower(lvl)
                         && (power <= info.getMaxPower(lvl) || lvl == ench.getMinLevel())) {

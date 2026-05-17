@@ -1,1 +1,0 @@
-execute as @e[type=arrow,tag=meridian.rebound] at @s run function meridian:actions/rebound/optimization

@@ -1,7 +1,7 @@
 {
   "values": [
     {
-      "id": "meridian:armor/magic_protection",
+      "id": "meridian:spellguard",
       "required": false
     }
   ]

@@ -151,6 +151,7 @@ public class MeridianConfig {
             display.overLeveledColor = DEFAULT_OVER_LEVELED_COLOR;
         }
 
+        enchantmentOverrides.entrySet().removeIf(e -> e.getValue() == null);
         for (var entry : enchantmentOverrides.entrySet()) {
             String id = entry.getKey();
             EnchantmentOverride o = entry.getValue();
@@ -263,6 +264,7 @@ public class MeridianConfig {
      * Keys in the {@code enchantmentOverrides} map are enchantment IDs (e.g. "minecraft:sharpness").
      */
     public static class EnchantmentOverride {
+        public boolean enabled = true;
         public int maxLevel = -1;
         public int maxLootLevel = -1;
         public int levelCap = -1;

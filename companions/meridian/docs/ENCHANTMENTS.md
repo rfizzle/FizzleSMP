@@ -1,198 +1,176 @@
 # Enchantments
 
-All 68 enchantments shipped by Meridian, grouped by slot category.
+All 75 enchantments shipped by Meridian, grouped by slot category. Every enchantment is original to Meridian — all IDs, names, weights, costs, effect definitions, and description text are authored fresh.
 
-## Origin Key
-
-| Code | Source | License |
-|------|--------|---------|
-| **NE+** | [NeoEnchant+](https://www.curseforge.com/minecraft/mc-mods/neoenchant) v5.14.0 by Hardel | CC BY-NC-SA 4.0 |
-| **Z** | [Zenith](https://www.curseforge.com/minecraft/mc-mods/zenith) by bageldotjpg (originally [Apotheosis](https://www.curseforge.com/minecraft/mc-mods/apotheosis) by Shadows_of_Fire) | — |
-| **EL** | [Enchantology](https://www.curseforge.com/minecraft/mc-mods/enchantology) | — |
-| **Custom** | Original to Meridian | — |
+**T** in the Weight column marks treasure enchantments (loot/trade only, never at the enchanting table).
 
 ---
 
 ## Sword / Weapon
 
-| Enchantment | ID | Max Level | Description | Origin |
+| Enchantment | ID | Lvl | Wt | Description |
 |---|---|---|---|---|
-| Attack Speed | `attack_speed` | 2 | Increases attack speed. | NE+ |
-| Certainty | `certainty` | 5 | Increases damage to Ender mobs. | EL |
-| Critical Hit | `critical` | 4 | Chance to deal true damage. | NE+ |
-| Death Touch | `death_touch` | 1 | Inflicts Darkness on enemies. | NE+ |
-| Dimensional Strike | `dimensional_hit` | 5 | Increases damage in other dimensions. | NE+ |
-| Divinity | `divinity` | 5 | Increases damage to Nether mobs. | EL |
-| Fear | `fear` | 1 | Delays creeper explosions when hit. | NE+ |
-| Last Hope | `last_hope` | 1 | Sacrifices the item for infinite damage. | NE+ |
-| Life Steal | `life_steal` | 3 | Drains health from targets. | NE+ |
-| Oppression | `oppression` | 3 | Inflicts slowness on hit. | EL |
-| Poison Aspect | `poison_aspect` | 3 | Poisons targets on hit. | NE+ |
-| Pull | `pull` | 1 | Chance to obtain mob eggs on kill. | NE+ |
-| Reach | `reach` | 3 | Extends attack range. | NE+ |
-| Tears of Asflors | `tears_of_asflors` | 3 | Converts XP to damage. | NE+ |
-| Vigilance | `vigilance` | 5 | Increases damage to Illagers. | EL |
-| XP Boost | `xp_boost` | 3 | Increases XP from mob kills. | NE+ |
+| Tempo | `tempo` | 1–2 | 5 | Increases attack speed, allowing faster strikes |
+| Voidbane | `voidbane` | 1–5 | 5 | Deals bonus damage to Ender creatures |
+| Keen Edge | `keen_edge` | 1–4 | 2 | Chance on hit to deal a burst of bonus damage |
+| Nightfall | `nightfall` | 1 | 2 | Blinds the target with darkness on hit |
+| Rift Strike | `rift_strike` | 1–5 | 2 | Deals bonus damage outside the Overworld |
+| Sanctify | `sanctify` | 1–5 | 5 | Deals bonus damage to Nether creatures |
+| Quell | `quell` | 1 | 5 | Hitting a creeper resets its detonation fuse |
+| Final Gambit | `final_gambit` | 1 | 1T | Sneak-attack to sacrifice the weapon for a devastating burst of damage |
+| Siphon | `siphon` | 1–3 | 2 | Chance on hit to drain life from the target |
+| Shackle | `shackle` | 1–3 | 5 | Strikes slow the target on hit |
+| Blight | `blight` | 1–3 | 5 | Poisons the target on hit |
+| Decay | `decay` | 1–3 | 2 | Inflicts wither on the target |
+| Snare | `snare` | 1 | 1T | Slain creatures may drop their spawn egg |
+| Outreach | `outreach` | 1–3 | 5 | Extends melee attack range |
+| Soul Tax | `soul_tax` | 1–3 | 2 | Spends experience to amplify each strike |
+| Sentinel | `sentinel` | 1–5 | 5 | Deals bonus damage to Illagers |
+| Insight | `insight` | 1–3 | 10 | Increases experience gained from slaying mobs |
+
+## Axe
+
+| Enchantment | ID | Lvl | Wt | Description |
+|---|---|---|---|---|
+| Cleave | `cleave` | 1–3 | 2 | Attacks strike nearby enemies in an arc |
 
 ## Bow / Ranged
 
-| Enchantment | ID | Max Level | Description | Origin |
+| Enchantment | ID | Lvl | Wt | Description |
 |---|---|---|---|---|
-| Accuracy Shot | `accuracy_shot` | 1 | Arrows fly straight without gravity. | NE+ |
-| Breezing Arrows | `breezing_arrow` | 2 | Repels targets or creates ground effects. | NE+ |
-| Echo Shot | `echo_shot` | 2 | Creates a sonic boom on impact, dealing area damage. | NE+ |
-| Eternal Frost | `eternal_frost` | 1 | Freezes blocks and slows targets. | NE+ |
-| Explosive Arrow | `explosive_arrow` | 4 | Creates explosions on arrow impact. | NE+ |
-| Rebound | `rebound` | 3 | Arrows bounce off walls. | NE+ |
-| Storm Arrows | `storm_arrow` | 1 | Summons lightning on impact. | NE+ |
+| True Flight | `true_flight` | 1 | 2 | Arrows fly in a flat trajectory, ignoring gravity |
+| Gale Shot | `gale_shot` | 1–2 | 5 | Arrows release a burst of wind on impact, pushing nearby targets away |
+| Resonance | `resonance` | 1–2 | 2 | Arrows emit a damaging sonic shockwave on impact |
+| Permafrost | `permafrost` | 1 | 5 | Arrows freeze nearby water and chill struck targets |
+| Detonation | `detonation` | 1–4 | 1 | Arrows explode on impact with increasing force |
+| Ricochet | `ricochet` | 1–3 | 2 | Arrows bounce off surfaces instead of breaking |
+| Stormcall | `stormcall` | 1 | 2 | Arrows summon a lightning bolt where they land |
 
-## Trident
+## Trident / Mace
 
-| Enchantment | ID | Max Level | Description | Origin |
+| Enchantment | ID | Lvl | Wt | Description |
 |---|---|---|---|---|
-| Gungnir Breath | `gungnir_breath` | 3 | Freezes water and slows targets. | NE+ |
-
-## Mace
-
-| Enchantment | ID | Max Level | Description | Origin |
-|---|---|---|---|---|
-| Striker | `striker` | 2 | Summons lightning during storms, grants immunity. | NE+ |
-| Teluric Wave | `teluric_wave` | 1 | Creates seismic waves when crouching and striking ground. | NE+ |
-| Wind Propulsion | `wind_propulsion` | 3 | Creates explosion on ground impact, launching you. | NE+ |
+| Glacial Lance | `glacial_lance` | 1–3 | 2 | Thrown trident freezes nearby water and chills targets on impact |
+| Tempest | `tempest` | 1–2 | 2 | Mace slams call down lightning during thunderstorms |
+| Seismic Slam | `seismic_slam` | 1 | 2 | Crouch-slamming releases a shockwave that damages nearby foes |
+| Updraft | `updraft` | 1–3 | 5 | Mace slams launch the wielder skyward for another strike |
 
 ## Helmet
 
-| Enchantment | ID | Max Level | Description | Origin |
+| Enchantment | ID | Lvl | Wt | Description |
 |---|---|---|---|---|
-| Bright Vision | `bright_vision` | 1 | Grants night vision. | NE+ |
-| Voidless | `voidless` | 1 | Brief levitation when falling into the void. | NE+ |
+| Luminance | `luminance` | 1 | 5 | Grants permanent night vision while the helmet is worn |
+| Abyss Ward | `abyss_ward` | 1 | 1T | Saves the wearer from the void once per life with a burst of levitation |
+| Premonition | `premonition` | 1 | 2 | Nearby hostile creatures glow through walls |
 
 ## Chestplate
 
-| Enchantment | ID | Max Level | Description | Origin |
+| Enchantment | ID | Lvl | Wt | Description |
 |---|---|---|---|---|
-| Builder Arm | `builder_arm` | 3 | Extends block placement and breaking range. | NE+ |
-| Icy Thorns | `icy_thorns` | 3 | Applies slowness to attackers who strike you. | NE+ |
-| Rebounding | `rebounding` | 3 | Melee attackers are knocked away when they strike you. | Z |
+| Mason's Reach | `masons_reach` | 1–3 | 5 | Extends block placement and breaking distance |
+| Repulse | `repulse` | 1–3 | 2 | Attackers are knocked away when striking the wearer |
+| Frostguard | `frostguard` | 1–3 | 2 | Melee attackers are chilled with slowness on contact |
+| Rally | `rally` | 1–2 | 1T | Dropping to critical health triggers a surge of regeneration |
 
 ## Armor (Any Slot)
 
-| Enchantment | ID | Max Level | Description | Origin |
+| Enchantment | ID | Lvl | Wt | Description |
 |---|---|---|---|---|
-| Bag of Souls | `bag_of_souls` | 3 | Increases experience gained from kills and mining. | Custom |
-| Berserker's Fury | `berserkers_fury` | 3 | Taking damage grants Resistance, Strength, and Speed at the cost of health. | Z |
-| Fury | `fury` | 3 | Reduces armor, increases penetration and damage. | NE+ |
-| Ironclad | `ironclad` | 3 | Increases knockback resistance. | EL |
-| Life+ | `lifeplus` | 5 | Grants extra hearts. | NE+ |
-| Magic Protection | `magic_protection` | 4 | Reduces magic damage. | EL |
-| Venom Protection | `venom_protection` | 1 | Protects against negative effects. | NE+ |
+| Animus | `animus` | 1–3 | 5 | Increases experience gained from kills and mining |
+| Bloodrage | `bloodrage` | 1–3 | 1 | Taking damage fuels a violent frenzy at the cost of vitality |
+| Reckless | `reckless` | 1–3 | 1 | Trades armor for raw attack power |
+| Bulwark | `bulwark` | 1–3 | 10 | Adds knockback resistance, keeping you grounded under fire |
+| Vitality | `vitality` | 1–5 | 5 | Grants bonus hearts, increasing maximum health |
+| Spellguard | `spellguard` | 1–4 | 5 | Reduces incoming magic damage |
+| Antidote | `antidote` | 1 | 5 | Harmful potion effects wear off in half the time |
+| Gravitas | `gravitas` | 1–3 | 5 | Nearby dropped items drift toward the wearer |
 
-## Leggings
+## Leggings / Boots
 
-| Enchantment | ID | Max Level | Description | Origin |
+| Enchantment | ID | Lvl | Wt | Description |
 |---|---|---|---|---|
-| Dwarfed | `dwarfed` | 5 | Decreases size and speed, adds step assist. | NE+ |
-| Fast Swim | `fast_swim` | 1 | Grants Dolphin's Grace effect. | NE+ |
-| Leaping | `leaping` | 3 | Enhances jumping ability. | NE+ |
-| Oversize | `oversize` | 4 | Increases size, reduces damage and attack reach. | NE+ |
-
-## Boots
-
-| Enchantment | ID | Max Level | Description | Origin |
-|---|---|---|---|---|
-| Agility | `agility` | 5 | Increases movement speed. | NE+ |
-| Lava Walker | `lava_walker` | 3 | Allows walking on lava. | NE+ |
-| Stable Footing | `stable_footing` | 1 | Negates the mining speed penalty while flying. | Z |
-| Step Assist | `step_assist` | 3 | Eases block climbing. | NE+ |
+| Diminish | `diminish` | 1–5 | 1 | Shrinks the wearer but grants auto step-up |
+| Slipstream | `slipstream` | 1 | 2 | Grants the speed of dolphins while swimming |
+| Vault | `vault` | 1–3 | 5 | Increases jump height |
+| Colossus | `colossus` | 1–4 | 1 | Enlarges the wearer at the cost of speed and reach |
+| Alacrity | `alacrity` | 1–5 | 10 | Boosts movement speed while worn |
+| Cinderwalk | `cinderwalk` | 1–3 | 2T | Solidifies lava beneath the wearer into temporary obsidian |
+| Steadfast | `steadfast` | 1 | 2 | Mining speed is unaffected while airborne or flying |
+| Clamber | `clamber` | 1–3 | 10 | Automatically step up taller blocks |
 
 ## Elytra
 
-| Enchantment | ID | Max Level | Description | Origin |
+| Enchantment | ID | Lvl | Wt | Description |
 |---|---|---|---|---|
-| Armored | `armored` | 4 | Reduces damage while wearing elytra. | NE+ |
-| Kinetic Protection | `kinetic_protection` | 5 | Protects from elytra collision damage. | NE+ |
+| Ironwing | `ironwing` | 1–4 | 5 | Reduces all damage taken while gliding |
+| Impact Ward | `impact_ward` | 1–5 | 5 | Reduces kinetic damage from elytra collisions |
 
-## Tools
+## Tools / Hoe
 
-| Enchantment | ID | Max Level | Description | Origin |
+| Enchantment | ID | Lvl | Wt | Description |
 |---|---|---|---|---|
-| Mining+ | `miningplus` | 1 | Mines in a 3x3 area. | NE+ |
-| Vein Miner | `vein_miner` | 1 | Mines all connected ores. | NE+ |
+| Excavate | `excavate` | 1 | 2 | Mines a 3x3 area of blocks in a single swing |
+| Prospect | `prospect` | 1 | 2 | Breaking an ore shatters the entire connected vein |
+| Bounty | `bounty` | 1–3 | 5 | Harvesting a crop also reaps and replants nearby mature crops |
+| Furrow | `furrow` | 1–3 | 5 | Tilling soil with a hoe also tills surrounding blocks |
+| Beckon | `beckon` | 1 | 10 | Farm animals are drawn to the wielder while a hoe is held |
+| Terrasculpt | `terrasculpt` | 1 | 2 | Walking converts rough terrain underfoot into natural growth |
 
-## Hoe
+## Mounted (Horse Armor)
 
-| Enchantment | ID | Max Level | Description | Origin |
+| Enchantment | ID | Lvl | Wt | Description |
 |---|---|---|---|---|
-| Harvest | `harvest` | 3 | Plants in an area. | NE+ |
-| Scyther | `scyther` | 3 | Tills larger areas based on enchantment level. | NE+ |
-| Seior's Oblivion | `seiors_oblivion` | 1 | Replaces blocks beneath you with natural terrain. | NE+ |
-| Temptation | `temptation` | 1 | Farm animals follow you while holding this tool. | Z |
-
-## Mounted
-
-| Enchantment | ID | Max Level | Description | Origin |
-|---|---|---|---|---|
-| Cavalier Egis | `cavalier_egis` | 5 | Reduces damage taken when riding a mount. | NE+ |
-| Ethereal Leap | `ethereal_leap` | 7 | Increases mount jump height and reduces fall damage. | NE+ |
-| Steel Fang | `steel_fang` | 3 | Allows your mount to deal more damage. | NE+ |
-| Velocity | `velocity` | 4 | Increases the movement speed of your mount. | NE+ |
+| Gallop | `gallop` | 1–4 | 5 | Increases mount movement speed |
+| Trample | `trample` | 1–3 | 5 | Mount deals damage to creatures it runs through |
+| Skybound | `skybound` | 1–7 | 2 | Mount jumps higher and takes less fall damage |
+| Saddleguard | `saddleguard` | 1–5 | 5 | Rider takes reduced damage while mounted |
 
 ## Shield
 
-| Enchantment | ID | Max Level | Description | Origin |
+| Enchantment | ID | Lvl | Wt | Description |
 |---|---|---|---|---|
-| Reflective Defenses | `reflective_defenses` | 5 | Chance to reflect blocked damage back to the attacker. | Z |
-| Shield Bash | `shield_bash` | 4 | Shields deal bonus damage on attack and lose durability per hit. | NE+ |
+| Retribution | `retribution` | 1–5 | 1 | Chance to reflect blocked damage back at the attacker |
+| Pummel | `pummel` | 1–4 | 2 | Strikes deal bonus damage while a shield is equipped, at the cost of shield durability |
+| Fortify | `fortify` | 1–3 | 5 | Blocking costs less shield durability |
 
 ## Shears
 
-| Enchantment | ID | Max Level | Description | Origin |
+| Enchantment | ID | Lvl | Wt | Description |
 |---|---|---|---|---|
-| Chromatic Aberration | `chromatic` | 1 | Sheared wool becomes a random color. | Z |
-| Growth Serum | `growth_serum` | 1 | Sheep have a chance to regrow wool instantly after shearing. | Z |
+| Prismatic | `prismatic` | 1 | 5 | Sheared wool drops as a random color |
+| Renewal | `renewal` | 1 | 2 | Chance for sheep to instantly regrow wool after shearing |
 
 ## Durability (Any Item)
 
-| Enchantment | ID | Max Level | Description | Origin |
+| Enchantment | ID | Lvl | Wt | Description |
 |---|---|---|---|---|
-| Life-Mending | `life_mending` | 3 | Incoming healing repairs item durability instead. | Z |
-| Scavenger | `scavenger` | 3 | Small chance for killed mobs to drop their loot twice. | Z |
+| Vital Mend | `vital_mend` | 1–3 | 1T | Incoming healing repairs durability instead of restoring health |
+| Plunder | `plunder` | 1–3 | 1 | Slain creatures may drop their loot a second time |
+| Tether | `tether` | 1 | 1T | Item stays in your inventory on death |
 
-## Curses
+## Curses / Misc
 
-| Enchantment | ID | Max Level | Description | Origin |
+| Enchantment | ID | Lvl | Wt | Description |
 |---|---|---|---|---|
-| Curse of Fragility | `curse_of_breaking` | 5 | Reduces item durability faster. | NE+ |
-| Curse of Enchant | `curse_of_enchant` | 1 | Prevents enchanting or modifying the item. | NE+ |
-
-## Misc
-
-| Enchantment | ID | Max Level | Description | Origin |
-|---|---|---|---|---|
-| Midas Touch | `midas_touch` | 1 | Transforms blocks into gold or gold ore on right click. | NE+ |
+| Curse of Decay | `curse_of_decay` | 1–5 | 2T | Item loses durability faster |
+| Curse of Sealing | `curse_of_sealing` | 1 | 1T | Item cannot be enchanted or modified |
+| Aurify | `aurify` | 1 | 1T | Sneak-use on a block for a chance to transmute it into gold |
 
 ---
 
-## Origin Totals
+## Exclusive Sets
 
-| Source | Count |
-|--------|-------|
-| NeoEnchant+ | 52 |
-| Zenith | 9 |
-| Enchantology | 6 |
-| Custom | 1 |
-| **Total** | **68** |
+Enchantments sharing an exclusive set cannot coexist on the same item.
 
-## NeoEnchant+ Cuts
-
-Seven enchantments from NeoEnchant+ v5.14.0 were intentionally omitted:
-
-| Enchantment | Reason |
+| Set | Members |
 |---|---|
-| Timber (axe) | Whole-tree fellers cause server lag and grief. |
-| Bedrock Breaker (pickaxe) | Bedrock protection is intentional; bypass enables escapes. |
-| Spawner Touch (pickaxe) | Trivializes mob-farm and spawner economies. |
-| Auto Smelt (tools) | Overlaps Fortune/Silk Touch loops. |
-| Auto Feed (helmet) | Removes hunger management, undercutting food variety. |
-| Magnet (chestplate) | Ships with an empty effects block (non-functional). |
-| Runic Despair (sword) | Targets a dimension not in FizzleSMP. |
+| `minecraft:exclusive_set/damage` | Voidbane, Sanctify, Sentinel, Rift Strike, Keen Edge + vanilla damage enchants |
+| `minecraft:exclusive_set/armor` | Spellguard + vanilla protection enchants |
+| `minecraft:exclusive_set/boots` | Cinderwalk + vanilla Frost Walker, Depth Strider |
+| `minecraft:exclusive_set/mace` | Tempest, Seismic Slam, Updraft + vanilla Density, Breach, Wind Burst |
+| `meridian:exclusive_set/aspect` | Blight, Decay, Shackle, Nightfall + vanilla Fire Aspect |
+| `meridian:exclusive_set/arrow_impact` | Gale Shot, Resonance, Permafrost, Detonation, Stormcall |
+| `meridian:exclusive_set/size` | Diminish, Colossus |
+| `meridian:exclusive_set/mining` | Excavate, Prospect |
+| `meridian:exclusive_set/glass_cannon` | Bloodrage, Reckless |
+| `meridian:exclusive_set/mending` | Vital Mend + vanilla Mending |

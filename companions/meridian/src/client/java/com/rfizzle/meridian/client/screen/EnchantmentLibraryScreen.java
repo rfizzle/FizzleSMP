@@ -1,6 +1,7 @@
 package com.rfizzle.meridian.client.screen;
 
 import com.rfizzle.meridian.Meridian;
+import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import com.rfizzle.meridian.library.EnchantmentLibraryBlockEntity;
 import com.rfizzle.meridian.library.EnchantmentLibraryMenu;
 
@@ -119,39 +120,44 @@ public class EnchantmentLibraryScreen extends AbstractContainerScreen<Enchantmen
             lines.add(Component.literal(""));
         }
 
-        lines.add(Component.translatable("tooltip.meridian.enchlib.max_lvl",
-                Component.translatable("enchantment.level." + slot.maxLvl()))
-                .withStyle(ChatFormatting.GRAY));
-        lines.add(Component.translatable("tooltip.meridian.enchlib.points",
-                formatNumber(slot.points()), formatNumber(getPointCap()))
-                .withStyle(ChatFormatting.GRAY));
-        lines.add(Component.literal(""));
-
-        ItemStack outSlot = this.menu.ioInv.getItem(EnchantmentLibraryMenu.EXTRACT_SLOT);
-        int current = getCurrentLevel(outSlot, slot.key());
-        boolean shift = Screen.hasShiftDown();
-        int targetLevel;
-        if (shift) {
-            targetLevel = Math.min(slot.maxLvl(),
-                    1 + (int) (Math.log(slot.points() + EnchantmentLibraryBlockEntity.points(current))
-                            / Math.log(2)));
-        } else {
-            targetLevel = current + 1;
-        }
-        if (targetLevel == current) targetLevel++;
-
-        int cost = EnchantmentLibraryBlockEntity.points(targetLevel)
-                - EnchantmentLibraryBlockEntity.points(current);
-
-        if (targetLevel > slot.maxLvl()) {
-            lines.add(Component.translatable("tooltip.meridian.enchlib.unavailable")
+        if (slot.disabled()) {
+            lines.add(Component.translatable("tooltip.meridian.enchlib.disabled")
                     .withStyle(ChatFormatting.RED));
         } else {
-            lines.add(Component.translatable("tooltip.meridian.enchlib.extracting",
-                    Component.translatable("enchantment.level." + targetLevel))
-                    .withStyle(ChatFormatting.BLUE));
-            lines.add(Component.translatable("tooltip.meridian.enchlib.cost", cost)
-                    .withStyle(cost > slot.points() ? ChatFormatting.RED : ChatFormatting.GOLD));
+            lines.add(Component.translatable("tooltip.meridian.enchlib.max_lvl",
+                    Component.translatable("enchantment.level." + slot.maxLvl()))
+                    .withStyle(ChatFormatting.GRAY));
+            lines.add(Component.translatable("tooltip.meridian.enchlib.points",
+                    formatNumber(slot.points()), formatNumber(getPointCap()))
+                    .withStyle(ChatFormatting.GRAY));
+            lines.add(Component.literal(""));
+
+            ItemStack outSlot = this.menu.ioInv.getItem(EnchantmentLibraryMenu.EXTRACT_SLOT);
+            int current = getCurrentLevel(outSlot, slot.key());
+            boolean shift = Screen.hasShiftDown();
+            int targetLevel;
+            if (shift) {
+                targetLevel = Math.min(slot.maxLvl(),
+                        1 + (int) (Math.log(slot.points() + EnchantmentLibraryBlockEntity.points(current))
+                                / Math.log(2)));
+            } else {
+                targetLevel = current + 1;
+            }
+            if (targetLevel == current) targetLevel++;
+
+            int cost = EnchantmentLibraryBlockEntity.points(targetLevel)
+                    - EnchantmentLibraryBlockEntity.points(current);
+
+            if (targetLevel > slot.maxLvl()) {
+                lines.add(Component.translatable("tooltip.meridian.enchlib.unavailable")
+                        .withStyle(ChatFormatting.RED));
+            } else {
+                lines.add(Component.translatable("tooltip.meridian.enchlib.extracting",
+                        Component.translatable("enchantment.level." + targetLevel))
+                        .withStyle(ChatFormatting.BLUE));
+                lines.add(Component.translatable("tooltip.meridian.enchlib.cost", cost)
+                        .withStyle(cost > slot.points() ? ChatFormatting.RED : ChatFormatting.GOLD));
+            }
         }
 
         int tooltipX = this.leftPos - 16 - lines.stream()
@@ -196,7 +202,8 @@ public class EnchantmentLibraryScreen extends AbstractContainerScreen<Enchantmen
             scale = 60F / this.font.width(txt);
         }
         pose.scale(scale, scale, 1);
-        gfx.drawString(this.font, txt, (int) ((x + 3) / scale), (int) ((y + 3) / scale), 0x8EE14D, false);
+        int textColor = slot.disabled() ? 0x666666 : 0x8EE14D;
+        gfx.drawString(this.font, txt, (int) ((x + 3) / scale), (int) ((y + 3) / scale), textColor, false);
         pose.popPose();
     }
 
@@ -212,6 +219,7 @@ public class EnchantmentLibraryScreen extends AbstractContainerScreen<Enchantmen
 
         LibrarySlot slot = getHoveredSlot((int) mouseX, (int) mouseY);
         if (slot != null) {
+            if (slot.disabled()) return true;
             int id = slot.registryIndex();
             if (Screen.hasShiftDown()) id |= EnchantmentLibraryMenu.SHIFT_BIT;
             if (this.minecraft != null && this.minecraft.gameMode != null) {
@@ -298,7 +306,9 @@ public class EnchantmentLibraryScreen extends AbstractContainerScreen<Enchantmen
             Component name = ench.description();
             if (!isAllowedBySearch(name.getString())) continue;
             if (!isAllowedByItem(registry, key)) continue;
-            this.data.add(new LibrarySlot(key, name, maxLvl, points, idx));
+            Holder<Enchantment> holder = registry.wrapAsHolder(ench);
+            boolean disabled = !EnchantmentInfoRegistry.getInfo(holder).enabled();
+            this.data.add(new LibrarySlot(key, name, maxLvl, points, idx, disabled));
         }
         this.data.sort(Comparator.comparing(s -> s.name().getString()));
 
@@ -361,5 +371,5 @@ public class EnchantmentLibraryScreen extends AbstractContainerScreen<Enchantmen
     }
 
     private record LibrarySlot(ResourceKey<Enchantment> key, Component name,
-                               int maxLvl, int points, int registryIndex) {}
+                               int maxLvl, int points, int registryIndex, boolean disabled) {}
 }

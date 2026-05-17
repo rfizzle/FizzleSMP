@@ -2,6 +2,7 @@ package com.rfizzle.meridian.mixin;
 
 import com.rfizzle.meridian.anvil.AnvilDispatcher;
 import com.rfizzle.meridian.anvil.AnvilResult;
+import com.rfizzle.meridian.enchanting.EnchantmentEffects;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AnvilMenu;
@@ -74,9 +75,16 @@ abstract class AnvilMenuMixin extends ItemCombinerMenu {
     private void meridian$dispatch(CallbackInfo ci) {
         if (this.meridian$takingResult) return;
 
+        ItemStack left = this.inputSlots.getItem(0);
+
+        if (EnchantmentEffects.getEnchantmentLevel(left, EnchantmentEffects.CURSE_OF_SEALING) > 0) {
+            this.resultSlots.setItem(0, ItemStack.EMPTY);
+            this.meridian$pendingResult = null;
+            return;
+        }
+
         AnvilMenu self = (AnvilMenu) (Object) this;
         AnvilMenuAccessor accessor = (AnvilMenuAccessor) (Object) this;
-        ItemStack left = this.inputSlots.getItem(0);
         ItemStack right = this.inputSlots.getItem(1);
         Player player = this.player;
         int currentCost = accessor.meridian$getCost().get();

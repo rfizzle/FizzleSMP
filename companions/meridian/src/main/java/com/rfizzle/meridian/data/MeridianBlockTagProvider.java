@@ -17,9 +17,9 @@ import net.minecraft.world.level.block.Blocks;
 
 public class MeridianBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
-    private static final TagKey<Block> MININGPLUS = TagKey.create(Registries.BLOCK, Meridian.id("miningplus"));
+    private static final TagKey<Block> EXCAVATE_BLACKLIST = TagKey.create(Registries.BLOCK, Meridian.id("excavate_blacklist"));
     private static final TagKey<Block> NON_SOLID = TagKey.create(Registries.BLOCK, Meridian.id("non-solid"));
-    private static final TagKey<Block> VEINMINER = TagKey.create(Registries.BLOCK, Meridian.id("veinminer"));
+    private static final TagKey<Block> PROSPECT_ORES = TagKey.create(Registries.BLOCK, Meridian.id("prospect_ores"));
 
     public MeridianBlockTagProvider(FabricDataOutput output,
                                     CompletableFuture<HolderLookup.Provider> registryLookup) {
@@ -28,15 +28,15 @@ public class MeridianBlockTagProvider extends FabricTagProvider.BlockTagProvider
 
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
-        addMiningplus();
+        addExcavateBlacklist();
         addNonSolid();
-        addVeinminer();
+        addProspectOres();
         addMineableAxe();
         addMineablePickaxe();
     }
 
-    private void addMiningplus() {
-        getOrCreateTagBuilder(MININGPLUS)
+    private void addExcavateBlacklist() {
+        getOrCreateTagBuilder(EXCAVATE_BLACKLIST)
                 .addOptionalTag(BlockTags.CROPS)
                 .addOptionalTag(BlockTags.FLOWERS)
                 .addOptionalTag(BlockTags.SAPLINGS)
@@ -104,8 +104,8 @@ public class MeridianBlockTagProvider extends FabricTagProvider.BlockTagProvider
                 .addOptionalTag(BlockTags.REPLACEABLE);
     }
 
-    private void addVeinminer() {
-        getOrCreateTagBuilder(VEINMINER)
+    private void addProspectOres() {
+        getOrCreateTagBuilder(PROSPECT_ORES)
                 .add(Blocks.GOLD_ORE)
                 .add(Blocks.IRON_ORE)
                 .add(Blocks.COPPER_ORE)

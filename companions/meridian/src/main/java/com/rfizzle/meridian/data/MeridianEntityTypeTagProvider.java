@@ -8,22 +8,17 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 
 public class MeridianEntityTypeTagProvider extends FabricTagProvider.EntityTypeTagProvider {
 
-    private static final TagKey<EntityType<?>> LAST_HOPE_BLACKLIST =
-            TagKey.create(Registries.ENTITY_TYPE, Meridian.id("last_hope_blacklist"));
-    private static final TagKey<EntityType<?>> SENSITIVE_TO_CERTAINTY =
-            TagKey.create(Registries.ENTITY_TYPE, Meridian.id("sensitive_to_certainty"));
-    private static final TagKey<EntityType<?>> SENSITIVE_TO_DIVINITY =
-            TagKey.create(Registries.ENTITY_TYPE, Meridian.id("sensitive_to_divinity"));
-    private static final TagKey<EntityType<?>> SENSITIVE_TO_VIGILANCE =
-            TagKey.create(Registries.ENTITY_TYPE, Meridian.id("sensitive_to_vigilance"));
-    private static final TagKey<EntityType<?>> TELURIC_BLACKLIST =
-            TagKey.create(Registries.ENTITY_TYPE, Meridian.id("teluric_blacklist"));
+    private static final TagKey<EntityType<?>> SENSITIVE_TO_VOIDBANE =
+            TagKey.create(Registries.ENTITY_TYPE, Meridian.id("sensitive_to_voidbane"));
+    private static final TagKey<EntityType<?>> SENSITIVE_TO_SANCTIFY =
+            TagKey.create(Registries.ENTITY_TYPE, Meridian.id("sensitive_to_sanctify"));
+    private static final TagKey<EntityType<?>> SENSITIVE_TO_SENTINEL =
+            TagKey.create(Registries.ENTITY_TYPE, Meridian.id("sensitive_to_sentinel"));
 
     public MeridianEntityTypeTagProvider(FabricDataOutput output,
                                          CompletableFuture<HolderLookup.Provider> registryLookup) {
@@ -32,15 +27,13 @@ public class MeridianEntityTypeTagProvider extends FabricTagProvider.EntityTypeT
 
     @Override
     protected void addTags(HolderLookup.Provider wrapperLookup) {
-        getOrCreateTagBuilder(LAST_HOPE_BLACKLIST);
-
-        getOrCreateTagBuilder(SENSITIVE_TO_CERTAINTY)
+        getOrCreateTagBuilder(SENSITIVE_TO_VOIDBANE)
                 .add(EntityType.ENDERMAN)
                 .add(EntityType.ENDERMITE)
                 .add(EntityType.SHULKER)
                 .add(EntityType.ENDER_DRAGON);
 
-        getOrCreateTagBuilder(SENSITIVE_TO_DIVINITY)
+        getOrCreateTagBuilder(SENSITIVE_TO_SANCTIFY)
                 .add(EntityType.BLAZE)
                 .add(EntityType.GHAST)
                 .add(EntityType.PIGLIN)
@@ -53,7 +46,7 @@ public class MeridianEntityTypeTagProvider extends FabricTagProvider.EntityTypeT
                 .add(EntityType.WITHER_SKELETON)
                 .add(EntityType.WITHER);
 
-        getOrCreateTagBuilder(SENSITIVE_TO_VIGILANCE)
+        getOrCreateTagBuilder(SENSITIVE_TO_SENTINEL)
                 .add(EntityType.PILLAGER)
                 .add(EntityType.VINDICATOR)
                 .add(EntityType.EVOKER)
@@ -61,10 +54,5 @@ public class MeridianEntityTypeTagProvider extends FabricTagProvider.EntityTypeT
                 .add(EntityType.RAVAGER)
                 .add(EntityType.WITCH)
                 .add(EntityType.VEX);
-
-        getOrCreateTagBuilder(TELURIC_BLACKLIST)
-                .addOptionalTag(EntityTypeTags.AQUATIC)
-                .addOptionalTag(EntityTypeTags.ARROWS)
-                .add(EntityType.PLAYER);
     }
 }

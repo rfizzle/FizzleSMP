@@ -2,6 +2,7 @@ package com.rfizzle.meridian.library;
 
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.config.MeridianConfig;
+import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
@@ -148,6 +149,7 @@ public abstract class EnchantmentLibraryBlockEntity extends BlockEntity {
         for (Holder<Enchantment> holder : stored.keySet()) {
             ResourceKey<Enchantment> key = holder.unwrapKey().orElse(null);
             if (key == null) continue;
+            if (!EnchantmentInfoRegistry.getInfo(holder).enabled()) continue;
             int level = stored.getLevel(holder);
             if (level <= 0) continue;
             int current = this.points.getInt(key);

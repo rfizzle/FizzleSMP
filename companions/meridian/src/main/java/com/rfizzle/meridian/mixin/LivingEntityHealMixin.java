@@ -26,7 +26,7 @@ public abstract class LivingEntityHealMixin {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             ItemStack stack = self.getItemBySlot(slot);
             if (stack.isDamaged()) {
-                int level = EnchantmentEffects.getEnchantmentLevel(stack, EnchantmentEffects.LIFE_MENDING);
+                int level = EnchantmentEffects.getEnchantmentLevel(stack, EnchantmentEffects.VITAL_MEND);
                 if (level > 0) {
                     candidates.add(slot);
                     levels.add(level);

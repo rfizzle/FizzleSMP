@@ -2,7 +2,7 @@
 
 **A complete enchanting overhaul for Minecraft 1.21.1 Fabric.**
 
-Meridian replaces the vanilla enchanting table with a stat-driven system featuring five independent stats, 25+ themed shelf blocks, a two-tier enchantment library, salvage tomes, anvil upgrades, and 68 new enchantments — all built on vanilla's data-driven `EnchantmentEffectComponents` with no heavy runtime dependencies.
+Meridian replaces the vanilla enchanting table with a stat-driven system featuring five independent stats, 25+ themed shelf blocks, a two-tier enchantment library, salvage tomes, anvil upgrades, and 75 original enchantments — built on vanilla's data-driven `EnchantmentEffectComponents` with custom Java handlers where needed.
 
 ---
 
@@ -73,19 +73,20 @@ Tomes are used in the anvil: place the enchanted item on the left, the tome on t
 - **Prismatic Web** — Strips all curses from an item (30 levels, 1 web consumed). Non-curse enchantments are preserved.
 - **Iron Block Repair** — Repairs a Damaged or Chipped Anvil by one tier (1 iron block consumed).
 
-### 68 Enchantments
+### 75 Enchantments
 
-A roster of 68 enchantments spanning combat, tools, mobility, mounts, and more. All are pure JSON definitions against vanilla effect components — no custom Java code required.
+A roster of 75 original enchantments spanning combat, tools, mobility, mounts, and more. Implemented as data-driven JSON definitions with custom Java handlers where vanilla effect components aren't sufficient.
 
 Highlights include:
 
-- **Combat** — Life Steal, Critical Hit, Attack Speed, Poison Aspect, Dimensional Strike, Last Hope, Fear, and more
-- **Ranged** — Explosive Arrow, Storm Arrows, Echo Shot, Accuracy Shot, Breezing Arrows, Eternal Frost, Rebound
-- **Tools** — Vein Miner, Mining+ (3x3 area), Harvest, Scyther
-- **Mobility** — Agility, Step Assist, Lava Walker, Fast Swim, Leaping
-- **Utility** — Builder Arm (extended reach), Bright Vision (night vision), Voidless (void safety), XP Boost, Midas Touch
-- **Mounts** — Velocity, Steel Fang, Ethereal Leap, Cavalier Egis
-- **Elytra** — Armored, Kinetic Protection
+- **Combat** — Siphon, Keen Edge, Tempo, Blight, Decay, Nightfall, Final Gambit, Cleave, Soul Tax
+- **Ranged** — Detonation, Stormcall, Resonance, Gale Shot, Permafrost, Ricochet, True Flight
+- **Tools** — Excavate (3x3 mining), Prospect (vein mining), Bounty, Furrow, Terrasculpt
+- **Mobility** — Alacrity, Clamber, Vault, Slipstream, Cinderwalk, Diminish, Colossus
+- **Utility** — Mason's Reach, Luminance, Abyss Ward, Premonition, Gravitas, Steadfast
+- **Mounts** — Gallop, Trample, Skybound, Saddleguard
+- **Elytra** — Ironwing, Impact Ward
+- **Shield** — Retribution, Pummel, Fortify
 
 ### Warden Loot
 
@@ -104,7 +105,7 @@ First-class recipe and tooltip adapters ship at launch for:
 
 ### Per-Enchantment Overrides
 
-Server operators can override `maxLevel`, `maxLootLevel`, and `levelCap` for any enchantment (vanilla or modded) via the config file. Changes sync to clients automatically.
+Server operators can override `maxLevel`, `maxLootLevel`, `levelCap`, and `enabled` for any enchantment (vanilla or modded) via the config file. Disabling an enchantment removes it from the table, loot, and tooltips without deleting data from existing items. Changes sync to clients automatically.
 
 ---
 
@@ -153,13 +154,9 @@ See the full annotated reference: **[Configuration Guide](docs/CONFIG.md)**
 
 ## Credits & Attribution
 
-Meridian is a clean-room 1.21.1 Fabric rewrite based on [Zenith](https://www.curseforge.com/minecraft/mc-mods/zenith) by bageldotjpg — the 1.20.1 Fabric port of [Apotheosis](https://www.curseforge.com/minecraft/mc-mods/apotheosis) by Shadows_of_Fire. Zenith's stat schema, shelf roster, recipe shapes, and texture pipeline were the direct reference for Meridian's implementation. All code is a fresh 1.21.1 rewrite — no Zenith source was copied. The original enchanting module concepts (stat-driven table, shelf blocks, enchantment library, anvil interactions, and tome system) trace back to Apotheosis on Forge/NeoForge.
+Meridian is a clean-room 1.21.1 Fabric rewrite. The enchanting module concepts (stat-driven table, shelf blocks, enchantment library, anvil interactions, and tome system) are inspired by [Apotheosis](https://www.curseforge.com/minecraft/mc-mods/apotheosis) by Shadows_of_Fire and its Fabric port [Zenith](https://www.curseforge.com/minecraft/mc-mods/zenith) by bageldotjpg. All code is a fresh 1.21.1 rewrite — no source was copied. Zenith's stat schema, shelf roster, recipe shapes, and texture pipeline were the reference for the enchanting table subsystem.
 
-### [NeoEnchant+](https://www.curseforge.com/minecraft/mc-mods/neoenchant) — Hardel
-52 of Meridian's enchantments are data-only namespace rewrites of NeoEnchant+ v5.14.0's JSON definitions. NeoEnchant+ is licensed under **CC BY-NC-SA 4.0**.
-
-### [Enchantology](https://www.curseforge.com/minecraft/mc-mods/enchantology) — Various
-6 enchantments (Certainty, Divinity, Vigilance, Oppression, Ironclad, Magic Protection) are inspired by Enchantology's designs, implemented as pure JSON.
+All 75 enchantments are original to Meridian — names, IDs, weights, costs, effect definitions, and description text are authored fresh.
 
 ---
 
@@ -167,7 +164,4 @@ Meridian is a clean-room 1.21.1 Fabric rewrite based on [Zenith](https://www.cur
 
 - **Code:** MIT
 - **Textures:** Sourced from Zenith (originally Apotheosis).
-- **Enchantment data (52 of 68):** Ported from NeoEnchant+ under **CC BY-NC-SA 4.0**.
-- **Enchantment data (9 of 68):** Ported from Zenith (originally Apotheosis).
-- **Enchantment data (6 of 68):** Inspired by Enchantology designs, implemented as pure JSON.
-- **Enchantment data (1 of 68):** Original to Meridian.
+- **Enchantment data (75 of 75):** Original to Meridian.

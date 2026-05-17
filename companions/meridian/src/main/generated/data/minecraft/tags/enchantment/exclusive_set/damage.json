@@ -1,15 +1,23 @@
 {
   "values": [
     {
-      "id": "meridian:sword/certainty",
+      "id": "meridian:voidbane",
       "required": false
     },
     {
-      "id": "meridian:sword/divinity",
+      "id": "meridian:sanctify",
       "required": false
     },
     {
-      "id": "meridian:sword/vigilance",
+      "id": "meridian:sentinel",
+      "required": false
+    },
+    {
+      "id": "meridian:rift_strike",
+      "required": false
+    },
+    {
+      "id": "meridian:keen_edge",
       "required": false
     }
   ]

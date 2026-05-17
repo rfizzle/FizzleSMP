@@ -2,6 +2,7 @@ package com.rfizzle.meridian.client.tooltip;
 
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.config.MeridianConfig;
+import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.core.Holder;
@@ -12,7 +13,9 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Recolors enchantment tooltip lines whose level exceeds the hardcoded vanilla cap in
@@ -38,9 +41,26 @@ public final class OverLeveledTooltipHandler {
                                   net.minecraft.world.item.TooltipFlag flag, List<Component> lines) {
         MeridianConfig config = Meridian.getConfig();
         if (config == null) return;
+        suppressDisabledLines(stack, lines);
         suppressStoredBookLines(stack, lines, config.display.showBookTooltips);
-        // Over-leveled recoloring is now handled globally by the EnchantmentMixin injection
-        // on Enchantment.getFullname(), so tooltip lines arrive pre-colored.
+    }
+
+    private static void suppressDisabledLines(ItemStack stack, List<Component> lines) {
+        Set<String> disabled = new HashSet<>();
+        collectDisabled(stack.get(DataComponents.ENCHANTMENTS), disabled);
+        collectDisabled(stack.get(DataComponents.STORED_ENCHANTMENTS), disabled);
+        if (!disabled.isEmpty()) {
+            lines.removeIf(line -> disabled.contains(line.getString()));
+        }
+    }
+
+    private static void collectDisabled(ItemEnchantments enchantments, Set<String> out) {
+        if (enchantments == null || enchantments.isEmpty()) return;
+        for (Object2IntMap.Entry<Holder<Enchantment>> entry : enchantments.entrySet()) {
+            if (!EnchantmentInfoRegistry.getInfo(entry.getKey()).enabled()) {
+                out.add(Enchantment.getFullname(entry.getKey(), entry.getIntValue()).getString());
+            }
+        }
     }
 
     private static void suppressStoredBookLines(ItemStack stack, List<Component> lines, boolean showBookTooltips) {

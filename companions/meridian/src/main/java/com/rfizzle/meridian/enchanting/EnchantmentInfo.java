@@ -22,17 +22,36 @@ public record EnchantmentInfo(
         int maxLootLevel,
         int levelCap,
         PowerFunction maxPower,
-        PowerFunction minPower
+        PowerFunction minPower,
+        boolean enabled
 ) {
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, EnchantmentInfo> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.holderRegistry(Registries.ENCHANTMENT), EnchantmentInfo::ench,
-            ByteBufCodecs.VAR_INT, EnchantmentInfo::maxLevel,
-            ByteBufCodecs.VAR_INT, EnchantmentInfo::maxLootLevel,
-            ByteBufCodecs.VAR_INT, EnchantmentInfo::levelCap,
-            PowerFunction.STREAM_CODEC, EnchantmentInfo::maxPower,
-            PowerFunction.STREAM_CODEC, EnchantmentInfo::minPower,
-            EnchantmentInfo::new);
+    public static final StreamCodec<RegistryFriendlyByteBuf, EnchantmentInfo> STREAM_CODEC = new StreamCodec<>() {
+        @Override
+        public EnchantmentInfo decode(RegistryFriendlyByteBuf buf) {
+            Holder<Enchantment> ench = ByteBufCodecs.holderRegistry(Registries.ENCHANTMENT).decode(buf);
+            int maxLevel = ByteBufCodecs.VAR_INT.decode(buf);
+            int maxLootLevel = ByteBufCodecs.VAR_INT.decode(buf);
+            int levelCap = ByteBufCodecs.VAR_INT.decode(buf);
+            PowerFunction maxPower = PowerFunction.STREAM_CODEC.decode(buf);
+            PowerFunction minPower = PowerFunction.STREAM_CODEC.decode(buf);
+            boolean enabled = buf.readBoolean();
+            return new EnchantmentInfo(ench, maxLevel, maxLootLevel, levelCap, maxPower, minPower, enabled);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public void encode(RegistryFriendlyByteBuf buf, EnchantmentInfo info) {
+            ((StreamCodec<RegistryFriendlyByteBuf, Holder<Enchantment>>) (StreamCodec<?, ?>)
+                    ByteBufCodecs.holderRegistry(Registries.ENCHANTMENT)).encode(buf, info.ench());
+            ByteBufCodecs.VAR_INT.encode(buf, info.maxLevel());
+            ByteBufCodecs.VAR_INT.encode(buf, info.maxLootLevel());
+            ByteBufCodecs.VAR_INT.encode(buf, info.levelCap());
+            PowerFunction.STREAM_CODEC.encode(buf, info.maxPower());
+            PowerFunction.STREAM_CODEC.encode(buf, info.minPower());
+            buf.writeBoolean(info.enabled());
+        }
+    };
 
     /**
      * Effective max level, respecting the hard cap if set.
@@ -64,7 +83,8 @@ public record EnchantmentInfo(
         return new EnchantmentInfo(
                 ench, e.getMaxLevel(), e.getMaxLevel(), -1,
                 PowerFunction.DefaultMaxPowerFunction.INSTANCE,
-                new PowerFunction.DefaultMinPowerFunction(ench));
+                new PowerFunction.DefaultMinPowerFunction(ench),
+                true);
     }
 
     /**
@@ -80,7 +100,7 @@ public record EnchantmentInfo(
                 new PowerFunction.DefaultMinPowerFunction(ench));
         PowerFunction maxPower = resolvePowerFunction(override.maxPowerFunction,
                 PowerFunction.DefaultMaxPowerFunction.INSTANCE);
-        return new EnchantmentInfo(ench, maxLevel, maxLootLevel, levelCap, maxPower, minPower);
+        return new EnchantmentInfo(ench, maxLevel, maxLootLevel, levelCap, maxPower, minPower, override.enabled);
     }
 
     private static PowerFunction resolvePowerFunction(

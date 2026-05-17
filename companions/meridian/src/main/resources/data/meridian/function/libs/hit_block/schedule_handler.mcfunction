@@ -1,1 +1,0 @@
-execute as @e[tag=meridian.libs.hit_block] run function meridian:libs/hit_block/kill

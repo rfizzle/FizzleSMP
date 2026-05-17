@@ -13,10 +13,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class PlayerMixin {
 
     @Inject(method = "getDestroySpeed", at = @At("RETURN"), cancellable = true)
-    private void meridian$stableFooting(BlockState state, CallbackInfoReturnable<Float> cir) {
+    private void meridian$steadfast(BlockState state, CallbackInfoReturnable<Float> cir) {
         Player self = (Player) (Object) this;
         if (!self.onGround()) {
-            if (EnchantmentEffects.getEquippedLevel(self, EnchantmentEffects.STABLE_FOOTING, EquipmentSlot.FEET) > 0) {
+            if (EnchantmentEffects.getEquippedLevel(self, EnchantmentEffects.STEADFAST,
+                    EquipmentSlot.LEGS, EquipmentSlot.FEET) > 0) {
                 cir.setReturnValue(cir.getReturnValue() * 5.0F);
             }
         }

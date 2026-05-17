@@ -14,8 +14,8 @@ public class TemptGoalMixin {
     @Inject(method = "shouldFollow", at = @At("RETURN"), cancellable = true)
     private void meridian$temptation(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
         if (!cir.getReturnValue()) {
-            if (EnchantmentEffects.getEnchantmentLevel(entity.getMainHandItem(), EnchantmentEffects.TEMPTATION) > 0
-                    || EnchantmentEffects.getEnchantmentLevel(entity.getOffhandItem(), EnchantmentEffects.TEMPTATION) > 0) {
+            if (EnchantmentEffects.getEnchantmentLevel(entity.getMainHandItem(), EnchantmentEffects.BECKON) > 0
+                    || EnchantmentEffects.getEnchantmentLevel(entity.getOffhandItem(), EnchantmentEffects.BECKON) > 0) {
                 cir.setReturnValue(true);
             }
         }

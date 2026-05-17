@@ -1,11 +1,11 @@
 {
   "values": [
     {
-      "id": "meridian:pickaxe/vein_miner",
+      "id": "meridian:excavate",
       "required": false
     },
     {
-      "id": "meridian:tools/miningplus",
+      "id": "meridian:prospect",
       "required": false
     }
   ]

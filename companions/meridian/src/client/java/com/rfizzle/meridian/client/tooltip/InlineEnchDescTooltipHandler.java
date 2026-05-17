@@ -2,6 +2,7 @@ package com.rfizzle.meridian.client.tooltip;
 
 import com.rfizzle.meridian.Meridian;
 import com.rfizzle.meridian.config.MeridianConfig;
+import com.rfizzle.meridian.enchanting.EnchantmentInfoRegistry;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.ChatFormatting;
@@ -51,6 +52,7 @@ public final class InlineEnchDescTooltipHandler {
         if (enchantments == null || enchantments.isEmpty()) return;
         for (Object2IntMap.Entry<Holder<Enchantment>> entry : enchantments.entrySet()) {
             Holder<Enchantment> holder = entry.getKey();
+            if (!EnchantmentInfoRegistry.getInfo(holder).enabled()) continue;
             int level = entry.getIntValue();
             Optional<ResourceKey<Enchantment>> keyOpt = holder.unwrapKey();
             if (keyOpt.isEmpty()) continue;
