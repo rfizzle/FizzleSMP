@@ -1,34 +1,31 @@
 ---
 name: fabric-testing
-description: Write, modify, or migrate tests for Fabric companion mods under companions/<mod>/src/test/. Encodes the three-tier decision tree (pure JUnit / fabric-loader-junit / Fabric Gametest) and the recipe for replacing the Bootstrap.bootStrap()+unfreeze-reflection pattern. TRIGGER when a *Test.java file under companions/*/src/test/ is being created or edited, or when the user asks about testing a Fabric mod without a full server.
+description: Write, modify, or migrate tests for Fabric mods. Encodes the three-tier decision tree (pure JUnit / fabric-loader-junit / Fabric Gametest) and the recipe for replacing the Bootstrap.bootStrap()+unfreeze-reflection pattern. TRIGGER when a *Test.java file is being created or edited, or when the user asks about testing a Fabric mod without a full server.
 ---
 
-The user is writing, modifying, or migrating tests in a companion Fabric mod under `companions/<mod-name>/src/test/`. Apply this guidance whenever test code is being touched — both new tests and conversions of existing ones.
+The user is writing, modifying, or migrating tests in a Fabric mod. Apply this guidance whenever test code is being touched — both new tests and conversions of existing ones.
 
 ## Why this skill exists
 
-The companion mods shipped with two incompatible test bootstrapping patterns:
-
-- **tribulation** (moved to own repo) — pure JUnit 5 tests, no Minecraft classes referenced. Works fine.
-- **meridian** — uses `Bootstrap.bootStrap()` plus reflection to unfreeze `BuiltInRegistries` (`MappedRegistry.frozen` / `unregisteredIntrusiveHolders`), plus `forkEvery = 1` to avoid cross-test contamination. This is brittle and slow.
+Fabric mods often ship with a brittle test bootstrapping pattern: `Bootstrap.bootStrap()` plus reflection to unfreeze `BuiltInRegistries` (`MappedRegistry.frozen` / `unregisteredIntrusiveHolders`), plus `forkEvery = 1` to avoid cross-test contamination. This is slow and fragile.
 
 The target is **`fabric-loader-junit`** for anything that needs a vanilla registry, mixin, or AW (with an explicit `Bootstrap.bootStrap()` in `@BeforeAll` — see below), and **Fabric Gametest** for anything that needs a real `Level` or the mod's own registered content. The `unfreeze`-reflection pattern must not be used in new code.
 
-> **Correction (from real run, 2026-04):** fabric-loader-junit's `FabricLoaderLauncherSessionListener` only initializes Knot's classloader. It does **not** call `Bootstrap.bootStrap()`, and it does **not** invoke the `main` / `ModInitializer` entrypoint. Tests that touch `BuiltInRegistries` still need `@BeforeAll Bootstrap.bootStrap()`. The mod's `onInitialize` does *not* fire, so any test that depends on the mod's own items / blocks / menus being registered can't be done cleanly at Tier 2 without the prohibited unfreeze dance — push those to Tier 3 instead.
+> **Important:** fabric-loader-junit's `FabricLoaderLauncherSessionListener` only initializes Knot's classloader. It does **not** call `Bootstrap.bootStrap()`, and it does **not** invoke the `main` / `ModInitializer` entrypoint. Tests that touch `BuiltInRegistries` still need `@BeforeAll Bootstrap.bootStrap()`. The mod's `onInitialize` does *not* fire, so any test that depends on the mod's own items / blocks / menus being registered can't be done cleanly at Tier 2 without the prohibited unfreeze dance — push those to Tier 3 instead.
 
 ## Decision tree — pick one tier per test
 
 Ask these in order and stop at the first "yes":
 
 1. **Does the test reference any `net.minecraft.*` or `net.fabricmc.*` class?**
-   No → **Tier 1: Pure JUnit**. Write a normal `@Test`, no framework, no bootstrap. Example: `ScalingEngineTest`, `PointMathTest`, `BuildClueListTest`.
+   No → **Tier 1: Pure JUnit**. Write a normal `@Test`, no framework, no bootstrap. Example: pure math tests, config validation, helper utilities.
 
 2. **Does the test need a real `ServerLevel`, tick loop, entity behavior, block placement, or redstone?**
    Yes → **Tier 3: Gametest**. Use `@GameTest` with a `GameTestHelper`. Runs on `./gradlew runGametest`.
 
-3. **Everything else** (vanilla registries, enchantments, payload codecs, mixin accessors, AW-widened members) → **Tier 2: `fabric-loader-junit`** + explicit `@BeforeAll Bootstrap.bootStrap()`. Knot applies mixins/AWs; bootstrap populates the vanilla registries; you don't need the unfreeze reflection or `forkEvery` (the latter was only there because the old pattern latched state for the JVM's lifetime — with Knot + bootstrap, read-only tests are safe to share a JVM).
+3. **Everything else** (vanilla registries, enchantments, payload codecs, mixin accessors, AW-widened members) → **Tier 2: `fabric-loader-junit`** + explicit `@BeforeAll Bootstrap.bootStrap()`. Knot applies mixins/AWs; bootstrap populates the vanilla registries; you don't need the unfreeze reflection or `forkEvery` (the latter was only needed because the old pattern latched state for the JVM's lifetime — with Knot + bootstrap, read-only tests are safe to share a JVM).
 
-If the test needs to see the **mod's own registered content** (e.g. `MeridianRegistry.EXTRACTION_TOME` in `BuiltInRegistries.ITEM`), there is no clean Tier 2 path — fabric-loader-junit does not run `onInitialize`, `Bootstrap.bootStrap()` freezes the registries, and registering post-freeze is the prohibited pattern. Push that test to Tier 3.
+If the test needs to see the **mod's own registered content** (e.g. custom items in `BuiltInRegistries.ITEM`), there is no clean Tier 2 path — fabric-loader-junit does not run `onInitialize`, `Bootstrap.bootStrap()` freezes the registries, and registering post-freeze is the prohibited pattern. Push that test to Tier 3.
 
 Write the tier into a `// Tier: N` comment at the top of every new test file — readers should not have to infer it.
 
@@ -49,9 +46,9 @@ No Minecraft imports → Tier 1 → done.
 
 ## Tier 2: fabric-loader-junit (the main migration target)
 
-### Gradle setup (per companion mod)
+### Gradle setup
 
-Add to `companions/<mod>/build.gradle` under `dependencies {}`:
+Add to `build.gradle` under `dependencies {}`:
 
 ```gradle
 testImplementation "net.fabricmc:fabric-loader-junit:${project.loader_version}"
@@ -127,23 +124,23 @@ class ExampleTest {
 
 ❌ **Does not** — run the mod's `onInitialize`. The mod's own items / blocks / menus are **not** in `BuiltInRegistries`. Registering them after `Bootstrap.bootStrap()` requires reflective unfreeze (prohibited). If your test needs mod-registered content, it belongs in Tier 3.
 
-### Real example: math-to-AttributeMap bridge
+### Tier 2 sweet spot
 
-`ScalingEngineAttributeBridgeTest` (in tribulation) proves the pure-math `ScalingEngine.computeAttributeFactor` result actually lands as the expected `getMaxHealth()` when applied to a real vanilla `AttributeMap`. That's the Tier 2 sweet spot: integration between computed values and vanilla attribute math, without booting a world.
+Bridge tests that prove pure-math results actually land correctly when applied to real vanilla objects. For example: verifying that a computed attribute factor produces the expected `getMaxHealth()` when applied to a real vanilla `AttributeMap`. Integration between computed values and vanilla attribute math, without booting a world.
 
-### Migration recipe (for each `meridian` test file)
+### Migration recipe (from unfreeze-reflection pattern)
 
 Work file-by-file, but commit **per mod** not per file (see "scope" rule below).
 
 **First classify the test:**
 - Does it only *read* vanilla content (items, enchantments, attributes)? → Migrate to Tier 2 + `Bootstrap.bootStrap()`. The unfreeze helpers and `register()` call go away.
-- Does it *register* mod content via `MeridianRegistry.register()` or similar? → Can't migrate cleanly; leave on the old pattern and revisit as a Tier 3 gametest.
+- Does it *register* mod content? → Can't migrate cleanly; leave on the old pattern and revisit as a Tier 3 gametest.
 
 For readable-by-Tier-2 test files:
 
 1. **Keep `@BeforeAll` — but simplify it** to just `SharedConstants.tryDetectVersion(); Bootstrap.bootStrap();`. Everything else goes.
 2. **Delete `unfreeze` / `unfreezeIntrusive` helpers** — only needed to register mod content, which Tier 2 can't support.
-3. **Delete any explicit `MeridianRegistry.register()` call** — if a test needed it, that test belongs in Tier 3, not Tier 2.
+3. **Delete any explicit mod registry `register()` call** — if a test needed it, that test belongs in Tier 3, not Tier 2.
 4. **Delete the `Field`, `IdentityHashMap` imports** that came with the reflection.
 5. **Delete any `@BeforeAll` that builds a synthetic enchantment registry via reflection** — the real `BuiltInRegistries.ENCHANTMENT` is populated by `Bootstrap.bootStrap()` (vanilla enchantments) or the loaded data pack (datapack ones). For a specific enchantment use `BuiltInRegistries.ENCHANTMENT.getHolder(Enchantments.SHARPNESS).orElseThrow()`.
 6. **Leave the `@Test` bodies unchanged.** Only setup is changing; assertion semantics must be byte-identical.
@@ -151,45 +148,9 @@ For readable-by-Tier-2 test files:
 
 Do **not** combine migration with test logic changes. A migration commit should only change setup boilerplate; reviewers must trust that no assertion was softened.
 
-### Before/after (real example)
-
-Before (`ExtractionTomeFuelSlotRepairHandlerTest.java`, lines 59–77 — registers mod items, so *cannot* migrate cleanly to Tier 2):
-
-```java
-@BeforeAll
-static void bootstrap() throws Exception {
-    SharedConstants.tryDetectVersion();
-    Bootstrap.bootStrap();
-    unfreezeIntrusive(BuiltInRegistries.BLOCK);
-    unfreezeIntrusive(BuiltInRegistries.ITEM);
-    unfreezeIntrusive(BuiltInRegistries.BLOCK_ENTITY_TYPE);
-    unfreeze(BuiltInRegistries.MENU);
-    MeridianRegistry.register();
-    BuiltInRegistries.BLOCK.freeze();
-    BuiltInRegistries.ITEM.freeze();
-    BuiltInRegistries.MENU.freeze();
-    BuiltInRegistries.BLOCK_ENTITY_TYPE.freeze();
-    enchantmentRegistry = buildEnchantmentRegistry();
-}
-```
-
-Correct target: **Tier 3**. Spin up a gametest that exercises the full anvil-fuel-slot repair flow with a real `ServerLevel` — that's what the original test was simulating.
-
-For a test that only reads vanilla enchantments (the cleanly-migratable case), the after looks like:
-
-```java
-@BeforeAll
-static void bootstrapVanillaRegistries() {
-    SharedConstants.tryDetectVersion();
-    Bootstrap.bootStrap();
-}
-```
-
-Everything after those two lines in the original `@BeforeAll`, plus all the private `unfreeze*` / `buildEnchantmentRegistry` / `synthetic()` helpers, can be deleted.
-
 ## Tier 3: Fabric Gametest
 
-Use when a test must drive a real `Level` — anvil menu end-to-end, block entity ticking, library-block neighbor updates, player interaction flows, or any case where the mod's own registered content has to be present.
+Use when a test must drive a real `Level` — menu end-to-end flows, block entity ticking, neighbor updates, player interaction flows, or any case where the mod's own registered content has to be present.
 
 ### Gradle setup — full pattern
 
@@ -251,9 +212,9 @@ import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.level.block.Blocks;
 
-public class AnvilFlowGameTest implements FabricGameTest {
-    @GameTest(template = "meridian:empty_3x3")
-    public void placeAndBreakAnvil(GameTestHelper helper) {
+public class SomeGameTest implements FabricGameTest {
+    @GameTest(template = "<modid>:empty_3x3")
+    public void placeAndBreakBlock(GameTestHelper helper) {
         BlockPos pos = new BlockPos(1, 2, 1);
         helper.setBlock(pos, Blocks.ANVIL);
         helper.assertBlockPresent(Blocks.ANVIL, pos);
@@ -266,9 +227,9 @@ Import `net.minecraft.gametest.framework.GameTest` (vanilla) for the annotation;
 
 ### Runtime patterns you'll hit
 
-These aren't obvious from the API surface — working them out cost multiple failing runs during the tribulation rollout.
+These aren't obvious from the API surface.
 
-**1. Mock player positioning.** `helper.makeMockServerPlayerInLevel()` places the player near the level's (0,0,0), not inside the test region. Each gametest runs at a randomized far-out position, so any test that relies on a `ServerPlayer` being in range — `level.getNearestPlayer(mob, range)`, `level.players().stream().filter(...)`, player-triggered block interactions — has to teleport the player into the test region first:
+**1. Mock player positioning.** `helper.makeMockServerPlayerInLevel()` places the player near the level's (0,0,0), not inside the test region. Each gametest runs at a randomized far-out position, so any test that relies on a `ServerPlayer` being in range must teleport the player into the test region first:
 
 ```java
 ServerPlayer player = helper.makeMockServerPlayerInLevel();
@@ -276,82 +237,31 @@ BlockPos playerAbs = helper.absolutePos(new BlockPos(0, 2, 1));
 player.teleportTo(playerAbs.getX() + 0.5, playerAbs.getY(), playerAbs.getZ() + 0.5);
 ```
 
-The `+0.5` centers the player on the block; matters for some detection paths that use exact coordinates, harmless for those that don't.
+The `+0.5` centers the player on the block; matters for some detection paths that use exact coordinates.
 
-**2. Deterministic assertions over non-deterministic world state.** The gametest world's shared-spawn and Y-level are not (0,0,0)/62, so any position-based scaling or terrain-dependent check in the code under test kicks in with non-obvious values. RNG-gated paths (variant rolls, drop chances, random damage) add more noise. When the goal is to assert one specific axis, save the relevant config flags, disable the noisy paths, spawn the entity, and restore in a `finally`:
+**2. Deterministic assertions over non-deterministic world state.** The gametest world's position is randomized, so any position-based or RNG-gated logic in the code under test kicks in with non-obvious values. When the goal is to assert one specific axis, save the relevant config flags, disable the noisy paths, spawn the entity, and restore in a `finally`:
 
 ```java
 boolean savedDist = cfg.distanceScaling.enabled;
-boolean savedSpecial = cfg.specialZombies.enabled;
 cfg.distanceScaling.enabled = false;
-cfg.specialZombies.enabled = false;
 
 Zombie zombie;
 try {
-    // ENTITY_LOAD fires synchronously inside spawnWithNoFreeWill, so the mod's
-    // handler runs and modifiers are frozen on the returned entity before this
-    // call returns.
     zombie = helper.spawnWithNoFreeWill(EntityType.ZOMBIE, new BlockPos(1, 2, 1));
 } finally {
     cfg.distanceScaling.enabled = savedDist;
-    cfg.specialZombies.enabled = savedSpecial;
 }
 ```
 
-Safe across tests: Minecraft's `GameTestServer` runs the whole batch on the main server thread, so `finally` always runs before any other test's spawn call. No concurrent-mutation risk even with config being a shared singleton.
+Safe across tests: Minecraft's `GameTestServer` runs the whole batch on the main server thread, so `finally` always runs before any other test's spawn call.
 
 **3. `helper.assertValueEqual` is exact equality.** It uses `.equals()`, so `assertValueEqual(zombie.getMaxHealth(), 70.0f, "...")` fails on `70.000001f`. Unlike JUnit's `assertEquals(expected, actual, delta)`, there is no tolerance parameter. For fractional/derived values, either compute the expected number exactly or fall back to `helper.assertTrue(Math.abs(actual - expected) < 1e-4, "...")`.
 
 **4. Synchronous vs deferred assertions.** `helper.succeedWhen(() -> { ... })` polls the lambda every tick until it passes or the test times out; assertions *inside* the lambda run at tick boundaries. Assertions *outside* `succeedWhen` run immediately on the calling thread. For state that's ready before `spawn*` returns (like `ENTITY_LOAD`-applied attributes), either works. For state that needs a tick — AI pathing, projectile flight, block entity logic — put the assertion inside `succeedWhen`.
 
-### Menu-flow sketch (meridian's shape)
-
-> **Unverified recipe.** I haven't run this against meridian's actual menu — the outline reflects the public API for 1.21.1 Fabric menus, but expect to adapt slot indices and the use-block call to the specific mod.
-
-For tests that need to exercise a block-backed menu end-to-end (anvil flow, enchanting table, beacon UI), the shape is:
-
-```java
-@GameTest(template = "meridian:empty_3x3")
-public void anvilFlow_inputAndMaterial_producesExpectedResult(GameTestHelper helper) {
-    // 1. Place the block and teleport a player next to it.
-    BlockPos blockLocal = new BlockPos(1, 1, 1);
-    helper.setBlock(blockLocal, Blocks.ANVIL);
-    ServerPlayer player = helper.makeMockServerPlayerInLevel();
-    BlockPos playerAbs = helper.absolutePos(new BlockPos(1, 1, 2));
-    player.teleportTo(playerAbs.getX() + 0.5, playerAbs.getY(), playerAbs.getZ() + 0.5);
-
-    // 2. Right-click the block to open its menu. useBlock goes through the normal
-    //    interaction path, so mod-registered screen handlers open the way they do in-game.
-    helper.useBlock(blockLocal, player);
-    AbstractContainerMenu menu = player.containerMenu;
-    helper.assertTrue(menu instanceof AnvilMenu, "expected anvil menu to open");
-
-    // 3. Place items into input slots. Slot indices are menu-specific: for AnvilMenu
-    //    slot 0 = input, slot 1 = material, slot 2 = output. For mod menus, look at
-    //    the constructor's addSlot(...) order.
-    menu.getSlot(0).set(new ItemStack(Items.DIAMOND_SWORD));
-    menu.getSlot(1).set(new ItemStack(Items.ENCHANTED_BOOK));
-
-    // 4. slotsChanged() ran on each set() call; read the computed output.
-    ItemStack result = menu.getSlot(2).getItem();
-    helper.assertTrue(!result.isEmpty(), "expected anvil to produce an output");
-    helper.succeed();
-}
-```
-
-If the menu reads a block entity's state (repair cost, stored XP, enchantment table shelf count), seed that via the helper's block-entity API before calling `useBlock`:
-
-```java
-helper.getBlockEntity(blockLocal) instanceof SomeBlockEntity be;
-// mutate be's fields, then:
-be.setChanged();
-```
-
-Run the single test first with `./gradlew runGametest --tests 'meridian:empty_3x3'` (Fabric gametest filters by template ID, not class name) and iterate on slot indices until the assertions pass.
-
 ### Template location
 
-Structure templates go under `src/main/resources/data/<modid>/gametest/structure/<name>.snbt` — **two subdirectories, singular "structure"**. This is the path the Fabric gametest API's `StructureTemplateManagerMixin` resolves (via `FabricGameTestHelper.GAMETEST_STRUCTURE_FINDER`). Do not be fooled by the vanilla error message `"Missing test structure: <id>"` — the token `"gameteststructures"` appears in vanilla `StructureUtils` but is only used in the error line, not as the actual resource path.
+Structure templates go under `src/main/resources/data/<modid>/gametest/structure/<name>.snbt` — **two subdirectories, singular "structure"**. This is the path the Fabric gametest API resolves. Do not be fooled by the vanilla error message `"Missing test structure: <id>"` — the token `"gameteststructures"` appears in vanilla `StructureUtils` but is only used in the error line, not as the actual resource path.
 
 Templates **must** be in `src/main/resources` (the main mod's data pack), not in `src/gametest/resources`. The gametest source set's resources are not loaded as part of the `<modid>` data pack at runtime, so a template there is invisible to the structure manager.
 
@@ -382,20 +292,16 @@ A minimal 3×3×3 empty-air-over-stone template (a single file covers almost eve
 
 On success you'll see `All N required tests passed :)` in the log. The `junit-gametest.xml` report lands in `build/` and can be wired into CI. On failure, Minecraft writes a crash report under `build/gametest/crash-reports/`.
 
-### Working reference
-
-The tribulation mod (now in its own repo) has a working Tier 3 suite exercising every piece discussed above: sourceSet wiring in `build.gradle`, `fabric.mod.json` entrypoint, SNBT structure template, and `MobScalingGameTest.java` with mock-player teleport, config-isolation try/finally, and parametrized breakpoint tests. Use it as a template when setting up a new mod's Tier 3.
-
 ### Do not use gametest for
 
 - Pure math or formula checks — Tier 1.
 - Registry lookups, item creation, component wiring — Tier 2 is faster and has no world boot cost.
-- Anything that can be expressed as "given this `ItemStack`, when I call `handler.handle(...)`, then the `AnvilResult` looks like X" — that's a Tier 2 handler test, not an integration test.
+- Anything that can be expressed as "given this `ItemStack`, when I call `handler.handle(...)`, then the result looks like X" — that's a Tier 2 handler test, not an integration test.
 
 ## Scope — one mod per session, one commit per mod
 
-- **Do not** half-migrate a mod. If `meridian` is the target, every test in that mod is either already Tier 1 (leave alone) or becomes Tier 2. Mixed states (some files using `Bootstrap.bootStrap()`, some using fabric-loader-junit) will fail unpredictably because `forkEvery = 1` would need to stay for the unconverted files while being wrong for the new ones.
-- **Do** commit the migration as a single `refactor(test)` commit per mod. Example: `refactor(test): migrate meridian to fabric-loader-junit`. The diff should be almost entirely deletions.
+- **Do not** half-migrate a mod. Every test is either already Tier 1 (leave alone) or becomes Tier 2. Mixed states (some files using `Bootstrap.bootStrap()`, some using fabric-loader-junit) will fail unpredictably because `forkEvery = 1` would need to stay for the unconverted files while being wrong for the new ones.
+- **Do** commit the migration as a single `refactor(test)` commit per mod. The diff should be almost entirely deletions.
 - **Do not** bundle migration with new test additions, bug fixes, or assertion changes. Review trust depends on that separation.
 
 ## Verification — before declaring the migration done
