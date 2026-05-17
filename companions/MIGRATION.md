@@ -8,7 +8,7 @@ spiritual predecessors without the `fizzle-` prefix.
 | Current | New | Mod ID | Display Name | Lineage |
 |---------|-----|--------|--------------|---------|
 | `fizzle-enchanting` | `meridian` | `meridian` | Meridian | Apotheosis + Zenith |
-| `fizzle-difficulty` | `tribulation` | `tribulation` | Tribulation | HMIOT + RpgDifficulty |
+| `fizzle-difficulty` | `tribulation` | `tribulation` | Tribulation (moved to own repo) | HMIOT + RpgDifficulty |
 
 **Maven group:** `com.fizzlesmp` -> `com.rfizzle` (changed during migration).
 

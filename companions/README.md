@@ -54,9 +54,6 @@ The script bumps `gradle.properties`, commits as
 
 ## Mods
 
-- **[tribulation](tribulation/)** — Unified, formula-driven mob
-  scaling (time + distance + height) that replaces HMIOT and RpgDifficulty.
-  Side: `both`. See [DESIGN.md](tribulation/DESIGN.md).
 - **[meridian](meridian/)** — Apotheosis/Zenith-style
   stat-driven enchanting table, shelves, Enchantment Library, and anvil/tome
   tooling for 1.21.1 Fabric. Design-only; intended to eventually replace

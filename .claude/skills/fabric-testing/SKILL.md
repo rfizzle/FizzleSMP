@@ -9,7 +9,7 @@ The user is writing, modifying, or migrating tests in a companion Fabric mod und
 
 The companion mods shipped with two incompatible test bootstrapping patterns:
 
-- **tribulation** — pure JUnit 5 tests, no Minecraft classes referenced. Works fine.
+- **tribulation** (moved to own repo) — pure JUnit 5 tests, no Minecraft classes referenced. Works fine.
 - **meridian** — uses `Bootstrap.bootStrap()` plus reflection to unfreeze `BuiltInRegistries` (`MappedRegistry.frozen` / `unregisteredIntrusiveHolders`), plus `forkEvery = 1` to avoid cross-test contamination. This is brittle and slow.
 
 The target is **`fabric-loader-junit`** for anything that needs a vanilla registry, mixin, or AW (with an explicit `Bootstrap.bootStrap()` in `@BeforeAll` — see below), and **Fabric Gametest** for anything that needs a real `Level` or the mod's own registered content. The `unfreeze`-reflection pattern must not be used in new code.
@@ -382,16 +382,9 @@ A minimal 3×3×3 empty-air-over-stone template (a single file covers almost eve
 
 On success you'll see `All N required tests passed :)` in the log. The `junit-gametest.xml` report lands in `build/` and can be wired into CI. On failure, Minecraft writes a crash report under `build/gametest/crash-reports/`.
 
-### Working reference in this repo
+### Working reference
 
-`companions/tribulation/src/gametest/` has a working Tier 3 suite exercising every piece discussed above:
-
-- Build wiring: `companions/tribulation/build.gradle` (sourceSet, configurations, loom run, evaluation order).
-- Entrypoint: `companions/tribulation/src/main/resources/fabric.mod.json`.
-- Template: `companions/tribulation/src/main/resources/data/tribulation/gametest/structure/empty_3x3.snbt`.
-- Tests: `companions/tribulation/src/gametest/java/com/rfizzle/tribulation/gametest/MobScalingGameTest.java` — includes the mock-player teleport, the config-isolation try/finally, and a parametrized helper invoked by 5 breakpoint tests.
-
-Copy the build.gradle wiring from there when setting up a new mod's Tier 3.
+The tribulation mod (now in its own repo) has a working Tier 3 suite exercising every piece discussed above: sourceSet wiring in `build.gradle`, `fabric.mod.json` entrypoint, SNBT structure template, and `MobScalingGameTest.java` with mock-player teleport, config-isolation try/finally, and parametrized breakpoint tests. Use it as a template when setting up a new mod's Tier 3.
 
 ### Do not use gametest for
 
