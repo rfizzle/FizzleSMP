@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column",
-  "textures": {
-    "end": "minecraft:block/nether_bricks",
-    "side": "meridian:block/blazing_hellshelf"
-  }
-}
