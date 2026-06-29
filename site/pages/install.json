@@ -1,0 +1,129 @@
+{
+  "nav": "Install",
+  "metaTitle": "Install Guide — FizzleSMP",
+  "metaDescription": "How to install the FizzleSMP modpack — step-by-step instructions for CurseForge, Modrinth, and manual installation.",
+  "ogTitle": "Install Guide — FizzleSMP",
+  "ogDescription": "Get FizzleSMP running in minutes. Download the pack, import it into your launcher, and connect to the server.",
+  "title": "Install Guide",
+  "lede": "Get FizzleSMP running in minutes.",
+  "sections": [
+    {
+      "title": "CurseForge Launcher",
+      "plainTitle": true,
+      "blocks": [
+        {
+          "type": "prose",
+          "html": [
+            "The CurseForge launcher is the recommended way to install FizzleSMP."
+          ]
+        },
+        {
+          "type": "steps",
+          "items": [
+            "Download the latest <code class='text-accent2'>FizzleSMP-client-X.Y.Z.zip</code> from the <a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/releases/latest' target='_blank' rel='noopener noreferrer'>latest GitHub release</a>.",
+            "Open the <a class='text-accent hover:text-accent2 underline' href='https://www.curseforge.com/download/app' target='_blank' rel='noopener noreferrer'>CurseForge App</a>. Go to <strong class='text-bone'>Minecraft</strong> → <strong class='text-bone'>Create Custom Profile</strong> → <strong class='text-bone'>Import</strong>.",
+            "Select the downloaded <code class='text-accent2'>.zip</code> file. The launcher downloads all mods automatically.",
+            "Click <strong class='text-bone'>Play</strong>. Connect to the server when the game launches."
+          ],
+          "note": "The CurseForge launcher handles mod downloads, Java version, and memory allocation for you."
+        }
+      ]
+    },
+    {
+      "title": "Modrinth Launcher",
+      "plainTitle": true,
+      "blocks": [
+        {
+          "type": "prose",
+          "html": [
+            "If you prefer Modrinth, grab the <code class='text-accent2'>.mrpack</code> file instead."
+          ]
+        },
+        {
+          "type": "steps",
+          "items": [
+            "Download the latest <code class='text-accent2'>FizzleSMP-client-X.Y.Z.mrpack</code> from the <a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/releases/latest' target='_blank' rel='noopener noreferrer'>latest GitHub release</a>.",
+            "Open the <a class='text-accent hover:text-accent2 underline' href='https://modrinth.com/app' target='_blank' rel='noopener noreferrer'>Modrinth App</a>. Click the <strong class='text-bone'>+</strong> button → <strong class='text-bone'>From file</strong>.",
+            "Select the <code class='text-accent2'>.mrpack</code> file. Mods download automatically.",
+            "Click <strong class='text-bone'>Play</strong> and connect."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Prism Launcher / MultiMC",
+      "plainTitle": true,
+      "blocks": [
+        {
+          "type": "prose",
+          "html": [
+            "Prism Launcher and MultiMC support both <code class='text-accent2'>.mrpack</code> and CurseForge <code class='text-accent2'>.zip</code> imports."
+          ]
+        },
+        {
+          "type": "steps",
+          "items": [
+            "Download either the <code class='text-accent2'>.zip</code> or <code class='text-accent2'>.mrpack</code> from the <a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/releases/latest' target='_blank' rel='noopener noreferrer'>latest release</a>.",
+            "In the launcher, go to <strong class='text-bone'>Add Instance</strong> → <strong class='text-bone'>Import from zip</strong>.",
+            "Select the file, let it download, then launch."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Recommended settings",
+      "blocks": [
+        {
+          "type": "cards",
+          "mdColumns": 3,
+          "lgColumns": 3,
+          "hoverAccent": true,
+          "items": [
+            {
+              "title": "Memory",
+              "titleTone": "bone",
+              "html": ["Allocate <strong class='text-accent2'>6–8 GB</strong> of RAM. Less than 4 GB will cause out-of-memory crashes with this many mods."]
+            },
+            {
+              "title": "Java",
+              "titleTone": "bone",
+              "html": ["Use <strong class='text-accent2'>Java 21</strong> (Temurin recommended). Most launchers handle this automatically."]
+            },
+            {
+              "title": "Shaders",
+              "titleTone": "bone",
+              "html": ["Iris is included. Drop a shader pack into <code class='text-accent2'>shaderpacks/</code> — <a class='text-accent hover:text-accent2 underline' href='https://www.complementary.dev/shaders/' target='_blank' rel='noopener noreferrer'>Complementary</a> is recommended."]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Updating",
+      "blocks": [
+        {
+          "type": "prose",
+          "html": [
+            "When a new version is released, download the new <code class='text-accent2'>.zip</code> or <code class='text-accent2'>.mrpack</code> and import it as a new profile. Your worlds and configs are stored per-instance, so they won't be affected. Check the <a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/releases' target='_blank' rel='noopener noreferrer'>release notes</a> for any migration notes."
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Server operators",
+      "blocks": [
+        {
+          "type": "prose",
+          "html": [
+            "The server pack updates in place via <code class='text-accent2'>server-install.sh</code> — no wipe-and-recreate. See the <a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/server-deployment.md' target='_blank' rel='noopener noreferrer'>server deployment guide</a> for the full operator walkthrough."
+          ]
+        },
+        {
+          "type": "code",
+          "label": "Install or update the server to the latest release:",
+          "code": "./server-install.sh\n./server-install.sh v1.5.0    # pin to a specific version\n./server-install.sh master    # install unreleased master (testing only)"
+        }
+      ]
+    }
+  ]
+}

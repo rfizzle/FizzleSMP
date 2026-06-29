@@ -1,0 +1,166 @@
+{
+  "type": "home",
+  "nav": "Home",
+  "metaTitle": "FizzleSMP — A Handcrafted Minecraft Modpack",
+  "metaDescription": "FizzleSMP is a curated Minecraft 1.21.1 Fabric modpack built for multiplayer survival — RPG classes, overhauled combat, massive worldgen, technology, and community features.",
+  "ogTitle": "FizzleSMP — A Handcrafted Minecraft Modpack",
+  "ogDescription": "Forge your path. Master your craft. Shape the world. A curated Fabric modpack for friends who want more from Minecraft.",
+  "hero": {
+    "lede": "Forge your path. Master your craft. Shape the world.",
+    "sub": "A handcrafted multiplayer survival experience built for friends who want more from their world — without losing what makes Minecraft feel like home. Minecraft 1.21.1 on Fabric.",
+    "buttons": [
+      { "label": "Download", "href": "https://github.com/rfizzle/FizzleSMP/releases/latest", "primary": true, "external": true },
+      { "label": "Install guide", "href": "/install.html" },
+      { "label": "Browse mods", "href": "/mods.html" }
+    ]
+  },
+  "sections": [
+    {
+      "title": "What makes FizzleSMP different",
+      "band": true,
+      "lede": "Every mod is here for a reason. Nothing is filler.",
+      "blocks": [
+        {
+          "type": "cards",
+          "mdColumns": 2,
+          "lgColumns": 4,
+          "hoverAccent": true,
+          "items": [
+            {
+              "title": "A World Worth Exploring",
+              "html": [
+                "Nearly a hundred biomes reshape the Overworld with dramatic cliffs, lush valleys, and forgotten ruins. The Nether, End, and hidden dimensions reward the bold. Every dungeon and temple has been rebuilt from the ground up."
+              ]
+            },
+            {
+              "title": "Choose Your Path",
+              "html": [
+                "Train as a Wizard, Paladin, Rogue, Warrior, or Archer through a full RPG class system. Build industrial empires. Unravel color-based magic. Hunt legendary weapons. Or open a shop and watch the economy grow."
+              ]
+            },
+            {
+              "title": "Combat That Feels Alive",
+              "html": [
+                "Directional swings, combat rolls, unique weapon types from claymores to chakrams, and enemies that grow tougher the longer your world survives. Boss encounters are designed for groups."
+              ]
+            },
+            {
+              "title": "Built for Community",
+              "html": [
+                "Proximity voice chat. Player-run shops and economies. Land claims. Per-player loot so every chest feels like yours. Waystones to stay connected across a massive world."
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "categories",
+      "title": "Mod categories",
+      "lede": "Over 100 mods organized into nine categories, each serving a clear purpose.",
+      "blocks": [
+        {
+          "type": "cards",
+          "mdColumns": 3,
+          "lgColumns": 3,
+          "hoverAccent": true,
+          "items": [
+            {
+              "title": "World Generation",
+              "html": ["Biomes, structures, dimensions, and terrain — the foundation that makes every journey unique."],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='/mods.html#worldgen'>View mods →</a>"
+            },
+            {
+              "title": "Combat & RPG",
+              "html": ["Overhauled combat mechanics, class systems, weapons, boss encounters, and gear progression."],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='/mods.html#combat'>View mods →</a>"
+            },
+            {
+              "title": "Gameplay",
+              "html": ["Core mechanics, technology, magic, farming, seasons, and content that defines the FizzleSMP experience."],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='/mods.html#gameplay'>View mods →</a>"
+            },
+            {
+              "title": "Economy & Trading",
+              "html": ["Player-run shops, currency, and trade systems that give the server a living economy."],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='/mods.html#economy'>View mods →</a>"
+            },
+            {
+              "title": "Social & Community",
+              "html": ["Voice chat, emotes, and social features that bring players together."],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='/mods.html#social'>View mods →</a>"
+            },
+            {
+              "title": "Protection & Security",
+              "html": ["Land claims, anti-grief tools, and server protection that keep builds safe."],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='/mods.html#protection'>View mods →</a>"
+            },
+            {
+              "title": "Utility & QoL",
+              "html": ["Minimap, HUD, inventory management, and quality-of-life improvements that smooth the experience."],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='/mods.html#utility'>View mods →</a>"
+            },
+            {
+              "title": "Admin & Management",
+              "html": ["Server administration, moderation, and management tools for operators."],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='/mods.html#admin'>View mods →</a>"
+            },
+            {
+              "title": "Performance",
+              "html": ["Sodium, Lithium, Noisium, and the full optimization stack that keeps frame rates high and load times low."],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='/mods.html#performance'>View mods →</a>"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Powered by Concord",
+      "band": true,
+      "lede": "FizzleSMP includes all four mods from the <a class='text-accent hover:text-accent2 underline' href='https://concord.rfizzle.com' target='_blank' rel='noopener noreferrer'>Concord</a> collection — independent overhauls of vanilla systems that light up together.",
+      "ledeNarrow": true,
+      "blocks": [
+        {
+          "type": "cards",
+          "mdColumns": 2,
+          "lgColumns": 4,
+          "leftAccent": true,
+          "items": [
+            {
+              "title": "Tribulation",
+              "titleTone": "bone",
+              "html": ["The world pushes back the longer and farther you survive. <a class='text-accent hover:text-accent2 underline' href='https://tribulation.rfizzle.com' target='_blank' rel='noopener noreferrer'>Learn more →</a>"]
+            },
+            {
+              "title": "Meridian",
+              "titleTone": "bone",
+              "html": ["Enchanting becomes a system you build toward, not a slot machine. <a class='text-accent hover:text-accent2 underline' href='https://meridian.rfizzle.com' target='_blank' rel='noopener noreferrer'>Learn more →</a>"]
+            },
+            {
+              "title": "Mercantile",
+              "titleTone": "bone",
+              "html": ["Villagers become people you have a history with. <a class='text-accent hover:text-accent2 underline' href='https://mercantile.rfizzle.com' target='_blank' rel='noopener noreferrer'>Learn more →</a>"]
+            },
+            {
+              "title": "Prosperity",
+              "titleTone": "bone",
+              "html": ["Every chest is worth opening, for every player who finds it. <a class='text-accent hover:text-accent2 underline' href='https://prosperity.rfizzle.com' target='_blank' rel='noopener noreferrer'>Learn more →</a>"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Runs well, plays better",
+      "width": "4xl",
+      "blocks": [
+        {
+          "type": "prose",
+          "html": [
+            "Under the hood, a full performance stack — Sodium, Lithium, Noisium, FerriteCore, ModernFix, and more — keeps frame rates high and load times low, even with over 100 mods packed in. The server runs <a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/server-deployment.md' target='_blank' rel='noopener noreferrer'>Fabric on bare metal</a>, updated in place via packwiz — no wipe-and-recreate."
+          ]
+        }
+      ]
+    }
+  ]
+}

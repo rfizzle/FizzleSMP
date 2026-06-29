@@ -1,0 +1,26 @@
+{
+  "id": "fizzlesmp",
+  "name": "FizzleSMP",
+  "domain": "smp.rfizzle.com",
+  "url": "https://smp.rfizzle.com",
+  "description": "A handcrafted Minecraft 1.21.1 Fabric modpack for friends who want more from their world — without losing what makes Minecraft feel like home.",
+  "metaKeywords": "Minecraft, Fabric, modpack, SMP, survival, multiplayer, 1.21.1, RPG, combat, exploration",
+  "github": "https://github.com/rfizzle/FizzleSMP",
+  "defaultBranch": "master",
+  "copyright": "© 2025-2026 rfizzle. FizzleSMP is not affiliated with Mojang Studios or Microsoft.",
+  "footerMeta": "Minecraft 1.21.1 · Fabric · Managed with packwiz",
+  "nav": ["index", "mods", "install", "guides"],
+  "theme": {
+    "ink": "#0a0a0a",
+    "card": "#1a1a1a",
+    "elevated": "#222222",
+    "bone": "#e8e0d4",
+    "ash": "#a89f93",
+    "smoke": "#6b6359",
+    "accent": "#56B366",
+    "accentDark": "#3D8A4A",
+    "accent2": "#7DD68B",
+    "accent2Bright": "#9AEAA5",
+    "glowRgb": "86, 179, 102"
+  }
+}

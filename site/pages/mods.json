@@ -1,0 +1,235 @@
+{
+  "nav": "Mods",
+  "metaTitle": "Mod List — FizzleSMP",
+  "metaDescription": "The complete list of mods in FizzleSMP, organized by category — world generation, combat, gameplay, economy, social, protection, admin, utility, and performance.",
+  "ogTitle": "Mod List — FizzleSMP",
+  "ogDescription": "Over 100 curated mods across nine categories. Every mod is here for a reason.",
+  "title": "Mod List",
+  "lede": "Every mod in FizzleSMP, organized by category. Each one is here for a reason — nothing is filler.",
+  "scale": "lg",
+  "width": "6xl",
+  "sections": [
+    {
+      "id": "worldgen",
+      "title": "World Generation",
+      "titleGap": "4",
+      "intro": "Biomes, structures, dimensions, and terrain that make every journey unique.",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["Mod", "Summary"],
+          "bottomGap": true,
+          "rows": [
+            ["<strong class='text-bone'>Tectonic</strong>", "Dramatic terrain overhaul — towering cliffs, deep valleys, and natural arches"],
+            ["<strong class='text-bone'>Terralith</strong>", "85+ new biomes that blend seamlessly with vanilla"],
+            ["<strong class='text-bone'>Incendium</strong>", "Complete Nether overhaul with volcanic wastelands and new structures"],
+            ["<strong class='text-bone'>Nullscape</strong>", "End dimension overhaul with alien landscapes"],
+            ["<strong class='text-bone'>Structory</strong>", "Atmospheric vanilla-style structures scattered across the world"],
+            ["<strong class='text-bone'>Structory: Towers</strong>", "Tower-focused structure generation addon"],
+            ["<strong class='text-bone'>Explorify</strong>", "Ruins, camps, and small discoveries that reward wandering"],
+            ["<strong class='text-bone'>YUNG's Better Dungeons</strong>", "Complete dungeon redesign with varied layouts"],
+            ["<strong class='text-bone'>YUNG's Better Strongholds</strong>", "Sprawling stronghold overhaul"],
+            ["<strong class='text-bone'>YUNG's Better Ocean Monuments</strong>", "Ocean monuments rebuilt with new rooms and challenges"],
+            ["<strong class='text-bone'>YUNG's Better Desert Temples</strong>", "Desert temples with multi-level exploration"],
+            ["<strong class='text-bone'>YUNG's Better Witch Huts</strong>", "Witch huts transformed into atmospheric encounters"],
+            ["<strong class='text-bone'>YUNG's Better Nether Fortresses</strong>", "Nether fortresses rebuilt as massive explorable structures"],
+            ["<strong class='text-bone'>YUNG's Better End Island</strong>", "Redesigned main End island and dragon fight arena"],
+            ["<strong class='text-bone'>YUNG's Bridges</strong>", "Natural bridges spanning ravines and rivers"],
+            ["<strong class='text-bone'>YUNG's Extras</strong>", "Small vanilla-friendly additions (wells, ruins, camps)"],
+            ["<strong class='text-bone'>The Bumblezone</strong>", "Bee-themed dimension accessed through bee nests"],
+            ["<strong class='text-bone'>Deeper and Darker</strong>", "Deep dark expansion with The Otherside dimension"],
+            ["<strong class='text-bone'>Sparse Structures</strong>", "Controls structure spawn density to prevent overcrowding"],
+            ["<strong class='text-bone'>Noisium</strong>", "World generation performance optimizer"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "combat",
+      "title": "Combat & RPG",
+      "titleGap": "4",
+      "intro": "Overhauled combat mechanics, class systems, weapons, and boss encounters.",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["Mod", "Summary"],
+          "bottomGap": true,
+          "rows": [
+            ["<strong class='text-bone'>Better Combat</strong>", "Directional swings, combo attacks, and weapon-specific animations"],
+            ["<strong class='text-bone'>Combat Roll</strong>", "Dodge-roll mechanic with i-frames"],
+            ["<strong class='text-bone'>Simply Swords</strong>", "Unique weapon types — claymores, rapiers, chakrams, and more"],
+            ["<strong class='text-bone'>Paladins & Priests</strong>", "Holy magic classes with spells and healing"],
+            ["<strong class='text-bone'>Wizards</strong>", "Arcane magic class with spell progression"],
+            ["<strong class='text-bone'>Archers</strong>", "Ranged combat overhaul with trick arrows and skills"],
+            ["<strong class='text-bone'>Rogues & Warriors</strong>", "Melee combat classes with skill trees"],
+            ["<strong class='text-bone'>Spell Engine</strong>", "Shared spell casting framework for RPG classes"],
+            ["<strong class='text-bone'>Spell Power Attributes</strong>", "RPG-style magic stats on gear"],
+            ["<strong class='text-bone'>Runes</strong>", "Runic augments for weapons and armor"],
+            ["<strong class='text-bone'>Artifacts</strong>", "Curio-slot trinkets with unique abilities found as loot"],
+            ["<strong class='text-bone'>Bosses of Mass Destruction</strong>", "Massive multi-phase boss encounters designed for groups"],
+            ["<strong class='text-bone'>Reforged</strong>", "Weapon attributes and stat modifiers"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gameplay",
+      "title": "Gameplay",
+      "titleGap": "4",
+      "intro": "Core mechanics, technology, magic, farming, and content that defines the FizzleSMP experience.",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["Mod", "Summary"],
+          "bottomGap": true,
+          "rows": [
+            ["<strong class='text-bone'>Tech Reborn</strong>", "Industrial tech tree — machines, power generation, ore processing"],
+            ["<strong class='text-bone'>Oritech</strong>", "Modern tech mod with machines, pipes, lasers, and drones"],
+            ["<strong class='text-bone'>Refined Storage</strong>", "Digital storage networks and autocrafting"],
+            ["<strong class='text-bone'>Spectrum</strong>", "Color-based magic system with discovery-driven progression"],
+            ["<strong class='text-bone'>Farmer's Delight</strong>", "Cooking and farming expansion with new crops and recipes"],
+            ["<strong class='text-bone'>Fabric Seasons</strong>", "Seasonal cycle affecting crop growth, weather, and biome colors"],
+            ["<strong class='text-bone'>Easy Anvils</strong>", "Removes the XP scaling penalty on anvil operations"],
+            ["<strong class='text-bone'>Grind Enchantments</strong>", "Extract enchantments via the grindstone"],
+            ["<strong class='text-bone'>Lootr</strong>", "Per-player instanced loot in all chests"],
+            ["<strong class='text-bone'>Waystones</strong>", "Fast-travel network via craftable waypoints"],
+            ["<strong class='text-bone'>Supplementaries</strong>", "Vanilla-style additions — signs, jars, flags, and more"],
+            ["<strong class='text-bone'>Jewelry</strong>", "Craftable rings, necklaces, and bracelets with set bonuses"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "economy",
+      "title": "Economy & Trading",
+      "titleGap": "4",
+      "intro": "Player-run shops, currency, and trade systems.",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["Mod", "Summary"],
+          "bottomGap": true,
+          "rows": [
+            ["<strong class='text-bone'>Grand Economy</strong>", "Server economy framework with currency and balances"],
+            ["<strong class='text-bone'>Shop</strong>", "Player-created chest shops for trading"],
+            ["<strong class='text-bone'>NumismaticOverhaul</strong>", "Physical coin currency that drops from mobs and replaces emerald trading"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "social",
+      "title": "Social & Community",
+      "titleGap": "4",
+      "intro": "Voice chat, emotes, and social features.",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["Mod", "Summary"],
+          "bottomGap": true,
+          "rows": [
+            ["<strong class='text-bone'>Simple Voice Chat</strong>", "Proximity-based in-game voice communication"],
+            ["<strong class='text-bone'>Emojiful</strong>", "Custom emoji in chat"],
+            ["<strong class='text-bone'>Styled Chat</strong>", "Chat formatting with colors and styles"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "protection",
+      "title": "Protection & Security",
+      "titleGap": "4",
+      "intro": "Land claims, anti-grief, and server protection.",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["Mod", "Summary"],
+          "bottomGap": true,
+          "rows": [
+            ["<strong class='text-bone'>FTB Chunks</strong>", "Chunk-based land claiming with team support"],
+            ["<strong class='text-bone'>You're in Grave Danger</strong>", "Death graves that preserve inventory — no item scatter"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "utility",
+      "title": "Utility & QoL",
+      "titleGap": "4",
+      "intro": "Minimap, HUD, inventory management, and quality-of-life improvements.",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["Mod", "Summary"],
+          "bottomGap": true,
+          "rows": [
+            ["<strong class='text-bone'>Xaero's Minimap</strong>", "In-game minimap with waypoint markers"],
+            ["<strong class='text-bone'>Xaero's World Map</strong>", "Full-screen world map companion"],
+            ["<strong class='text-bone'>Roughly Enough Items</strong>", "Recipe browser and item lookup"],
+            ["<strong class='text-bone'>Jade</strong>", "Block/entity tooltip showing what you're looking at"],
+            ["<strong class='text-bone'>BetterF3</strong>", "Customizable debug screen replacement"],
+            ["<strong class='text-bone'>Inventory Profiles Next</strong>", "Inventory sorting and management"],
+            ["<strong class='text-bone'>Explorer's Compass</strong>", "Locate structures by name"],
+            ["<strong class='text-bone'>Nature's Compass</strong>", "Locate biomes by name"],
+            ["<strong class='text-bone'>AppleSkin</strong>", "Food value and saturation visualization"],
+            ["<strong class='text-bone'>Mod Menu</strong>", "In-game mod configuration browser"],
+            ["<strong class='text-bone'>Iris Shaders</strong>", "Shader support compatible with Sodium"],
+            ["<strong class='text-bone'>Staaaaaaaaaaaack</strong>", "Increased stack sizes for items that stack too low"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "admin",
+      "title": "Admin & Management",
+      "titleGap": "4",
+      "intro": "Server administration and management tools for operators.",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["Mod", "Summary"],
+          "bottomGap": true,
+          "rows": [
+            ["<strong class='text-bone'>Spark</strong>", "Performance profiler and TPS monitor"],
+            ["<strong class='text-bone'>BlueMap</strong>", "3D web-based world map"],
+            ["<strong class='text-bone'>Ledger</strong>", "Block and entity change logging for grief investigation"],
+            ["<strong class='text-bone'>Chunky</strong>", "Pre-generate world chunks to reduce lag on first exploration"]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "performance",
+      "title": "Performance",
+      "titleGap": "4",
+      "intro": "The optimization stack that keeps frame rates high and load times low.",
+      "blocks": [
+        {
+          "type": "table",
+          "headers": ["Mod", "Summary"],
+          "bottomGap": true,
+          "rows": [
+            ["<strong class='text-bone'>Sodium</strong>", "Rendering engine replacement — massive FPS improvement"],
+            ["<strong class='text-bone'>Lithium</strong>", "General-purpose server and game logic optimizer"],
+            ["<strong class='text-bone'>Noisium</strong>", "World generation performance optimizer"],
+            ["<strong class='text-bone'>FerriteCore</strong>", "Memory usage optimizer"],
+            ["<strong class='text-bone'>ModernFix</strong>", "Startup time and memory improvements"],
+            ["<strong class='text-bone'>ImmediatelyFast</strong>", "Immediate-mode rendering optimizations"],
+            ["<strong class='text-bone'>Entity Culling</strong>", "Skips rendering entities not visible to the player"],
+            ["<strong class='text-bone'>Debugify</strong>", "Fixes vanilla Minecraft bugs"],
+            ["<strong class='text-bone'>Concurrent Chunk Management Engine</strong>", "Multithreaded chunk loading"]
+          ]
+        }
+      ]
+    },
+    {
+      "blocks": [
+        {
+          "type": "note",
+          "center": true,
+          "html": "This list highlights the major mods. The full pack includes additional libraries, APIs, and compatibility layers. See the <a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/tree/master/plugins' target='_blank' rel='noopener noreferrer'>complete mod list on GitHub</a>."
+        }
+      ]
+    }
+  ]
+}

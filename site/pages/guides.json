@@ -1,0 +1,86 @@
+{
+  "nav": "Guides",
+  "metaTitle": "Player Guides — FizzleSMP",
+  "metaDescription": "In-depth guides for FizzleSMP — enchanting, technology, combat, exploration, farming, magic, community features, and visuals.",
+  "ogTitle": "Player Guides — FizzleSMP",
+  "ogDescription": "Guides covering the non-obvious mods and mechanics in FizzleSMP, from RPG classes to industrial automation.",
+  "title": "Player Guides",
+  "lede": "Guides covering the non-obvious mods and mechanics in FizzleSMP.",
+  "sections": [
+    {
+      "blocks": [
+        {
+          "type": "cards",
+          "mdColumns": 2,
+          "lgColumns": 3,
+          "hoverAccent": true,
+          "items": [
+            {
+              "title": "Enchanting, Repairs & Gear",
+              "html": [
+                "Enchanting Infuser, Easy Anvils, Grind Enchantments, XP Storage, and Better Than Mending — how gear progression works in FizzleSMP."
+              ],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/guides/enchanting-guide.md' target='_blank' rel='noopener noreferrer'>Read on GitHub →</a>"
+            },
+            {
+              "title": "Technology & Automation",
+              "html": [
+                "Oritech machines, ore processing, pipes, lasers, and drones. Tech Reborn's industrial tech tree. Refined Storage for digital item management."
+              ],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/guides/tech-guide.md' target='_blank' rel='noopener noreferrer'>Read on GitHub →</a>"
+            },
+            {
+              "title": "Combat & RPG Classes",
+              "html": [
+                "Better Combat, Combat Roll, Simply Swords, and the full class system — Wizard, Paladin, Priest, Archer, Rogue, and Warrior."
+              ],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/guides/combat-rpg-guide.md' target='_blank' rel='noopener noreferrer'>Read on GitHub →</a>"
+            },
+            {
+              "title": "Exploration & World",
+              "html": [
+                "Waystones, compasses, maps, overhauled worldgen, structures, The Bumblezone, The Otherside, and the creatures you'll encounter."
+              ],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/guides/exploration-guide.md' target='_blank' rel='noopener noreferrer'>Read on GitHub →</a>"
+            },
+            {
+              "title": "Farming, Seasons & Food",
+              "html": [
+                "Fabric Seasons, Farmer's Delight, seasonal crop growth, Easy Mob Farm, and expanded cooking recipes."
+              ],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/guides/farming-seasons-guide.md' target='_blank' rel='noopener noreferrer'>Read on GitHub →</a>"
+            },
+            {
+              "title": "Spectrum Magic",
+              "html": [
+                "Spectrum's discovery-driven progression system, guidebook, pedestal crafting, and color-based magic."
+              ],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/guides/spectrum-guide.md' target='_blank' rel='noopener noreferrer'>Read on GitHub →</a>"
+            },
+            {
+              "title": "Community & Utilities",
+              "html": [
+                "Land claims, proximity voice chat, graves, sleep voting, storage upgrades, building tools, and quality-of-life features."
+              ],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/guides/community-utilities-guide.md' target='_blank' rel='noopener noreferrer'>Read on GitHub →</a>"
+            },
+            {
+              "title": "Visuals & Shaders",
+              "html": [
+                "Iris + Complementary Shaders, dynamic lighting, visual and audio enhancements, and the performance mods that keep it smooth."
+              ],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/guides/visuals-shaders-guide.md' target='_blank' rel='noopener noreferrer'>Read on GitHub →</a>"
+            },
+            {
+              "title": "Modded Villager Trades",
+              "html": [
+                "Trade tables for Tech Reborn, Paladins & Priests, Jewelry, and Chef's Delight villager professions."
+              ],
+              "note": "<a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/guides/modded-villager-trades.md' target='_blank' rel='noopener noreferrer'>Read on GitHub →</a>"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
