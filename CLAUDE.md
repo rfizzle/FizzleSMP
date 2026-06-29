@@ -47,7 +47,11 @@ FizzleSMP/
 │   └── compatibility-matrix.md     # Known conflicts & compatibility notes
 ├── scripts/
 │   ├── sync-packwiz.sh             # Sync plugins/*.md → modpack/mods/
-│   └── build-pack.sh               # Build client/server ZIP packs
+│   ├── build-pack.sh               # Build client/server ZIP packs
+│   ├── release.sh                  # Bump version, tag, push
+│   ├── server-install.sh           # Server-side update tool
+│   └── release/
+│       └── publish.py              # Publish to Modrinth & CurseForge
 └── .claude/
     └── commands/
         ├── review-plugins.md       # /review-plugins — audit the full mod list
@@ -181,7 +185,7 @@ FizzleSMP is cut into versioned releases that ship to the live SMP server and to
 - **MINOR** — additive changes (new mods, new content). Safe to apply to an existing world.
 - **PATCH** — config tweaks, mod version bumps, bug fixes, compatibility fixes.
 
-The version lives in `modpack/pack.toml` as the `version = "X.Y.Z"` field and is embedded in release artifact filenames (`FizzleSMP-client-X.Y.Z.zip`, `FizzleSMP-server-X.Y.Z.zip`).
+The version lives in `modpack/pack.toml` as the `version = "X.Y.Z"` field and is embedded in release artifact filenames (`FizzleSMP-client-X.Y.Z.zip`, `FizzleSMP-client-X.Y.Z.mrpack`, `FizzleSMP-server-X.Y.Z.zip`).
 
 ### Cutting a release
 
@@ -202,9 +206,25 @@ The script checks that the working tree is clean and that the current branch is 
 1. Installs the `packwiz` CLI via `go install`.
 2. Verifies `modpack/pack.toml`'s version matches the tag (fails if not — forces the use of `release.sh`).
 3. Runs `./scripts/build-pack.sh client` → `FizzleSMP-client-X.Y.Z.zip` (CurseForge-compatible ZIP via `packwiz curseforge export --side client`).
-4. Runs `./scripts/build-pack.sh server` → `FizzleSMP-server-X.Y.Z.zip` (drop-in Fabric server directory ZIP built by the custom download loop in `build-pack.sh`).
-5. Extracts the changelog section for the new version from `CHANGELOG.md`.
-6. Publishes a GitHub Release with both ZIPs and the changelog as the release body.
+4. Runs `packwiz modrinth export` → `FizzleSMP-client-X.Y.Z.mrpack` (Modrinth-compatible modpack).
+5. Runs `./scripts/build-pack.sh server` → `FizzleSMP-server-X.Y.Z.zip` (drop-in Fabric server directory ZIP built by the custom download loop in `build-pack.sh`).
+6. Extracts the changelog section for the new version from `CHANGELOG.md`.
+7. Creates a draft GitHub Release with all three artifacts attached, then publishes it (draft-then-publish for immutable-release compatibility). Idempotent — skips if a published release already exists.
+8. Publishes to **Modrinth** (`.mrpack` as primary file, server ZIP as additional file) and **CurseForge** (client ZIP as primary, server ZIP as additional file) via `scripts/release/publish.py`. Each platform self-skips when its token is absent.
+
+### Platform publishing
+
+`scripts/release/publish.py` handles Modrinth and CurseForge uploads with retry logic (3 attempts with 10s backoff for 5xx/transport errors) and idempotency checks. Modrinth runs first and must succeed before CurseForge is attempted. Both platforms receive the client pack as primary and the server pack as an additional file.
+
+**Required secrets** (add via GitHub repo settings → Secrets):
+- `MODRINTH_TOKEN` — Modrinth PAT with "Create versions" scope. Absent → Modrinth skipped.
+- `CURSEFORGE_TOKEN` — CurseForge author upload token. Absent → CurseForge skipped.
+
+**Required repository variables** (add via GitHub repo settings → Variables):
+- `MODRINTH_ID` — Modrinth project slug or ID.
+- `CURSEFORGE_ID` — CurseForge numeric project ID.
+
+Re-runs are safe: an existing Modrinth version is detected and skipped; the GitHub Release is detected and skipped; CurseForge, being the terminal step, only runs when it hasn't already succeeded.
 
 ### Updating the live server
 

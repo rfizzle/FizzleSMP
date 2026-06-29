@@ -36,6 +36,11 @@ jobs:
           VERSION="${TAG#v}"
           echo "tag=$TAG"       >> "$GITHUB_OUTPUT"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if [[ "$VERSION" == *-* ]]; then
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Verify pack.toml version matches tag
         run: |
@@ -48,6 +53,12 @@ jobs:
 
       - name: Build client pack (CurseForge export)
         run: ./scripts/build-pack.sh client
+
+      - name: Build Modrinth pack (.mrpack)
+        run: |
+          cd modpack
+          packwiz modrinth export --side client \
+            -o "$GITHUB_WORKSPACE/FizzleSMP-client-${{ steps.version.outputs.version }}.mrpack"
 
       - name: Cache server pack downloads
         uses: actions/cache@v4
@@ -64,7 +75,7 @@ jobs:
         run: ./scripts/build-pack.sh server
 
       - name: List build artifacts
-        run: ls -lh FizzleSMP-*.zip
+        run: ls -lh FizzleSMP-*
 
       - name: Extract changelog section for this release
         id: changelog
@@ -83,14 +94,30 @@ jobs:
             BODY="See CHANGELOG.md for details."
           fi
 
-          # Emit the body as a multiline GitHub Actions output
           {
             echo "body<<CHANGELOG_EOF"
             echo "$BODY"
             echo "CHANGELOG_EOF"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Create GitHub Release
+          echo "$BODY" > /tmp/release-body.md
+
+      - name: Detect existing release
+        id: rel
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" \
+               --json isDraft --jq '.isDraft' > /tmp/rel-draft.txt 2>/dev/null \
+             && [ "$(cat /tmp/rel-draft.txt)" = "false" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Published release $GITHUB_REF_NAME already exists; skipping GitHub release steps"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create draft GitHub Release
+        if: steps.rel.outputs.exists != 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.version.outputs.tag }}
@@ -105,7 +132,55 @@ jobs:
             ```
 
             See [`docs/server-deployment.md`](https://github.com/rfizzle/FizzleSMP/blob/${{ steps.version.outputs.tag }}/docs/server-deployment.md) for the full guide.
+          draft: true
+          prerelease: ${{ steps.version.outputs.prerelease == 'true' }}
           files: |
             FizzleSMP-client-${{ steps.version.outputs.version }}.zip
+            FizzleSMP-client-${{ steps.version.outputs.version }}.mrpack
             FizzleSMP-server-${{ steps.version.outputs.version }}.zip
           fail_on_unmatched_files: true
+
+      - name: Publish GitHub Release
+        if: steps.rel.outputs.exists != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh release edit "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" --draft=false
+
+      - name: Detect publish auth
+        id: publish
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+        run: |
+          if [ -n "$MODRINTH_TOKEN" ] || [ -n "$CURSEFORGE_TOKEN" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No MODRINTH_TOKEN/CURSEFORGE_TOKEN; skipping platform publish"
+          fi
+
+      - name: Set up Python
+        if: steps.publish.outputs.available == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Publish to Modrinth and CurseForge
+        if: steps.publish.outputs.available == 'true'
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          MODRINTH_ID: ${{ vars.MODRINTH_ID }}
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          CURSEFORGE_ID: ${{ vars.CURSEFORGE_ID }}
+          VERSION: ${{ steps.version.outputs.version }}
+          TITLE: "FizzleSMP ${{ steps.version.outputs.tag }}"
+          PRERELEASE: ${{ steps.version.outputs.prerelease }}
+          GAME_VERSIONS: "1.21.1"
+          LOADERS: "fabric"
+          CLIENT_ZIP: FizzleSMP-client-${{ steps.version.outputs.version }}.zip
+          CLIENT_MRPACK: FizzleSMP-client-${{ steps.version.outputs.version }}.mrpack
+          SERVER_ZIP: FizzleSMP-server-${{ steps.version.outputs.version }}.zip
+          CHANGELOG_FILE: /tmp/release-body.md
+        run: |
+          python3 -m pip install --quiet 'requests>=2.31,<3'
+          python3 scripts/release/publish.py
