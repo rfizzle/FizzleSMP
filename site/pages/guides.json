@@ -18,7 +18,7 @@
             {
               "title": "Enchanting, Repairs & Gear",
               "html": [
-                "Enchanting Infuser, Easy Anvils, Grind Enchantments, XP Storage, and Better Than Mending — how gear progression works in FizzleSMP."
+                "Meridian's five-stat enchanting system, themed shelf blocks, enchantment library, salvage tomes, and 75 new enchantments — how gear progression works in FizzleSMP."
               ],
               "note": "<a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/guides/enchanting-guide.md' target='_blank' rel='noopener noreferrer'>Read on GitHub →</a>"
             },
@@ -32,7 +32,7 @@
             {
               "title": "Combat & RPG Classes",
               "html": [
-                "Better Combat, Combat Roll, Simply Swords, and the full class system — Wizard, Paladin, Priest, Archer, Rogue, and Warrior."
+                "Better Combat, Combat Roll, Arsenal weapons, and the full class system — Wizard, Paladin, Priest, Archer, Rogue, and Warrior."
               ],
               "note": "<a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/guides/combat-rpg-guide.md' target='_blank' rel='noopener noreferrer'>Read on GitHub →</a>"
             },
@@ -46,21 +46,14 @@
             {
               "title": "Farming, Seasons & Food",
               "html": [
-                "Fabric Seasons, Farmer's Delight, seasonal crop growth, Easy Mob Farm, and expanded cooking recipes."
+                "Fabric Seasons, Farmer's Delight, Chef's Delight, seasonal crop growth, greenhouses, and expanded cooking recipes."
               ],
               "note": "<a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/guides/farming-seasons-guide.md' target='_blank' rel='noopener noreferrer'>Read on GitHub →</a>"
             },
             {
-              "title": "Spectrum Magic",
-              "html": [
-                "Spectrum's discovery-driven progression system, guidebook, pedestal crafting, and color-based magic."
-              ],
-              "note": "<a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/guides/spectrum-guide.md' target='_blank' rel='noopener noreferrer'>Read on GitHub →</a>"
-            },
-            {
               "title": "Community & Utilities",
               "html": [
-                "Land claims, proximity voice chat, graves, sleep voting, storage upgrades, building tools, and quality-of-life features."
+                "Land claims, proximity voice chat, Tribulation's death mechanics, sleep voting, storage upgrades, building tools, and quality-of-life features."
               ],
               "note": "<a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/guides/community-utilities-guide.md' target='_blank' rel='noopener noreferrer'>Read on GitHub →</a>"
             },
@@ -74,7 +67,7 @@
             {
               "title": "Modded Villager Trades",
               "html": [
-                "Trade tables for Tech Reborn, Paladins & Priests, Jewelry, and Chef's Delight villager professions."
+                "Trade tables for Tech Reborn, Paladins & Priests, Chef's Delight, and Mercantile's overhauled villager professions."
               ],
               "note": "<a class='text-accent hover:text-accent2 underline' href='https://github.com/rfizzle/FizzleSMP/blob/master/docs/guides/modded-villager-trades.md' target='_blank' rel='noopener noreferrer'>Read on GitHub →</a>"
             }

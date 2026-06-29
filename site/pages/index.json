@@ -35,19 +35,19 @@
             {
               "title": "Choose Your Path",
               "html": [
-                "Train as a Wizard, Paladin, Rogue, Warrior, or Archer through a full RPG class system. Build industrial empires. Unravel color-based magic. Hunt legendary weapons. Or open a shop and watch the economy grow."
+                "Train as a Wizard, Paladin, Rogue, Warrior, or Archer through a full RPG class system. Build industrial empires with Tech Reborn and Oritech. Hunt legendary weapons from Arsenal. Enchant with Meridian's five-stat system."
               ]
             },
             {
               "title": "Combat That Feels Alive",
               "html": [
-                "Directional swings, combat rolls, unique weapon types from claymores to chakrams, and enemies that grow tougher the longer your world survives. Boss encounters are designed for groups."
+                "Directional swings, combat rolls, legendary weapons with passive abilities, and enemies that grow tougher the longer your world survives. Boss encounters are designed for groups."
               ]
             },
             {
               "title": "Built for Community",
               "html": [
-                "Proximity voice chat. Player-run shops and economies. Land claims. Per-player loot so every chest feels like yours. Waystones to stay connected across a massive world."
+                "Proximity voice chat. Land claims. Per-player loot so every chest feels like yours. Waystones to stay connected across a massive world. Seasons that change the world together."
               ]
             }
           ]
@@ -57,7 +57,7 @@
     {
       "id": "categories",
       "title": "Mod categories",
-      "lede": "Over 100 mods organized into nine categories, each serving a clear purpose.",
+      "lede": "Over 100 mods organized into eight categories, each serving a clear purpose.",
       "blocks": [
         {
           "type": "cards",
@@ -81,13 +81,8 @@
               "note": "<a class='text-accent hover:text-accent2 underline' href='/mods.html#gameplay'>View mods →</a>"
             },
             {
-              "title": "Economy & Trading",
-              "html": ["Player-run shops, currency, and trade systems that give the server a living economy."],
-              "note": "<a class='text-accent hover:text-accent2 underline' href='/mods.html#economy'>View mods →</a>"
-            },
-            {
               "title": "Social & Community",
-              "html": ["Voice chat, emotes, and social features that bring players together."],
+              "html": ["Voice chat, social presence indicators, and community features that bring players together."],
               "note": "<a class='text-accent hover:text-accent2 underline' href='/mods.html#social'>View mods →</a>"
             },
             {
