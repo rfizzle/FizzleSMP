@@ -17,10 +17,10 @@
     "bone": "#e8e0d4",
     "ash": "#a89f93",
     "smoke": "#6b6359",
-    "accent": "#56B366",
-    "accentDark": "#3D8A4A",
-    "accent2": "#7DD68B",
-    "accent2Bright": "#9AEAA5",
-    "glowRgb": "86, 179, 102"
+    "accent": "#5B8DBF",
+    "accentDark": "#3E6A96",
+    "accent2": "#82B1D9",
+    "accent2Bright": "#A8CCE8",
+    "glowRgb": "91, 141, 191"
   }
 }
