@@ -17,22 +17,22 @@ SRC = os.path.join(HERE, '..', 'shield.png')
 
 COL = {
     'ink':     '#0a0a0a',
-    # green glow halo (FizzleSMP accent)
-    'glow1':   '#56b366cc',
-    'glow2':   '#3d8a4aa0',
-    'glow3':   '#2d6b3a50',
-    # iron-grey stone bezel (lit upper-left)
-    'st_sh':   '#151515',
-    'st_dark': '#282828',
-    'st_mid':  '#404040',
-    'st_lit':  '#5e5e5e',
-    'st_spec': '#7a7a7a',
-    # dark iron-green brickwork field
-    'br_deep': '#0a1510',
-    'br':      '#122a1e',
-    'br_lit':  '#1a3828',
-    'mortar':  '#081008',
-    'vig':     '#060e08',
+    # steel blue glow halo
+    'glow1':   '#5b8dbfcc',
+    'glow2':   '#3e6a96a0',
+    'glow3':   '#2a4d7050',
+    # blue-grey stone bezel (lit upper-left)
+    'st_sh':   '#121418',
+    'st_dark': '#222830',
+    'st_mid':  '#364050',
+    'st_lit':  '#4e5e72',
+    'st_spec': '#6a7e96',
+    # dark slate brickwork field
+    'br_deep': '#0a0e14',
+    'br':      '#121c28',
+    'br_lit':  '#1a2838',
+    'mortar':  '#080c10',
+    'vig':     '#060a0e',
 }
 
 G = [[None] * N for _ in range(N)]
