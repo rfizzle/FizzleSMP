@@ -1,0 +1,1 @@
+A handcrafted 1.21.1 Fabric survival pack for playing with friends. Nearly 100 biomes, an RPG class system, overhauled combat, proximity voice, land claims, player shops, and the full Concord suite of overhauls — all tuned to run smooth.
