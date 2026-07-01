@@ -1,0 +1,1 @@
+A handcrafted Minecraft 1.21.1 Fabric survival modpack for playing with friends. Nearly 100 biomes, an RPG class system, overhauled combat, proximity voice, land claims, and player shops — all tuned to run smooth, and bundling the full Concord suite of overhauls.
