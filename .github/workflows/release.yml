@@ -169,16 +169,16 @@ jobs:
         if: steps.publish.outputs.available == 'true'
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
-          MODRINTH_ID: ${{ vars.MODRINTH_ID }}
+          MODRINTH_ID: B3409rxs
           CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-          CURSEFORGE_ID: ${{ vars.CURSEFORGE_ID }}
+          CURSEFORGE_ID: "1511791"
           VERSION: ${{ steps.version.outputs.version }}
           TITLE: "FizzleSMP ${{ steps.version.outputs.tag }}"
           PRERELEASE: ${{ steps.version.outputs.prerelease }}
           GAME_VERSIONS: "1.21.1"
           LOADERS: "fabric"
-          CLIENT_ZIP: FizzleSMP-client-${{ steps.version.outputs.version }}.zip
-          CLIENT_MRPACK: FizzleSMP-client-${{ steps.version.outputs.version }}.mrpack
+          CLIENT_ZIP: FizzleSMP-${{ steps.version.outputs.version }}.zip
+          CLIENT_MRPACK: FizzleSMP-${{ steps.version.outputs.version }}.mrpack
           SERVER_ZIP: FizzleSMP-server-${{ steps.version.outputs.version }}.zip
           CHANGELOG_FILE: /tmp/release-body.md
         run: |
