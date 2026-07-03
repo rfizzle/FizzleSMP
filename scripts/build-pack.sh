@@ -24,7 +24,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 MODPACK_DIR="$PROJECT_DIR/modpack"
 BUILD_DIR="$PROJECT_DIR/build"
-OUTPUT_DIR="$PROJECT_DIR"
+OUTPUT_DIR="$BUILD_DIR"
 
 # Parse pack version from pack.toml — embedded into output filenames so every
 # release artifact is self-describing.
@@ -98,6 +98,7 @@ if [[ "$TARGET" == "client" ]]; then
     fi
 
     # Remove old zip if it exists
+    mkdir -p "$OUTPUT_DIR"
     rm -f "$ZIP_PATH"
 
     echo "▸ Running: packwiz curseforge export --side client"
