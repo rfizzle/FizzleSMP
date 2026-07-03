@@ -1,13 +1,13 @@
 name = "Controlify (Controller support)"
-filename = "controlify-3.0.0-beta.3+1.21.1-fabric.jar"
+filename = "controlify-3.0.0+lts+1.21.1-fabric.jar"
 side = "client"
 
 [download]
 hash-format = "sha1"
-hash = "d4efd82b986b151de1c3bd2a919def19d8becb95"
+hash = "a2d891ea923fbfa4db8c9832486fb2bf41896649"
 mode = "metadata:curseforge"
 
 [update]
 [update.curseforge]
-file-id = 7677323
+file-id = 8088067
 project-id = 835847

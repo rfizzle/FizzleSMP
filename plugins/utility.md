@@ -32,16 +32,6 @@
 - **Dependencies:** None (JEI is optional for recipe integration)
 - **Conflicts:** None known
 
-## MiniHUD
-- **CurseForge ID:** 244260
-- **Slug:** minihud
-- **Mod Loader:** Fabric
-- **Side:** client
-- **Summary:** A "mini F3" HUD mod with various overlays like light level, spawn chunks, slime chunks, and more.
-- **Why:** Provides compact debug info and visual overlays (light levels, structure bounding boxes) invaluable for building and mob-proofing on the SMP.
-- **Dependencies:** MaLiLib
-- **Conflicts:** None known
-
 ## guy's Armor HUD
 - **CurseForge ID:** 1388138
 - **Slug:** guys-armor-hud
@@ -50,16 +40,6 @@
 - **Summary:** Adds a vanilla-like widget showing equipped armor items with durability warnings when armor is low.
 - **Why:** Keeps players aware of armor durability at a glance without opening inventory, important for SMP PvE and PvP.
 - **Dependencies:** Fabric API
-- **Conflicts:** None known
-
-## MaLiLib
-- **CurseForge ID:** 303119
-- **Slug:** malilib
-- **Mod Loader:** Fabric
-- **Side:** client
-- **Summary:** A library mod containing shared code for masa's client-side mods (MiniHUD, Litematica, etc.).
-- **Why:** Required dependency of MiniHUD.
-- **Dependencies:** None
 - **Conflicts:** None known
 
 ## Mouse Tweaks
@@ -271,23 +251,13 @@
 - **Dependencies:** YUNG's API, Fabric API, Cloth Config API
 - **Conflicts:** None known
 
-## Enchantment Descriptions
-- **CurseForge ID:** 250419
-- **Slug:** enchantment-descriptions
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Adds plain-text descriptions of enchantment effects to enchanted item tooltips.
-- **Why:** Helps SMP players understand what each enchantment does at a glance without alt-tabbing to a wiki.
-- **Dependencies:** Fabric API, Bookshelf, Prickle
-- **Conflicts:** None known
-
 ## Bookshelf
 - **CurseForge ID:** 228525
 - **Slug:** bookshelf
 - **Mod Loader:** Fabric
 - **Side:** both
 - **Summary:** An open-source library mod providing shared utilities for DarkhaxDev's mods.
-- **Why:** Required dependency of Enchantment Descriptions.
+- **Why:** Required dependency of Dark Utilities.
 - **Dependencies:** None
 - **Conflicts:** None known
 
@@ -297,7 +267,7 @@
 - **Mod Loader:** Fabric
 - **Side:** both
 - **Summary:** A JSON-based configuration file format library for Minecraft mods.
-- **Why:** Required dependency of Enchantment Descriptions.
+- **Why:** Required dependency of Dark Utilities.
 - **Dependencies:** None
 - **Conflicts:** None known
 
@@ -321,16 +291,6 @@
 - **Summary:** A cross-platform abstraction layer library used by BlayTheNinth's mods.
 - **Why:** Required dependency of Waystones.
 - **Dependencies:** Fabric API
-- **Conflicts:** None known
-
-## Lavender
-- **CurseForge ID:** 962916
-- **Slug:** lavender-api
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** A guidebook API and alternative to Patchouli, enabling in-game documentation with markdown syntax and hot-reloading.
-- **Why:** Required dependency of Things for its in-game guidebook.
-- **Dependencies:** None
 - **Conflicts:** None known
 
 ## Xaero's Minimap
@@ -392,7 +352,7 @@
 - **Mod Loader:** Fabric
 - **Side:** both
 - **Summary:** A shared library mod providing common utilities for Fuzs' mods.
-- **Why:** Required dependency of Enchanting Infuser and Easy Magic.
+- **Why:** Required dependency of several Fuzs' mods in the pack (Mutant Monsters, Illager Invasion).
 - **Dependencies:** None
 - **Conflicts:** None known
 
@@ -444,9 +404,9 @@
 - **Mod Loader:** Fabric
 - **Side:** client
 - **Summary:** Light overlay mod that displays mob spawn potential using carpet-like transparent blocks, numbers, or crosses (toggle with F7/F8).
-- **Why:** Gives players a quick, visually distinct way to check light levels and mob-proof builds — complements MiniHUD's numeric overlay with a more intuitive carpet-style visualization.
+- **Why:** Gives players a quick, visually distinct way to check light levels and mob-proof builds with intuitive carpet-style visualization.
 - **Dependencies:** Mod Menu (optional)
-- **Conflicts:** None known (soft overlap with MiniHUD light level overlay — different visualization styles)
+- **Conflicts:** None known
 
 ## Polymorph
 - **CurseForge ID:** 388800
@@ -454,7 +414,7 @@
 - **Mod Loader:** Fabric
 - **Side:** both
 - **Summary:** Solves recipe conflicts by letting players choose between all potential outputs shared by the same ingredients.
-- **Why:** Essential with a large modpack — resolves crafting, smelting, and smithing recipe conflicts from mods like Tech Reborn, Oritech, and Mythic Upgrades.
+- **Why:** Essential with a large modpack — resolves crafting, smelting, and smithing recipe conflicts from mods like Tech Reborn and Oritech.
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
 
@@ -468,6 +428,15 @@
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
 
+## EMI Ores
+- **CurseForge ID:** 974009
+- **Slug:** emi-ores
+- **Mod Loader:** Fabric
+- **Side:** client
+- **Summary:** An EMI plugin that displays ore generation information including Y-level distribution, vein size, and biome restrictions.
+- **Why:** Lets players look up ore spawn levels and distribution in EMI, especially useful with modded ores from Tech Reborn and Oritech.
+- **Dependencies:** EMI, Fabric API
+- **Conflicts:** None known
 ## EMI Addon: Extra Mod Integrations
 - **CurseForge ID:** 739970
 - **Slug:** extra-mod-integrations
@@ -476,26 +445,6 @@
 - **Summary:** Adds EMI recipe support for additional mods including Tech Reborn, Farmers' Delight, and more.
 - **Why:** Extends EMI with recipe integration for Tech Reborn and other mods in the pack.
 - **Dependencies:** EMI, Fabric API
-- **Conflicts:** None known
-
-## EMI Loot
-- **CurseForge ID:** 681783
-- **Slug:** emi-loot
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Displays mob loot tables and chest loot tables directly in EMI.
-- **Why:** Lets players see what mobs drop and what loot chests contain in EMI, reducing wiki dependency.
-- **Dependencies:** EMI, Fzzy Config
-- **Conflicts:** None known
-
-## EMI professions (EMIP)
-- **CurseForge ID:** 1065904
-- **Slug:** emi-professions-emip
-- **Mod Loader:** Fabric
-- **Side:** client
-- **Summary:** An EMI addon that shows villager profession workstations — press Uses (U) on an Emerald or Villager Spawn Egg to see all professions.
-- **Why:** Lets players quickly look up which workstation corresponds to each villager profession directly in EMI.
-- **Dependencies:** EMI
 - **Conflicts:** None known
 
 ## EMIffect
@@ -524,7 +473,7 @@
 - **Mod Loader:** Fabric
 - **Side:** both
 - **Summary:** Ports the NeoForge/Forge config API to Fabric, allowing mods to use Forge-style configuration files.
-- **Why:** Required dependency of Enchanting Infuser and Easy Magic.
+- **Why:** Required by numerous mods for Forge-style config (e.g. Mutant Monsters, TreeChop, Open Parties and Claims).
 - **Dependencies:** None
 - **Conflicts:** None known
 
@@ -591,7 +540,6 @@
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
 
-
 ## Nature's Compass
 - **CurseForge ID:** 252848
 - **Slug:** natures-compass
@@ -642,16 +590,6 @@
 - **Dependencies:** CreativeCore, Fabric API
 - **Conflicts:** None known
 
-## Better Than Mending
-- **CurseForge ID:** 264738
-- **Slug:** better-than-mending
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Sneak-right-click a Mending-enchanted item to instantly repair it using your stored XP levels.
-- **Why:** Lets players repair Mending gear on-demand instead of waiting at an XP farm, a simple but essential QoL improvement.
-- **Dependencies:** None
-- **Conflicts:** None known
-
 ## Shulker Box Tooltip
 - **CurseForge ID:** 315811
 - **Slug:** shulkerboxtooltip
@@ -659,16 +597,6 @@
 - **Side:** client
 - **Summary:** Shows the contents of shulker boxes as a visual tooltip when hovering over them in inventory.
 - **Why:** Essential QoL for shulker box organization — see contents at a glance without placing and opening each box.
-- **Dependencies:** Fabric API
-- **Conflicts:** None known
-
-## XP Storage
-- **CurseForge ID:** 403434
-- **Slug:** xp-storage
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Adds blocks and items that let players safely store and retrieve experience points.
-- **Why:** Lets SMP players bank XP safely to avoid losing it on death, complementing Better Than Mending for on-demand repairs.
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
 
@@ -707,29 +635,9 @@
 - **Slug:** jade-addons-fabric
 - **Mod Loader:** Fabric
 - **Side:** both
-- **Summary:** Adds Jade tooltip/HUD integration for blocks and entities from supported mods including Lootr, Supplementaries, and Artifacts.
-- **Why:** Extends Jade with mod-specific tooltips for several mods already in the pack (Lootr, Supplementaries, Artifacts), improving information display.
+- **Summary:** Adds Jade tooltip/HUD integration for blocks and entities from supported mods.
+- **Why:** Extends Jade with mod-specific tooltips for supported mods already in the pack, improving information display.
 - **Dependencies:** Jade
-- **Conflicts:** None known
-
-## EMI Enchanting
-- **CurseForge ID:** 936713
-- **Slug:** emi-enchanting
-- **Mod Loader:** Fabric
-- **Side:** client
-- **Summary:** An EMI plugin that displays enchantment information including valid items, exclusions, curse status, tradability, and max level.
-- **Why:** Lets players browse enchantment details directly in EMI, complementing the existing EMI addon suite.
-- **Dependencies:** EMI
-- **Conflicts:** None known
-
-## EMI Ores
-- **CurseForge ID:** 974009
-- **Slug:** emi-ores
-- **Mod Loader:** Fabric
-- **Side:** client
-- **Summary:** An EMI plugin that displays ore generation information including Y-level distribution, vein size, and biome restrictions.
-- **Why:** Lets players look up ore spawn levels and distribution in EMI, especially useful with modded ores from Tech Reborn, Oritech, and Mythic Upgrades.
-- **Dependencies:** EMI, Fabric API
 - **Conflicts:** None known
 
 ## Controlling
@@ -798,13 +706,3 @@
 - **Dependencies:** None
 - **Conflicts:** None known
 
-## Building Wands
-- **CurseForge ID:** 363392
-- **Slug:** building-wands
-- **Modrinth Slug:** building-wands
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Adds tiered wands (stone/iron/diamond/netherite) that place or destroy blocks in bulk via directional, row, fill, grid, line, circle, copy/paste, and blast modes.
-- **Why:** Speeds up large-scale building on the SMP without trivializing progression — block limits scale with wand tier, and survival mode still requires the blocks in the player's inventory (or shulker boxes).
-- **Dependencies:** Fabric API, Architectury API, Cloth Config API; Mod Menu (optional)
-- **Conflicts:** None known

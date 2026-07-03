@@ -1,0 +1,13 @@
+name = "Meridian - Enchanting Overhaul"
+filename = "meridian-1.0.0.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "31706b3f444877d4a786bc1ccae2dace48159ae5"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 8351841
+project-id = 1546092

@@ -9,8 +9,19 @@
 - **Mod Loader:** Fabric
 - **Side:** server
 - **Summary:** A fast SQLite/MySQL-backed player interaction logger, like CoreProtect for modded Fabric.
-- **Why:** Replaces Ledger for tracking griefing, theft, and player actions on the SMP. Ledger's 1.21.1 build (v1.3.5, Nov 2024) is abandoned and crashes with a NullPointerException in its screen-close mixin when players use Easy Mob Farm.
+- **Why:** Replaces Ledger for tracking griefing, theft, and player actions on the SMP. Ledger's 1.21.1 build (v1.3.5, Nov 2024) is abandoned and crashes with a NullPointerException in its screen-close mixin.
 - **Dependencies:** Fabric API, Architectury API, SuperMartijn642's Config Lib
+- **Conflicts:** None known
+
+## Cupboard
+- **CurseForge ID:** 326652
+- **Slug:** cupboard
+- **Modrinth Slug:** N/A
+- **Mod Loader:** Fabric
+- **Side:** both
+- **Summary:** Shared library providing code, frameworks, and utilities for MrCrayfish's mods.
+- **Why:** Required runtime dependency for Connectivity.
+- **Dependencies:** None
 - **Conflicts:** None known
 
 ## Connectivity
@@ -20,7 +31,7 @@
 - **Side:** both
 - **Summary:** Fixes various connection issues including timeouts, login failures, and chunk loading problems.
 - **Why:** Prevents frustrating disconnects and login issues on the SMP server by increasing timeouts and fixing packet handling bugs.
-- **Dependencies:** Fabric API
+- **Dependencies:** Fabric API, Cupboard
 - **Conflicts:** None known
 
 ## Chunky

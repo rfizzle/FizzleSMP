@@ -1,13 +1,13 @@
 name = "Configurable"
-filename = "configurable-3.3.2+1.21.1-fabric.jar"
+filename = "configurable-3.5.1+1.21.1-fabric.jar"
 side = "both"
 
 [download]
 hash-format = "sha1"
-hash = "c2946dae95ffa3ba905b452ba15cee218d979b99"
+hash = "fae27c62a2a1f8eefd90a22ce097ea5877e634ec"
 mode = "metadata:curseforge"
 
 [update]
 [update.curseforge]
-file-id = 7356764
+file-id = 8011511
 project-id = 1092048

@@ -2,17 +2,6 @@
 
 <!-- Mods that overhaul combat mechanics, add weapons/armor, or rebalance difficulty. -->
 
-## Simply Swords
-- **CurseForge ID:** 659887
-- **Slug:** simply-swords
-- **Pin CurseForge File ID:** 6958140
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Adds 14 unique weapon variants with different playstyles, plus rare unique weapons with special abilities found in loot chests.
-- **Why:** Greatly expands weapon variety for SMP combat with throwable chakrams, twinblades, greataxes, and more — each with distinct attack patterns via Better Combat.
-- **Dependencies:** Architectury API, Fzzy Config; Better Combat (optional, recommended)
-- **Conflicts:** v1.63.0+ requires Simply Tooltips, which hard-conflicts with Alexandria (Accessories screen crash). Pinned to v1.62.0.
-
 ## Better Combat
 - **CurseForge ID:** 639842
 - **Slug:** better-combat-by-daedelus
@@ -21,7 +10,7 @@
 - **Summary:** Overhauls melee combat with Minecraft Dungeons-style attack animations, accurate weapon collision, dual wielding, and weapon combos.
 - **Why:** Makes combat visually spectacular and mechanically deeper with swing animations, hit detection by weapon arc, and combo systems.
 - **Dependencies:** Fabric API, Cloth Config API, playerAnimator
-- **Conflicts:** Incompatible with other dual wielding mods (none in pack). Partnered with Simply Swords for full weapon animation support.
+- **Conflicts:** Incompatible with other dual wielding mods (none in pack).
 
 ## Combat Roll
 - **CurseForge ID:** 678036
@@ -32,16 +21,6 @@
 - **Why:** Complements Better Combat with evasive movement, adding depth to PvE and PvP encounters on the SMP.
 - **Dependencies:** Fabric API, Cloth Config API, playerAnimator
 - **Conflicts:** None known; designed by same author as Better Combat to work together.
-
-## Fzzy Config
-- **CurseForge ID:** 1005914
-- **Slug:** fzzy-config
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** A configuration library for Fabric mods with GUI support.
-- **Why:** Required dependency of Simply Swords.
-- **Dependencies:** None
-- **Conflicts:** None known
 
 ## playerAnimator
 - **CurseForge ID:** 658587
@@ -70,7 +49,7 @@
 - **Side:** both
 - **Summary:** Data-driven magic library providing a complete spell-casting system including spell books, visual effects, and weapon integration.
 - **Why:** Core library powering the RPG Series magic mods (Wizards, Paladins & Priests); works alongside Better Combat for weapon animations.
-- **Dependencies:** Fabric API, Cloth Config API, playerAnimator, Spell Power Attributes, Trinkets or Accessories
+- **Dependencies:** Fabric API, Cloth Config API, playerAnimator, Spell Power Attributes, Trinkets
 - **Conflicts:** None known
 
 ## Runes
@@ -99,7 +78,7 @@
 - **Mod Loader:** Fabric
 - **Side:** both
 - **Summary:** Adds RPG-style wizard classes with Arcane, Fire, and Frost magic skill sets, spell books, wands, staves, and Wizard Towers in villages.
-- **Why:** Adds deep magic combat classes to the SMP, complementing the existing melee combat from Better Combat and Simply Swords.
+- **Why:** Adds deep magic combat classes to the SMP, complementing the existing melee combat from Better Combat.
 - **Dependencies:** Spell Engine, Runes, AzureLib Armor, Structure Pool API, Fabric API
 - **Conflicts:** None known; strongly recommended alongside Better Combat for proper weapon animations.
 
@@ -165,17 +144,6 @@
 - **Dependencies:** Spell Engine, AzureLib Armor, Structure Pool API, Fabric API
 - **Conflicts:** Rebalances Sharpness enchantment (+8%/level) for balanced fast/slow weapon scaling. Strongly recommended alongside Better Combat.
 
-## Jewelry (RPG Series)
-- **CurseForge ID:** 910706
-- **Slug:** jewelry
-- **Modrinth Slug:** jewelry
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Adds 25+ craftable jewelry items (rings, necklaces) from mineable gem veins, with Jeweler villagers in villages and unique pieces in end-game loot chests.
-- **Why:** Adds an accessory crafting system with combat attribute bonuses, giving players another progression axis alongside weapons and armor.
-- **Dependencies:** Spell Power Attributes, Ranged Weapon API, Trinkets (via Accessories Compat Layer), Fabric API
-- **Conflicts:** None known; adds gem veins at diamond depth (half as common as diamonds).
-
 ## Armory (RPG Series)
 - **CurseForge ID:** 1311561
 - **Slug:** armory-rpg-series
@@ -198,17 +166,6 @@
 - **Dependencies:** Spell Engine, Ranged Weapon API, Shield API, Fabric API
 - **Conflicts:** None known; loot tables configurable in `config/rpg_series/loot_items.json`.
 
-## Skill Tree (RPG Series)
-- **CurseForge ID:** 1311513
-- **Slug:** skill-tree
-- **Modrinth Slug:** skill-tree
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** Adds a 100+ node skill tree for all RPG Series classes with offensive/defensive specializations, spell modifiers, and passive abilities, powered by XP.
-- **Why:** Adds deep class specialization and meaningful build choices, letting players customize their RPG class with unique skill paths.
-- **Dependencies:** Pufferfish's Skills, Spell Engine, Ranged Weapon API, Fabric API; requires Archers, Paladins & Priests, Rogues & Warriors, and Wizards
-- **Conflicts:** None known; Orb of Oblivion item allows full skill tree reset.
-
 ## Ranged Weapon API
 - **CurseForge ID:** 962162
 - **Slug:** ranged-weapon-api
@@ -216,7 +173,7 @@
 - **Mod Loader:** Fabric
 - **Side:** both
 - **Summary:** API for creating custom bows and crossbows with configurable damage, pull time, and projectile velocity.
-- **Why:** Required dependency of Archers, Jewelry, Armory, Arsenal, and Skill Tree.
+- **Why:** Required dependency of Archers, Armory, and Arsenal.
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
 
@@ -228,17 +185,6 @@
 - **Side:** both
 - **Summary:** API allowing mods to easily add shields with custom models.
 - **Why:** Required dependency of Arsenal.
-- **Dependencies:** Fabric API
-- **Conflicts:** None known
-
-## Pufferfish's Skills
-- **CurseForge ID:** 835091
-- **Slug:** puffish-skills
-- **Modrinth Slug:** skills
-- **Mod Loader:** Fabric
-- **Side:** both
-- **Summary:** A framework for fully configurable skill systems with an online editor and API, supporting custom skill trees via datapacks.
-- **Why:** Required dependency of Skill Tree (RPG Series).
 - **Dependencies:** Fabric API
 - **Conflicts:** None known
 
@@ -286,24 +232,13 @@
 - **Dependencies:** Fabric API, Forge Config API Port, Puzzles Lib
 - **Conflicts:** None known
 
-## Hostile Mobs Improve Over Time
-- **CurseForge ID:** 1409469
-- **Slug:** hostile-mobs-improve-over-time-unofficial
-- **Modrinth Slug:** hostile-mobs-improve-over-time
-- **Mod Loader:** Fabric
-- **Side:** server
-- **Summary:** Hostile mobs progressively gain stronger stats and new abilities the longer the world exists, with configurable scaling.
-- **Why:** Adds natural difficulty escalation — the world gets harder as players progress, without gates or quest requirements. Keeps combat challenging in late-game.
-- **Dependencies:** None
-- **Conflicts:** None known
-
-## RpgDifficulty
-- **CurseForge ID:** 480786
-- **Slug:** rpgdifficulty
-- **Modrinth Slug:** rpgdifficulty
+## Tribulation — Difficulty Overhaul
+- **CurseForge ID:** 1546072
+- **Slug:** tribulation-difficulty-overhaul
+- **Modrinth Slug:** tribulation-difficulty-overhaul
 - **Mod Loader:** Fabric
 - **Side:** both
-- **Summary:** Strengthens mob health/damage/armor/XP based on distance from world spawn and/or in-game time.
-- **Why:** Fills the distance-scaling gap that HMIOT doesn't cover — rewards exploration with tougher encounters. Time-axis disabled in config so HMIOT owns the temporal curve.
-- **Dependencies:** Fabric API, Cloth Config
-- **Conflicts:** Soft overlap with Hostile Mobs Improve Over Time — both scale mob attributes. Keep RpgDifficulty's time scaling disabled so the two axes stay orthogonal.
+- **Summary:** A difficulty overhaul — hostile mobs scale along four axes (cumulative playtime, distance from spawn, depth/height, moon phase), with tier-gated mob abilities, opt-in death penalties (level loss, hardcore hearts, soul inventory guarded by a Soulbound enchantment), special zombie/skeleton variants, boss and trial-spawner scaling, and bonus XP from tough mobs.
+- **Why:** Single source of truth for difficulty and mob scaling — replaces Hostile Mobs Improve Over Time and RpgDifficulty, and supersedes You're in Grave Danger's death/Soulbound handling. Auto-scales modded mobs, so content mods (Mutant Monsters, Illager Invasion, Creeper Overhaul, etc.) layer on top. Part of the Concord suite.
+- **Dependencies:** Fabric API
+- **Conflicts:** None known. Do not run alongside other mob-scaling difficulty mods or grave/soulbound death mods.

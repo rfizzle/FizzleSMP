@@ -1,0 +1,13 @@
+name = "Prosperity - Loot Overhaul"
+filename = "prosperity-1.0.0.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "50698546c145dfe19900d50c5204197ab8f9f45b"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 8352011
+project-id = 1591262

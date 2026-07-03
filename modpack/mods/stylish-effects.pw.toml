@@ -1,13 +1,13 @@
 name = "Stylish Effects"
-filename = "StylishEffects-v21.1.2-1.21.1-Fabric.jar"
+filename = "StylishEffects-v21.1.3-1.21.1-Fabric.jar"
 side = "client"
 
 [download]
 hash-format = "sha1"
-hash = "d870279df2ebc8a452e6f62bcb8adc337545efdb"
+hash = "3b83834af18791b17423afaf60f6c0d8fad3f6ed"
 mode = "metadata:curseforge"
 
 [update]
 [update.curseforge]
-file-id = 7239281
+file-id = 8319770
 project-id = 543661

@@ -1,0 +1,13 @@
+name = "Tribulation - Difficulty Overhaul"
+filename = "tribulation-1.0.0.jar"
+side = "both"
+
+[download]
+hash-format = "sha1"
+hash = "5b793d83d47b805a3487982c9a414deac00c4a13"
+mode = "metadata:curseforge"
+
+[update]
+[update.curseforge]
+file-id = 8351782
+project-id = 1546072
