@@ -12,7 +12,7 @@
 #   1. Verifies working tree is clean and on master
 #   2. Bumps version in modpack/pack.toml
 #   3. Runs `packwiz refresh` to keep index.toml in sync
-#   4. Moves CHANGELOG.md [Unreleased] content to a new [X.Y.Z] - YYYY-MM-DD section
+#   4. Promotes changelogs/unreleased.md to changelogs/<version>.md
 #   5. Commits + tags vX.Y.Z
 #   6. Pushes master and the tag to origin (unless --no-push)
 #
@@ -24,7 +24,7 @@ set -eo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 PACK_TOML="$PROJECT_DIR/modpack/pack.toml"
-CHANGELOG="$PROJECT_DIR/CHANGELOG.md"
+CHANGELOGS_DIR="$PROJECT_DIR/changelogs"
 
 BUMP=""
 EXPLICIT_VERSION=""
@@ -77,11 +77,6 @@ if [[ ! -f "$PACK_TOML" ]]; then
     exit 1
 fi
 
-if [[ ! -f "$CHANGELOG" ]]; then
-    echo "Error: $CHANGELOG not found."
-    exit 1
-fi
-
 # --- Parse current version ---
 
 current_version=$(awk -F' = ' '/^version = / { gsub(/"/, "", $2); print $2; exit }' "$PACK_TOML")
@@ -113,20 +108,28 @@ if git rev-parse "$new_tag" >/dev/null 2>&1; then
     exit 1
 fi
 
-# --- Verify CHANGELOG has content under [Unreleased] ---
+# --- Check for changelog content ---
 
-unreleased_body=$(awk '
-    /^## \[Unreleased\]/ { found = 1; next }
-    found && /^## \[/    { exit }
-    found                { print }
-' "$CHANGELOG")
+unreleased_file="$CHANGELOGS_DIR/unreleased.md"
+versioned_file="$CHANGELOGS_DIR/${new_version}.md"
 
-# Strip empty section headers to check for real content
-real_content=$(echo "$unreleased_body" | grep -vE '^(###|[[:space:]]*$)' || true)
+if [[ -f "$versioned_file" ]]; then
+    echo "Error: $versioned_file already exists."
+    exit 1
+fi
 
-if [[ -z "$real_content" ]]; then
-    echo "Warning: CHANGELOG.md [Unreleased] section has no entries."
-    read -rp "Continue with empty release notes? [y/N] " confirm
+has_content=false
+if [[ -f "$unreleased_file" ]]; then
+    real_content=$(grep -vE '^(##|[[:space:]]*$)' "$unreleased_file" || true)
+    if [[ -n "$real_content" ]]; then
+        has_content=true
+    fi
+fi
+
+if [[ "$has_content" != true ]]; then
+    echo "Warning: changelogs/unreleased.md has no entries."
+    echo "  The release workflow will generate notes from the commit log."
+    read -rp "Continue? [y/N] " confirm
     if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
         echo "Aborted."
         exit 1
@@ -159,82 +162,29 @@ rm -f "${PACK_TOML}.bak"
 echo "▸ Refreshing packwiz index..."
 (cd "$PROJECT_DIR/modpack" && packwiz refresh)
 
-# --- 3. Update CHANGELOG.md ---
+# --- 3. Promote changelogs/unreleased.md ---
 
-echo "▸ Rolling CHANGELOG [Unreleased] into [$new_version]..."
-today=$(date +%Y-%m-%d)
+mkdir -p "$CHANGELOGS_DIR"
 
-tmp_changelog=$(mktemp)
-awk -v version="$new_version" -v date="$today" '
-    /^## \[Unreleased\]/ {
-        # Emit a fresh empty Unreleased section...
-        print "## [Unreleased]"
-        print ""
-        print "### Added"
-        print ""
-        print "### Changed"
-        print ""
-        print "### Fixed"
-        print ""
-        print "### Removed"
-        print ""
-        # ...followed by the new version header. The original content that
-        # was under [Unreleased] will now live under [X.Y.Z] since we skip
-        # the old header and let the rest of the file stream through.
-        print "## [" version "] - " date
-        # Skip the blank line that usually follows the Unreleased header
-        # so we do not end up with a doubled blank line.
-        getline blank
-        if (blank != "") print blank
-        next
-    }
-    { print }
-' "$CHANGELOG" > "$tmp_changelog"
-mv "$tmp_changelog" "$CHANGELOG"
-
-# Strip empty ### subsections from the newly-versioned block only.
-# Buffers each ### section and emits it only if it has a non-empty body line.
-tmp_changelog=$(mktemp)
-awk -v version="$new_version" '
-    function flush() {
-        # Drop empty ### sections in the target version; emit otherwise.
-        if (header != "" && !(in_target && !has_body)) {
-            print header
-            for (i = 1; i <= n; i++) print buf[i]
-        }
-        header = ""; n = 0; has_body = 0
-    }
-    /^## \[/ {
-        flush()
-        in_target = ($0 ~ ("^## \\[" version "\\] "))
-        print
-        next
-    }
-    in_target && /^### / {
-        flush()
-        header = $0
-        next
-    }
-    in_target && header != "" {
-        buf[++n] = $0
-        if ($0 ~ /[^[:space:]]/) has_body = 1
-        next
-    }
-    { print }
-    END { flush() }
-' "$CHANGELOG" > "$tmp_changelog"
-mv "$tmp_changelog" "$CHANGELOG"
+if [[ "$has_content" == true ]]; then
+    echo "▸ Promoting changelogs/unreleased.md → changelogs/${new_version}.md..."
+    cp "$unreleased_file" "$versioned_file"
+    # Reset unreleased file to empty template
+    : > "$unreleased_file"
+else
+    echo "▸ No unreleased changelog content; skipping promotion."
+fi
 
 # --- 4. Git commit + tag ---
 
 echo "▸ Committing release..."
-git add "$PACK_TOML" "$PROJECT_DIR/modpack/index.toml" "$CHANGELOG"
+git add "$PACK_TOML" "$PROJECT_DIR/modpack/index.toml" "$CHANGELOGS_DIR/"
 git commit -m "chore(release): ${new_tag}"
 
 echo "▸ Tagging $new_tag..."
 tag_message="FizzleSMP ${new_tag}
 
-See CHANGELOG.md for the full release notes."
+See changelogs/${new_version}.md for the full release notes."
 git tag -a "$new_tag" -m "$tag_message"
 
 # --- 5. Push ---

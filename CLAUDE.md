@@ -9,7 +9,7 @@ This repository defines **FizzleSMP**, a curated Minecraft 1.21.1 modpack manage
 - A feature brainstorming document that maps ideas to mods (`docs/features-brainstorm.md`)
 - A compatibility matrix tracking known conflicts (`docs/compatibility-matrix.md`)
 - A server deployment guide (`docs/server-deployment.md`) for the live SMP server
-- A changelog (`CHANGELOG.md`) following Keep a Changelog
+- Per-version changelogs (`changelogs/`) — player-facing release notes published verbatim to GitHub, Modrinth, and CurseForge
 - Release scripts (`scripts/release.sh`, `scripts/server-install.sh`) and a GitHub Actions workflow (`.github/workflows/release.yml`) for cutting versioned releases and updating the live server in place
 
 ## Target Platform
@@ -42,6 +42,10 @@ FizzleSMP/
 │   ├── protection.md               # Land claims, anti-grief, & security
 │   ├── admin.md                    # Server admin & management tools
 │   └── utility.md                  # QoL, HUD, minimap, & misc utilities
+├── changelogs/                     # Per-version release notes
+│   ├── unreleased.md               # Accumulator for in-progress changes
+│   ├── 1.5.0.md                    # Published verbatim with release
+│   └── ...
 ├── docs/
 │   ├── features-brainstorm.md      # Feature wishlist → mod mapping
 │   └── compatibility-matrix.md     # Known conflicts & compatibility notes
@@ -197,7 +201,7 @@ The version lives in `modpack/pack.toml` as the `version = "X.Y.Z"` field and is
 ./scripts/release.sh patch --no-push # tag locally, do not push
 ```
 
-The script checks that the working tree is clean and that the current branch is master, bumps `pack.toml`, refreshes the packwiz index, rolls `CHANGELOG.md`'s `[Unreleased]` section into a new `[X.Y.Z] - DATE` heading, commits as `chore(release): vX.Y.Z`, tags `vX.Y.Z`, and pushes both master and the tag to `origin`. Pushing the tag triggers the GitHub Actions release workflow.
+The script checks that the working tree is clean and that the current branch is master, bumps `pack.toml`, refreshes the packwiz index, promotes `changelogs/unreleased.md` to `changelogs/<version>.md`, commits as `chore(release): vX.Y.Z`, tags `vX.Y.Z`, and pushes both master and the tag to `origin`. Pushing the tag triggers the GitHub Actions release workflow.
 
 ### GitHub Actions release pipeline
 
@@ -208,7 +212,7 @@ The script checks that the working tree is clean and that the current branch is 
 3. Runs `./scripts/build-pack.sh client` → `FizzleSMP-client-X.Y.Z.zip` (CurseForge-compatible ZIP via `packwiz curseforge export --side client`).
 4. Runs `packwiz modrinth export` → `FizzleSMP-client-X.Y.Z.mrpack` (Modrinth-compatible modpack).
 5. Runs `./scripts/build-pack.sh server` → `FizzleSMP-server-X.Y.Z.zip` (drop-in Fabric server directory ZIP built by the custom download loop in `build-pack.sh`).
-6. Extracts the changelog section for the new version from `CHANGELOG.md`.
+6. Resolves release notes: `changelogs/<version>.md` if present → AI-generated from commit log (requires `CLAUDE_CODE_OAUTH_TOKEN` secret) → raw commit log fallback.
 7. Creates a draft GitHub Release with all three artifacts attached, then publishes it (draft-then-publish for immutable-release compatibility). Idempotent — skips if a published release already exists.
 8. Publishes to **Modrinth** (`.mrpack` as primary file, server ZIP as additional file) and **CurseForge** (client ZIP as primary, server ZIP as additional file) via `scripts/release/publish.py`. Each platform self-skips when its token is absent.
 
@@ -217,6 +221,7 @@ The script checks that the working tree is clean and that the current branch is 
 `scripts/release/publish.py` handles Modrinth and CurseForge uploads with retry logic (3 attempts with 10s backoff for 5xx/transport errors) and idempotency checks. Modrinth runs first and must succeed before CurseForge is attempted. Both platforms receive the client pack as primary and the server pack as an additional file.
 
 **Required secrets** (add via GitHub repo settings → Secrets):
+- `CLAUDE_CODE_OAUTH_TOKEN` — Claude Code OAuth token for AI-generated release notes. Absent → falls back to raw commit log.
 - `MODRINTH_TOKEN` — Modrinth PAT with "Create versions" scope. Absent → Modrinth skipped.
 - `CURSEFORGE_TOKEN` — CurseForge author upload token. Absent → CurseForge skipped.
 
@@ -308,24 +313,36 @@ refactor(plugins): split utility mods into utility and admin
 - Stage only the files relevant to the change — avoid catch-all `git add .`.
 - One logical change per commit. If adding a mod touches `plugins/`, `docs/compatibility-matrix.md`, and `modpack/mods/*.pw.toml`, commit them together as one `feat` commit.
 
-### CHANGELOG pre-processing (REQUIRED for mod-related commits)
+### Changelogs
 
-Any commit that affects what ships in the pack — adding, removing, swapping, version-pinning, or reconfiguring a mod, datapack, or shipped config — MUST include a matching entry in the `[Unreleased]` section of `CHANGELOG.md` in the **same commit**. This is non-negotiable: `release.sh` rolls `[Unreleased]` into the tagged section, so anything missing here is missing from the release notes players see.
+Release notes live in `changelogs/` as one Markdown file per version. `changelogs/unreleased.md` accumulates entries during development; `release.sh` promotes it to `changelogs/<version>.md` at release time. The release workflow publishes the file **verbatim** to GitHub, Modrinth, and CurseForge — there is no editor between the file and the player.
 
-**Which commits require a CHANGELOG entry:**
-- `feat(plugins|<category>)` — mod added → `### Added`
-- `fix(plugins|<category>|compat)` involving a mod swap or removal → `### Removed` (and `### Added` if replaced)
-- `fix(packwiz|config|compat)` that changes shipped behavior (config tweak, datapack, override change, version pin) → `### Fixed` or `### Changed`
-- `feat(config)` / `chore(packwiz)` bulk version bumps that players will notice → `### Changed`
-- `revert(plugins|...)` → matching `### Removed` or `### Changed` entry
+When no `changelogs/<version>.md` exists at release time (i.e. `unreleased.md` was empty), the release workflow generates notes from the commit log via Claude Code (requires `CLAUDE_CODE_OAUTH_TOKEN` secret), falling back to the raw commit log if the token is absent.
+
+**Format:** use `## Added`, `## Changed`, `## Fixed`, and `## Removed` headings (in that order). Omit empty sections. Optionally open with one or two sentences naming what the release is about.
+
+**What goes in:**
+- Player-visible changes only — new content, changed behavior, fixed bugs someone hit.
+- The outcome, in their words. "Villagers restock twice as fast," not "reduced `RESTOCK_INTERVAL` constant." Name the mod/block/item as it appears in-game.
+- Action players must take, up front, when a release needs it — a config reset, a world backup, a now-incompatible mod.
+
+**What stays out:**
+- Developer/CI jargon: commit hashes, PR numbers, branch names, version bumps of build tooling.
+- Internal-only work with no player-facing effect: code cleanup, doc edits, script changes.
+- Duplication of the mod list — the changelog is what changed *this version*, not a re-pitch of the whole pack.
+
+**Which commits require an unreleased.md entry:**
+- `feat(plugins|<category>)` — mod added → `## Added`
+- `fix(plugins|<category>|compat)` involving a mod swap or removal → `## Removed` (and `## Added` if replaced)
+- `fix(packwiz|config|compat)` that changes shipped behavior → `## Fixed` or `## Changed`
+- `feat(config)` / `chore(packwiz)` bulk version bumps that players will notice → `## Changed`
+- `revert(plugins|...)` → matching `## Removed` or `## Changed` entry
 
 **Which commits do NOT require an entry:**
 - Pure documentation changes (`docs(...)`) that don't touch shipped files
 - CI/workflow changes (`chore(ci)`, `fix(ci)`)
 - Script/tooling changes that don't alter pack contents (`chore(scripts)`, doc refactors)
 - `chore(release)` — handled by `release.sh` itself
-
-**Entry format:** one bullet per change under the correct subsection, written in the same voice as existing entries — lead with the mod/subsystem name, then a terse explanation of what changed and *why* if non-obvious. Match the detail level of past entries (a removal with a spark-profiled root cause gets a sentence; a simple add gets a phrase).
 
 **When in doubt, add the entry.** It is cheaper to trim an over-eager changelog line at release time than to reconstruct history from `git log` later.
 

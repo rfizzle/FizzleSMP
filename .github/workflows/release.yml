@@ -77,30 +77,129 @@ jobs:
       - name: List build artifacts
         run: ls -lh FizzleSMP-*
 
-      - name: Extract changelog section for this release
-        id: changelog
-        run: |
-          VERSION="${{ steps.version.outputs.version }}"
-          BODY=$(awk -v ver="$VERSION" '
-            BEGIN { found = 0 }
-            /^## \[/ {
-              if (found) exit
-              if ($0 ~ "\\["ver"\\]") { found = 1; next }
-            }
-            found { print }
-          ' CHANGELOG.md)
+      # --- Release notes pipeline ---
+      # Priority: hand-written changelogs/<version>.md > AI-generated > commit log
 
-          if [[ -z "$BODY" ]]; then
-            BODY="See CHANGELOG.md for details."
+      - name: Cache release notes
+        id: notescache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/release-body.md
+          key: release-notes-${{ github.ref_name }}
+
+      - name: Detect manual changelog
+        id: manual
+        if: steps.notescache.outputs.cache-hit != 'true'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          if [ -s "changelogs/${VERSION}.md" ]; then
+            cp "changelogs/${VERSION}.md" /tmp/manual-notes.md
+            echo "present=true" >> "$GITHUB_OUTPUT"
+            echo "Using hand-written changelogs/${VERSION}.md"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "No changelogs/${VERSION}.md; generating release notes"
           fi
 
-          {
-            echo "body<<CHANGELOG_EOF"
-            echo "$BODY"
-            echo "CHANGELOG_EOF"
-          } >> "$GITHUB_OUTPUT"
+      - name: Gather changelog source
+        if: steps.notescache.outputs.cache-hit != 'true' && steps.manual.outputs.present != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if gh api "repos/${GITHUB_REPOSITORY}/releases/generate-notes" \
+              -f tag_name="${GITHUB_REF_NAME}" --jq '.body' \
+              > /tmp/gh-notes.md 2>/tmp/gh-notes-err.txt; then
+            echo "Gathered $(wc -l < /tmp/gh-notes.md) line(s) of source notes"
+          else
+            echo "::warning::Could not generate source notes"
+            tail -c 500 /tmp/gh-notes-err.txt || true
+            : > /tmp/gh-notes.md
+          fi
 
-          echo "$BODY" > /tmp/release-body.md
+      - name: Detect Claude auth
+        id: auth
+        if: steps.notescache.outputs.cache-hit != 'true' && steps.manual.outputs.present != 'true'
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+        run: |
+          if [ -n "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::No CLAUDE_CODE_OAUTH_TOKEN; using raw changelog"
+          fi
+
+      - name: Install Claude Code
+        if: steps.notescache.outputs.cache-hit != 'true' && steps.auth.outputs.available == 'true'
+        run: |
+          curl -fsSL https://claude.ai/install.sh -o /tmp/claude-install.sh
+          echo "claude install.sh sha256: $(sha256sum /tmp/claude-install.sh | cut -d' ' -f1)"
+          bash /tmp/claude-install.sh
+
+      - name: Write release notes
+        if: steps.notescache.outputs.cache-hit != 'true' && steps.auth.outputs.available == 'true'
+        env:
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          {
+            cat <<EOF
+          You are writing the public release notes for "FizzleSMP" v${VERSION}, a
+          curated Minecraft 1.21.1 Fabric modpack.
+
+          Rewrite the merged commits / pull requests below into concise, friendly,
+          player-facing release notes:
+          - Open with one or two sentences on what this release is about.
+          - Then group changes under "## Added", "## Changed", "## Fixed", and
+            "## Removed". Omit any section that would be empty.
+          - Write for players, not developers: no commit hashes, PR numbers,
+            author handles, branch names, or internal/CI/build jargon.
+          - Describe ONLY changes present in the list below — never invent, infer,
+            or embellish features.
+          - Keep it tight: a handful of bullets per section at most.
+          Output only the Markdown release notes, with no preamble or sign-off.
+
+          --- BEGIN SOURCE ---
+          EOF
+            cat /tmp/gh-notes.md
+            cat <<'EOF'
+          --- END SOURCE ---
+          EOF
+          } > /tmp/changelog-prompt.txt
+
+          RESULT="$(~/.local/bin/claude -p \
+            --output-format json \
+            --model sonnet \
+            --max-turns 2 \
+            --max-budget-usd 0.50 \
+            < /tmp/changelog-prompt.txt 2>/tmp/changelog-stderr.txt)" || true
+
+          NOTES="$(printf '%s' "$RESULT" | jq -r '.result // empty' 2>/dev/null)" || true
+          COST="$(printf '%s' "$RESULT" | jq -r '.total_cost_usd // 0' 2>/dev/null)" || COST=0
+
+          if [ -n "$NOTES" ]; then
+            printf '%s\n' "$NOTES" > /tmp/ai-notes.md
+            echo "Wrote release notes (\$${COST})"
+          else
+            echo "::warning::Release-note model produced no output; falling back to raw notes"
+            tail -c 1000 /tmp/changelog-stderr.txt || true
+          fi
+
+      - name: Assemble release body
+        if: steps.notescache.outputs.cache-hit != 'true'
+        run: |
+          if [ -s /tmp/manual-notes.md ]; then
+            cp /tmp/manual-notes.md /tmp/release-body.md
+          elif [ -s /tmp/ai-notes.md ]; then
+            cp /tmp/ai-notes.md /tmp/release-body.md
+          elif [ -s /tmp/gh-notes.md ]; then
+            cp /tmp/gh-notes.md /tmp/release-body.md
+          else
+            echo "FizzleSMP v${{ steps.version.outputs.version }}" > /tmp/release-body.md
+          fi
+          echo "--- release body ---"
+          cat /tmp/release-body.md
 
       - name: Detect existing release
         id: rel
@@ -122,16 +221,7 @@ jobs:
         with:
           tag_name: ${{ steps.version.outputs.tag }}
           name: FizzleSMP ${{ steps.version.outputs.tag }}
-          body: |
-            ${{ steps.changelog.outputs.body }}
-
-            ## Install / update the server
-
-            ```bash
-            ./server-install.sh ${{ steps.version.outputs.tag }}
-            ```
-
-            See [`docs/server-deployment.md`](https://github.com/rfizzle/FizzleSMP/blob/${{ steps.version.outputs.tag }}/docs/server-deployment.md) for the full guide.
+          body_path: /tmp/release-body.md
           draft: true
           prerelease: ${{ steps.version.outputs.prerelease == 'true' }}
           files: |
