@@ -43,7 +43,7 @@ jobs:
       - name: Stage server
         run: |
           mkdir -p test-server
-          unzip -q FizzleSMP-server-*.zip -d test-server
+          unzip -q build/FizzleSMP-server-*.zip -d test-server
           cd test-server
           curl -sL -o fabric-installer.jar \
             https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar

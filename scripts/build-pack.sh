@@ -2,7 +2,7 @@
 # build-pack.sh — Build a versioned client or server release artifact.
 #
 # Usage:
-#   ./scripts/build-pack.sh client               # Build FizzleSMP-client-X.Y.Z.zip via packwiz curseforge export
+#   ./scripts/build-pack.sh client               # Build FizzleSMP-X.Y.Z.zip via packwiz curseforge export
 #   ./scripts/build-pack.sh server               # Build FizzleSMP-server-X.Y.Z.zip (drop-in server directory)
 #   ./scripts/build-pack.sh server --dry-run     # Preview without downloading
 #   ./scripts/build-pack.sh server --clean       # Wipe build dir, rebuild, and zip
@@ -75,7 +75,12 @@ if [[ ! -d "$MODPACK_DIR" ]]; then
     exit 1
 fi
 
-ZIP_NAME="FizzleSMP-${TARGET}-${PACK_VERSION}.zip"
+# Client pack carries the plain pack name; only the server pack is labeled.
+if [[ "$TARGET" == "client" ]]; then
+    ZIP_NAME="FizzleSMP-${PACK_VERSION}.zip"
+else
+    ZIP_NAME="FizzleSMP-server-${PACK_VERSION}.zip"
+fi
 ZIP_PATH="$OUTPUT_DIR/$ZIP_NAME"
 
 echo "=== FizzleSMP $TARGET pack builder (v${PACK_VERSION}) ==="

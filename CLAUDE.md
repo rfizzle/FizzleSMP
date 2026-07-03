@@ -167,8 +167,8 @@ packwiz modrinth export             # Export .mrpack for Modrinth
 `scripts/build-pack.sh` downloads mods and packages them as ZIP files for distribution:
 
 ```bash
-./scripts/build-pack.sh server              # Build FizzleSMP.server.zip
-./scripts/build-pack.sh client              # Build FizzleSMP.client.zip
+./scripts/build-pack.sh server              # Build build/FizzleSMP-server-X.Y.Z.zip
+./scripts/build-pack.sh client              # Build build/FizzleSMP-X.Y.Z.zip
 ./scripts/build-pack.sh server --clean      # Wipe build dir, rebuild, and zip
 ./scripts/build-pack.sh client --dry-run    # Preview without downloading
 ```
@@ -189,7 +189,7 @@ FizzleSMP is cut into versioned releases that ship to the live SMP server and to
 - **MINOR** — additive changes (new mods, new content). Safe to apply to an existing world.
 - **PATCH** — config tweaks, mod version bumps, bug fixes, compatibility fixes.
 
-The version lives in `modpack/pack.toml` as the `version = "X.Y.Z"` field and is embedded in release artifact filenames (`FizzleSMP-client-X.Y.Z.zip`, `FizzleSMP-client-X.Y.Z.mrpack`, `FizzleSMP-server-X.Y.Z.zip`).
+The version lives in `modpack/pack.toml` as the `version = "X.Y.Z"` field and is embedded in release artifact filenames (`FizzleSMP-X.Y.Z.zip`, `FizzleSMP-X.Y.Z.mrpack`, `FizzleSMP-server-X.Y.Z.zip` — the client pack carries the plain pack name; only the server pack is labeled).
 
 ### Cutting a release
 
@@ -209,8 +209,8 @@ The script checks that the working tree is clean and that the current branch is 
 
 1. Installs the `packwiz` CLI via `go install`.
 2. Verifies `modpack/pack.toml`'s version matches the tag (fails if not — forces the use of `release.sh`).
-3. Runs `./scripts/build-pack.sh client` → `FizzleSMP-client-X.Y.Z.zip` (CurseForge-compatible ZIP via `packwiz curseforge export --side client`).
-4. Runs `packwiz modrinth export` → `FizzleSMP-client-X.Y.Z.mrpack` (Modrinth-compatible modpack).
+3. Runs `./scripts/build-pack.sh client` → `FizzleSMP-X.Y.Z.zip` (CurseForge-compatible ZIP via `packwiz curseforge export --side client`).
+4. Runs `packwiz modrinth export` → `FizzleSMP-X.Y.Z.mrpack` (Modrinth-compatible modpack).
 5. Runs `./scripts/build-pack.sh server` → `FizzleSMP-server-X.Y.Z.zip` (drop-in Fabric server directory ZIP built by the custom download loop in `build-pack.sh`).
 6. Resolves release notes: `changelogs/<version>.md` if present → AI-generated from commit log (requires `CLAUDE_CODE_OAUTH_TOKEN` secret) → raw commit log fallback.
 7. Creates a draft GitHub Release with all three artifacts attached, then publishes it (draft-then-publish for immutable-release compatibility). Idempotent — skips if a published release already exists.

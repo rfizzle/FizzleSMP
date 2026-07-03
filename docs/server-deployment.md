@@ -133,7 +133,7 @@ Flags:
 Every tag also publishes a pre-built server ZIP via GitHub Releases:
 
 - `FizzleSMP-server-X.Y.Z.zip` — mods/, config/, shaderpacks/ for the server
-- `FizzleSMP-client-X.Y.Z.zip` — CurseForge-compatible modpack ZIP for clients
+- `FizzleSMP-X.Y.Z.zip` — CurseForge-compatible modpack ZIP for clients
 
 The ZIPs are a fallback; `server-install.sh` is the recommended path because it
 does in-place diffing. The server ZIP is useful for:

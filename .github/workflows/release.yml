@@ -56,9 +56,10 @@ jobs:
 
       - name: Build Modrinth pack (.mrpack)
         run: |
+          mkdir -p build
           cd modpack
           packwiz modrinth export --side client \
-            -o "$GITHUB_WORKSPACE/FizzleSMP-client-${{ steps.version.outputs.version }}.mrpack"
+            -o "$GITHUB_WORKSPACE/build/FizzleSMP-${{ steps.version.outputs.version }}.mrpack"
 
       - name: Cache server pack downloads
         uses: actions/cache@v4
@@ -75,7 +76,7 @@ jobs:
         run: ./scripts/build-pack.sh server
 
       - name: List build artifacts
-        run: ls -lh FizzleSMP-*
+        run: ls -lh build/FizzleSMP-*
 
       # --- Release notes pipeline ---
       # Priority: hand-written changelogs/<version>.md > AI-generated > commit log
@@ -225,9 +226,9 @@ jobs:
           draft: true
           prerelease: ${{ steps.version.outputs.prerelease == 'true' }}
           files: |
-            FizzleSMP-client-${{ steps.version.outputs.version }}.zip
-            FizzleSMP-client-${{ steps.version.outputs.version }}.mrpack
-            FizzleSMP-server-${{ steps.version.outputs.version }}.zip
+            build/FizzleSMP-${{ steps.version.outputs.version }}.zip
+            build/FizzleSMP-${{ steps.version.outputs.version }}.mrpack
+            build/FizzleSMP-server-${{ steps.version.outputs.version }}.zip
           fail_on_unmatched_files: true
 
       - name: Publish GitHub Release
@@ -267,9 +268,9 @@ jobs:
           PRERELEASE: ${{ steps.version.outputs.prerelease }}
           GAME_VERSIONS: "1.21.1"
           LOADERS: "fabric"
-          CLIENT_ZIP: FizzleSMP-${{ steps.version.outputs.version }}.zip
-          CLIENT_MRPACK: FizzleSMP-${{ steps.version.outputs.version }}.mrpack
-          SERVER_ZIP: FizzleSMP-server-${{ steps.version.outputs.version }}.zip
+          CLIENT_ZIP: build/FizzleSMP-${{ steps.version.outputs.version }}.zip
+          CLIENT_MRPACK: build/FizzleSMP-${{ steps.version.outputs.version }}.mrpack
+          SERVER_ZIP: build/FizzleSMP-server-${{ steps.version.outputs.version }}.zip
           CHANGELOG_FILE: /tmp/release-body.md
         run: |
           python3 -m pip install --quiet 'requests>=2.31,<3'

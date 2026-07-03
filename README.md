@@ -35,8 +35,8 @@ Minecraft 1.21.1 · Fabric · Managed with [packwiz](https://packwiz.infra.link/
 
 ```bash
 # Build versioned release ZIPs locally (reads version from modpack/pack.toml)
-./scripts/build-pack.sh client    # FizzleSMP-client-X.Y.Z.zip (CurseForge-compatible)
-./scripts/build-pack.sh server    # FizzleSMP-server-X.Y.Z.zip (drop-in Fabric server directory)
+./scripts/build-pack.sh client    # build/FizzleSMP-X.Y.Z.zip (CurseForge-compatible)
+./scripts/build-pack.sh server    # build/FizzleSMP-server-X.Y.Z.zip (drop-in Fabric server directory)
 
 # Or call packwiz directly (run from modpack/)
 cd modpack
@@ -66,7 +66,7 @@ Pragmatic SemVer for modpacks:
 ### Cutting a release
 
 1. **Land your changes on `master`** — commit all the plugin/packwiz/config changes you want in the release.
-2. **Update `CHANGELOG.md`** — add your entries under the `## [Unreleased]` section (Added / Changed / Fixed / Removed). The release script will roll these into a dated version heading.
+2. **Update `changelogs/unreleased.md`** — add your entries under the Added / Changed / Fixed / Removed headings. The release script promotes the file to `changelogs/X.Y.Z.md`.
 3. **Run the release script:**
 
    ```bash
@@ -81,22 +81,22 @@ Pragmatic SemVer for modpacks:
    - Verifies the working tree is clean and you are on `master`
    - Bumps `version = "..."` in `modpack/pack.toml`
    - Runs `packwiz refresh` to keep `index.toml` in sync
-   - Rolls `CHANGELOG.md` `[Unreleased]` into `[X.Y.Z] - YYYY-MM-DD`
+   - Promotes `changelogs/unreleased.md` to `changelogs/X.Y.Z.md`
    - Commits as `chore(release): vX.Y.Z`
    - Creates an annotated tag `vX.Y.Z`
    - Pushes `master` and the tag to `origin` (unless `--no-push`)
 
 5. **GitHub Actions takes over** — the tag push triggers `.github/workflows/release.yml`, which:
    - Installs the `packwiz` CLI
-   - Builds `FizzleSMP-client-X.Y.Z.zip` and `FizzleSMP-server-X.Y.Z.zip`
-   - Extracts the matching `CHANGELOG.md` section for the release body
-   - Publishes a GitHub Release with both ZIPs attached
+   - Builds `FizzleSMP-X.Y.Z.zip`, `FizzleSMP-X.Y.Z.mrpack`, and `FizzleSMP-server-X.Y.Z.zip`
+   - Uses `changelogs/X.Y.Z.md` for the release body (or generates notes from the commit log)
+   - Publishes a GitHub Release with the artifacts attached, then uploads to Modrinth and CurseForge
 
    Watch the build at <https://github.com/rfizzle/FizzleSMP/actions>.
 
 ### Shipping the client pack to players
 
-Players import `FizzleSMP-client-X.Y.Z.zip` into the CurseForge launcher. Every release attaches this ZIP to the GitHub Release.
+Players import `FizzleSMP-X.Y.Z.zip` into the CurseForge launcher. Every release attaches this ZIP to the GitHub Release.
 
 ### Updating the live server
 
